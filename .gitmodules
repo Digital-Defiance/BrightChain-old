@@ -1,0 +1,3 @@
+[submodule "BrightChain.wiki"]
+	path = BrightChain.wiki
+	url = git@github.com:The-Revolution-Network/BrightChain.wiki.git

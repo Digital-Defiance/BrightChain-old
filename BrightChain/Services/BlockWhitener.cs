@@ -1,0 +1,36 @@
+﻿using BrightChain.Interfaces;
+using BrightChain.Models.Blocks;
+using System;
+
+namespace BrightChain.Services
+{
+    public class BlockWhitener
+    {
+        public byte TupleCount { get; } = 3;
+
+        private MemoryBlockCacheManager pregeneratedRandomizerCache;
+
+        public BlockWhitener(MemoryBlockCacheManager pregeneratedRandomizerCache)
+        {
+            this.pregeneratedRandomizerCache = pregeneratedRandomizerCache;
+        }
+
+        public IBlock Whiten(SourceBlock block)
+        {
+            // the incoming block should be a raw disk block and is never used again
+            Block[] tuples = new Block[TupleCount - 1];
+            for (int i = 0; i < tuples.Length; i++)
+            {
+                // select or generate pre-generated random blocks
+                // for now just generate on demand, but these can be pre-seeded
+                tuples[i] = new RandomizerBlock(
+                    pregeneratedRandomizerCache: this.pregeneratedRandomizerCache,
+                    requestTime: DateTime.Now,
+                    keepUntilAtLeast: block.DurationContract.KeepUntilAtLeast,
+                    redundancy: block.RedundancyContract.RedundancyContractType,
+                    data: new ReadOnlyMemory<byte>());
+            }
+            return block.XOR(tuples);
+        }
+    }
+}
