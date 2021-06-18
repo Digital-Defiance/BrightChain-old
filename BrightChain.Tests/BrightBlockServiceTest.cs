@@ -19,33 +19,36 @@ namespace BrightChain.Tests
         [TestInitialize]
         public void PreTestSetup()
         {
-            this._loggerFactory = new Mock<ILoggerFactory>().Object;
-            this._logger = new Mock<ILogger>().Object;
             this._configuration = new Mock<IConfiguration>().Object;
             this._services = new Mock<IServiceCollection>().Object;
+            this._logger = new Mock<ILogger>().Object;
 
-            Mock.Get<ILoggerFactory>(this._loggerFactory)
+            var factoryMock = new Mock<ILoggerFactory>();
+
+            factoryMock
                 .SetupAllProperties()
                 .Setup(f => f.CreateLogger(It.IsAny<string>())).Returns(this._logger);
+
+            this._loggerFactory = factoryMock.Object;
         }
 
         [TestMethod]
         public void ServiceInitializionTest()
         {
+            var loggerMock = Mock.Get(this._logger);
+
             var brightChainService = new BrightBlockService(
                 logger: this._loggerFactory,
                 configuration: this._configuration,
                 services: this._services);
 
-            var mock = Mock.Get(this._logger);
-
-            mock.Verify(l => l.Log(
+            loggerMock.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(4));
-            mock.VerifyNoOtherCalls();
+            loggerMock.VerifyNoOtherCalls();
         }
     }
 }

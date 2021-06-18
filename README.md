@@ -1,5 +1,5 @@
 # BrightChain
-- BrightChain Engine in C#/.Net 5/6
+- BrightChain Engine in C#/.Net 6
 - BrightNet BlockStore and API for BrightChain: The Revolution(ary) Network
 - https://github.com/The-Revolution-Network/brightChainAPI/wiki/Introduction
 
