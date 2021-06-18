@@ -1,7 +1,7 @@
-﻿using BrightChain.Interfaces;
+﻿using BrightChain.CSharpTest.Net.Collections;
+using BrightChain.Interfaces;
 using BrightChain.Models;
 using BrightChain.Models.Events;
-using CSharpTest.Net.Collections;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;

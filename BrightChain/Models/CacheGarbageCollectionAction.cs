@@ -1,4 +1,4 @@
-﻿using CSharpTest.Net.Collections;
+﻿using BrightChain.CSharpTest.Net.Collections;
 
 namespace BrightChain.Models
 {

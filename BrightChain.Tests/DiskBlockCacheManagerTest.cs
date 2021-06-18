@@ -1,10 +1,10 @@
-﻿using BrightChain.Enumerations;
+﻿using BrightChain.CSharpTest.Net.Collections;
+using BrightChain.CSharpTest.Net.Serialization;
+using BrightChain.Enumerations;
 using BrightChain.Helpers;
 using BrightChain.Interfaces;
 using BrightChain.Models.Blocks;
 using BrightChain.Services;
-using CSharpTest.Net.Collections;
-using CSharpTest.Net.Serialization;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;

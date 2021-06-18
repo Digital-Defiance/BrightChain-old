@@ -1,5 +1,5 @@
-﻿using BrightChain.Models.Blocks;
-using CSharpTest.Net.Serialization;
+﻿using BrightChain.CSharpTest.Net.Serialization;
+using BrightChain.Models.Blocks;
 using System;
 using System.IO;
 

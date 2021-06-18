@@ -1,6 +1,6 @@
-﻿using BrightChain.Helpers;
+﻿using BrightChain.CSharpTest.Net.Collections;
+using BrightChain.Helpers;
 using BrightChain.Models.Blocks;
-using CSharpTest.Net.Collections;
 using Microsoft.Extensions.Logging;
 
 namespace BrightChain.Services

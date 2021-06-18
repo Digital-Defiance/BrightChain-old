@@ -6,8 +6,11 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain", "BrightChain\BrightChain.csproj", "{5E171D4F-5EF9-4511-B13D-E537C326B87A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.Tests", "BrightChain.Tests\BrightChain.Tests.csproj", "{2FE11136-5082-4B94-A8FD-D82DDD9D39A1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CA544D08-926B-4C3F-B7D9-2327D6384A99} = {CA544D08-926B-4C3F-B7D9-2327D6384A99}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrightChain.API", "BrightChain.API\BrightChain.API.csproj", "{CA544D08-926B-4C3F-B7D9-2327D6384A99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.API", "BrightChain.API\BrightChain.API.csproj", "{CA544D08-926B-4C3F-B7D9-2327D6384A99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

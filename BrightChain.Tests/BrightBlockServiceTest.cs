@@ -39,8 +39,7 @@ namespace BrightChain.Tests
 
             var brightChainService = new BrightBlockService(
                 logger: this._loggerFactory,
-                configuration: this._configuration,
-                services: this._services);
+                configuration: this._configuration);
 
             loggerMock.Verify(l => l.Log(
                 LogLevel.Information,

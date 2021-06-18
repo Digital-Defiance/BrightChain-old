@@ -1,5 +1,5 @@
-﻿using CSharpTest.Net.Collections;
-using CSharpTest.Net.IO;
+﻿using BrightChain.CSharpTest.Net.Collections;
+using BrightChain.CSharpTest.Net.IO;
 using Microsoft.Extensions.Logging;
 
 namespace BrightChain.Services

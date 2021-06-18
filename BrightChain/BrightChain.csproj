@@ -8,28 +8,56 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CSharpTest.Net.Collections" Version="14.906.1403.1082" />
+    <Compile Remove="CSharpTest.Net\BPlusTreeTest\**" />
+    <Compile Remove="CSharpTest.Net\CollectionsTest\**" />
+    <Compile Remove="CSharpTest.Net\CSharpTest.Net.BPlusTreeTest\**" />
+    <Compile Remove="CSharpTest.Net\CSharpTest.Net.CollectionsTest\**" />
+    <Compile Remove="Extensions\**" />
+    <Content Remove="CSharpTest.Net\BPlusTreeTest\**" />
+    <Content Remove="CSharpTest.Net\CollectionsTest\**" />
+    <Content Remove="CSharpTest.Net\CSharpTest.Net.BPlusTreeTest\**" />
+    <Content Remove="CSharpTest.Net\CSharpTest.Net.CollectionsTest\**" />
+    <Content Remove="Extensions\**" />
+    <EmbeddedResource Remove="CSharpTest.Net\BPlusTreeTest\**" />
+    <EmbeddedResource Remove="CSharpTest.Net\CollectionsTest\**" />
+    <EmbeddedResource Remove="CSharpTest.Net\CSharpTest.Net.BPlusTreeTest\**" />
+    <EmbeddedResource Remove="CSharpTest.Net\CSharpTest.Net.CollectionsTest\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <None Remove="CSharpTest.Net\BPlusTreeTest\**" />
+    <None Remove="CSharpTest.Net\CollectionsTest\**" />
+    <None Remove="CSharpTest.Net\CSharpTest.Net.BPlusTreeTest\**" />
+    <None Remove="CSharpTest.Net\CSharpTest.Net.CollectionsTest\**" />
+    <None Remove="Extensions\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="CSharpTest.Net\Collections\Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.CodeCoverage" Version="16.10.0" />
     <PackageReference Include="Moq" Version="4.16.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0-preview.5.21301.5" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-preview.5.21301.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Castle.Core" Version="4.4.1" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="Microsoft.Data.OData" Version="5.8.4" />
     <PackageReference Include="FluentValidation" Version="10.2.3" />
-    <PackageReference Include="System.Runtime.Caching" Version="5.0.0" />
+    <PackageReference Include="System.Runtime.Caching" Version="6.0.0-preview.5.21301.5" />
     <PackageReference Include="Faker.Net" Version="1.5.138" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extensions\" />
+    <Folder Include="CSharpTest.Net\Collections\Properties\" />
     <Folder Include="Attributes\" />
     <Folder Include="Properties\" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="CSharpTest.Net\LICENSE-2.0.txt" />
+    <None Remove="CSharpTest.Net\README.htm" />
     <None Remove="Microsoft.Extensions.Logging" />
     <None Remove="Microsoft.Extensions.DependencyInjection" />
     <None Remove="Newtonsoft.Json" />
@@ -44,5 +72,14 @@
     <None Remove="System.Runtime.Caching" />
     <None Remove="Faker.Net" />
     <None Remove="Attributes\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="CSharpTest.Net\Collections\BPlusTree.Debug.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="CSharpTest.Net\Collections\BPlusTree.Options.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>
