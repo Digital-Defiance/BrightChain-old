@@ -7,6 +7,8 @@ namespace BrightChain.Models.Blocks
 {
     public class TransactableBlock : Block, IDisposable, ITransactable
     {
+        public bool Committed { get; private set; }
+
         private bool disposedValue;
         protected BPlusTree<BlockHash, Block> tree;
 
@@ -14,10 +16,14 @@ namespace BrightChain.Models.Blocks
             base(requestTime: requestTime, keepUntilAtLeast: keepUntilAtLeast, redundancy: redundancy, data: data)
         {
             this.disposedValue = false;
+            this.Committed = false;
         }
 
-        public void Commit() =>
+        public void Commit()
+        {
             this.tree.Commit();
+            this.Committed = true;
+        }
 
         public void Rollback() =>
             this.tree.Rollback();
