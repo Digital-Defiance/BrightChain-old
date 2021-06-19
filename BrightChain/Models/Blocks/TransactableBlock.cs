@@ -2,9 +2,6 @@
 using BrightChain.CSharpTest.Net.Interfaces;
 using BrightChain.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BrightChain.Models.Blocks
 {

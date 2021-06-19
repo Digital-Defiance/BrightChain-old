@@ -18,7 +18,7 @@ namespace BrightChain.Services
 
         public static bool EnableCount { get; } = false;
 
-        protected readonly BPlusTree<Tkey, Tvalue> tree;
+        internal readonly BPlusTree<Tkey, Tvalue> tree;
         protected readonly BlockCacheExpirationCache<Tkey, Tvalue> expirationCache;
         protected readonly ILogger logger;
 
