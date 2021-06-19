@@ -1,6 +1,7 @@
 ﻿using BrightChain.CSharpTest.Net.Collections;
 using BrightChain.CSharpTest.Net.Interfaces;
 using BrightChain.Enumerations;
+using BrightChain.Interfaces;
 using System;
 
 namespace BrightChain.Models.Blocks
@@ -11,6 +12,7 @@ namespace BrightChain.Models.Blocks
 
         private bool disposedValue;
         protected BPlusTree<BlockHash, Block> tree;
+        protected ICacheManager<BlockHash, Block> cacheManager;
 
         public TransactableBlock(BPlusTree<BlockHash, Block> tree, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data) :
             base(requestTime: requestTime, keepUntilAtLeast: keepUntilAtLeast, redundancy: redundancy, data: data)
