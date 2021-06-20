@@ -6,7 +6,7 @@ using System;
 
 namespace BrightChain.Models.Blocks
 {
-    public class TransactableBlock : Block, IDisposable, ITransactable
+    public abstract class TransactableBlock : Block, IDisposable, ITransactable
     {
         public bool Committed { get; private set; }
 
@@ -61,13 +61,5 @@ namespace BrightChain.Models.Blocks
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
-
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data) =>
-            new TransactableBlock(
-                tree: this.tree,
-                requestTime: requestTime,
-                keepUntilAtLeast: keepUntilAtLeast,
-                redundancy: redundancy,
-                data: data);
     }
 }
