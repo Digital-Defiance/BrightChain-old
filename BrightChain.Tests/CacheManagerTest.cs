@@ -80,7 +80,7 @@ namespace BrightChain.Tests
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(1));
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(3));
             this.logger.VerifyNoOtherCalls();
         }
 
@@ -104,7 +104,7 @@ namespace BrightChain.Tests
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(1));
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(3));
             this.logger.VerifyNoOtherCalls();
         }
 
@@ -131,7 +131,7 @@ namespace BrightChain.Tests
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(1));
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(4));
             this.logger.VerifyNoOtherCalls();
         }
 
@@ -155,7 +155,7 @@ namespace BrightChain.Tests
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(1));
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(3));
             this.logger.VerifyNoOtherCalls();
         }
 
@@ -180,7 +180,7 @@ namespace BrightChain.Tests
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(1));
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(4));
             this.logger.VerifyNoOtherCalls();
         }
 
@@ -206,7 +206,7 @@ namespace BrightChain.Tests
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(1));
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(4));
             this.logger.VerifyNoOtherCalls();
         }
     }

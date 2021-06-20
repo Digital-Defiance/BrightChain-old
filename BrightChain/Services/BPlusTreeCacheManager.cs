@@ -32,8 +32,15 @@ namespace BrightChain.Services
             this.logger.LogInformation(String.Format("<%s>: initalizing", nameof(BPlusTreeCacheManager<Tkey, Tvalue>)));
             this.tree = tree;
             ApplyTreeActions(new Action<BPlusTree<Tkey, Tvalue>>[] {
-                CacheGarbageCollectionAction<Tkey, Tvalue>.GarbageCollect
+                GarbageCollect
             });
+        }
+
+        internal void GarbageCollect(BPlusTree<Tkey, Tvalue> tree)
+        {
+            // get (keep and store elsewhere?) list of keys expiring this second in the given tree (and which haven't been required longer by renewed/extended contracts)
+            // remove expired entries
+            this.logger.LogInformation("GarbageCollect");
         }
 
         public void ApplyTreeActions(Action<BPlusTree<Tkey, Tvalue>>[] actions)
@@ -42,8 +49,8 @@ namespace BrightChain.Services
             if (EnableCount) this.tree.EnableCount();
 
             var result = actions.Select(t =>
-                Task.Run(() => t(this.tree)))
-                    .ToArray();
+                Task.Run(() => t(this.tree))
+            ).ToArray();
 
             mreStop.Set();
             Task.WaitAll(result);
@@ -53,6 +60,7 @@ namespace BrightChain.Services
 
         public Tvalue Get(Tkey key)
         {
+            this.logger.LogInformation(String.Format("Get({0})", key));
             Tvalue value = default;
             var contains = this.tree.TryGetValue(key, out value);
             if (!contains)
@@ -67,6 +75,7 @@ namespace BrightChain.Services
 
         public void Set(Tkey key, Tvalue value)
         {
+            this.logger.LogInformation(String.Format("Set({0})", key));
             this.tree.Add(
                 key: key,
                 value: value); // TODO: Expiration in btree - look at having an expiration tree grouped by blocks expiring that second?
@@ -80,6 +89,7 @@ namespace BrightChain.Services
 
         public bool Drop(Tkey key, bool noCheckContains = true)
         {
+            this.logger.LogInformation(String.Format("Drop({0})", key));
             if (!noCheckContains && !Contains(key)) return false;
             var eventArgs = new CacheEventArgs<Tkey, Tvalue>();
             eventArgs.KeyValue = new KeyValuePair<Tkey, Tvalue>(key, this.tree[key]);
