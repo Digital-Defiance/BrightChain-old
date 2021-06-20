@@ -1,4 +1,4 @@
-﻿using BrightChain.CSharpTest.Net.Collections;
+﻿using CSharpTest.Net.Collections;
 using BrightChain.Helpers;
 using BrightChain.Models.Blocks;
 using Microsoft.Extensions.Logging;

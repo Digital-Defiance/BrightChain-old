@@ -1,3 +1,6 @@
 [submodule "BrightChain.wiki"]
 	path = BrightChain.wiki
 	url = git@github.com:The-Revolution-Network/BrightChain.wiki.git
+[submodule "BrightChain/CSharpTest.Net"]
+	path = CSharpTest.Net
+	url = git@github.com:The-Revolution-Network/CSharpTest.Net.Collections.git

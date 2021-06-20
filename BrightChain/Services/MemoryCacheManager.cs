@@ -1,4 +1,4 @@
-﻿using BrightChain.CSharpTest.Net.Collections;
+﻿using CSharpTest.Net.Collections;
 using Microsoft.Extensions.Logging;
 
 namespace BrightChain.Services

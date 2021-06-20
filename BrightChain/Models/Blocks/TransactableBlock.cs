@@ -1,5 +1,5 @@
-﻿using BrightChain.CSharpTest.Net.Collections;
-using BrightChain.CSharpTest.Net.Interfaces;
+﻿using CSharpTest.Net.Collections;
+using CSharpTest.Net.Interfaces;
 using BrightChain.Enumerations;
 using BrightChain.Interfaces;
 using System;

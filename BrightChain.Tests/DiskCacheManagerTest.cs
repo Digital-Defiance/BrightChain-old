@@ -1,5 +1,5 @@
-﻿using BrightChain.CSharpTest.Net.Collections;
-using BrightChain.CSharpTest.Net.Serialization;
+﻿using CSharpTest.Net.Collections;
+using CSharpTest.Net.Serialization;
 using BrightChain.Interfaces;
 using BrightChain.Services;
 using Microsoft.Extensions.Logging;
