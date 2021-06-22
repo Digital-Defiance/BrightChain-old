@@ -12,8 +12,10 @@ namespace BrightChain.Interfaces
         Block XOR(Block[] others);
         StorageDurationContract DurationContract { get; }
         RedundancyContract RedundancyContract { get; }
-        [BrightChainIgnore]
+        [BrightChainDataIgnore]
         ReadOnlyMemory<byte> MetaData { get; }
         ReadOnlyMemory<byte> Data { get; }
+        bool Committed { get; }
+        bool AllowCommit { get; }
     }
 }

@@ -1,14 +1,11 @@
-﻿using BrightChain.Interfaces;
-using System.Collections.Generic;
-
-namespace BrightChain.Services
+﻿namespace BrightChain.Services
 {
     public class BlockCacheExpirationCache<Tkey, Tvalue>
     {
-        private DiskCacheManager<ulong, IEnumerable<Tkey>> expirationCache;
-        private ICacheManager<Tkey, Tvalue> sourceCache;
+        private BlockCacheManager expirationCache;
+        private BPlusTreeCacheManager<Tkey, Tvalue> sourceCache;
 
-        public BlockCacheExpirationCache(ICacheManager<Tkey, Tvalue> sourceCache)
+        public BlockCacheExpirationCache(BPlusTreeCacheManager<Tkey, Tvalue> sourceCache)
         {
             /* TODO:
              * for each entry in the cache, create or add to the list of blocks expiring that second

@@ -1,22 +1,33 @@
-﻿using CSharpTest.Net.Collections;
-using BrightChain.Helpers;
-using BrightChain.Models.Blocks;
+﻿using BrightChain.Models.Blocks;
+using CSharpTest.Net.Collections;
+using CSharpTest.Net.IO;
 using Microsoft.Extensions.Logging;
 
 namespace BrightChain.Services
 {
-    public class DiskBlockCacheManager : DiskCacheManager<BlockHash, Block>
+    /// <summary>
+    /// Disk backed version of BPlus tree
+    /// </summary>
+    public class DiskBlockCacheManager : BlockCacheManager
     {
-        public static BPlusTree<BlockHash, Block>.OptionsV2 DefaultOptions()
-        {
-            BPlusTree<BlockHash, Block>.OptionsV2 options = new BPlusTree<BlockHash, Block>.OptionsV2(
-                keySerializer: new BlockHashSerializer(),
-                valueSerializer: new BlockSerializer());
-            return options;
-        }
+        private TempFile backingFile = new TempFile();
 
-        public DiskBlockCacheManager(ILogger logger) : base(logger: logger, optionsV2: DefaultOptions())
+        public DiskBlockCacheManager(BlockCacheManager other) : base(other) { }
+
+        public DiskBlockCacheManager(ILogger logger, BPlusTree<BlockHash, TransactableBlock>.OptionsV2 optionsV2) :
+            base(logger: logger, tree: new BPlusTree<BlockHash, TransactableBlock>(optionsV2))
+        { }
+
+        public DiskBlockCacheManager(ILogger logger, BPlusTree<BlockHash, TransactableBlock> tree) :
+            base(logger: logger, tree: tree)
+        { }
+
+        public BPlusTree<BlockHash, TransactableBlock>.OptionsV2 DefaultOptions(BPlusTree<BlockHash, TransactableBlock>.OptionsV2 options)
         {
+            options.CalcBTreeOrder(16, 24);
+            options.CreateFile = CreatePolicy.Always;
+            options.FileName = backingFile.TempPath;
+            return options;
         }
     }
 }

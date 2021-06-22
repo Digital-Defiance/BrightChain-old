@@ -5,6 +5,9 @@ using System.Security.Cryptography;
 
 namespace BrightChain.Models.Blocks
 {
+    /// <summary>
+    /// Type box for the sha hashes
+    /// </summary>
     public class BlockHash : IBlockHash
     {
         public ReadOnlyMemory<byte> HashBytes { get; protected set; }

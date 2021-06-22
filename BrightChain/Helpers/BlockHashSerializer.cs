@@ -1,10 +1,13 @@
-﻿using CSharpTest.Net.Serialization;
-using BrightChain.Models.Blocks;
+﻿using BrightChain.Models.Blocks;
+using CSharpTest.Net.Serialization;
 using System;
 using System.IO;
 
 namespace BrightChain.Helpers
 {
+    /// <summary>
+    /// Serializer class to help BTree
+    /// </summary>
     public class BlockHashSerializer : ISerializer<BlockHash>
     {
         public BlockHash ReadFrom(Stream stream)

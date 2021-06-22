@@ -1,19 +1,29 @@
-﻿using BrightChain.Exceptions;
-using BrightChain.Interfaces;
+﻿#nullable enable
+using BrightChain.Exceptions;
+using BrightChain.Helpers;
 using BrightChain.Models.Blocks;
+using CSharpTest.Net.Collections;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 
 namespace BrightChain.Services
 {
+    /// <summary>
+    /// Core service for BrightChain used by the webservice to retrieve and store blocks.
+    /// </summary>
     public class BrightBlockService : ILogger
     {
         protected ILogger logger;
         protected IConfiguration configuration;
 
-        protected ICacheManager<BlockHash, Block> blockMemoryCache;
-        protected ICacheManager<BlockHash, Block> blockDiskCache;
+        protected MemoryBlockCacheManager blockMemoryCache;
+        protected DiskBlockCacheManager blockDiskCache;
+
+        public static BPlusTree<BlockHash, TransactableBlock>.OptionsV2 DefaultOptions() =>
+            new BPlusTree<BlockHash, TransactableBlock>.OptionsV2(
+                keySerializer: new BlockHashSerializer(),
+                valueSerializer: new BlockSerializer<TransactableBlock>());
 
         public BrightBlockService(ILoggerFactory logger, IConfiguration configuration)
         {
@@ -23,8 +33,8 @@ namespace BrightChain.Services
             this.logger.LogInformation(String.Format("<%s>: logging initialized", nameof(BrightBlockService)));
             this.configuration = configuration;
 
-            this.blockMemoryCache = new MemoryCacheManager<BlockHash, Block>(logger: this.logger);
-            this.blockDiskCache = new DiskBlockCacheManager(logger: this.logger);
+            this.blockMemoryCache = new MemoryBlockCacheManager(logger: this.logger);
+            this.blockDiskCache = new DiskBlockCacheManager(logger: this.logger, optionsV2: DefaultOptions());
             this.logger.LogInformation(String.Format("<%s>: caches initialized", nameof(BrightBlockService)));
         }
 

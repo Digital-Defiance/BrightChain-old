@@ -1,34 +1,75 @@
-﻿using CSharpTest.Net.Collections;
+﻿using BrightChain.Enumerations;
+using BrightChain.Exceptions;
+using BrightChain.Services;
+using CSharpTest.Net.Collections;
 using CSharpTest.Net.Interfaces;
-using BrightChain.Enumerations;
-using BrightChain.Interfaces;
 using System;
 
 namespace BrightChain.Models.Blocks
 {
-    public abstract class TransactableBlock : Block, IDisposable, ITransactable
+    public class TransactableBlock : Block, IDisposable, ITransactable
     {
-        public bool Committed { get; private set; }
-
         private bool disposedValue;
-        protected BPlusTree<BlockHash, Block> tree;
-        protected ICacheManager<BlockHash, Block> cacheManager;
+        protected BPlusTree<BlockHash, TransactableBlock> tree;
+        public BPlusTreeCacheManager<BlockHash, TransactableBlock> cacheManager { get; internal set; }
 
-        public TransactableBlock(BPlusTree<BlockHash, Block> tree, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data) :
+        public TransactableBlock(BPlusTreeCacheManager<BlockHash, TransactableBlock> cacheManager, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
             base(requestTime: requestTime, keepUntilAtLeast: keepUntilAtLeast, redundancy: redundancy, data: data)
         {
+            this.cacheManager = cacheManager;
+            this.tree = cacheManager is null ? null : this.cacheManager.tree;
             this.disposedValue = false;
-            this.Committed = false;
         }
+
+        /// <summary>
+        /// For test methods
+        /// </summary>
+        public TransactableBlock() : base(
+            requestTime: DateTime.Now,
+            keepUntilAtLeast: DateTime.MaxValue,
+            redundancy: RedundancyContractType.HeapAuto,
+            data: new ReadOnlyMemory<byte>() { })
+        {
+
+        }
+
+        public void SetCacheManager(BPlusTreeCacheManager<BlockHash, TransactableBlock> cacheManager)
+        {
+            this.cacheManager = cacheManager;
+            this.tree = cacheManager is null ? null : this.cacheManager.tree;
+        }
+
+        public bool TreeIsEqual(BPlusTree<BlockHash, TransactableBlock> other) =>
+            this.tree is null ? false : this.tree.Equals(other);
+
+        public bool TreeIsSame(BPlusTree<BlockHash, TransactableBlock> other) =>
+            this.tree is null ? false : object.ReferenceEquals(this.tree, other);
 
         public void Commit()
         {
+            if (this.tree is null)
+                throw new NullReferenceException(nameof(this.tree));
+
+            if (!this.AllowCommit)
+                throw new BrightChainException("Block is not allowed to be committed");
+
             this.tree.Commit();
             this.Committed = true;
         }
 
-        public void Rollback() =>
+        public void Rollback()
+        {
+            if (this.tree is null)
+                throw new NullReferenceException(nameof(this.tree));
+
             this.tree.Rollback();
+            this.Committed = false;
+        }
+
+        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit)
+        {
+            return new TransactableBlock(this.cacheManager, requestTime, keepUntilAtLeast, redundancy, data, allowCommit);
+        }
 
         protected virtual void Dispose(bool disposing)
         {

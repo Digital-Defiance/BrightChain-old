@@ -1,7 +1,6 @@
-﻿using CSharpTest.Net.Collections;
-using BrightChain.Interfaces;
-using BrightChain.Models;
+﻿using BrightChain.Interfaces;
 using BrightChain.Models.Events;
+using CSharpTest.Net.Collections;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,15 +11,20 @@ using System.Threading.Tasks;
 
 namespace BrightChain.Services
 {
+    /// <summary>
+    /// Special intance of CacheManager that is BTree backed. Works for disk and memory and has transaction support.
+    /// </summary>
+    /// <typeparam name="Tkey"></typeparam>
+    /// <typeparam name="Tvalue"></typeparam>
     public abstract class BPlusTreeCacheManager<Tkey, Tvalue> : ICacheManager<Tkey, Tvalue>
     {
         static readonly ManualResetEvent mreStop = new ManualResetEvent(false);
 
         public static bool EnableCount { get; } = false;
 
+        protected readonly ILogger logger;
         internal readonly BPlusTree<Tkey, Tvalue> tree;
         protected readonly BlockCacheExpirationCache<Tkey, Tvalue> expirationCache;
-        protected readonly ILogger logger;
 
         public event ICacheManager<Tkey, Tvalue>.KeyAddedEventHandler KeyAdded;
         public event ICacheManager<Tkey, Tvalue>.KeyRemovedEventHandler KeyRemoved;
@@ -34,6 +38,13 @@ namespace BrightChain.Services
             ApplyTreeActions(new Action<BPlusTree<Tkey, Tvalue>>[] {
                 GarbageCollect
             });
+        }
+
+        public BPlusTreeCacheManager(BPlusTreeCacheManager<Tkey, Tvalue> other)
+        {
+            this.logger = other.logger;
+            this.tree = other.tree;
+            this.expirationCache = other.expirationCache;
         }
 
         internal void GarbageCollect(BPlusTree<Tkey, Tvalue> tree)
@@ -97,5 +108,7 @@ namespace BrightChain.Services
             KeyRemoved?.Invoke(this, eventArgs);
             return true;
         }
+
+        public BPlusTreeCacheManager<Tkey, Tvalue> AsBPlusTreeCacheManager { get => this as BPlusTreeCacheManager<Tkey, Tvalue>; }
     }
 }

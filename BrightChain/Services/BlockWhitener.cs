@@ -4,6 +4,11 @@ using System;
 
 namespace BrightChain.Services
 {
+    /// <summary>
+    /// This tiny little class is actually the lynchpin of the owner free filesystem.
+    /// It is responsible for XORing blocks with random data blocks in order to correlate
+    /// the user data with random data and other user blocks.
+    /// </summary>
     public class BlockWhitener
     {
         public byte TupleCount { get; } = 3;
@@ -28,7 +33,8 @@ namespace BrightChain.Services
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: block.DurationContract.KeepUntilAtLeast,
                     redundancy: block.RedundancyContract.RedundancyContractType,
-                    data: new ReadOnlyMemory<byte>());
+                    data: new ReadOnlyMemory<byte>(),
+                    allowCommit: true);
             }
             return block.XOR(tuples);
         }

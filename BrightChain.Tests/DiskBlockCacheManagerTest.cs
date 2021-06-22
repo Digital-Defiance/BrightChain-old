@@ -1,25 +1,41 @@
-﻿using CSharpTest.Net.Collections;
-using CSharpTest.Net.Serialization;
-using BrightChain.Enumerations;
+﻿using BrightChain.Enumerations;
 using BrightChain.Helpers;
-using BrightChain.Interfaces;
 using BrightChain.Models.Blocks;
 using BrightChain.Services;
+using CSharpTest.Net.Collections;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace BrightChain.Tests
 {
-    public class DiskCacheTestBlock : Block
+    public class DiskCacheTestBlock : TransactableBlock
     {
+        public static DiskBlockCacheManager CacheManager;
 
-        public DiskCacheTestBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data) : base(requestTime: requestTime, keepUntilAtLeast: keepUntilAtLeast, redundancy: redundancy, data: data)
+        public DiskCacheTestBlock(DiskBlockCacheManager cacheManager, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
+            base(
+                cacheManager: cacheManager,
+                requestTime: requestTime,
+                keepUntilAtLeast: keepUntilAtLeast,
+                redundancy: redundancy,
+                data: data,
+                allowCommit: allowCommit)
         {
 
         }
+
+        public DiskCacheTestBlock() :
+            base(
+                cacheManager: CacheManager,
+                requestTime: DateTime.Now,
+                keepUntilAtLeast: DateTime.MaxValue,
+                redundancy: RedundancyContractType.LocalNone,
+                data: NewRandomData(),
+                allowCommit: true)
+        { }
 
         public static ReadOnlyMemory<byte> NewRandomData()
         {
@@ -30,70 +46,58 @@ namespace BrightChain.Tests
             return new ReadOnlyMemory<byte>(data);
         }
 
-        //public static DiskCacheTestBlock NewTestBlock() =>
-        //    new DiskCacheTestBlock(
-        //        requestTime: DateTime.Now,
-        //        keepUntilAtLeast: DateTime.MaxValue,
-        //        redundancy: Enumerations.RedundancyContractType.LocalNone,
-        //        data: NewRandomData());
-
-        public DiskCacheTestBlock() : base(requestTime: DateTime.Now, keepUntilAtLeast: DateTime.MaxValue, redundancy: RedundancyContractType.LocalNone, data: NewRandomData())
-        {
-
-        }
+        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) =>
+            new DiskCacheTestBlock(
+                cacheManager: CacheManager,
+                requestTime: requestTime,
+                keepUntilAtLeast: keepUntilAtLeast,
+                redundancy: redundancy,
+                data: data,
+                allowCommit: allowCommit);
 
         public override void Dispose()
         {
             throw new NotImplementedException();
         }
-
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class TestBlockSerializer : ISerializer<DiskCacheTestBlock>
-    {
-        private BlockSerializer blockSerializer = new BlockSerializer();
-
-        public DiskCacheTestBlock ReadFrom(Stream stream)
-        {
-            return (DiskCacheTestBlock)blockSerializer.ReadFrom(stream);
-        }
-
-        public void WriteTo(DiskCacheTestBlock value, Stream stream)
-        {
-
-        }
-
     }
 
     [TestClass]
-    public class DiskBlockCacheManagerTest : CacheManagerTest<DiskCacheManager<BlockHash, DiskCacheTestBlock>, BlockHash, DiskCacheTestBlock>
+    public class DiskBlockCacheManagerTest : TransactableBlockCacheManagerTest
     {
-        public BPlusTree<BlockHash, DiskCacheTestBlock>.OptionsV2 DefaultOptions()
+        public DiskBlockCacheManagerTest()
         {
-            BPlusTree<BlockHash, DiskCacheTestBlock>.OptionsV2 options = new BPlusTree<BlockHash, DiskCacheTestBlock>.OptionsV2(
-                keySerializer: new BlockHashSerializer(),
-                valueSerializer: new TestBlockSerializer());
-            return options;
+            this.logger = new Mock<ILogger<BPlusTreeCacheManager<BlockHash, TransactableBlock>>>();
+            DiskCacheTestBlock.CacheManager = new DiskBlockCacheManager(
+                                                    new BlockCacheManager(
+                                                        NewCacheManager(this.logger.Object)));
         }
 
-        internal override ICacheManager<BlockHash, DiskCacheTestBlock> NewCacheManager(ILogger logger) => new DiskCacheManager<BlockHash, DiskCacheTestBlock>(logger: logger, optionsV2: DefaultOptions());
+        public static BPlusTree<BlockHash, TransactableBlock>.OptionsV2 DefaultOptions() =>
+            new BPlusTree<BlockHash, TransactableBlock>.OptionsV2(
+                keySerializer: new BlockHashSerializer(),
+                valueSerializer: new BlockSerializer<TransactableBlock>());
 
-        internal override KeyValuePair<BlockHash, DiskCacheTestBlock> NewKeyValue()
+        internal override DiskBlockCacheManager NewCacheManager(ILogger logger) =>
+            new DiskBlockCacheManager(
+                logger: logger,
+                optionsV2: DefaultOptions());
+
+        internal override KeyValuePair<BlockHash, TransactableBlock> NewKeyValue()
         {
             var random = new Random(Guid.NewGuid().GetHashCode());
             var data = new byte[BlockSizeMap.BlockSize(BlockSize.Message)];
             for (int i = 0; i < BlockSizeMap.BlockSize(BlockSize.Message); i++)
                 data[i] = (byte)random.Next(0, 255);
             var block = new DiskCacheTestBlock(
+                new DiskBlockCacheManager(
+                    new BlockCacheManager(
+                        this.cacheManager)),
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.MaxValue,
                 redundancy: Enumerations.RedundancyContractType.LocalNone,
-                data: data);
-            return new KeyValuePair<BlockHash, DiskCacheTestBlock>(block.Id, block);
+                data: data,
+                allowCommit: true);
+            return new KeyValuePair<BlockHash, TransactableBlock>(block.Id, block);
         }
 
         internal override DiskCacheTestBlock NewNullData() => null;
@@ -106,13 +110,24 @@ namespace BrightChain.Tests
             cacheManager.Set(testPair.Key, expectation);
 
             // Act
-            DiskCacheTestBlock result = cacheManager.Get(testPair.Key);
+            TransactableBlock result = cacheManager.Get(testPair.Key);
 
             // Assert
             Assert.IsNotNull(expectation);
             Assert.AreEqual(expectation, result);
             Assert.AreSame(expectation, result);
             Assert.AreEqual(expectation.Data, result.Data);
+        }
+
+        [TestMethod, Ignore]
+        public void TestTransactionCommit()
+        {
+        }
+
+        [TestMethod, Ignore]
+        public void TestTransactionRollback()
+        {
+
         }
     }
 }

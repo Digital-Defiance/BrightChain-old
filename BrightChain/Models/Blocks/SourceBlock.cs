@@ -1,22 +1,24 @@
 ﻿using BrightChain.Enumerations;
 using BrightChain.Exceptions;
-using BrightChain.Interfaces;
 using BrightChain.Services;
 using System;
 
 namespace BrightChain.Models.Blocks
 {
+    /// <summary>
+    /// User data that must be whitened with the block whitener before being persisted. These blocks must never be stored directly.
+    /// </summary>
     public class SourceBlock : Block
     {
-        private ICacheManager<BlockHash, Block> cacheManager;
+        private BPlusTreeCacheManager<BlockHash, TransactableBlock> cacheManager;
 
-        public SourceBlock(ICacheManager<BlockHash, Block> destinationCacheManager, ReadOnlyMemory<byte> data) :
+        public SourceBlock(BPlusTreeCacheManager<BlockHash, TransactableBlock> destinationCacheManager, ReadOnlyMemory<byte> data) :
             base(requestTime: DateTime.Now, keepUntilAtLeast: DateTime.MinValue, redundancy: RedundancyContractType.LocalNone, data: data)
         {
             this.cacheManager = destinationCacheManager;
         }
 
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data)
+        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit)
         {
             if (this.cacheManager is MemoryBlockCacheManager memoryBlockCacheManager)
                 return new MemoryBlock(
@@ -24,14 +26,16 @@ namespace BrightChain.Models.Blocks
                     requestTime: requestTime,
                     keepUntilAtLeast: keepUntilAtLeast,
                     redundancy: redundancy,
-                    data: data);
+                    data: data,
+                    allowCommit: allowCommit);
             else if (this.cacheManager is DiskBlockCacheManager diskBlockCacheManager)
                 return new DiskBlock(
                     cacheManager: diskBlockCacheManager,
                     requestTime: requestTime,
                     keepUntilAtLeast: keepUntilAtLeast,
                     redundancy: redundancy,
-                    data: data);
+                    data: data,
+                    allowCommit: allowCommit);
             else
                 throw new BrightChainException("Unexpected destination cache type");
         }

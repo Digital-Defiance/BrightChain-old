@@ -8,37 +8,48 @@ using System.Collections.Generic;
 
 namespace BrightChain.Models.Blocks
 {
+    /// <summary>
+    /// The block is the base unit persisted to disk
+    /// </summary>
     public abstract class Block : IBlock
     {
         public BlockHash Id { get; }
+        [BrightChainMetadata]
         public StorageDurationContract DurationContract { get; }
+        [BrightChainMetadata]
         public RedundancyContract RedundancyContract { get; }
         public ReadOnlyMemory<byte> Data { get; protected set; }
+        [BrightChainDataIgnore]
+        public bool Committed { get; protected set; } = false;
+        [BrightChainDataIgnore]
+        public bool AllowCommit { get; protected set; } = false;
 
-        [BrightChainIgnore]
+        [BrightChainDataIgnore]
         public BlockSize BlockSize { get; }
-        [BrightChainIgnore]
+        [BrightChainDataIgnore]
         public bool HashVerified { get; private set; }
 
         /// <summary>
         /// A list of the blocks, in order, required to complete this block. Not persisted to disk.
         /// </summary>
-        [BrightChainIgnore]
-        public IEnumerable<IBlock> ConstituentBlocks { get; private set; }
+        [BrightChainDataIgnore]
+        public IEnumerable<Block> ConstituentBlocks { get; private set; }
 
         /// <summary>
         /// Returns a block which contains only the constituent block hashes, ready to write to disk.
         /// </summary>
-        [BrightChainIgnore]
-        public ConstituentBlockListBlock ConstituentBlockListBlock { get => new ConstituentBlockListBlock(sourceBlock: this); }
+        [BrightChainDataIgnore]
+        public ConstituentBlockListBlock ConstituentBlockListBlock { get => new ConstituentBlockListBlock(sourceBlock: this.AsBlock); }
 
         /// <summary>
-        /// Emits the json serialization of the block minus data and any ignored attributes (including itself).
+        /// Emits the serialization of the block minus data and any ignored attributes (including itself).
         /// </summary>
-        [BrightChainIgnore]
+        [BrightChainDataIgnore]
         public ReadOnlyMemory<byte> MetaData => throw new NotImplementedException();
 
-        public abstract Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data);
+        public abstract Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit);
+
+        public Block AsBlock { get => this as Block; }
 
         public Block(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data)
         {
@@ -56,11 +67,18 @@ namespace BrightChain.Models.Blocks
                 storageDurationContract: this.DurationContract,
                 redundancy: redundancy);
             this.Data = data;
-            this.ConstituentBlocks = new IBlock[] { };
+            this.ConstituentBlocks = new Block[] { };
         }
 
+        /// <summary>
+        /// XORs this block with another/randomizer block
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public Block XOR(Block other)
         {
+            if (other is SourceBlock)
+                throw new BrightChainException("Unexpected SourceBlock");
             if (this.BlockSize != other.BlockSize)
                 throw new BrightChainException("BlockSize mismatch");
 
@@ -78,20 +96,26 @@ namespace BrightChain.Models.Blocks
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: keepUntil,
                 redundancy: redundancy,
-                data: new ReadOnlyMemory<byte>(xorData));
-            var newList = new List<IBlock>(this.ConstituentBlocks);
+                data: new ReadOnlyMemory<byte>(xorData),
+                allowCommit: true); // these XOR functions should be one of the only places this even happens
+            var newList = new List<Block>(this.ConstituentBlocks);
             if (!(this is SourceBlock)) newList.Add(this);
             if (!(other is SourceBlock)) newList.Add(other);
             result.ConstituentBlocks = newList.ToArray();
             return result;
         }
 
+        /// <summary>
+        /// XORs this block with a list of other/randomizer blocks
+        /// </summary>
+        /// <param name="others"></param>
+        /// <returns></returns>
         public Block XOR(Block[] others)
         {
             DateTime keepUntil = this.DurationContract.KeepUntilAtLeast;
             RedundancyContractType redundancy = this.RedundancyContract.RedundancyContractType;
             int blockSize = BlockSizeMap.Map[this.BlockSize];
-            var newList = new List<IBlock>(this.ConstituentBlocks);
+            var newList = new List<Block>(this.ConstituentBlocks);
             if (!(this is SourceBlock)) newList.Add(this);
             byte[] xorData = this.Data.ToArray();
 
@@ -114,7 +138,8 @@ namespace BrightChain.Models.Blocks
                 requestTime: System.DateTime.Now,
                 keepUntilAtLeast: keepUntil,
                 redundancy: redundancy,
-                data: new ReadOnlyMemory<byte>(xorData));
+                data: new ReadOnlyMemory<byte>(xorData),
+                allowCommit: true); // these XOR functions should be one of the only places this even happens
             result.ConstituentBlocks = newList.ToArray();
             return result;
         }

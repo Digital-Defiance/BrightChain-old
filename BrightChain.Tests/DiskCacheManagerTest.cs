@@ -1,7 +1,6 @@
-﻿using CSharpTest.Net.Collections;
+﻿using BrightChain.Services;
+using CSharpTest.Net.Collections;
 using CSharpTest.Net.Serialization;
-using BrightChain.Interfaces;
-using BrightChain.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -94,7 +93,8 @@ namespace BrightChain.Tests
             return options;
         }
 
-        internal override ICacheManager<string, TestDiskCacheObject> NewCacheManager(ILogger logger) => new DiskCacheManager<string, TestDiskCacheObject>(logger: logger, optionsV2: DefaultOptions());
+        internal override DiskCacheManager<string, TestDiskCacheObject> NewCacheManager(ILogger logger) =>
+            new DiskCacheManager<string, TestDiskCacheObject>(logger: logger, optionsV2: DefaultOptions());
 
         internal override KeyValuePair<string, TestDiskCacheObject> NewKeyValue()
         {

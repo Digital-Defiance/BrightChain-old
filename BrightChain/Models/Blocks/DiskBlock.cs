@@ -5,28 +5,35 @@ using System;
 
 namespace BrightChain.Models.Blocks
 {
+    /// <summary>
+    /// Block associated with a disk based bplus tree cache
+    /// </summary>
     public class DiskBlock : TransactableBlock, IBlock
     {
-        public DiskBlock(DiskBlockCacheManager cacheManager, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data) :
+        public DiskBlock(BPlusTreeCacheManager<BlockHash, TransactableBlock> cacheManager, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
             base(
-                tree: cacheManager.tree,
+                cacheManager: cacheManager,
                 requestTime: requestTime,
                 keepUntilAtLeast: keepUntilAtLeast,
                 redundancy: redundancy,
-                data: data)
+                data: data,
+                allowCommit: allowCommit)
         {
-            this.cacheManager = cacheManager;
+            if (!(cacheManager is DiskBlockCacheManager))
+                throw new InvalidCastException();
+
             this.cacheManager.Set(this.Id, this);
         }
 
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data)
+        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit)
         {
             return new DiskBlock(
-                cacheManager: (DiskBlockCacheManager)this.cacheManager,
+                cacheManager: this.cacheManager,
                 requestTime: requestTime,
                 keepUntilAtLeast: keepUntilAtLeast,
                 redundancy: redundancy,
-                data: data);
+                data: data,
+                allowCommit: allowCommit);
         }
 
         public override void Dispose()

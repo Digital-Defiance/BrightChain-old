@@ -18,8 +18,8 @@ namespace BrightChain.Tests
         where Tcache : ICacheManager<Tkey, Tvalue>
         where Tvalue : new()
     {
-        protected Mock<ILogger<Tcache>> logger = new Mock<ILogger<Tcache>>();
-        protected ICacheManager<Tkey, Tvalue> cacheManager;
+        protected Mock<ILogger<Tcache>> logger;
+        protected Tcache cacheManager;
 
         /// <summary>
         /// Creates a new value type for test using the standard new(). Override to be more rigorous or for special cases.
@@ -37,7 +37,7 @@ namespace BrightChain.Tests
         /// Method for the derived tests to instantiate the cache manager for the tests with all the right options
         /// </summary>
         /// <returns></returns>
-        abstract internal ICacheManager<Tkey, Tvalue> NewCacheManager(ILogger logger);
+        abstract internal Tcache NewCacheManager(ILogger logger);
 
         /// <summary>
         /// Each test will generate a cache key to be set/get/etc
@@ -51,6 +51,7 @@ namespace BrightChain.Tests
         [TestInitialize]
         public void PreTestSetup()
         {
+            this.logger = new Mock<ILogger<Tcache>>();
             // the cache manager under test
             this.cacheManager = NewCacheManager(logger: logger.Object);
             // a key to be used for each test

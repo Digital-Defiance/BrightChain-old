@@ -1,5 +1,4 @@
-﻿using BrightChain.Interfaces;
-using BrightChain.Services;
+﻿using BrightChain.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -37,7 +36,8 @@ namespace BrightChain.Tests
             return randomString;
         }
 
-        internal override ICacheManager<string, MemoryCacheTestObject> NewCacheManager(ILogger logger) => new MemoryCacheManager<string, MemoryCacheTestObject>(logger: logger);
+        internal override MemoryCacheManager<string, MemoryCacheTestObject> NewCacheManager(ILogger logger) =>
+            new MemoryCacheManager<string, MemoryCacheTestObject>(logger: logger);
 
         internal override KeyValuePair<string, MemoryCacheTestObject> NewKeyValue()
         {
