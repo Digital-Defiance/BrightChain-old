@@ -1,6 +1,12 @@
 ﻿namespace BrightChain.Services
 {
+    /// <summary>
+    /// Cache system focused on grouping expiring blocks into cache keys by second and containing a list of expiring block hashes
+    /// </summary>
+    /// <typeparam name="Tkey"></typeparam>
+    /// <typeparam name="Tvalue"></typeparam>
     public class BlockCacheExpirationCache<Tkey, Tvalue>
+        where Tvalue : new()
     {
         private BlockCacheManager expirationCache;
         private BPlusTreeCacheManager<Tkey, Tvalue> sourceCache;

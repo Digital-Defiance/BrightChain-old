@@ -5,6 +5,9 @@ using System.Security.Cryptography;
 
 namespace BrightChain.Models.Blocks
 {
+    /// <summary>
+    /// Input blocks to the whitener service that consist of purely CSPRNG data of the specified block size
+    /// </summary>
     public class RandomizerBlock : TransactableBlock
     {
         public MemoryBlockCacheManager pregeneratedRandomizerCache { get; }

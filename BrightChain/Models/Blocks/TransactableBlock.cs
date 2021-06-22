@@ -1,5 +1,6 @@
 ﻿using BrightChain.Enumerations;
 using BrightChain.Exceptions;
+using BrightChain.Interfaces;
 using BrightChain.Services;
 using CSharpTest.Net.Collections;
 using CSharpTest.Net.Interfaces;
@@ -7,17 +8,21 @@ using System;
 
 namespace BrightChain.Models.Blocks
 {
-    public class TransactableBlock : Block, IDisposable, ITransactable
+    /// <summary>
+    /// Block that is able to be stored, rolled back, committed, or prevented from being stored.
+    /// TODO: Currently heavily associated with underlying BPlusTree. Abstract
+    /// </summary>
+    public class TransactableBlock : Block, IDisposable, ITransactable, ITransactableBlock
     {
         private bool disposedValue;
         protected BPlusTree<BlockHash, TransactableBlock> tree;
-        public BPlusTreeCacheManager<BlockHash, TransactableBlock> cacheManager { get; internal set; }
+        public BPlusTreeCacheManager<BlockHash, TransactableBlock> CacheManager { get; internal set; }
 
         public TransactableBlock(BPlusTreeCacheManager<BlockHash, TransactableBlock> cacheManager, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
             base(requestTime: requestTime, keepUntilAtLeast: keepUntilAtLeast, redundancy: redundancy, data: data)
         {
-            this.cacheManager = cacheManager;
-            this.tree = cacheManager is null ? null : this.cacheManager.tree;
+            this.CacheManager = cacheManager;
+            this.tree = cacheManager is null ? null : this.CacheManager.tree;
             this.disposedValue = false;
         }
 
@@ -35,8 +40,8 @@ namespace BrightChain.Models.Blocks
 
         public void SetCacheManager(BPlusTreeCacheManager<BlockHash, TransactableBlock> cacheManager)
         {
-            this.cacheManager = cacheManager;
-            this.tree = cacheManager is null ? null : this.cacheManager.tree;
+            this.CacheManager = cacheManager;
+            this.tree = cacheManager is null ? null : this.CacheManager.tree;
         }
 
         public bool TreeIsEqual(BPlusTree<BlockHash, TransactableBlock> other) =>
@@ -68,7 +73,7 @@ namespace BrightChain.Models.Blocks
 
         public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit)
         {
-            return new TransactableBlock(this.cacheManager, requestTime, keepUntilAtLeast, redundancy, data, allowCommit);
+            return new TransactableBlock(this.CacheManager, requestTime, keepUntilAtLeast, redundancy, data, allowCommit);
         }
 
         protected virtual void Dispose(bool disposing)

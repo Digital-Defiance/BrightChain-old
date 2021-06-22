@@ -17,6 +17,7 @@ namespace BrightChain.Services
     /// <typeparam name="Tkey"></typeparam>
     /// <typeparam name="Tvalue"></typeparam>
     public abstract class BPlusTreeCacheManager<Tkey, Tvalue> : ICacheManager<Tkey, Tvalue>
+        where Tvalue : new()
     {
         static readonly ManualResetEvent mreStop = new ManualResetEvent(false);
 

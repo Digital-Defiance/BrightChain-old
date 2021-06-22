@@ -2,6 +2,11 @@
 
 namespace BrightChain.Interfaces
 {
+    /// <summary>
+    /// Basic guaranteed members of the cache system. Notably the system is heavily dependent on the BPlusTree caches which have transaction support.
+    /// </summary>
+    /// <typeparam name="Tkey"></typeparam>
+    /// <typeparam name="Tvalue"></typeparam>
     public interface ICacheManager<Tkey, Tvalue>
     {
         Tvalue Get(Tkey key);

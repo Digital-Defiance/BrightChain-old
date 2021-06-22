@@ -22,13 +22,13 @@ namespace BrightChain.Models.Blocks
             if (!(cacheManager is DiskBlockCacheManager))
                 throw new InvalidCastException();
 
-            this.cacheManager.Set(this.Id, this);
+            this.CacheManager.Set(this.Id, this);
         }
 
         public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit)
         {
             return new DiskBlock(
-                cacheManager: this.cacheManager,
+                cacheManager: this.CacheManager,
                 requestTime: requestTime,
                 keepUntilAtLeast: keepUntilAtLeast,
                 redundancy: redundancy,

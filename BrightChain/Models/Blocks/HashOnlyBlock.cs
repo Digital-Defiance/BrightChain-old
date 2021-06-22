@@ -6,6 +6,10 @@ using System;
 
 namespace BrightChain.Models.Blocks
 {
+    /// <summary>
+    /// Block that only contains a hash and has not yet had data loaded in for verification.
+    /// TODO: this process is not completely thought out.
+    /// </summary>
     public class HashOnlyBlock : IBlock
     {
         public ReadOnlyMemory<byte> Data { get => throw new NotImplementedException(); }

@@ -8,6 +8,7 @@ namespace BrightChain.Services
     /// Disk backed version of BPlus tree
     /// </summary>
     public class DiskCacheManager<Tkey, Tvalue> : BPlusTreeCacheManager<Tkey, Tvalue>
+        where Tvalue : new()
     {
         private TempFile backingFile = new TempFile();
 

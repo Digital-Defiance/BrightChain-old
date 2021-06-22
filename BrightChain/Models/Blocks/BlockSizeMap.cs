@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace BrightChain.Models.Blocks
 {
+    /// <summary>
+    /// Map of the block size enumeration values to their actual sizes.
+    /// </summary>
     public static class BlockSizeMap
     {
         public static readonly Dictionary<BlockSize, int> Map = new Dictionary<BlockSize, int> {
@@ -13,6 +16,11 @@ namespace BrightChain.Models.Blocks
             { global::BrightChain.Enumerations.BlockSize.Large,     4*1024*1024 },  // 4M
         };
 
+        /// <summary>
+        /// Map a block size enumeration to its actual size in bytes
+        /// </summary>
+        /// <param name="blockSize"></param>
+        /// <returns></returns>
         public static int BlockSize(BlockSize blockSize)
         {
             if (!BlockSizeMap.Map.ContainsKey(blockSize))
@@ -21,6 +29,11 @@ namespace BrightChain.Models.Blocks
             return BlockSizeMap.Map[blockSize];
         }
 
+        /// <summary>
+        /// Map a block size in bytes back to its block size enumeration
+        /// </summary>
+        /// <param name="blockSize"></param>
+        /// <returns></returns>
         public static Enumerations.BlockSize BlockSize(int blockSize)
         {
             foreach (KeyValuePair<BlockSize, int> pair in BlockSizeMap.Map)

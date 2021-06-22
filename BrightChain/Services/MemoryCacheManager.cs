@@ -7,6 +7,7 @@ namespace BrightChain.Services
     /// Thin wrapper to parallel DiskCacheManager and provide appropriate BTree options
     /// </summary>
     public class MemoryCacheManager<Tkey, Tvalue> : BPlusTreeCacheManager<Tkey, Tvalue>
+        where Tvalue : new()
     {
         public MemoryCacheManager(ILogger logger, BPlusTree<Tkey, Tvalue>.OptionsV2 optionsV2 = null) :
             base(

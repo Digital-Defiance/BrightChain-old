@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace BrightChain.Models.Blocks
 {
+    /// <summary>
+    /// Map of the block sizes to their (to be determined) costs, which may end up even being calculation functions.
+    /// </summary>
     public static class ByteStorageRedundanceDurationCostMap
     {
         public static readonly Dictionary<BlockSize, double> Map = new Dictionary<BlockSize, double> {
@@ -13,6 +16,11 @@ namespace BrightChain.Models.Blocks
             { global::BrightChain.Enumerations.BlockSize.Large,     0 },  // 4M
         };
 
+        /// <summary>
+        /// Map a block size back to its cost
+        /// </summary>
+        /// <param name="blockSize"></param>
+        /// <returns></returns>
         public static double BlockSize(BlockSize blockSize)
         {
             if (!ByteStorageRedundanceDurationCostMap.Map.ContainsKey(blockSize))
@@ -21,6 +29,11 @@ namespace BrightChain.Models.Blocks
             return ByteStorageRedundanceDurationCostMap.Map[blockSize];
         }
 
+        /// <summary>
+        /// Map a block size's cost back to its block size. May be impossible if not a direct map later on.
+        /// </summary>
+        /// <param name="blockSize"></param>
+        /// <returns></returns>
         public static Enumerations.BlockSize BlockSize(double blockSize)
         {
             foreach (KeyValuePair<BlockSize, double> pair in ByteStorageRedundanceDurationCostMap.Map)
