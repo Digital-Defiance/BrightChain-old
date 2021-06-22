@@ -19,10 +19,6 @@ namespace BrightChain.Models.Blocks
         [BrightChainMetadata]
         public RedundancyContract RedundancyContract { get; }
         public ReadOnlyMemory<byte> Data { get; protected set; }
-        [BrightChainDataIgnore]
-        public bool Committed { get; protected set; } = false;
-        [BrightChainDataIgnore]
-        public bool AllowCommit { get; protected set; } = false;
 
         [BrightChainDataIgnore]
         public BlockSize BlockSize { get; }
