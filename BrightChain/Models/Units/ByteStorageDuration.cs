@@ -5,15 +5,15 @@
     /// </summary>
     public struct ByteStorageDuration
     {
-        readonly ulong ByteCount;
+        readonly int ByteCount;
         readonly ulong DurationSeconds;
         readonly double TotalCost;
 
-        public ByteStorageDuration(ulong byteCount, ulong durationSeconds)
+        public ByteStorageDuration(int byteCount, ulong durationSeconds)
         {
             this.ByteCount = byteCount;
             this.DurationSeconds = durationSeconds;
-            this.TotalCost = byteCount * durationSeconds;
+            this.TotalCost = ((ulong)byteCount) * durationSeconds;
         }
     }
 }

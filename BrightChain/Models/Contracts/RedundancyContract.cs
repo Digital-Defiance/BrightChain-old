@@ -1,4 +1,5 @@
 ﻿using BrightChain.Enumerations;
+using BrightChain.Models.Blocks;
 using BrightChain.Models.Units;
 
 namespace BrightChain.Models.Contracts
@@ -28,11 +29,10 @@ namespace BrightChain.Models.Contracts
                 durationSeconds: (ulong)this.StorageContract.Duration,
                 redundancy: this.RedundancyContractType);
 
-        public static double ComputeCost(ulong byteCount, ulong durationSeconds, RedundancyContractType redundancy)
+        public static double ComputeCost(int byteCount, ulong durationSeconds, RedundancyContractType redundancy)
         {
-            // TODO: probably not a linear map. It's cheaper to store more bytes in bulk probably?
             return
-                byteCount * durationSeconds * ByteStorageRedundancyDurationCostMap.Cost(redundancy);
+                ((ulong)byteCount) * durationSeconds * ByteStorageRedundancyDurationCostMap.Cost(BlockSizeMap.BlockSize(byteCount), redundancy);
         }
     }
 }

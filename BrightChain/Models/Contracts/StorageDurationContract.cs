@@ -10,10 +10,10 @@ namespace BrightChain.Models.Contracts
     {
         public readonly DateTime RequestTime;
         public readonly DateTime KeepUntilAtLeast;
-        public readonly ulong ByteCount;
+        public readonly int ByteCount;
 
 
-        public StorageDurationContract(DateTime requestTime, DateTime keepUntilAtLeast, ulong byteCount)
+        public StorageDurationContract(DateTime requestTime, DateTime keepUntilAtLeast, int byteCount)
         {
             this.RequestTime = requestTime;
             this.KeepUntilAtLeast = keepUntilAtLeast;

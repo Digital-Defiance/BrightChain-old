@@ -2,15 +2,15 @@
 namespace BrightChain.Models.Units
 {
     /// <summary>
-    /// Struct to house the fields for the RedundancyContract
+    /// Struct to house the fields for the RedundancyContract. Per block.
     /// </summary>
     public struct ByteStorageRedundancyDuration
     {
-        readonly ulong ByteCount;
+        readonly int ByteCount;
         readonly ulong DurationSeconds;
         RedundancyContractType Redundancy;
 
-        public ByteStorageRedundancyDuration(ulong byteCount, ulong durationSeconds, RedundancyContractType redundancy)
+        public ByteStorageRedundancyDuration(int byteCount, ulong durationSeconds, RedundancyContractType redundancy)
         {
             this.ByteCount = byteCount;
             this.DurationSeconds = durationSeconds;

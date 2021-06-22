@@ -62,7 +62,7 @@ namespace BrightChain.Models.Blocks
             this.DurationContract = new StorageDurationContract(
                 requestTime: requestTime,
                 keepUntilAtLeast: keepUntilAtLeast,
-                byteCount: (ulong)data.Length);
+                byteCount: data.Length);
             this.RedundancyContract = new RedundancyContract(
                 storageDurationContract: this.DurationContract,
                 redundancy: redundancy);
