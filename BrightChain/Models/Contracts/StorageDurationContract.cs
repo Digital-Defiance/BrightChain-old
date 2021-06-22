@@ -3,6 +3,9 @@ using System;
 
 namespace BrightChain.Models.Contracts
 {
+    /// <summary>
+    /// Contract for the minimum amount of time required to store a given block
+    /// </summary>
     public struct StorageDurationContract
     {
         public readonly DateTime RequestTime;

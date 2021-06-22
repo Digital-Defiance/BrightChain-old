@@ -3,6 +3,11 @@ using System.Collections.Generic;
 
 namespace BrightChain.Models.Units
 {
+    /// <summary>
+    /// Map of redundancy contract types to their associated costs or cost callbock functions in the future.
+    /// currently zero.
+    /// TODO: implement
+    /// </summary>
     public static class ByteStorageRedundancyDurationCostMap
     {
         /** Cost per unit

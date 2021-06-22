@@ -3,6 +3,9 @@ using BrightChain.Models.Units;
 
 namespace BrightChain.Models.Contracts
 {
+    /// <summary>
+    /// Contract for the minimum amount of redundancy desired for a given block
+    /// </summary>
     public struct RedundancyContract
     {
         public readonly StorageDurationContract StorageContract;

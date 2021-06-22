@@ -1,5 +1,8 @@
 ﻿namespace BrightChain.Models.Units
 {
+    /// <summary>
+    /// Struct to house the fields for the StorageDurationContract
+    /// </summary>
     public struct ByteStorageDuration
     {
         readonly ulong ByteCount;
