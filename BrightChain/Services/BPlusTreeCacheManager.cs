@@ -16,7 +16,7 @@ namespace BrightChain.Services
     /// </summary>
     /// <typeparam name="Tkey"></typeparam>
     /// <typeparam name="Tvalue"></typeparam>
-    public abstract class BPlusTreeCacheManager<Tkey, Tvalue> : ICacheManager<Tkey, Tvalue>
+    public abstract class BPlusTreeCacheManager<Tkey, Tvalue> : ICacheManager<Tkey, Tvalue>, IBPlusTreeCacheManager<Tkey, Tvalue>
         where Tvalue : new()
     {
         static readonly ManualResetEvent mreStop = new ManualResetEvent(false);
@@ -50,7 +50,7 @@ namespace BrightChain.Services
 
         internal void GarbageCollect(BPlusTree<Tkey, Tvalue> tree)
         {
-            // get (keep and store elsewhere?) list of keys expiring this second in the given tree (and which haven't been required longer by renewed/extended contracts)
+            // TODO: get (keep and store elsewhere?) list of keys expiring this second in the given tree (and which haven't been required longer by renewed/extended contracts)
             // remove expired entries
             this.logger.LogInformation("GarbageCollect");
         }
@@ -110,6 +110,26 @@ namespace BrightChain.Services
             return true;
         }
 
-        public BPlusTreeCacheManager<Tkey, Tvalue> AsBPlusTreeCacheManager { get => this as BPlusTreeCacheManager<Tkey, Tvalue>; }
+        public bool TreeIsEqual(BPlusTree<Tkey, Tvalue> other) =>
+            this.tree is null ? false : this.tree.Equals(other);
+
+        public bool TreeIsSame(BPlusTree<Tkey, Tvalue> other) =>
+            this.tree is null ? false : object.ReferenceEquals(this.tree, other);
+
+        public void Commit()
+        {
+            if (this.tree is null)
+                throw new NullReferenceException(nameof(this.tree));
+
+            this.tree.Commit();
+        }
+
+        public void Rollback()
+        {
+            if (this.tree is null)
+                throw new NullReferenceException(nameof(this.tree));
+
+            this.tree.Rollback();
+        }
     }
 }
