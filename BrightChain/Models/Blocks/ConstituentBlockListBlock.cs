@@ -34,7 +34,7 @@ namespace BrightChain.Models.Blocks
 
         public IEnumerable<BlockHash> ConstituentBlockHashes =>
             ConstituentBlocks
-                .Select(b => { return b.Id; })
+                .Select(b => b.Id)
                     .ToArray();
 
         public new ReadOnlyMemory<byte> Data =>
@@ -44,7 +44,8 @@ namespace BrightChain.Models.Blocks
                         b.Id.HashBytes.ToArray())
                     .ToArray());
 
-
+        public double TotalCost =>
+            ConstituentBlocks.Sum(b => b.RedundancyContract.Cost);
 
         public override void Dispose()
         {
