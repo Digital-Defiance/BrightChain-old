@@ -12,6 +12,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.Tests", "Bright
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.API", "BrightChain.API\BrightChain.API.csproj", "{CA544D08-926B-4C3F-B7D9-2327D6384A99}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "docs", "docs\docs.csproj", "{A1A13294-9595-468D-964C-2281EAB05A7A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3B1CFD0B-0ED3-48AB-A2E9-54F24DC7BB68}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+		.github\workflows\generate-docs.yml = .github\workflows\generate-docs.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +39,10 @@ Global
 		{CA544D08-926B-4C3F-B7D9-2327D6384A99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA544D08-926B-4C3F-B7D9-2327D6384A99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA544D08-926B-4C3F-B7D9-2327D6384A99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1A13294-9595-468D-964C-2281EAB05A7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1A13294-9595-468D-964C-2281EAB05A7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1A13294-9595-468D-964C-2281EAB05A7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1A13294-9595-468D-964C-2281EAB05A7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

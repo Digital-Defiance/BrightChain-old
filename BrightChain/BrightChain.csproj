@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <PackageReference Include="CSharpTest.Net.Collections" Version="14.906.1403.1082" />
+    <PackageReference Include="docfx" Version="2.58.0" />
     <PackageReference Include="Microsoft.CodeCoverage" Version="16.10.0" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0-preview.5.21301.5" />
