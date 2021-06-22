@@ -1,7 +1,10 @@
 # BrightChain
 - BrightChain Engine in C#/.Net 6
 - BrightNet BlockStore and API for BrightChain: The Revolution(ary) Network
-- https://github.com/The-Revolution-Network/brightChainAPI/wiki/Introduction
+- The old wiki: https://github.com/The-Revolution-Network/brightChainAPI/wiki/Introduction
+- The new wiki: https://github.com/The-Revolution-Network/BrightChain/wiki (old will be rewritten/migrated)
+- Auto-generated documentation: https://the-revolution-network.github.io/BrightChain/api/index.html
+  - Note that some of the classes don't have docblocks yet, but I've gotten many. The "TODO/example" text is in place as well, but if you click into the sections the content is there.
 
 Recent thoughts:
  - API throttle will continue as planned to be mathematically rate limited by minimal proof of works for bad actors and an algorithm to determine the maximum request r/w rates.
