@@ -8,7 +8,7 @@ Recent thoughts:
  - Block consensus will be proof of stake
  - its more of a brightnet blockstore and an ethos... what it needs still is some math and a little more vision in the areas I'm not seeing.
  - The whole goal is to reward people who contribute good, frequently accessed content, the storage for it, etc.
- - Everything is tracked in terms of a unit called the Joule
+ - Everything is tracked in terms of a unit called the Joule - wondering about using a micro-unit Jansky.
  - - Attempting to be somewhat synonymous with the real work unit.
  - - There should ideally be a direct maths.
   - Ultimately bad users are just bad blocks and will get flushed and expired out while good stuff will get extended on forever. They will have to work too hard for their network access/wasteful contribution/access and will leave.
