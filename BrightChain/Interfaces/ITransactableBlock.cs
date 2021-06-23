@@ -32,6 +32,7 @@ namespace BrightChain.Interfaces
         /// <param name="other"></param>
         /// <returns></returns>
         bool TreeIsSame(BPlusTree<BlockHash, TransactableBlock> other);
+        /// <summary>
         /// Whether this block has been committed to the block store
         /// </summary>
         bool Committed { get; }
