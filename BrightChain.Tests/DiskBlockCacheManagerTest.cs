@@ -66,7 +66,7 @@ namespace BrightChain.Tests
     {
         public DiskBlockCacheManagerTest()
         {
-            this.logger = new Mock<ILogger<BPlusTreeCacheManager<BlockHash, TransactableBlock>>>();
+            this.logger = new Mock<ILogger<BlockCacheManager>>();
             DiskCacheTestBlock.CacheManager = new DiskBlockCacheManager(
                                                     new BlockCacheManager(
                                                         NewCacheManager(this.logger.Object)));

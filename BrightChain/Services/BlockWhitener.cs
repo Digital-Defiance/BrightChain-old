@@ -11,7 +11,7 @@ namespace BrightChain.Services
     /// </summary>
     public class BlockWhitener
     {
-        public byte TupleCount { get; } = 3;
+        public byte TupleCount { get; } = 5;
 
         private MemoryBlockCacheManager pregeneratedRandomizerCache;
 

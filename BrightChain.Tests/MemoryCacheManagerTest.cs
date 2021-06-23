@@ -23,7 +23,7 @@ namespace BrightChain.Tests
     }
 
     [TestClass]
-    public class MemoryCacheManagerTest : CacheManagerTest<MemoryCacheManager<string, MemoryCacheTestObject>, string, MemoryCacheTestObject>
+    public class MemoryCacheManagerTest : CacheManagerTest<MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject>, string, MemoryCacheTestObject>
     {
         private static int TestKeyLength { get; } = 11;
         public static string GenerateTestKey()
@@ -36,8 +36,8 @@ namespace BrightChain.Tests
             return randomString;
         }
 
-        internal override MemoryCacheManager<string, MemoryCacheTestObject> NewCacheManager(ILogger logger) =>
-            new MemoryCacheManager<string, MemoryCacheTestObject>(logger: logger);
+        internal override MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject> NewCacheManager(ILogger logger) =>
+            new MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject>(logger: logger);
 
         internal override KeyValuePair<string, MemoryCacheTestObject> NewKeyValue()
         {

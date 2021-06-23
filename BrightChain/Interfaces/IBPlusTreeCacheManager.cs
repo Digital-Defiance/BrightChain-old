@@ -3,7 +3,6 @@
 namespace BrightChain.Interfaces
 {
     public interface IBPlusTreeCacheManager<Tkey, Tvalue> : ICacheManager<Tkey, Tvalue>
-        where Tvalue : new()
     {
         bool TreeIsEqual(BPlusTree<Tkey, Tvalue> other);
         bool TreeIsSame(BPlusTree<Tkey, Tvalue> other);

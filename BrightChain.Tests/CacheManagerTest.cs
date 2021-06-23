@@ -16,7 +16,6 @@ namespace BrightChain.Tests
     [TestClass]
     public abstract class CacheManagerTest<Tcache, Tkey, Tvalue>
         where Tcache : ICacheManager<Tkey, Tvalue>
-        where Tvalue : new()
     {
         protected Mock<ILogger<Tcache>> logger;
         protected Tcache cacheManager;

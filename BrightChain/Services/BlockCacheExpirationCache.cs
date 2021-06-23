@@ -6,7 +6,6 @@
     /// <typeparam name="Tkey"></typeparam>
     /// <typeparam name="Tvalue"></typeparam>
     public class BlockCacheExpirationCache<Tkey, Tvalue>
-        where Tvalue : new()
     {
         private BlockCacheManager expirationCache;
         private BPlusTreeCacheManager<Tkey, Tvalue> sourceCache;

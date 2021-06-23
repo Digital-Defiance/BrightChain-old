@@ -72,7 +72,7 @@ namespace BrightChain.Tests
     }
 
     [TestClass]
-    public class DiskCacheManagerTest : CacheManagerTest<DiskCacheManager<string, TestDiskCacheObject>, string, TestDiskCacheObject>
+    public class DiskCacheManagerTest : CacheManagerTest<DiskBPlusTreeCacheManager<string, TestDiskCacheObject>, string, TestDiskCacheObject>
     {
         private int TestKeyLength { get; } = 11;
         public string GenerateTestKey()
@@ -93,8 +93,8 @@ namespace BrightChain.Tests
             return options;
         }
 
-        internal override DiskCacheManager<string, TestDiskCacheObject> NewCacheManager(ILogger logger) =>
-            new DiskCacheManager<string, TestDiskCacheObject>(logger: logger, optionsV2: DefaultOptions());
+        internal override DiskBPlusTreeCacheManager<string, TestDiskCacheObject> NewCacheManager(ILogger logger) =>
+            new DiskBPlusTreeCacheManager<string, TestDiskCacheObject>(logger: logger, optionsV2: DefaultOptions());
 
         internal override KeyValuePair<string, TestDiskCacheObject> NewKeyValue()
         {
