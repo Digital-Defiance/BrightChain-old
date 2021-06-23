@@ -1,5 +1,6 @@
 ﻿using BrightChain.Services;
 using CSharpTest.Net.Collections;
+using CSharpTest.Net.Interfaces;
 using CSharpTest.Net.Serialization;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,18 +11,43 @@ using System.Linq;
 
 namespace BrightChain.Tests
 {
-    public class TestDiskCacheObject
+    public class TestDiskCacheObject : ITransactable
     {
-        public Memory<byte> Memory { get; set; }
+        /// <summary>
+        /// last committed value
+        /// </summary>
+        protected Memory<byte> lastCommittedMemory { get; private set; }
+        /// <summary>
+        /// working memory with new values
+        /// </summary>
+        public Memory<byte> Memory { get; private set; }
 
         public TestDiskCacheObject()
         {
             this.Memory = new Memory<byte>();
+            this.lastCommittedMemory = new Memory<byte>();
         }
 
         public TestDiskCacheObject(byte[] data)
         {
             this.Memory = new Memory<byte>(data);
+            this.lastCommittedMemory = new Memory<byte>();
+        }
+
+        public void Commit()
+        {
+            this.lastCommittedMemory = new Memory<byte>(this.Memory.ToArray());
+        }
+
+        public void Rollback()
+        {
+            this.Memory = new Memory<byte>(this.lastCommittedMemory.ToArray());
+        }
+
+        public void Dispose()
+        {
+            this.Memory = null;
+            this.lastCommittedMemory = null;
         }
     }
 
@@ -72,7 +98,7 @@ namespace BrightChain.Tests
     }
 
     [TestClass]
-    public class DiskCacheManagerTest : CacheManagerTest<DiskBPlusTreeCacheManager<string, TestDiskCacheObject>, string, TestDiskCacheObject>
+    public class DiskBPlusTreeCacheManagerTest : BPlusTreeCacheManagerTest<DiskBPlusTreeCacheManager<string, TestDiskCacheObject, PrimitiveSerializer, TestDiskCacheObjectSerializer>, string, TestDiskCacheObject, PrimitiveSerializer, TestDiskCacheObjectSerializer>
     {
         private int TestKeyLength { get; } = 11;
         public string GenerateTestKey()
@@ -93,8 +119,8 @@ namespace BrightChain.Tests
             return options;
         }
 
-        internal override DiskBPlusTreeCacheManager<string, TestDiskCacheObject> NewCacheManager(ILogger logger) =>
-            new DiskBPlusTreeCacheManager<string, TestDiskCacheObject>(logger: logger, optionsV2: DefaultOptions());
+        internal override DiskBPlusTreeCacheManager<string, TestDiskCacheObject, PrimitiveSerializer, TestDiskCacheObjectSerializer> NewCacheManager(ILogger logger) =>
+            new DiskBPlusTreeCacheManager<string, TestDiskCacheObject, PrimitiveSerializer, TestDiskCacheObjectSerializer>(logger: logger, optionsV2: DefaultOptions());
 
         internal override KeyValuePair<string, TestDiskCacheObject> NewKeyValue()
         {

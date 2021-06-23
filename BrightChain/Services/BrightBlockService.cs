@@ -30,12 +30,12 @@ namespace BrightChain.Services
             this.logger = logger.CreateLogger(nameof(BrightBlockService));
             if (this.logger is null)
                 throw new BrightChainException("CreateLogger failed");
-            this.logger.LogInformation(String.Format("<%s>: logging initialized", nameof(BrightBlockService)));
+            this.logger.LogInformation(String.Format("<{0}>: logging initialized", nameof(BrightBlockService)));
             this.configuration = configuration;
 
             this.blockMemoryCache = new MemoryBlockCacheManager(logger: this.logger);
             this.blockDiskCache = new DiskBlockCacheManager(logger: this.logger, optionsV2: DefaultOptions());
-            this.logger.LogInformation(String.Format("<%s>: caches initialized", nameof(BrightBlockService)));
+            this.logger.LogInformation(String.Format("<{0}>: caches initialized", nameof(BrightBlockService)));
         }
 
         public IDisposable BeginScope<TState>(TState state) =>

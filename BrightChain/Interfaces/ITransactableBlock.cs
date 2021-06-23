@@ -1,4 +1,5 @@
-﻿using BrightChain.Models.Blocks;
+﻿using BrightChain.Helpers;
+using BrightChain.Models.Blocks;
 using BrightChain.Services;
 using CSharpTest.Net.Collections;
 using CSharpTest.Net.Interfaces;
@@ -14,12 +15,12 @@ namespace BrightChain.Interfaces
         /// <summary>
         /// Associated cache manager for this block
         /// </summary>
-        BPlusTreeCacheManager<BlockHash, TransactableBlock> CacheManager { get; }
+        BPlusTreeCacheManager<BlockHash, TransactableBlock, BlockHashSerializer, BlockSerializer<TransactableBlock>> CacheManager { get; }
         /// <summary>
         /// Update the cache manager association for the block
         /// </summary>
         /// <param name="cacheManager"></param>
-        void SetCacheManager(BPlusTreeCacheManager<BlockHash, TransactableBlock> cacheManager);
+        void SetCacheManager(BPlusTreeCacheManager<BlockHash, TransactableBlock, BlockHashSerializer, BlockSerializer<TransactableBlock>> cacheManager);
         /// <summary>
         /// Whether this tree node is on a tree equal to the other cache's tree
         /// </summary>

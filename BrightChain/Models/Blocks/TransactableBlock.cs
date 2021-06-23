@@ -1,6 +1,7 @@
 ﻿using BrightChain.Attributes;
 using BrightChain.Enumerations;
 using BrightChain.Exceptions;
+using BrightChain.Helpers;
 using BrightChain.Interfaces;
 using BrightChain.Services;
 using CSharpTest.Net.Collections;
@@ -17,13 +18,13 @@ namespace BrightChain.Models.Blocks
     {
         private bool disposedValue;
         protected BPlusTree<BlockHash, TransactableBlock> tree;
-        public BPlusTreeCacheManager<BlockHash, TransactableBlock> CacheManager { get; internal set; }
+        public BPlusTreeCacheManager<BlockHash, TransactableBlock, BlockHashSerializer, BlockSerializer<TransactableBlock>> CacheManager { get; internal set; }
         [BrightChainDataIgnore]
         public bool Committed { get; protected set; } = false;
         [BrightChainDataIgnore]
         public bool AllowCommit { get; protected set; } = false;
 
-        public TransactableBlock(BPlusTreeCacheManager<BlockHash, TransactableBlock> cacheManager, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
+        public TransactableBlock(BPlusTreeCacheManager<BlockHash, TransactableBlock, BlockHashSerializer, BlockSerializer<TransactableBlock>> cacheManager, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
             base(requestTime: requestTime, keepUntilAtLeast: keepUntilAtLeast, redundancy: redundancy, data: data)
         {
             this.CacheManager = cacheManager;
@@ -43,7 +44,7 @@ namespace BrightChain.Models.Blocks
 
         }
 
-        public void SetCacheManager(BPlusTreeCacheManager<BlockHash, TransactableBlock> cacheManager)
+        public void SetCacheManager(BPlusTreeCacheManager<BlockHash, TransactableBlock, BlockHashSerializer, BlockSerializer<TransactableBlock>> cacheManager)
         {
             this.CacheManager = cacheManager;
             this.tree = cacheManager is null ? null : this.CacheManager.tree;

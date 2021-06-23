@@ -13,7 +13,7 @@ namespace BrightChain.Tests
 {
     public class DiskCacheTestBlock : TransactableBlock
     {
-        public static DiskBlockCacheManager CacheManager;
+        public new static DiskBlockCacheManager CacheManager;
 
         public DiskCacheTestBlock(DiskBlockCacheManager cacheManager, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
             base(

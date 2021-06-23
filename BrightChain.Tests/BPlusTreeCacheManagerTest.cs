@@ -1,32 +1,43 @@
-﻿using BrightChain.Interfaces;
-using BrightChain.Services;
+﻿using BrightChain.Services;
+using CSharpTest.Net.Collections;
 using CSharpTest.Net.Interfaces;
+using CSharpTest.Net.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BrightChain.Tests
 {
     [TestClass]
-    public abstract class BPlusTreeCacheManagerTest<Tcache, Tkey, Tvalue> : CacheManagerTest<Tcache, Tkey, Tvalue>
-            where Tcache : BPlusTreeCacheManager<Tkey, Tvalue>
-            where Tvalue : ITransactable, ITransactableBlock
+    public abstract class BPlusTreeCacheManagerTest<Tcache, Tkey, Tvalue, TkeySerializer, TvalueSerializer> : CacheManagerTest<Tcache, Tkey, Tvalue>
+        where TkeySerializer : ISerializer<Tkey>, new()
+        where TvalueSerializer : ISerializer<Tvalue>, new()
+        where Tcache : BPlusTreeCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer>
+            where Tvalue : ITransactable
     {
+
+        public TransactionLogOptions<Tkey, Tvalue> NewTransactionLogOptions() =>
+            new TransactionLogOptions<Tkey, Tvalue>(
+                    fileName: this.cacheManager.TransactionLogPath,
+                    keySerializer: new TkeySerializer(),
+                    valueSerializer: new TvalueSerializer());
+
         [TestMethod, Ignore]
         public void DataCommitTest()
         {
-            this.cacheManager.Set(testPair.Key, testPair.Value);
-            Assert.IsFalse(testPair.Value.Committed);
-            this.cacheManager.Commit();
-            Assert.IsTrue(testPair.Value.Committed);
-            Assert.IsTrue(this.cacheManager.Contains(testPair.Key));
+            var alternateValue = NewKeyValue();
+
+            using (var tlog = new TransactionLog<Tkey, Tvalue>(
+                this.NewTransactionLogOptions()))
+            {
+            }
         }
 
         [TestMethod, Ignore]
         public void DataRollbackTest()
         {
-            this.cacheManager.Set(testPair.Key, testPair.Value);
-            Assert.IsFalse(testPair.Value.Committed);
-            this.cacheManager.Rollback();
-            Assert.IsFalse(this.cacheManager.Contains(testPair.Key));
+            using (var tlog = new TransactionLog<Tkey, Tvalue>(
+                this.NewTransactionLogOptions()))
+            {
+            }
         }
     }
 }

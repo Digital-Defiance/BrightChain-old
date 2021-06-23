@@ -1,8 +1,10 @@
 ﻿using BrightChain.Services;
+using CSharpTest.Net.Serialization;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace BrightChain.Tests
@@ -22,8 +24,31 @@ namespace BrightChain.Tests
         }
     }
 
+    public class MemoryCacheTestObjectSerializer : PrimitiveSerializer, ISerializer<MemoryCacheTestObject>
+    {
+        public MemoryCacheTestObject ReadFrom(Stream stream)
+        {
+            List<byte> streamdata = new List<byte>();
+            do
+            {
+                int b = stream.ReadByte();
+                if (b == -1)
+                    break;
+                if (b == 0)
+                    break; // end of string
+                streamdata.Add(streamdata[0]);
+            } while (true);
+
+            return new MemoryCacheTestObject(
+                id: System.Text.ASCIIEncoding.ASCII.GetString(streamdata.ToArray()));
+        }
+
+        public void WriteTo(MemoryCacheTestObject value, Stream stream) =>
+            stream.Write(System.Text.ASCIIEncoding.ASCII.GetBytes(value.id));
+    }
+
     [TestClass]
-    public class MemoryCacheManagerTest : CacheManagerTest<MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject>, string, MemoryCacheTestObject>
+    public class MemoryCacheManagerTest : CacheManagerTest<MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject, PrimitiveSerializer, MemoryCacheTestObjectSerializer>, string, MemoryCacheTestObject>
     {
         private static int TestKeyLength { get; } = 11;
         public static string GenerateTestKey()
@@ -36,8 +61,8 @@ namespace BrightChain.Tests
             return randomString;
         }
 
-        internal override MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject> NewCacheManager(ILogger logger) =>
-            new MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject>(logger: logger);
+        internal override MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject, PrimitiveSerializer, MemoryCacheTestObjectSerializer> NewCacheManager(ILogger logger) =>
+            new MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject, PrimitiveSerializer, MemoryCacheTestObjectSerializer>(logger: logger);
 
         internal override KeyValuePair<string, MemoryCacheTestObject> NewKeyValue()
         {

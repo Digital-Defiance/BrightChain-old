@@ -1,4 +1,5 @@
-﻿using BrightChain.Models.Blocks;
+﻿using BrightChain.Enumerations;
+using BrightChain.Models.Blocks;
 using CSharpTest.Net.Serialization;
 using System;
 using System.IO;
@@ -12,7 +13,23 @@ namespace BrightChain.Helpers
     {
         public T ReadFrom(Stream stream)
         {
-            throw new NotImplementedException();
+            byte[] lengthBytes = new byte[sizeof(int)];
+            stream.Read(
+                buffer: lengthBytes,
+                offset: 0,
+                count: lengthBytes.Length);
+            int blockLength = BitConverter.ToInt32(lengthBytes, 0);
+            BlockSize blockSize = BlockSizeMap.BlockSize(blockLength);
+            byte[] blockData = new byte[blockLength];
+            stream.Read(
+                buffer: blockData,
+                offset: 0,
+                count: blockLength);
+            return new RestoredBlock(
+                requestTime: DateTime.Now,
+                keepUntilAtLeast: DateTime.MaxValue,
+                redundancy: RedundancyContractType.HeapAuto,
+                data: blockData) as T;
         }
 
         public void WriteTo(T value, Stream stream)

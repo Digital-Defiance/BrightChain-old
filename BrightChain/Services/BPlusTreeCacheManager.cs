@@ -1,6 +1,8 @@
 ﻿using BrightChain.Interfaces;
 using BrightChain.Models.Events;
 using CSharpTest.Net.Collections;
+using CSharpTest.Net.IO;
+using CSharpTest.Net.Serialization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,9 @@ namespace BrightChain.Services
     /// </summary>
     /// <typeparam name="Tkey"></typeparam>
     /// <typeparam name="Tvalue"></typeparam>
-    public abstract class BPlusTreeCacheManager<Tkey, Tvalue> : ICacheManager<Tkey, Tvalue>, IBPlusTreeCacheManager<Tkey, Tvalue>
+    public abstract class BPlusTreeCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer> : ICacheManager<Tkey, Tvalue>, IBPlusTreeCacheManager<Tkey, Tvalue>
+        where TkeySerializer : ISerializer<Tkey>, new()
+        where TvalueSerializer : ISerializer<Tvalue>, new()
     {
         static readonly ManualResetEvent mreStop = new ManualResetEvent(false);
 
@@ -24,23 +28,39 @@ namespace BrightChain.Services
 
         protected readonly ILogger logger;
         internal readonly BPlusTree<Tkey, Tvalue> tree;
-        protected readonly BlockCacheExpirationCache<Tkey, Tvalue> expirationCache;
+        protected readonly BlockCacheExpirationCache<Tkey, Tvalue, TkeySerializer, TvalueSerializer> expirationCache;
+        protected TempFile transactionLog = new TempFile();
 
         public event ICacheManager<Tkey, Tvalue>.KeyAddedEventHandler KeyAdded;
         public event ICacheManager<Tkey, Tvalue>.KeyRemovedEventHandler KeyRemoved;
         public event ICacheManager<Tkey, Tvalue>.CacheMissEventHandler CacheMiss;
 
+        public BPlusTree<Tkey, Tvalue>.OptionsV2 DefaultOptions(BPlusTree<Tkey, Tvalue>.OptionsV2 options)
+        {
+            //options.CalcBTreeOrder(16, 24);
+            options.TransactionLogFileName = transactionLog.TempPath;
+            return options;
+        }
+
+        public TransactionLogOptions<Tkey, Tvalue> NewTransactionLogOptions() =>
+            new TransactionLogOptions<Tkey, Tvalue>(
+                    fileName: this.transactionLog.TempPath,
+                    keySerializer: new TkeySerializer(),
+                    valueSerializer: new TvalueSerializer());
+
+        public string TransactionLogPath => this.transactionLog.TempPath;
+
         public BPlusTreeCacheManager(ILogger logger, BPlusTree<Tkey, Tvalue> tree)
         {
             this.logger = logger;
-            this.logger.LogInformation(String.Format("<%s>: initalizing", nameof(BPlusTreeCacheManager<Tkey, Tvalue>)));
+            this.logger.LogInformation(String.Format("<{0}>: initalizing", nameof(BPlusTreeCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer>)));
             this.tree = tree;
             ApplyTreeActions(new Action<BPlusTree<Tkey, Tvalue>>[] {
                 GarbageCollect
             });
         }
 
-        public BPlusTreeCacheManager(BPlusTreeCacheManager<Tkey, Tvalue> other)
+        public BPlusTreeCacheManager(BPlusTreeCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer> other)
         {
             this.logger = other.logger;
             this.tree = other.tree;

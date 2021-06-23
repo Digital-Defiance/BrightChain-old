@@ -13,20 +13,46 @@ namespace BrightChain.Models.Blocks
         public ReadOnlyMemory<byte> HashBytes { get; protected set; }
         public BlockSize BlockSize { get; }
 
+        public bool Computed { get; }
+
         public BlockHash(Block block)
         {
             this.BlockSize = block.BlockSize;
             using (SHA256 mySHA256 = SHA256.Create())
                 this.HashBytes = mySHA256.ComputeHash(block.Data.ToArray());
+            this.Computed = true;
         }
 
-        public BlockHash(BlockSize blockSize, ReadOnlyMemory<byte> hashBytes)
+        public BlockHash(BlockSize originalBlockSize, ReadOnlyMemory<byte> providedHashBytes)
         {
-            this.BlockSize = blockSize;
-            this.HashBytes = hashBytes;
+            this.BlockSize = originalBlockSize;
+            this.HashBytes = providedHashBytes;
+            this.Computed = false;
+        }
+
+        internal BlockHash(BlockSize originalBlockSize, ReadOnlyMemory<byte> providedHashBytes, bool computed = false)
+        {
+            this.BlockSize = originalBlockSize;
+            this.HashBytes = providedHashBytes;
+            this.Computed = computed;
+        }
+
+        public BlockHash(ReadOnlyMemory<byte> dataBytes)
+        {
+            this.BlockSize = BlockSizeMap.BlockSize(dataBytes.Length);
+            using (SHA256 mySHA256 = SHA256.Create())
+                this.HashBytes = mySHA256.ComputeHash(dataBytes.ToArray());
+            this.Computed = true;
         }
 
         public string ToString(string format, IFormatProvider _) =>
             BitConverter.ToString(this.HashBytes.ToArray());
+
+        public static bool operator ==(BlockHash a, BlockHash b) =>
+            a.HashBytes.Equals(b.HashBytes);
+
+        public static bool operator !=(BlockHash a, BlockHash b) =>
+            !a.HashBytes.Equals(b.HashBytes);
+
     }
 }

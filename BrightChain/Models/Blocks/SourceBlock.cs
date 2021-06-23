@@ -1,5 +1,6 @@
 ﻿using BrightChain.Enumerations;
 using BrightChain.Exceptions;
+using BrightChain.Helpers;
 using BrightChain.Services;
 using System;
 
@@ -10,9 +11,9 @@ namespace BrightChain.Models.Blocks
     /// </summary>
     public class SourceBlock : Block
     {
-        private BPlusTreeCacheManager<BlockHash, TransactableBlock> cacheManager;
+        private BPlusTreeCacheManager<BlockHash, TransactableBlock, BlockHashSerializer, BlockSerializer<TransactableBlock>> cacheManager;
 
-        public SourceBlock(BPlusTreeCacheManager<BlockHash, TransactableBlock> destinationCacheManager, ReadOnlyMemory<byte> data) :
+        public SourceBlock(BPlusTreeCacheManager<BlockHash, TransactableBlock, BlockHashSerializer, BlockSerializer<TransactableBlock>> destinationCacheManager, ReadOnlyMemory<byte> data) :
             base(requestTime: DateTime.Now, keepUntilAtLeast: DateTime.MinValue, redundancy: RedundancyContractType.LocalNone, data: data)
         {
             this.cacheManager = destinationCacheManager;

@@ -140,6 +140,18 @@ namespace BrightChain.Models.Blocks
             return result;
         }
 
+        public bool Validate()
+        {
+            if (this.BlockSize == BlockSize.Unknown)
+                throw new BrightChainValidationException(String.Format("{0} is invalid: {1}", nameof(this.BlockSize), this.BlockSize.ToString()));
+            if (this.BlockSize != BlockSizeMap.BlockSize(this.Data.Length))
+                throw new BrightChainValidationException(String.Format("{0} is invalid: {1}, actual {2} bytes", nameof(this.BlockSize), this.BlockSize.ToString(), this.Data.Length));
+            var recomputedHash = new BlockHash(this);
+            if (this.Id != recomputedHash)
+                throw new BrightChainValidationException(String.Format("{0} is invalid: {1}, actual {2}", nameof(this.Id), this.Id.ToString(), recomputedHash.ToString()));
+            return true;
+        }
+
         public abstract void Dispose();
     }
 }

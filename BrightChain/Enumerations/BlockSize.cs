@@ -3,6 +3,10 @@
     public enum BlockSize
     {
         /// <summary>
+        /// Invalid/indeterminate/unknown block size
+        /// </summary>
+        Unknown,
+        /// <summary>
         /// Message size, such as  a small data blob, currently 512b
         /// </summary>
         Message,

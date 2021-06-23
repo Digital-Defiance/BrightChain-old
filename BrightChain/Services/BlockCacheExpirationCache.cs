@@ -1,16 +1,20 @@
-﻿namespace BrightChain.Services
+﻿using CSharpTest.Net.Serialization;
+
+namespace BrightChain.Services
 {
     /// <summary>
     /// Cache system focused on grouping expiring blocks into cache keys by second and containing a list of expiring block hashes
     /// </summary>
     /// <typeparam name="Tkey"></typeparam>
     /// <typeparam name="Tvalue"></typeparam>
-    public class BlockCacheExpirationCache<Tkey, Tvalue>
+    public class BlockCacheExpirationCache<Tkey, Tvalue, TkeySerializer, TvalueSerializer>
+        where TkeySerializer : ISerializer<Tkey>, new()
+        where TvalueSerializer : ISerializer<Tvalue>, new()
     {
         private BlockCacheManager expirationCache;
-        private BPlusTreeCacheManager<Tkey, Tvalue> sourceCache;
+        private BPlusTreeCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer> sourceCache;
 
-        public BlockCacheExpirationCache(BPlusTreeCacheManager<Tkey, Tvalue> sourceCache)
+        public BlockCacheExpirationCache(BPlusTreeCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer> sourceCache)
         {
             /* TODO:
              * for each entry in the cache, create or add to the list of blocks expiring that second
