@@ -30,10 +30,10 @@ namespace BrightChain.Services
                 // for now just generate on demand, but these can be pre-seeded
                 tuples[i] = new RandomizerBlock(
                     pregeneratedRandomizerCache: this.pregeneratedRandomizerCache,
+                    blockSize: block.BlockSize,
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: block.DurationContract.KeepUntilAtLeast,
                     redundancy: block.RedundancyContract.RedundancyContractType,
-                    data: new ReadOnlyMemory<byte>(),
                     allowCommit: true);
             }
             return block.XOR(tuples);

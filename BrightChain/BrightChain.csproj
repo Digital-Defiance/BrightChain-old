@@ -22,16 +22,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BouncyCastle" Version="1.8.9" />
     <PackageReference Include="CSharpTest.Net.Collections" Version="14.906.1403.1082" />
+    <PackageReference Include="Dapr.Actors" Version="1.2.0" />
+    <PackageReference Include="Dapr.Actors.AspNetCore" Version="1.2.0" />
+    <PackageReference Include="Dapr.AspNetCore" Version="1.2.0" />
+    <PackageReference Include="Dapr.Client" Version="1.2.0" />
+    <PackageReference Include="Dapr.Extensions.Configuration" Version="1.2.0" />
     <PackageReference Include="docfx" Version="2.58.0" />
     <PackageReference Include="Microsoft.CodeCoverage" Version="16.10.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0-preview.5.21301.9" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0-preview.5.21301.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-preview.5.21301.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Castle.Core" Version="4.4.1" />
-    <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="Microsoft.Data.OData" Version="5.8.4" />
     <PackageReference Include="FluentValidation" Version="10.2.3" />

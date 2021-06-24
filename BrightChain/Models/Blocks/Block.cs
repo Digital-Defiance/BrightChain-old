@@ -51,7 +51,6 @@ namespace BrightChain.Models.Blocks
                 throw new BrightChainException("Invalid Block Size"); // TODO: make (more) special exception type
 
             this.BlockSize = BlockSizeMap.BlockSize(data.Length);
-            this.Id = new BlockHash(this);
             this.HashVerified = true;
             this.DurationContract = new StorageDurationContract(
                 requestTime: requestTime,
@@ -61,6 +60,7 @@ namespace BrightChain.Models.Blocks
                 storageDurationContract: this.DurationContract,
                 redundancy: redundancy);
             this.Data = data;
+            this.Id = new BlockHash(this); // must happen after data is in place
             this.ConstituentBlocks = new Block[] { };
         }
 

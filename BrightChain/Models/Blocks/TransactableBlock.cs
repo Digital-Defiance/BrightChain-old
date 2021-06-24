@@ -81,10 +81,8 @@ namespace BrightChain.Models.Blocks
             this.Committed = false;
         }
 
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit)
-        {
-            return new TransactableBlock(this.CacheManager, requestTime, keepUntilAtLeast, redundancy, data, allowCommit);
-        }
+        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) =>
+            new TransactableBlock(this.CacheManager, requestTime, keepUntilAtLeast, redundancy, data, allowCommit);
 
         public override bool Equals(object obj) =>
             this == obj as TransactableBlock;
