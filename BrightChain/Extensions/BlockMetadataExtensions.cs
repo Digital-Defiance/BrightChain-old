@@ -38,8 +38,17 @@ namespace BrightChain.Extensions
                     System.Text.Encoding.ASCII.GetString(
                         metaDataBytes.ToArray()));
 
-                // TODO: validate type and maximum compatible assembly version
-                throw new NotImplementedException();
+                // TODO: validate compatible types and assembly versions
+                // TODO: use BlockFactory to get the right type
+
+                Dictionary<string, object> metadataDictionary = (Dictionary<string, object>)metaDataObject;
+                foreach (string key in metadataDictionary.Keys)
+                    if (!key.StartsWith("_"))
+                    {
+                        var prop = typeof(Block).GetProperty(key);
+                        if (prop != null)
+                            prop.SetValue(block, metadataDictionary[key]);
+                    }
             }
             catch (Exception e)
             {
