@@ -10,7 +10,8 @@ namespace BrightChain.Models.Blocks
     /// </summary>
     public class RandomizerBlock : TransactableBlock
     {
-        public static ReadOnlyMemory<byte> NewRandomBlockData(BlockSize blockSize) {
+        public static ReadOnlyMemory<byte> NewRandomBlockData(BlockSize blockSize)
+        {
             var rnd = new byte[BlockSizeMap.BlockSize(blockSize)];
             using (var rng = RandomNumberGenerator.Create()) // TODO: guarantee is CSPRNG
                 rng.GetBytes(rnd);

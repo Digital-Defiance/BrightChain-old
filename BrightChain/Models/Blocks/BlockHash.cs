@@ -50,7 +50,7 @@ namespace BrightChain.Models.Blocks
             this.ToString();
 
         public new string ToString() =>
-            BitConverter.ToString( this.HashBytes.ToArray());
+            BitConverter.ToString(this.HashBytes.ToArray());
 
         public static bool operator ==(BlockHash a, BlockHash b) =>
             ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;

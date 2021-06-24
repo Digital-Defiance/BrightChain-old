@@ -19,7 +19,7 @@ namespace BrightChain.Models.Blocks
             this.cacheManager = destinationCacheManager;
         }
 
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit)
+        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool _)
         {
             if (this.cacheManager is MemoryBlockCacheManager memoryBlockCacheManager)
                 return new MemoryBlock(
@@ -28,7 +28,7 @@ namespace BrightChain.Models.Blocks
                     keepUntilAtLeast: keepUntilAtLeast,
                     redundancy: redundancy,
                     data: data,
-                    allowCommit: allowCommit);
+                    allowCommit: false);
             else if (this.cacheManager is DiskBlockCacheManager diskBlockCacheManager)
                 return new DiskBlock(
                     cacheManager: diskBlockCacheManager,
@@ -36,7 +36,7 @@ namespace BrightChain.Models.Blocks
                     keepUntilAtLeast: keepUntilAtLeast,
                     redundancy: redundancy,
                     data: data,
-                    allowCommit: allowCommit);
+                    allowCommit: false);
             else
                 throw new BrightChainException("Unexpected destination cache type");
         }

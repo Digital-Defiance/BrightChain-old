@@ -34,5 +34,16 @@ namespace BrightChain.Models.Contracts
             return
                 ((ulong)byteCount) * durationSeconds * ByteStorageRedundancyDurationCostMap.Cost(BlockSizeMap.BlockSize(byteCount), redundancy);
         }
+
+        public bool Equals(RedundancyContract other) =>
+            this.StorageContract.Equals(other.StorageContract) &&
+            this.RedundancyContractType == other.RedundancyContractType;
+
+        public static bool operator ==(RedundancyContract a, RedundancyContract b) =>
+            a.StorageContract == b.StorageContract &&
+            a.RedundancyContractType == b.RedundancyContractType;
+
+        public static bool operator !=(RedundancyContract a, RedundancyContract b) =>
+            !(a == b);
     }
 }

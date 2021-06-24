@@ -5,7 +5,7 @@
     /// </summary>
     public class BrightChainValidationException : BrightChainException
     {
-        public string Element { get; protected set;}
+        public string Element { get; protected set; }
 
         public BrightChainValidationException(string element, string message) : base(message)
         {

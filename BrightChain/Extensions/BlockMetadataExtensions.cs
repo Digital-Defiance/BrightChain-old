@@ -3,6 +3,7 @@ using BrightChain.Models.Blocks;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace BrightChain.Extensions
@@ -25,9 +26,9 @@ namespace BrightChain.Extensions
             metadataDictionary.Add("_t", block.GetType().Name);
             metadataDictionary.Add("_v", assemblyVersion);
 
-            return new ReadOnlyMemory<byte>(
-                System.Text.ASCIIEncoding.ASCII.GetBytes(
-                    JsonConvert.SerializeObject(metadataDictionary)));
+            string jsonData = JsonConvert.SerializeObject(metadataDictionary);
+            var readonlyChars = jsonData.AsMemory();
+            return new ReadOnlyMemory<byte>(readonlyChars.ToArray().Select(c => (byte)c).ToArray());
         }
 
         public static bool RestoreMetaDataFromBytes(this Block block, ReadOnlyMemory<byte> metaDataBytes)
@@ -36,7 +37,7 @@ namespace BrightChain.Extensions
             {
                 object metaDataObject = JsonConvert.DeserializeObject(
                     System.Text.Encoding.ASCII.GetString(
-                        metaDataBytes.ToArray()));
+                        metaDataBytes.ToArray()), typeof(Dictionary<string, object>));
 
                 // TODO: validate compatible types and assembly versions
                 // TODO: use BlockFactory to get the right type

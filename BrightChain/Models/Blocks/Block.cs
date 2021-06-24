@@ -27,6 +27,7 @@ namespace BrightChain.Models.Blocks
 
         /// <summary>
         /// A list of the blocks, in order, required to complete this block. Not persisted to disk.
+        /// Generally only used during construction of a chain
         /// </summary>
         public IEnumerable<Block> ConstituentBlocks { get; private set; }
 
@@ -52,7 +53,7 @@ namespace BrightChain.Models.Blocks
             if (!BlockSizeMap.Map.ContainsValue(data.Length))
                 throw new BrightChainException("Invalid Block Size"); // TODO: make (more) special exception type
 
-            this.BlockSize = BlockSizeMap.BlockSize(data.Length);            
+            this.BlockSize = BlockSizeMap.BlockSize(data.Length);
             this.DurationContract = new StorageDurationContract(
                 requestTime: requestTime,
                 keepUntilAtLeast: keepUntilAtLeast,
