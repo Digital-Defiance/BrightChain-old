@@ -14,6 +14,7 @@ namespace BrightChain.Helpers
     {
         public T ReadFrom(Stream stream)
         {
+            // part 1a read length
             byte[] lengthBytes = new byte[sizeof(int)];
             stream.Read(
                 buffer: lengthBytes,
@@ -21,16 +22,37 @@ namespace BrightChain.Helpers
                 count: lengthBytes.Length);
             int blockLength = BitConverter.ToInt32(lengthBytes, 0);
             BlockSize blockSize = BlockSizeMap.BlockSize(blockLength);
+            // part 1b read data
             byte[] blockData = new byte[blockLength];
             stream.Read(
                 buffer: blockData,
                 offset: 0,
                 count: blockLength);
-            return new RestoredBlock(
+
+            // part 2a read metadata length
+            lengthBytes = new byte[sizeof(int)];
+            stream.Read(
+                buffer: lengthBytes,
+                offset: 0,
+                count: lengthBytes.Length);
+            int metaDataLength = BitConverter.ToInt32(lengthBytes, 0);
+            // part 2b read metadata
+            byte[] metaData = new byte[metaDataLength];
+            stream.Read(
+                buffer: metaData,
+                offset: 0,
+                count: metaDataLength);
+
+            // make block
+            var restoredBlock = new RestoredBlock(
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.MaxValue,
                 redundancy: RedundancyContractType.HeapAuto,
                 data: blockData) as T;
+            // fill in metadata
+            restoredBlock.RestoreMetaDataFromBytes(metaData);
+
+            return restoredBlock;
         }
 
         public void WriteTo(T value, Stream stream)
