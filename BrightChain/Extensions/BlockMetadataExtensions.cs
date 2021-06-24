@@ -1,5 +1,6 @@
 ﻿using BrightChain.Attributes;
 using BrightChain.Models.Blocks;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,27 +11,42 @@ namespace BrightChain.Extensions
     {
         public static ReadOnlyMemory<byte> MetaDataBytes(this Block block)
         {
-            Dictionary<string, object> _dict = new Dictionary<string, object>();
+            Dictionary<string, object> metadataDictionary = new Dictionary<string, object>();
+            foreach (PropertyInfo prop in typeof(Block).GetProperties())
+                foreach (object attr in prop.GetCustomAttributes(true))
+                    if (attr is BrightChainMetadataAttribute)
+                        metadataDictionary.Add(prop.Name, prop.GetValue(block));
 
-            PropertyInfo[] props = typeof(Block).GetProperties();
-            foreach (PropertyInfo prop in props)
+            // get assembly version
+            Assembly assembly = Assembly.GetEntryAssembly();
+            AssemblyInformationalVersionAttribute versionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+            string assemblyVersion = versionAttribute.InformationalVersion;
+
+            metadataDictionary.Add("_t", block.GetType().Name);
+            metadataDictionary.Add("_v", assemblyVersion);
+
+            return new ReadOnlyMemory<byte>(
+                System.Text.ASCIIEncoding.ASCII.GetBytes(
+                    JsonConvert.SerializeObject(metadataDictionary)));
+        }
+
+        public static bool RestoreMetaDataFromBytes(this Block block, ReadOnlyMemory<byte> metaDataBytes)
+        {
+            try
             {
-                object[] attrs = prop.GetCustomAttributes(true);
-                foreach (object attr in attrs)
-                {
-                    BrightChainMetadataAttribute metadataAttr = attr as BrightChainMetadataAttribute;
-                    if (metadataAttr != null)
-                    {
-                        string propName = prop.Name;
-                        object propValue = prop.GetValue(block);
+                object metaDataObject = JsonConvert.DeserializeObject(
+                    System.Text.Encoding.ASCII.GetString(
+                        metaDataBytes.ToArray()));
 
-                        _dict.Add(propName, propValue);
-                    }
-                }
+                // TODO: validate type and maximum compatible assembly version
+                throw new NotImplementedException();
             }
-            // alphabetize by key
+            catch (Exception e)
+            {
+                return false;
+            }
 
-            return new ReadOnlyMemory<byte>();
+            return true;
         }
     }
 }

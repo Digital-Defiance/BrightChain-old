@@ -35,6 +35,7 @@ namespace BrightChain.Helpers
 
         public void WriteTo(T value, Stream stream)
         {
+            // part 1: data
             byte[] buffer = BitConverter.GetBytes(value.Data.Length);
             stream.Write(
                 buffer: buffer,
@@ -44,8 +45,17 @@ namespace BrightChain.Helpers
                 buffer: value.Data.ToArray(),
                 offset: 0,
                 count: value.Data.Length);
+            // part 2: metadata
             ReadOnlyMemory<byte> metaData = value.MetaDataBytes();
-
+            buffer = BitConverter.GetBytes(metaData.Length);
+            stream.Write(
+                buffer: buffer,
+                offset: 0,
+                count: buffer.Length);
+            stream.Write(
+                buffer: metaData.ToArray(),
+                offset: 0,
+                count: metaData.Length);
         }
     }
 }
