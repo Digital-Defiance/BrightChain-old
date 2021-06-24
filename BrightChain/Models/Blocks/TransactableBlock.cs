@@ -55,10 +55,10 @@ namespace BrightChain.Models.Blocks
             this.tree is null ? false : object.ReferenceEquals(this.tree, other);
 
         public static bool operator ==(TransactableBlock a, TransactableBlock b) =>
-            a.Data.Equals(b.Data);
+            ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;
 
         public static bool operator !=(TransactableBlock a, TransactableBlock b) =>
-            !a.Data.Equals(b.Data);
+            !(a == b);
 
         public void Commit()
         {

@@ -1,4 +1,5 @@
 using BrightChain.Enumerations;
+using BrightChain.Helpers;
 using BrightChain.Interfaces;
 using System;
 using System.Security.Cryptography;
@@ -49,10 +50,10 @@ namespace BrightChain.Models.Blocks
             BitConverter.ToString(this.HashBytes.ToArray());
 
         public static bool operator ==(BlockHash a, BlockHash b) =>
-            a.HashBytes.Equals(b.HashBytes);
+            ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;
 
         public static bool operator !=(BlockHash a, BlockHash b) =>
-            !a.HashBytes.Equals(b.HashBytes);
+            !(a == b);
 
         public override bool Equals(object obj) =>
             this == obj as BlockHash;

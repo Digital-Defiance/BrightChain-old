@@ -2,6 +2,7 @@ using BrightChain.Attributes;
 using BrightChain.Enumerations;
 using BrightChain.Exceptions;
 using BrightChain.Extensions;
+using BrightChain.Helpers;
 using BrightChain.Interfaces;
 using BrightChain.Models.Contracts;
 using System;
@@ -150,10 +151,10 @@ namespace BrightChain.Models.Blocks
         }
 
         public static bool operator ==(Block a, Block b) =>
-            a.Data.Equals(b.Data);
+            ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;
 
         public static bool operator !=(Block a, Block b) =>
-            !a.Data.Equals(b.Data);
+            !(a == b);
 
         public override bool Equals(object obj) =>
             this == obj as Block;
