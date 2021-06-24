@@ -85,6 +85,12 @@ namespace BrightChain.Models.Blocks
             return new TransactableBlock(this.CacheManager, requestTime, keepUntilAtLeast, redundancy, data, allowCommit);
         }
 
+        public override bool Equals(object obj) =>
+            this == obj as TransactableBlock;
+
+        public override int GetHashCode() =>
+            this.Data.GetHashCode();
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)

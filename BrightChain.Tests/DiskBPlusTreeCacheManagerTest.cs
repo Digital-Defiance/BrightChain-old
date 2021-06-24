@@ -142,22 +142,5 @@ namespace BrightChain.Tests
         }
 
         internal override TestDiskCacheObject NewNullData() => null;
-
-        [TestMethod]
-        public void VerifyCacheDataIntegrityTest()
-        {
-            // Arrange
-            var expectation = testPair.Value;
-            cacheManager.Set(testPair.Key, expectation);
-
-            // Act
-            TestDiskCacheObject result = cacheManager.Get(testPair.Key);
-
-            // Assert
-            Assert.IsNotNull(expectation);
-            Assert.AreEqual(expectation, result);
-            Assert.AreSame(expectation, result);
-            Assert.AreEqual(expectation.Memory, result.Memory);
-        }
     }
 }

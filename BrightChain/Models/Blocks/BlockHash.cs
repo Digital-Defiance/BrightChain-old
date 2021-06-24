@@ -54,5 +54,10 @@ namespace BrightChain.Models.Blocks
         public static bool operator !=(BlockHash a, BlockHash b) =>
             !a.HashBytes.Equals(b.HashBytes);
 
+        public override bool Equals(object obj) =>
+            this == obj as BlockHash;
+
+        public override int GetHashCode() =>
+            this.HashBytes.GetHashCode();
     }
 }

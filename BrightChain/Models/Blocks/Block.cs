@@ -155,6 +155,12 @@ namespace BrightChain.Models.Blocks
         public static bool operator !=(Block a, Block b) =>
             !a.Data.Equals(b.Data);
 
+        public override bool Equals(object obj) =>
+            this == obj as Block;
+
+        public override int GetHashCode() =>
+            this.Data.GetHashCode();
+
         public abstract void Dispose();
     }
 }

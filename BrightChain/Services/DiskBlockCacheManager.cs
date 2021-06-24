@@ -22,7 +22,7 @@ namespace BrightChain.Services
             base(logger: logger, tree: tree)
         { }
 
-        public BPlusTree<BlockHash, TransactableBlock>.OptionsV2 DefaultOptions(BPlusTree<BlockHash, TransactableBlock>.OptionsV2 options)
+        public new BPlusTree<BlockHash, TransactableBlock>.OptionsV2 DefaultOptions(BPlusTree<BlockHash, TransactableBlock>.OptionsV2 options)
         {
             options.CalcBTreeOrder(16, 24);
             options.CreateFile = CreatePolicy.Always;

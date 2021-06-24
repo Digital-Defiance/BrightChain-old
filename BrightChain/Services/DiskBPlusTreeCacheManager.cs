@@ -14,7 +14,7 @@ namespace BrightChain.Services
     {
         private TempFile backingFile = new TempFile();
 
-        public BPlusTree<Tkey, Tvalue>.OptionsV2 DefaultOptions(BPlusTree<Tkey, Tvalue>.OptionsV2 options)
+        public new BPlusTree<Tkey, Tvalue>.OptionsV2 DefaultOptions(BPlusTree<Tkey, Tvalue>.OptionsV2 options)
         {
             options.CalcBTreeOrder(16, 24);
             options.CreateFile = CreatePolicy.Always;
