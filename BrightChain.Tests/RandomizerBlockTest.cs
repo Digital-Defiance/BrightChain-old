@@ -41,7 +41,6 @@ namespace BrightChain.Tests
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
                 allowCommit: true);
 
-            Assert.IsTrue(block.Data.Length > 0);
             Assert.IsTrue(block.Validate());
             Assert.IsTrue(this.cacheManager.Contains(block.Id));
 

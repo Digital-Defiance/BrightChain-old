@@ -5,8 +5,11 @@
     /// </summary>
     public class BrightChainValidationException : BrightChainException
     {
-        public BrightChainValidationException(string message) : base(message)
+        public string Element { get; protected set;}
+
+        public BrightChainValidationException(string element, string message) : base(message)
         {
+            this.Element = element;
         }
     }
 }

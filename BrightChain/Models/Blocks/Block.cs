@@ -45,13 +45,14 @@ namespace BrightChain.Models.Blocks
 
         public Block AsBlock { get => this as Block; }
 
+        public IEnumerable<BrightChainValidationException> ValidationExceptions { get; protected set; }
+
         public Block(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data)
         {
             if (!BlockSizeMap.Map.ContainsValue(data.Length))
                 throw new BrightChainException("Invalid Block Size"); // TODO: make (more) special exception type
 
-            this.BlockSize = BlockSizeMap.BlockSize(data.Length);
-            this.HashVerified = true;
+            this.BlockSize = BlockSizeMap.BlockSize(data.Length);            
             this.DurationContract = new StorageDurationContract(
                 requestTime: requestTime,
                 keepUntilAtLeast: keepUntilAtLeast,
@@ -62,6 +63,7 @@ namespace BrightChain.Models.Blocks
             this.Data = data;
             this.Id = new BlockHash(this); // must happen after data is in place
             this.ConstituentBlocks = new Block[] { };
+            this.HashVerified = this.Validate(); // also fills in any validation errors in the array
         }
 
         /// <summary>
@@ -138,16 +140,47 @@ namespace BrightChain.Models.Blocks
             return result;
         }
 
+        /// <summary>
+        /// return true or throw an exception with the error
+        /// </summary>
+        /// <returns></returns>
         public bool Validate()
         {
+            List<BrightChainValidationException> validationExceptions = new List<BrightChainValidationException>();
+
             if (this.BlockSize == BlockSize.Unknown)
-                throw new BrightChainValidationException(String.Format("{0} is invalid: {1}", nameof(this.BlockSize), this.BlockSize.ToString()));
+                validationExceptions.Add(new BrightChainValidationException(
+                    element: nameof(this.BlockSize),
+                    message: String.Format("{0} is invalid: {1}", nameof(this.BlockSize), this.BlockSize.ToString())));
+
             if (this.BlockSize != BlockSizeMap.BlockSize(this.Data.Length))
-                throw new BrightChainValidationException(String.Format("{0} is invalid: {1}, actual {2} bytes", nameof(this.BlockSize), this.BlockSize.ToString(), this.Data.Length));
-            var recomputedHash = new BlockHash(this);
-            if (this.Id != recomputedHash)
-                throw new BrightChainValidationException(String.Format("{0} is invalid: {1}, actual {2}", nameof(this.Id), this.Id.ToString(), recomputedHash.ToString()));
-            return true;
+                validationExceptions.Add(new BrightChainValidationException(
+                    element: nameof(this.BlockSize),
+                    message: String.Format("{0} is invalid: {1}, actual {2} bytes", nameof(this.BlockSize), this.BlockSize.ToString(), this.Data.Length)));
+
+            try
+            {
+                var recomputedHash = new BlockHash(this);
+                if (this.Id != recomputedHash)
+                    validationExceptions.Add(new BrightChainValidationException(
+                        element: nameof(this.Id),
+                        message: String.Format("{0} is invalid: {1}, actual {2}", nameof(this.Id), this.Id.ToString(), recomputedHash.ToString())));
+            }
+            catch (Exception e)
+            {
+                validationExceptions.Add(new BrightChainValidationException(
+                    element: nameof(this.Id),
+                    message: String.Format("{0} is invalid: {1}, unable to recompute hash: {2}", nameof(this.Id), this.Id.ToString(), e.Message)));
+            }
+
+            if (this.Data.Length != BlockSizeMap.BlockSize(this.BlockSize))
+                validationExceptions.Add(new BrightChainValidationException(
+                    element: nameof(this.Data),
+                    message: String.Format("{0} has no data: {1} bytes", nameof(this.Data), this.Data.Length.ToString())));
+
+            this.ValidationExceptions = validationExceptions;
+
+            return (validationExceptions.Count == 0);
         }
 
         public static bool operator ==(Block a, Block b) =>
