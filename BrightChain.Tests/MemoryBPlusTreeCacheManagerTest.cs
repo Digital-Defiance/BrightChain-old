@@ -24,7 +24,7 @@ namespace BrightChain.Tests
 
         public MemoryCacheTestObject()
         {
-            this.id = MemoryCacheManagerTest.GenerateTestKey();
+            this.id = MemoryBPlusTreeCacheManagerTest.GenerateTestKey();
         }
 
         public void Commit()
@@ -70,10 +70,10 @@ namespace BrightChain.Tests
     }
 
     /// <summary>
-    /// 
+    /// Tests the MemoryBPlusTreeCacheManager using the BPlusTreeCacheManagerTest
     /// </summary>
     [TestClass]
-    public class MemoryCacheManagerTest : BPlusTreeCacheManagerTest<MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject, PrimitiveSerializer, MemoryCacheTestObjectSerializer>, string, MemoryCacheTestObject, PrimitiveSerializer, MemoryCacheTestObjectSerializer>
+    public class MemoryBPlusTreeCacheManagerTest : BPlusTreeCacheManagerTest<MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject, PrimitiveSerializer, MemoryCacheTestObjectSerializer>, string, MemoryCacheTestObject, PrimitiveSerializer, MemoryCacheTestObjectSerializer>
     {
         private static int TestKeyLength { get; } = 11;
         public static string GenerateTestKey()
