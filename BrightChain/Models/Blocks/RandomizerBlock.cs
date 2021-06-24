@@ -1,5 +1,6 @@
 using BrightChain.Enumerations;
 using BrightChain.Services;
+using CSharpTest.Net.IO;
 using System;
 using System.Security.Cryptography;
 
@@ -8,7 +9,7 @@ namespace BrightChain.Models.Blocks
     /// <summary>
     /// Input blocks to the whitener service that consist of purely CSPRNG data of the specified block size
     /// </summary>
-    public class RandomizerBlock : TransactableBlock
+    public class RandomizerBlock : TransactableBlock, IComparable<RandomizerBlock>
     {
         public static ReadOnlyMemory<byte> NewRandomBlockData(BlockSize blockSize)
         {
@@ -46,6 +47,9 @@ namespace BrightChain.Models.Blocks
                 keepUntilAtLeast: keepUntilAtLeast,
                 redundancy: redundancy,
                 allowCommit: allowCommit);
+
+        public int CompareTo(RandomizerBlock other) =>
+            BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
 
         public override void Dispose()
         {

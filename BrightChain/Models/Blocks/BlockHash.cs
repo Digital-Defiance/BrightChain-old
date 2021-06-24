@@ -1,6 +1,7 @@
 using BrightChain.Enumerations;
 using BrightChain.Helpers;
 using BrightChain.Interfaces;
+using CSharpTest.Net.IO;
 using System;
 using System.Security.Cryptography;
 
@@ -9,7 +10,7 @@ namespace BrightChain.Models.Blocks
     /// <summary>
     /// Type box for the sha hashes
     /// </summary>
-    public class BlockHash : IBlockHash
+    public class BlockHash : IBlockHash, IComparable<BlockHash>
     {
         public ReadOnlyMemory<byte> HashBytes { get; protected set; }
         public BlockSize BlockSize { get; }
@@ -63,5 +64,8 @@ namespace BrightChain.Models.Blocks
 
         public override int GetHashCode() =>
             this.HashBytes.GetHashCode();
+
+        public int CompareTo(BlockHash other) =>
+            BinaryComparer.Compare(this.HashBytes.ToArray(), other.HashBytes.ToArray());
     }
 }

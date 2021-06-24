@@ -13,7 +13,7 @@ namespace BrightChain.Tests
     /// <summary>
     /// test object for the cache
     /// </summary>
-    public class MemoryCacheTestObject : object, ITransactable
+    public class MemoryCacheTestObject : object, ITransactable, IComparable<MemoryCacheTestObject>
     {
         public string id;
 
@@ -41,6 +41,9 @@ namespace BrightChain.Tests
         {
             this.id = null;
         }
+
+        public int CompareTo(MemoryCacheTestObject other) =>
+            this.id.CompareTo(other.id);
     }
 
     /// <summary>

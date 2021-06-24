@@ -5,6 +5,7 @@ using BrightChain.Interfaces;
 using BrightChain.Services;
 using CSharpTest.Net.Collections;
 using CSharpTest.Net.Interfaces;
+using CSharpTest.Net.IO;
 using System;
 
 namespace BrightChain.Models.Blocks
@@ -14,7 +15,7 @@ namespace BrightChain.Models.Blocks
     /// TODO: Currently heavily associated with underlying BPlusTree. Abstract
     /// TODO: base off TransactedCompoundFile?
     /// </summary>
-    public class TransactableBlock : Block, IDisposable, ITransactable, ITransactableBlock
+    public class TransactableBlock : Block, IDisposable, ITransactable, ITransactableBlock, IComparable<TransactableBlock>, IComparable<ITransactableBlock>
     {
         private bool disposedValue;
         protected BPlusTree<BlockHash, TransactableBlock> tree;
@@ -89,6 +90,12 @@ namespace BrightChain.Models.Blocks
 
         public override int GetHashCode() =>
             this.Data.GetHashCode();
+
+        public int CompareTo(TransactableBlock other) =>
+            BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
+
+        public int CompareTo(ITransactableBlock other) =>
+            BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
 
         protected virtual void Dispose(bool disposing)
         {

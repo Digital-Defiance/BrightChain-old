@@ -2,6 +2,7 @@
 using BrightChain.Exceptions;
 using BrightChain.Helpers;
 using BrightChain.Services;
+using CSharpTest.Net.IO;
 using System;
 
 namespace BrightChain.Models.Blocks
@@ -9,7 +10,7 @@ namespace BrightChain.Models.Blocks
     /// <summary>
     /// User data that must be whitened with the block whitener before being persisted. These blocks must never be stored directly.
     /// </summary>
-    public class SourceBlock : Block
+    public class SourceBlock : Block, IComparable<SourceBlock>, IComparable<Block>
     {
         private BPlusTreeCacheManager<BlockHash, TransactableBlock, BlockHashSerializer, BlockSerializer<TransactableBlock>> cacheManager;
 
@@ -40,6 +41,9 @@ namespace BrightChain.Models.Blocks
             else
                 throw new BrightChainException("Unexpected destination cache type");
         }
+
+        public int CompareTo(SourceBlock other) =>
+            BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
 
         public override void Dispose()
         {

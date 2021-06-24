@@ -1,4 +1,5 @@
 ﻿using BrightChain.Models.Events;
+using System;
 
 namespace BrightChain.Interfaces
 {
@@ -8,6 +9,8 @@ namespace BrightChain.Interfaces
     /// <typeparam name="Tkey"></typeparam>
     /// <typeparam name="Tvalue"></typeparam>
     public interface ICacheManager<Tkey, Tvalue>
+        where Tkey : IComparable<Tkey>
+        where Tvalue : IComparable<Tvalue>
     {
         Tvalue Get(Tkey key);
         void Set(Tkey key, Tvalue value);

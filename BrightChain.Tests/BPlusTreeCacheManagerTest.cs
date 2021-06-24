@@ -3,6 +3,7 @@ using CSharpTest.Net.Collections;
 using CSharpTest.Net.Interfaces;
 using CSharpTest.Net.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace BrightChain.Tests
 {
@@ -17,10 +18,11 @@ namespace BrightChain.Tests
     /// <typeparam name="TvalueSerializer"></typeparam>
     [TestClass]
     public abstract class BPlusTreeCacheManagerTest<Tcache, Tkey, Tvalue, TkeySerializer, TvalueSerializer> : CacheManagerTest<Tcache, Tkey, Tvalue>
+        where Tcache : BPlusTreeCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer>
+        where Tkey : IComparable<Tkey>
+        where Tvalue : IComparable<Tvalue>, ITransactable
         where TkeySerializer : ISerializer<Tkey>, new()
         where TvalueSerializer : ISerializer<Tvalue>, new()
-        where Tcache : BPlusTreeCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer>
-            where Tvalue : ITransactable
     {
 
         public TransactionLogOptions<Tkey, Tvalue> NewTransactionLogOptions() =>

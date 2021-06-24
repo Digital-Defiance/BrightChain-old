@@ -19,6 +19,8 @@ namespace BrightChain.Services
     /// <typeparam name="Tkey"></typeparam>
     /// <typeparam name="Tvalue"></typeparam>
     public abstract class BPlusTreeCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer> : ICacheManager<Tkey, Tvalue>, IBPlusTreeCacheManager<Tkey, Tvalue>
+        where Tkey : IComparable<Tkey>
+        where Tvalue : IComparable<Tvalue>
         where TkeySerializer : ISerializer<Tkey>, new()
         where TvalueSerializer : ISerializer<Tvalue>, new()
     {

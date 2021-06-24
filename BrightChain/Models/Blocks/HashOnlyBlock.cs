@@ -2,6 +2,7 @@
 using BrightChain.Enumerations;
 using BrightChain.Interfaces;
 using BrightChain.Models.Contracts;
+using CSharpTest.Net.IO;
 using System;
 
 namespace BrightChain.Models.Blocks
@@ -44,5 +45,8 @@ namespace BrightChain.Models.Blocks
 
         public Block XOR(Block[] others) =>
             throw new NotImplementedException();
+
+        public int CompareTo(IBlock other) =>
+            BinaryComparer.Compare(this.Id.HashBytes.ToArray(), other.Id.HashBytes.ToArray());
     }
 }

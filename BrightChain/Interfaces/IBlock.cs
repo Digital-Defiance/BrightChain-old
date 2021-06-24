@@ -7,7 +7,7 @@ namespace BrightChain.Interfaces
     /// <summary>
     /// Basic description for a block
     /// </summary>
-    public interface IBlock : IDisposable
+    public interface IBlock : IDisposable, IComparable<IBlock>
     {
         /// <summary>
         /// Block's SHA-256 hash

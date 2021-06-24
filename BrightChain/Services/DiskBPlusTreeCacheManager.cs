@@ -2,6 +2,7 @@
 using CSharpTest.Net.IO;
 using CSharpTest.Net.Serialization;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace BrightChain.Services
 {
@@ -9,6 +10,8 @@ namespace BrightChain.Services
     /// Disk backed version of BPlus tree
     /// </summary>
     public class DiskBPlusTreeCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer> : BPlusTreeCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer>
+        where Tkey : IComparable<Tkey>
+        where Tvalue : IComparable<Tvalue>
         where TkeySerializer : ISerializer<Tkey>, new()
         where TvalueSerializer : ISerializer<Tvalue>, new()
     {

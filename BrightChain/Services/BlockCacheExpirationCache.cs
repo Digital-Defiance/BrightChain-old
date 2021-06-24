@@ -1,4 +1,5 @@
 ﻿using CSharpTest.Net.Serialization;
+using System;
 
 namespace BrightChain.Services
 {
@@ -8,6 +9,8 @@ namespace BrightChain.Services
     /// <typeparam name="Tkey"></typeparam>
     /// <typeparam name="Tvalue"></typeparam>
     public class BlockCacheExpirationCache<Tkey, Tvalue, TkeySerializer, TvalueSerializer>
+        where Tkey : IComparable<Tkey>
+        where Tvalue : IComparable<Tvalue>
         where TkeySerializer : ISerializer<Tkey>, new()
         where TvalueSerializer : ISerializer<Tvalue>, new()
     {

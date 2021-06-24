@@ -1,4 +1,5 @@
 ﻿using BrightChain.Enumerations;
+using BrightChain.Extensions;
 using BrightChain.Models.Blocks;
 using BrightChain.Models.Contracts;
 using BrightChain.Services;
@@ -54,10 +55,31 @@ namespace BrightChain.Tests
             Assert.AreEqual(block.RedundancyContract, blockRedundancyContract);
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void ItRestoresMetaDataCorrectlyTest()
         {
-            throw new NotImplementedException();
+            var testStart = DateTime.Now;
+
+            var block = new RandomizerBlock(
+                pregeneratedRandomizerCache: this.cacheManager,
+                blockSize: BlockSize.Message,
+                requestTime: testStart,
+                keepUntilAtLeast: testStart.AddDays(1),
+                redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                allowCommit: true);
+            Assert.IsTrue(block.Validate());
+            var metaData = block.MetaData;
+
+            var block2 = new RandomizerBlock(
+                pregeneratedRandomizerCache: this.cacheManager,
+                blockSize: BlockSize.Message,
+                requestTime: testStart.AddSeconds(5),
+                keepUntilAtLeast: testStart.AddDays(1).AddSeconds(5),
+                redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                allowCommit: true);
+            block2.RestoreMetaDataFromBytes(metaData);
+            Assert.AreEqual(block.DurationContract, block2.DurationContract);
+            Assert.AreEqual(block.RedundancyContract, block2.RedundancyContract);
         }
     }
 }

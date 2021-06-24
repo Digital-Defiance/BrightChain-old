@@ -1,6 +1,7 @@
 ﻿using BrightChain.Services;
 using CSharpTest.Net.Collections;
 using CSharpTest.Net.Interfaces;
+using CSharpTest.Net.IO;
 using CSharpTest.Net.Serialization;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,7 +15,7 @@ namespace BrightChain.Tests
     /// <summary>
     /// Test object for exercizing the BPlus tree
     /// </summary>
-    public class TestDiskCacheObject : ITransactable
+    public class TestDiskCacheObject : ITransactable, IComparable<TestDiskCacheObject>
     {
         /// <summary>
         /// last committed value
@@ -52,6 +53,10 @@ namespace BrightChain.Tests
             this.Memory = null;
             this.lastCommittedMemory = null;
         }
+
+        public int CompareTo(TestDiskCacheObject other) =>
+            BinaryComparer.Compare(this.Memory.ToArray(), other.Memory.ToArray());
+
     }
 
     /// <summary>

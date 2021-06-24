@@ -15,6 +15,8 @@ namespace BrightChain.Tests
     /// <typeparam name="Tvalue"></typeparam>
     [TestClass]
     public abstract class CacheManagerTest<Tcache, Tkey, Tvalue>
+        where Tkey : IComparable<Tkey>
+        where Tvalue : IComparable<Tvalue>
         where Tcache : ICacheManager<Tkey, Tvalue>
     {
         protected Mock<ILogger<Tcache>> logger;

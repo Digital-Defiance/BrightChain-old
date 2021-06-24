@@ -5,6 +5,7 @@ using BrightChain.Extensions;
 using BrightChain.Helpers;
 using BrightChain.Interfaces;
 using BrightChain.Models.Contracts;
+using CSharpTest.Net.IO;
 using System;
 using System.Collections.Generic;
 
@@ -13,7 +14,7 @@ namespace BrightChain.Models.Blocks
     /// <summary>
     /// The block is the base unit persisted to disk
     /// </summary>
-    public abstract class Block : IBlock
+    public abstract class Block : IBlock, IComparable<IBlock>, IComparable<Block>
     {
         public BlockHash Id { get; }
         [BrightChainMetadata]
@@ -197,5 +198,11 @@ namespace BrightChain.Models.Blocks
             this.Data.GetHashCode();
 
         public abstract void Dispose();
+
+        public int CompareTo(IBlock other) =>
+            BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
+
+        public int CompareTo(Block other) =>
+            BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
     }
 }
