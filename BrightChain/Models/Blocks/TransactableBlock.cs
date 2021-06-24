@@ -1,5 +1,4 @@
-﻿using BrightChain.Attributes;
-using BrightChain.Enumerations;
+﻿using BrightChain.Enumerations;
 using BrightChain.Exceptions;
 using BrightChain.Helpers;
 using BrightChain.Interfaces;
@@ -19,9 +18,7 @@ namespace BrightChain.Models.Blocks
         private bool disposedValue;
         protected BPlusTree<BlockHash, TransactableBlock> tree;
         public BPlusTreeCacheManager<BlockHash, TransactableBlock, BlockHashSerializer, BlockSerializer<TransactableBlock>> CacheManager { get; internal set; }
-        [BrightChainDataIgnore]
         public bool Committed { get; protected set; } = false;
-        [BrightChainDataIgnore]
         public bool AllowCommit { get; protected set; } = false;
 
         public TransactableBlock(BPlusTreeCacheManager<BlockHash, TransactableBlock, BlockHashSerializer, BlockSerializer<TransactableBlock>> cacheManager, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :

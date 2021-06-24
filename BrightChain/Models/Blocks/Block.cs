@@ -1,6 +1,7 @@
 using BrightChain.Attributes;
 using BrightChain.Enumerations;
 using BrightChain.Exceptions;
+using BrightChain.Extensions;
 using BrightChain.Interfaces;
 using BrightChain.Models.Contracts;
 using System;
@@ -20,28 +21,24 @@ namespace BrightChain.Models.Blocks
         public RedundancyContract RedundancyContract { get; }
         public ReadOnlyMemory<byte> Data { get; protected set; }
 
-        [BrightChainDataIgnore]
         public BlockSize BlockSize { get; }
-        [BrightChainDataIgnore]
         public bool HashVerified { get; private set; }
 
         /// <summary>
         /// A list of the blocks, in order, required to complete this block. Not persisted to disk.
         /// </summary>
-        [BrightChainDataIgnore]
         public IEnumerable<Block> ConstituentBlocks { get; private set; }
 
         /// <summary>
         /// Returns a block which contains only the constituent block hashes, ready to write to disk.
         /// </summary>
-        [BrightChainDataIgnore]
         public ConstituentBlockListBlock ConstituentBlockListBlock { get => new ConstituentBlockListBlock(sourceBlock: this.AsBlock); }
 
         /// <summary>
         /// Emits the serialization of the block minus data and any ignored attributes (including itself).
         /// </summary>
-        [BrightChainDataIgnore]
-        public ReadOnlyMemory<byte> MetaData => throw new NotImplementedException();
+        public ReadOnlyMemory<byte> MetaData =>
+            this.MetaDataBytes();
 
         public abstract Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit);
 

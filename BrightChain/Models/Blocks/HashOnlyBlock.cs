@@ -15,17 +15,15 @@ namespace BrightChain.Models.Blocks
         public ReadOnlyMemory<byte> Data { get => throw new NotImplementedException(); }
 
         public BlockHash Id { get; }
+        [BrightChainMetadata]
         public StorageDurationContract DurationContract { get => throw new NotImplementedException(); }
+        [BrightChainMetadata]
         public RedundancyContract RedundancyContract { get => throw new NotImplementedException(); }
 
-        [BrightChainDataIgnore]
         public bool Committed { get; } = false;
-        [BrightChainDataIgnore]
         public bool AllowCommit { get; } = false;
 
-        [BrightChainDataIgnore]
         public BlockSize BlockSize { get; }
-        [BrightChainDataIgnore]
         public bool HashVerified { get; }
 
         public ReadOnlyMemory<byte> MetaData => throw new NotImplementedException();

@@ -1,4 +1,3 @@
-using BrightChain.Attributes;
 using BrightChain.Models.Blocks;
 using BrightChain.Models.Contracts;
 using System;
@@ -37,7 +36,6 @@ namespace BrightChain.Interfaces
         /// <summary>
         /// Returns the serialized MetaData pulled from attributes
         /// </summary>
-        [BrightChainDataIgnore]
         ReadOnlyMemory<byte> MetaData { get; }
         /// <summary>
         /// Returns only the raw data for the block and none of the metadata. The hash is based only on this.

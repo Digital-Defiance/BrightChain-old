@@ -1,5 +1,9 @@
 ﻿namespace BrightChain.Enumerations
 {
+    /// <summary>
+    /// List of the pre-specified block sizes this node supports
+    /// The BlockSizeMap class contains the map to the actual sizes.
+    /// </summary>
     public enum BlockSize
     {
         /// <summary>

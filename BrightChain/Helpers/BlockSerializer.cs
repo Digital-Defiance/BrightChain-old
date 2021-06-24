@@ -1,4 +1,5 @@
 ﻿using BrightChain.Enumerations;
+using BrightChain.Extensions;
 using BrightChain.Models.Blocks;
 using CSharpTest.Net.Serialization;
 using System;
@@ -43,6 +44,7 @@ namespace BrightChain.Helpers
                 buffer: value.Data.ToArray(),
                 offset: 0,
                 count: value.Data.Length);
+            ReadOnlyMemory<byte> metaData = value.MetaDataBytes();
 
         }
     }
