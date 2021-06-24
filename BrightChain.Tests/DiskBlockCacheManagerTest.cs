@@ -122,7 +122,6 @@ namespace BrightChain.Tests
             Assert.IsNotNull(expectation);
             Assert.AreEqual(expectation, result);
             Assert.AreSame(expectation, result);
-            Assert.AreEqual(expectation.Data, result.Data);
         }
     }
 }

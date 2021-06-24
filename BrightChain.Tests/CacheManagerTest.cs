@@ -209,5 +209,22 @@ namespace BrightChain.Tests
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(4));
             this.logger.VerifyNoOtherCalls();
         }
+
+        [TestMethod]
+        public void VerifyCacheDataIntegrityTest()
+        {
+            // Arrange
+            var expectation = testPair.Value;
+            cacheManager.Set(testPair.Key, expectation);
+
+            // Act
+            Tvalue result = cacheManager.Get(testPair.Key);
+
+            // Assert
+            Assert.IsNotNull(expectation);
+            Assert.AreEqual(expectation, result);
+            Assert.AreSame(expectation, result);
+        }
+
     }
 }

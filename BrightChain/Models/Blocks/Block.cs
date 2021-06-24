@@ -149,6 +149,12 @@ namespace BrightChain.Models.Blocks
             return true;
         }
 
+        public static bool operator ==(Block a, Block b) =>
+            a.Data.Equals(b.Data);
+
+        public static bool operator !=(Block a, Block b) =>
+            !a.Data.Equals(b.Data);
+
         public abstract void Dispose();
     }
 }

@@ -104,6 +104,9 @@ namespace BrightChain.Tests
         }
     }
 
+    /// <summary>
+    /// Tests the DiskBPlusTreeCacheManager with the BPlusTreeCacheManagerTest
+    /// </summary>
     [TestClass]
     public class DiskBPlusTreeCacheManagerTest : BPlusTreeCacheManagerTest<DiskBPlusTreeCacheManager<string, TestDiskCacheObject, PrimitiveSerializer, TestDiskCacheObjectSerializer>, string, TestDiskCacheObject, PrimitiveSerializer, TestDiskCacheObjectSerializer>
     {
@@ -141,7 +144,7 @@ namespace BrightChain.Tests
         internal override TestDiskCacheObject NewNullData() => null;
 
         [TestMethod]
-        public void TestSetGetIntegrity()
+        public void VerifyCacheDataIntegrityTest()
         {
             // Arrange
             var expectation = testPair.Value;

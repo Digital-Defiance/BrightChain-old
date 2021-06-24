@@ -53,6 +53,12 @@ namespace BrightChain.Models.Blocks
         public bool TreeIsSame(BPlusTree<BlockHash, TransactableBlock> other) =>
             this.tree is null ? false : object.ReferenceEquals(this.tree, other);
 
+        public static bool operator ==(TransactableBlock a, TransactableBlock b) =>
+            a.Data.Equals(b.Data);
+
+        public static bool operator !=(TransactableBlock a, TransactableBlock b) =>
+            !a.Data.Equals(b.Data);
+
         public void Commit()
         {
             if (this.tree is null)
