@@ -63,7 +63,7 @@ namespace BrightChain.Tests
         /// Create and push a non null object into the cache
         /// </summary>
         [TestMethod]
-        public void TestPutNonNull()
+        public void ItPutsNonNullValuesTest()
         {
             // Arrange
             // generate a new value type
@@ -88,7 +88,7 @@ namespace BrightChain.Tests
         /// Push a null value into the cache
         /// </summary>
         [TestMethod]
-        public void TestPutNull()
+        public void ItPutsNullValuesTest()
         {
             // Arrange
             Tvalue newData = NewNullData();
@@ -112,7 +112,7 @@ namespace BrightChain.Tests
         /// Ensure a k/v placed into the cache emerge when a get request occurs
         /// </summary>
         [TestMethod]
-        public void TestGetHit()
+        public void ItHitsTheCacheTest()
         {
             // Arrange
             var expectation = testPair.Value;
@@ -139,7 +139,7 @@ namespace BrightChain.Tests
         /// Look for an item not already in the cache
         /// </summary>
         [TestMethod]
-        public void TestGetMiss()
+        public void ItMissesTheCacheTest()
         {
             // Arrange
             // none
@@ -163,7 +163,7 @@ namespace BrightChain.Tests
         /// Make sure items are removed from the cache
         /// </summary>
         [TestMethod]
-        public void TestDrop()
+        public void ItDropsCachKeysTest()
         {
             // Arrange
             cacheManager.Set(testPair.Key, testPair.Value);
@@ -189,7 +189,7 @@ namespace BrightChain.Tests
         /// </summary>
         /// <returns></returns>
         [TestMethod, Ignore]
-        public void TestGetMissExpired()
+        public void ItExpiresCacheKeysTest()
         {
             var expectation = testPair.Value;
             cacheManager.Set(testPair.Key, expectation);

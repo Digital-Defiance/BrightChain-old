@@ -103,7 +103,7 @@ namespace BrightChain.Tests
         internal override DiskCacheTestBlock NewNullData() => null;
 
         [TestMethod]
-        public void TestSetGetIntegrity()
+        public void VerifyCacheDataIntegrityTest()
         {
             // Arrange
             var expectation = testPair.Value;
@@ -117,17 +117,6 @@ namespace BrightChain.Tests
             Assert.AreEqual(expectation, result);
             Assert.AreSame(expectation, result);
             Assert.AreEqual(expectation.Data, result.Data);
-        }
-
-        [TestMethod, Ignore]
-        public void TestTransactionCommit()
-        {
-        }
-
-        [TestMethod, Ignore]
-        public void TestTransactionRollback()
-        {
-
         }
     }
 }

@@ -21,7 +21,7 @@ namespace BrightChain.Tests
                     valueSerializer: new TvalueSerializer());
 
         [TestMethod, Ignore]
-        public void DataCommitTest()
+        public void ItCommitsDataTest()
         {
             var alternateValue = NewKeyValue();
 
@@ -32,7 +32,7 @@ namespace BrightChain.Tests
         }
 
         [TestMethod, Ignore]
-        public void DataRollbackTest()
+        public void ItRollsBackDataTest()
         {
             using (var tlog = new TransactionLog<Tkey, Tvalue>(
                 this.NewTransactionLogOptions()))

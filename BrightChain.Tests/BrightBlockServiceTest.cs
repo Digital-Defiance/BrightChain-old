@@ -33,7 +33,7 @@ namespace BrightChain.Tests
         }
 
         [TestMethod]
-        public void ServiceInitializionTest()
+        public void ItInitializesTest()
         {
             var loggerMock = Mock.Get(this._logger);
 
