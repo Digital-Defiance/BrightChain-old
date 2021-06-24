@@ -3,6 +3,9 @@ using System;
 
 namespace BrightChain.Tests
 {
+    /// <summary>
+    /// Exercises the block metadata extensions for storing/restoring metadata
+    /// </summary>
     [TestClass]
     public class BlockMetaDataExtensionsTest
     {

@@ -11,6 +11,9 @@ using System.Collections.Generic;
 
 namespace BrightChain.Tests
 {
+    /// <summary>
+    /// Serializable testable test block class
+    /// </summary>
     public class DiskCacheTestBlock : TransactableBlock
     {
         public new static DiskBlockCacheManager CacheManager;
@@ -61,6 +64,9 @@ namespace BrightChain.Tests
         }
     }
 
+    /// <summary>
+    /// Tests disk block cache managers
+    /// </summary>
     [TestClass]
     public class DiskBlockCacheManagerTest : TransactableBlockCacheManagerTest
     {

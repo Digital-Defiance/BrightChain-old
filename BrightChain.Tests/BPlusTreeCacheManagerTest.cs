@@ -6,6 +6,15 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BrightChain.Tests
 {
+    /// <summary>
+    /// Exercizes the BPlusTree using the CacheManagerTest
+    /// TODO: be sure to test the cache events
+    /// </summary>
+    /// <typeparam name="Tcache"></typeparam>
+    /// <typeparam name="Tkey"></typeparam>
+    /// <typeparam name="Tvalue"></typeparam>
+    /// <typeparam name="TkeySerializer"></typeparam>
+    /// <typeparam name="TvalueSerializer"></typeparam>
     [TestClass]
     public abstract class BPlusTreeCacheManagerTest<Tcache, Tkey, Tvalue, TkeySerializer, TvalueSerializer> : CacheManagerTest<Tcache, Tkey, Tvalue>
         where TkeySerializer : ISerializer<Tkey>, new()

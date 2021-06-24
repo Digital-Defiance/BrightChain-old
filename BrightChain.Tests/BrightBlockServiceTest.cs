@@ -8,6 +8,9 @@ using System;
 
 namespace BrightChain.Tests
 {
+    /// <summary>
+    /// Exercises the core API service
+    /// </summary>
     [TestClass]
     public class BrightBlockServiceTest
     {

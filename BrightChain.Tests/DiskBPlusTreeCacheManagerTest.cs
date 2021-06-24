@@ -11,6 +11,9 @@ using System.Linq;
 
 namespace BrightChain.Tests
 {
+    /// <summary>
+    /// Test object for exercizing the BPlus tree
+    /// </summary>
     public class TestDiskCacheObject : ITransactable
     {
         /// <summary>
@@ -51,6 +54,10 @@ namespace BrightChain.Tests
         }
     }
 
+    /// <summary>
+    /// Serializer for the test object
+    /// TODO: use internal serializers or make this a helper?
+    /// </summary>
     public class TestDiskCacheObjectSerializer : ISerializer<TestDiskCacheObject>
     {
         public TestDiskCacheObject ReadFrom(Stream stream)

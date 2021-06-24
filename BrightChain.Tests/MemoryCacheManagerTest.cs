@@ -1,4 +1,5 @@
 ﻿using BrightChain.Services;
+using CSharpTest.Net.Interfaces;
 using CSharpTest.Net.Serialization;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,7 +10,10 @@ using System.Linq;
 
 namespace BrightChain.Tests
 {
-    public class MemoryCacheTestObject : object
+    /// <summary>
+    /// test object for the cache
+    /// </summary>
+    public class MemoryCacheTestObject : object, ITransactable
     {
         public string id;
 
@@ -22,8 +26,26 @@ namespace BrightChain.Tests
         {
             this.id = MemoryCacheManagerTest.GenerateTestKey();
         }
+
+        public void Commit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Rollback()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            this.id = null;
+        }
     }
 
+    /// <summary>
+    /// test object serializer/deserializer
+    /// </summary>
     public class MemoryCacheTestObjectSerializer : PrimitiveSerializer, ISerializer<MemoryCacheTestObject>
     {
         public MemoryCacheTestObject ReadFrom(Stream stream)
@@ -47,8 +69,11 @@ namespace BrightChain.Tests
             stream.Write(System.Text.ASCIIEncoding.ASCII.GetBytes(value.id));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [TestClass]
-    public class MemoryCacheManagerTest : CacheManagerTest<MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject, PrimitiveSerializer, MemoryCacheTestObjectSerializer>, string, MemoryCacheTestObject>
+    public class MemoryCacheManagerTest : BPlusTreeCacheManagerTest<MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject, PrimitiveSerializer, MemoryCacheTestObjectSerializer>, string, MemoryCacheTestObject, PrimitiveSerializer, MemoryCacheTestObjectSerializer>
     {
         private static int TestKeyLength { get; } = 11;
         public static string GenerateTestKey()
