@@ -12,6 +12,7 @@ namespace BrightChain.Models.Blocks
     /// <summary>
     /// Block that is able to be stored, rolled back, committed, or prevented from being stored.
     /// TODO: Currently heavily associated with underlying BPlusTree. Abstract
+    /// TODO: base off TransactedCompoundFile?
     /// </summary>
     public class TransactableBlock : Block, IDisposable, ITransactable, ITransactableBlock
     {
