@@ -1,6 +1,7 @@
 ﻿using BrightChain.Enumerations;
 using BrightChain.Models.Blocks;
 using BrightChain.Models.Units;
+using Newtonsoft.Json;
 
 namespace BrightChain.Models.Contracts
 {
@@ -18,6 +19,7 @@ namespace BrightChain.Models.Contracts
             this.RedundancyContractType = redundancy;
         }
 
+        [JsonIgnore]
         public double Cost
         {
             get => ComputeCost(byteCount: this.StorageContract.ByteCount,
@@ -25,6 +27,7 @@ namespace BrightChain.Models.Contracts
                 redundancy: this.RedundancyContractType);
         }
 
+        [JsonIgnore]
         public readonly ByteStorageRedundancyDuration RedundancyDuration
         {
             get => new ByteStorageRedundancyDuration(

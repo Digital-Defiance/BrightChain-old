@@ -41,13 +41,15 @@ namespace BrightChain.Tests
             Assert.IsTrue(block.Validate());
             var metaData = block.MetaData;
             var metaDataString = System.Text.Encoding.ASCII.GetString(metaData.ToArray());
-            var metaDataObject = JsonConvert.DeserializeObject(metaDataString, typeof(Dictionary<string, object>));
-            var metaDataDictionary = metaDataObject as Dictionary<string, object>;
+            Dictionary<string, object> metaDataDictionary = (Dictionary<string, object>)JsonConvert.DeserializeObject(metaDataString, typeof(Dictionary<string, object>));
             Assert.IsTrue(metaDataDictionary.ContainsKey("_t"));
             Assert.IsTrue(metaDataDictionary.ContainsKey("_v"));
             Assert.IsTrue(metaDataDictionary.ContainsKey("RedundancyContract"));
             var contractObj = metaDataDictionary["RedundancyContract"] as JObject;
-            RedundancyContract blockRedundancyContract = (RedundancyContract)contractObj.ToObject(typeof(RedundancyContract));
+
+            RedundancyContract blockRedundancyContract = new RedundancyContract(
+                storageDurationContract: contractObj.GetValue("StorageContract").ToObject<StorageDurationContract>(),
+                redundancy: contractObj.GetValue("RedundancyContractType").ToObject<RedundancyContractType>());
             Assert.AreEqual(block.RedundancyContract, blockRedundancyContract);
             Assert.AreEqual(block.StorageContract, blockRedundancyContract.StorageContract);
         }

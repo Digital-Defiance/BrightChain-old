@@ -1,4 +1,5 @@
 ﻿using BrightChain.Models.Units;
+using Newtonsoft.Json;
 using System;
 
 namespace BrightChain.Models.Contracts
@@ -20,19 +21,31 @@ namespace BrightChain.Models.Contracts
             this.ByteCount = byteCount;
         }
 
-        public double Duration =>
-            KeepUntilAtLeast.Subtract(RequestTime).TotalSeconds;
+        [JsonIgnore]
+        public double Duration
+        {
+            get => KeepUntilAtLeast.Subtract(RequestTime).TotalSeconds;
+        }
 
-        public ByteStorageDuration ByteStorageDuration =>
-            new ByteStorageDuration(
+        [JsonIgnore]
+        public ByteStorageDuration ByteStorageDuration
+        {
+            get => new ByteStorageDuration(
                 byteCount: ByteCount,
                 durationSeconds: (ulong)Duration);
+        }
 
-        public readonly bool DoNotStore =>
-            this.KeepUntilAtLeast.Equals(DateTime.MinValue);
+        [JsonIgnore]
+        public readonly bool DoNotStore
+        {
+            get => this.KeepUntilAtLeast.Equals(DateTime.MinValue);
+        }
 
-        public readonly bool NonExpiring =>
-            this.KeepUntilAtLeast.Equals(DateTime.MaxValue);
+        [JsonIgnore]
+        public readonly bool NonExpiring
+        {
+            get => this.KeepUntilAtLeast.Equals(DateTime.MaxValue);
+        }
 
         public bool Equals(StorageDurationContract other) =>
             this.RequestTime.Equals(other.RequestTime) &&
