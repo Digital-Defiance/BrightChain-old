@@ -165,19 +165,24 @@ namespace BrightChain.Models.Blocks
                 if (this.Id != recomputedHash)
                     validationExceptions.Add(new BrightChainValidationException(
                         element: nameof(this.Id),
-                        message: String.Format("{0} is invalid: {1}, actual {2}", nameof(this.Id), this.Id.ToString(), recomputedHash.ToString())));
+                        message: String.Format("{0} is invalid: {1}, actual {2}", nameof(this.Id), this.Id, recomputedHash)));
             }
             catch (Exception e)
             {
                 validationExceptions.Add(new BrightChainValidationException(
                     element: nameof(this.Id),
-                    message: String.Format("{0} is invalid: {1}, unable to recompute hash: {2}", nameof(this.Id), this.Id.ToString(), e.Message)));
+                    message: String.Format("{0} is invalid: {1}, unable to recompute hash: {2}", nameof(this.Id), this.Id, e.Message)));
             }
 
             if (this.Data.Length != BlockSizeMap.BlockSize(this.BlockSize))
                 validationExceptions.Add(new BrightChainValidationException(
                     element: nameof(this.Data),
-                    message: String.Format("{0} has no data: {1} bytes", nameof(this.Data), this.Data.Length.ToString())));
+                    message: String.Format("{0} has no data: {1} bytes", nameof(this.Data), this.Data.Length)));
+
+            if (this.StorageContract.ByteCount != this.Data.Length)
+                validationExceptions.Add(new BrightChainValidationException(
+                    element: nameof(this.StorageContract.ByteCount),
+                    message: String.Format("{0} length {1} does not match data length of {1} bytes", nameof(this.StorageContract.ByteCount), this.StorageContract.ByteCount, this.Data.Length)));
 
             this.ValidationExceptions = validationExceptions;
 

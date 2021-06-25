@@ -46,6 +46,7 @@ namespace BrightChain.Tests
             Assert.IsTrue(metaDataDictionary.ContainsKey("_v"));
             Assert.IsTrue(metaDataDictionary.ContainsKey("RedundancyContract"));
             var contractObj = metaDataDictionary["RedundancyContract"] as JObject;
+            Assert.AreEqual(3, metaDataDictionary.Count);
 
             RedundancyContract blockRedundancyContract = new RedundancyContract(
                 storageDurationContract: contractObj.GetValue("StorageContract").ToObject<StorageDurationContract>(),
