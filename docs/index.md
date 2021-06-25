@@ -1,4 +1,4 @@
-# This is the **HOMEPAGE**.
-Refer to [Markdown](http://daringfireball.net/projects/markdown/) for how to write markdown files.
-## Quick Start Notes:
-1. Add images to the *images* folder if the file is referencing an image.
+# Welcome to BrightChain!
+
+* [GitHub](https://github.com/The-Revolution-Network/BrightChain) has most everything you could need!
+* Please otherwise jump to the [Introduction/Readme](https://apidocs.therevolution.network/articles/README.html)
