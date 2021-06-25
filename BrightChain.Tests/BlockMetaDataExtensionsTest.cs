@@ -42,6 +42,7 @@ namespace BrightChain.Tests
             var metaData = block.MetaData;
             var metaDataString = System.Text.Encoding.ASCII.GetString(metaData.ToArray());
             Dictionary<string, object> metaDataDictionary = (Dictionary<string, object>)JsonConvert.DeserializeObject(metaDataString, typeof(Dictionary<string, object>));
+            Assert.IsNotNull(metaDataDictionary);
             Assert.IsTrue(metaDataDictionary.ContainsKey("_t"));
             Assert.IsTrue(metaDataDictionary.ContainsKey("_v"));
             Assert.IsTrue(metaDataDictionary.ContainsKey("RedundancyContract"));
