@@ -10,8 +10,8 @@ namespace BrightChain.Models.Contracts
     /// </summary>
     public struct RedundancyContract
     {
-        public readonly StorageDurationContract StorageContract;
-        public readonly RedundancyContractType RedundancyContractType;
+        public StorageDurationContract StorageContract { get; set; }
+        public RedundancyContractType RedundancyContractType { get; set; }
 
         public RedundancyContract(StorageDurationContract storageDurationContract, RedundancyContractType redundancy)
         {

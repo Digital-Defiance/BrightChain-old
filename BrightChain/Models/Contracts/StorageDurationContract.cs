@@ -9,10 +9,9 @@ namespace BrightChain.Models.Contracts
     /// </summary>
     public struct StorageDurationContract
     {
-        public readonly DateTime RequestTime;
-        public readonly DateTime KeepUntilAtLeast;
-        public readonly int ByteCount;
-
+        public DateTime RequestTime { get; internal set; }
+        public DateTime KeepUntilAtLeast { get; internal set; }
+        public int ByteCount { get; internal set; }
 
         public StorageDurationContract(DateTime requestTime, DateTime keepUntilAtLeast, int byteCount)
         {

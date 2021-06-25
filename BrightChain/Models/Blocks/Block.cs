@@ -17,9 +17,9 @@ namespace BrightChain.Models.Blocks
     public abstract class Block : IBlock, IComparable<IBlock>, IComparable<Block>
     {
         public BlockHash Id { get; }
-        public StorageDurationContract StorageContract { get; internal set; }
+        public StorageDurationContract StorageContract { get; set; }
         [BrightChainMetadata]
-        public RedundancyContract RedundancyContract { get; internal set; }
+        public RedundancyContract RedundancyContract { get; set; }
         public ReadOnlyMemory<byte> Data { get; protected set; }
 
         public BlockSize BlockSize { get; }
