@@ -28,7 +28,7 @@ namespace BrightChain.Interfaces
         /// <summary>
         /// Parameters of the duration contract for this block
         /// </summary>
-        StorageDurationContract DurationContract { get; }
+        StorageDurationContract StorageContract { get; }
         /// <summary>
         /// Parameters of the redundancy contract for this block
         /// </summary>

@@ -45,14 +45,11 @@ namespace BrightChain.Tests
             var metaDataDictionary = metaDataObject as Dictionary<string, object>;
             Assert.IsTrue(metaDataDictionary.ContainsKey("_t"));
             Assert.IsTrue(metaDataDictionary.ContainsKey("_v"));
-            Assert.IsTrue(metaDataDictionary.ContainsKey("DurationContract"));
             Assert.IsTrue(metaDataDictionary.ContainsKey("RedundancyContract"));
-
-            var blockDurationContract = (metaDataDictionary["DurationContract"] as JObject).ToObject<StorageDurationContract>();
-            Assert.AreEqual(block.DurationContract, blockDurationContract);
 
             var blockRedundancyContract = (metaDataDictionary["RedundancyContract"] as JObject).ToObject<RedundancyContract>();
             Assert.AreEqual(block.RedundancyContract, blockRedundancyContract);
+            Assert.AreEqual(block.StorageContract, blockRedundancyContract.StorageContract);
         }
 
         [TestMethod]
@@ -78,8 +75,9 @@ namespace BrightChain.Tests
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
                 allowCommit: true);
             block2.RestoreMetaDataFromBytes(metaData);
-            Assert.AreEqual(block.DurationContract, block2.DurationContract);
+            Assert.AreEqual(block.StorageContract, block2.StorageContract);
             Assert.AreEqual(block.RedundancyContract, block2.RedundancyContract);
+            Assert.AreEqual(block.StorageContract, block2.RedundancyContract.StorageContract);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace BrightChain.Models.Blocks
 
         public BlockHash Id { get; }
         [BrightChainMetadata]
-        public StorageDurationContract DurationContract { get => throw new NotImplementedException(); }
+        public StorageDurationContract StorageContract { get => throw new NotImplementedException(); }
         [BrightChainMetadata]
         public RedundancyContract RedundancyContract { get => throw new NotImplementedException(); }
 

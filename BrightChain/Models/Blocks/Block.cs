@@ -17,8 +17,7 @@ namespace BrightChain.Models.Blocks
     public abstract class Block : IBlock, IComparable<IBlock>, IComparable<Block>
     {
         public BlockHash Id { get; }
-        [BrightChainMetadata]
-        public StorageDurationContract DurationContract { get; internal set; }
+        public StorageDurationContract StorageContract { get; internal set; }
         [BrightChainMetadata]
         public RedundancyContract RedundancyContract { get; internal set; }
         public ReadOnlyMemory<byte> Data { get; protected set; }
@@ -55,12 +54,12 @@ namespace BrightChain.Models.Blocks
                 throw new BrightChainException("Invalid Block Size"); // TODO: make (more) special exception type
 
             this.BlockSize = BlockSizeMap.BlockSize(data.Length);
-            this.DurationContract = new StorageDurationContract(
+            this.StorageContract = new StorageDurationContract(
                 requestTime: requestTime,
                 keepUntilAtLeast: keepUntilAtLeast,
                 byteCount: data.Length);
             this.RedundancyContract = new RedundancyContract(
-                storageDurationContract: this.DurationContract,
+                storageDurationContract: this.StorageContract,
                 redundancy: redundancy);
             this.Data = data;
             this.Id = new BlockHash(this); // must happen after data is in place
@@ -80,9 +79,9 @@ namespace BrightChain.Models.Blocks
             if (this.BlockSize != other.BlockSize)
                 throw new BrightChainException("BlockSize mismatch");
 
-            DateTime keepUntil = DateTime.Compare(this.DurationContract.KeepUntilAtLeast, other.DurationContract.KeepUntilAtLeast) > 0 ?
-                this.DurationContract.KeepUntilAtLeast :
-                other.DurationContract.KeepUntilAtLeast;
+            DateTime keepUntil = DateTime.Compare(this.StorageContract.KeepUntilAtLeast, other.StorageContract.KeepUntilAtLeast) > 0 ?
+                this.StorageContract.KeepUntilAtLeast :
+                other.StorageContract.KeepUntilAtLeast;
             RedundancyContractType redundancy = this.RedundancyContract.RedundancyContractType > other.RedundancyContract.RedundancyContractType ?
                 this.RedundancyContract.RedundancyContractType :
                 other.RedundancyContract.RedundancyContractType;
@@ -110,7 +109,7 @@ namespace BrightChain.Models.Blocks
         /// <returns></returns>
         public Block XOR(Block[] others)
         {
-            DateTime keepUntil = this.DurationContract.KeepUntilAtLeast;
+            DateTime keepUntil = this.StorageContract.KeepUntilAtLeast;
             RedundancyContractType redundancy = this.RedundancyContract.RedundancyContractType;
             int blockSize = BlockSizeMap.Map[this.BlockSize];
             var newList = new List<Block>(this.ConstituentBlocks);
@@ -124,7 +123,7 @@ namespace BrightChain.Models.Blocks
                 if (b.BlockSize != this.BlockSize)
                     throw new BrightChainException("BlockSize mismatch");
 
-                keepUntil = (b.DurationContract.KeepUntilAtLeast > keepUntil) ? b.DurationContract.KeepUntilAtLeast : keepUntil;
+                keepUntil = (b.StorageContract.KeepUntilAtLeast > keepUntil) ? b.StorageContract.KeepUntilAtLeast : keepUntil;
                 redundancy = (b.RedundancyContract.RedundancyContractType > redundancy) ? b.RedundancyContract.RedundancyContractType : redundancy;
                 byte[] xorWith = b.Data.ToArray();
                 for (int i = 0; i < blockSize; i++)
@@ -194,6 +193,8 @@ namespace BrightChain.Models.Blocks
                     if (attr is BrightChainMetadataAttribute)
                     {
                         prop.SetValue(this, value);
+                        if (value is RedundancyContract redundancyContract)
+                            this.StorageContract = redundancyContract.StorageContract;
                         exception = null;
                         return true;
                     }

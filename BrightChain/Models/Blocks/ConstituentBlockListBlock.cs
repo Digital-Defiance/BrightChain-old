@@ -23,8 +23,8 @@ namespace BrightChain.Models.Blocks
 
         public ConstituentBlockListBlock(Block sourceBlock) :
             base(
-                requestTime: sourceBlock.DurationContract.RequestTime,
-                keepUntilAtLeast: sourceBlock.DurationContract.KeepUntilAtLeast,
+                requestTime: sourceBlock.StorageContract.RequestTime,
+                keepUntilAtLeast: sourceBlock.StorageContract.KeepUntilAtLeast,
                 redundancy: sourceBlock.RedundancyContract.RedundancyContractType,
                 data: sourceBlock.Data)
         {

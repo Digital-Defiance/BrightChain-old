@@ -32,7 +32,7 @@ namespace BrightChain.Services
                     pregeneratedRandomizerCache: this.pregeneratedRandomizerCache,
                     blockSize: block.BlockSize,
                     requestTime: DateTime.Now,
-                    keepUntilAtLeast: block.DurationContract.KeepUntilAtLeast,
+                    keepUntilAtLeast: block.StorageContract.KeepUntilAtLeast,
                     redundancy: block.RedundancyContract.RedundancyContractType,
                     allowCommit: true);
             }
