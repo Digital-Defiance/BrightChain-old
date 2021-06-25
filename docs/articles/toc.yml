@@ -1,2 +1,4 @@
 - name: Introduction
-  href: intro.md
+  href: README.md
+- name: License
+  href: LICENSE.md
