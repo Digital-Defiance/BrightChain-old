@@ -39,7 +39,6 @@
     <PackageReference Include="Microsoft.Data.OData" Version="5.8.4" />
     <PackageReference Include="FluentValidation" Version="10.2.3" />
     <PackageReference Include="System.Runtime.Caching" Version="6.0.0-preview.5.21301.5" />
-    <PackageReference Include="Faker.Net" Version="1.5.138" />
   </ItemGroup>
 
   <ItemGroup>
