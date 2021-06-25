@@ -1,0 +1,10 @@
+#!/bin/sh
+# this is always run from the git root
+ReadmeStatus=$(git status -s README.md | awk '{print $1;}')
+if [ "$ReadmeStatus" == "M" ]; then
+	echo "README.md is modified, updating timestamp"
+	sed -Ei "s/(<time.*>)(.*)(<\/time>)/\1`date \"+%Y-%m-%dT%H:%M:%S%z\"`\3/" README.md
+	git add README.md
+	echo "Updated the time in README"
+fi
+exit 0

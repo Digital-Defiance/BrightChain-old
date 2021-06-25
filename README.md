@@ -24,4 +24,5 @@ Recent thoughts:
 * This project is not affiliated with GitHub, The DotNet Foundation, Microsoft, or any of its affiliates or holdings.
 * This software is open source, and offered as a "best-effort" thereoetical construct at this time and it may well lose all your data at this point in time.
 
-Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-06-25T11:32:28-0700</time>
+<!-- this timestamp is updated by a pre-commit hook in git-hooks/pre-commit then added to .git/hooks -->
+Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-06-25T11:41:10-0700</time>
