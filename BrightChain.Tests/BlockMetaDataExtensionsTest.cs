@@ -76,7 +76,7 @@ namespace BrightChain.Tests
                 keepUntilAtLeast: testStart.AddDays(1).AddSeconds(5),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
                 allowCommit: true);
-            block2.RestoreMetaDataFromBytes(metaData);
+            Assert.IsTrue(block2.RestoreMetaDataFromBytes(metaData));
             Assert.AreEqual(block.RedundancyContract, block2.RedundancyContract);
             Assert.AreEqual(block.StorageContract, block2.RedundancyContract.StorageContract);
             Assert.AreEqual(block.StorageContract, block2.StorageContract);
