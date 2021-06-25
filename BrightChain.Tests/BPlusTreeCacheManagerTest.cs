@@ -39,6 +39,14 @@ namespace BrightChain.Tests
             using (var tlog = new TransactionLog<Tkey, Tvalue>(
                 this.NewTransactionLogOptions()))
             {
+                this.cacheManager.Set(testPair.Key, testPair.Value);
+                Assert.AreEqual(testPair.Value, this.cacheManager.Get(testPair.Key));
+                this.cacheManager.Commit();
+                this.cacheManager.Drop(testPair.Key);
+                this.cacheManager.Set(alternateValue.Key, alternateValue.Value);
+                this.cacheManager.Commit();
+                this.cacheManager.Rollback();
+                Assert.IsFalse(this.cacheManager.Contains(alternateValue.Key));
             }
         }
 

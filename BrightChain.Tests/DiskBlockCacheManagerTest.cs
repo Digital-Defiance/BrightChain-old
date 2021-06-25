@@ -107,5 +107,27 @@ namespace BrightChain.Tests
         }
 
         internal override DiskCacheTestBlock NewNullData() => null;
+
+        /// <summary>
+        /// Push a null value into the cache
+        /// </summary>
+        [TestMethod]
+        public override void ItPutsNullValuesTest()
+        {
+            // Arrange
+            var newData = NewNullData();
+
+            // Act/Expect
+            Exceptions.BrightChainException brightChainException = Assert.ThrowsException<BrightChain.Exceptions.BrightChainException>(() =>
+                cacheManager.Set(testPair.Key, newData));
+
+            this.logger.Verify(l => l.Log(
+                LogLevel.Information,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(2));
+            this.logger.VerifyNoOtherCalls();
+        }
     }
 }

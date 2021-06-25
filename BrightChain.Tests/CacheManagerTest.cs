@@ -90,7 +90,7 @@ namespace BrightChain.Tests
         /// Push a null value into the cache
         /// </summary>
         [TestMethod]
-        public void ItPutsNullValuesTest()
+        public virtual void ItPutsNullValuesTest()
         {
             // Arrange
             Tvalue newData = NewNullData();

@@ -184,6 +184,11 @@ namespace BrightChain.Models.Blocks
                     element: nameof(this.StorageContract.ByteCount),
                     message: String.Format("{0} length {1} does not match data length of {1} bytes", nameof(this.StorageContract.ByteCount), this.StorageContract.ByteCount, this.Data.Length)));
 
+            if (!this.RedundancyContract.StorageContract.Equals(this.StorageContract))
+                validationExceptions.Add(new BrightChainValidationException(
+                    element: nameof(this.RedundancyContract.StorageContract),
+                    message: String.Format("{0} on redundancy contract does not match StorageContract", nameof(this.StorageContract))));
+
             this.ValidationExceptions = validationExceptions;
 
             return (validationExceptions.Count == 0);
