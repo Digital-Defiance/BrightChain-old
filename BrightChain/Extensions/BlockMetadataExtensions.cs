@@ -34,11 +34,10 @@ namespace BrightChain.Extensions
 
         public static bool RestoreMetaDataFromBytes(this Block block, ReadOnlyMemory<byte> metaDataBytes)
         {
+            var readonlyChars = metaDataBytes.ToArray().Select(c => (char)c).ToArray();
             try
             {
-                object metaDataObject = JsonConvert.DeserializeObject(
-                    System.Text.Encoding.ASCII.GetString(
-                        metaDataBytes.ToArray()), typeof(Dictionary<string, object>));
+                object metaDataObject = JsonConvert.DeserializeObject(new string(readonlyChars), typeof(Dictionary<string, object>));
 
                 // TODO: validate compatible types and assembly versions
                 // TODO: use BlockFactory to get the right type
@@ -51,10 +50,11 @@ namespace BrightChain.Extensions
                         var keyValue = (metadataDictionary[key] as JObject).ToObject(keyProperty.PropertyType);
                         Exception reloadException = null;
                         bool wasSet = block.reloadMetadata(key, keyValue, out reloadException);
-                        if (wasSet)
-                            return true;
-                        else if (reloadException != null)
+
+                        if (reloadException != null)
                             throw reloadException;
+                        else if (!wasSet)
+                            return false;
                     }
             }
             catch (Exception e)
