@@ -35,9 +35,12 @@ namespace BrightChain.Models.Contracts
             this.KeepUntilAtLeast.Equals(DateTime.MaxValue);
 
         public bool Equals(StorageDurationContract other) =>
-            this.RequestTime == other.RequestTime &&
-            this.KeepUntilAtLeast == other.KeepUntilAtLeast &&
-            this.ByteCount == other.ByteCount;
+            this.RequestTime.Equals(other.RequestTime) &&
+            this.KeepUntilAtLeast.Equals(other.KeepUntilAtLeast) &&
+            this.ByteCount.Equals(other.ByteCount);
+
+        public override bool Equals(object other) =>
+            other is StorageDurationContract && (StorageDurationContract)other == this;
 
         public static bool operator ==(StorageDurationContract a, StorageDurationContract b) =>
             a.RequestTime == b.RequestTime &&
@@ -45,6 +48,6 @@ namespace BrightChain.Models.Contracts
             a.ByteCount == b.ByteCount;
 
         public static bool operator !=(StorageDurationContract a, StorageDurationContract b) =>
-            !(a == b);
+            !a.Equals(b);
     }
 }

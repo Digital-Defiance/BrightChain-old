@@ -41,7 +41,9 @@ namespace BrightChain.Tests
             Assert.IsTrue(block.Validate());
             var metaData = block.MetaData;
             var metaDataString = System.Text.Encoding.ASCII.GetString(metaData.ToArray());
-            var metaDataObject = JsonConvert.DeserializeObject(metaDataString, typeof(Dictionary<string, object>));
+            JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings();
+            jsonSerializerSettings.MaxDepth = 5;
+            var metaDataObject = JsonConvert.DeserializeObject(metaDataString, typeof(Dictionary<string, object>), jsonSerializerSettings);
             var metaDataDictionary = metaDataObject as Dictionary<string, object>;
             Assert.IsTrue(metaDataDictionary.ContainsKey("_t"));
             Assert.IsTrue(metaDataDictionary.ContainsKey("_v"));
@@ -75,9 +77,9 @@ namespace BrightChain.Tests
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
                 allowCommit: true);
             block2.RestoreMetaDataFromBytes(metaData);
-            Assert.AreEqual(block.StorageContract, block2.StorageContract);
             Assert.AreEqual(block.RedundancyContract, block2.RedundancyContract);
             Assert.AreEqual(block.StorageContract, block2.RedundancyContract.StorageContract);
+            Assert.AreEqual(block.StorageContract, block2.StorageContract);
         }
     }
 }

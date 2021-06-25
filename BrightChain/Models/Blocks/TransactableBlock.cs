@@ -59,7 +59,7 @@ namespace BrightChain.Models.Blocks
             ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;
 
         public static bool operator !=(TransactableBlock a, TransactableBlock b) =>
-            !(a == b);
+            !a.Equals(b);
 
         public void Commit()
         {
@@ -86,7 +86,7 @@ namespace BrightChain.Models.Blocks
             new TransactableBlock(this.CacheManager, requestTime, keepUntilAtLeast, redundancy, data, allowCommit);
 
         public override bool Equals(object obj) =>
-            this == obj as TransactableBlock;
+            BinaryComparer.Compare(this.Data.ToArray(), (obj as TransactableBlock).Data.ToArray()) == 0;
 
         public override int GetHashCode() =>
             this.Data.GetHashCode();

@@ -62,7 +62,7 @@ namespace BrightChain.Extensions
                 return false;
             }
 
-            return true;
+            return block.Validate();
         }
     }
 }

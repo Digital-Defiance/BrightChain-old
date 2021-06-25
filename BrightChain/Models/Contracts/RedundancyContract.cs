@@ -37,13 +37,19 @@ namespace BrightChain.Models.Contracts
 
         public bool Equals(RedundancyContract other) =>
             this.StorageContract.Equals(other.StorageContract) &&
-            this.RedundancyContractType == other.RedundancyContractType;
+            this.RedundancyContractType.Equals(RedundancyContractType);
 
         public static bool operator ==(RedundancyContract a, RedundancyContract b) =>
-            a.StorageContract == b.StorageContract &&
-            a.RedundancyContractType == b.RedundancyContractType;
+            a.StorageContract.Equals(b.StorageContract) &&
+            a.RedundancyContractType.Equals(b.RedundancyContractType);
 
         public static bool operator !=(RedundancyContract a, RedundancyContract b) =>
-            !(a == b);
+            !a.Equals(b);
+
+        public override bool Equals(object obj) =>
+            (obj is RedundancyContract) &&
+            this.StorageContract.Equals(((RedundancyContract)obj).StorageContract) &&
+            this.RedundancyContractType.Equals(((RedundancyContract)obj).RedundancyContractType);
+
     }
 }
