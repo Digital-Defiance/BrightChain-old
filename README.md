@@ -24,4 +24,4 @@ Recent thoughts:
 * This project is not affiliated with GitHub, The DotNet Foundation, Microsoft, or any of its affiliates or holdings.
 * This software is open source, and offered as a "best-effort" thereoetical construct at this time and it may well lose all your data at this point in time.
 
-```Last Updated: 06/25/21 11a PT```
+Last Updated: <time class="timestamp" timestamp="ISO 8601 string"></time>
