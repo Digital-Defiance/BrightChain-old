@@ -8,6 +8,7 @@
 - Coming soon (GitHub Pages): https://the-revolution-network.github.io/gh-pages/
 
 Recent thoughts:
+ - Likely to use https://dapr.io https://github.com/dapr for node sync in the near future.
  - API throttle will continue as planned to be mathematically rate limited by minimal proof of works for bad actors and an algorithm to determine the maximum request r/w rates.
  - Block consensus will be proof of stake
  - its more of a brightnet blockstore and an ethos... what it needs still is some math and a little more vision in the areas I'm not seeing.
