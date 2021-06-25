@@ -1,5 +1,5 @@
 # BrightChain
-- BrightChain Engine in C#/.Net 6 (Currently requires VS 2022 Preview)
+- BrightChain Engine in C#/.Net 6 (Currently requires VS 2022 Preview, or IntelliJ Rider)
 - BrightNet BlockStore and API for BrightChain: The Revolution(ary) Network
 - The old wiki: https://github.com/The-Revolution-Network/brightChainAPI/wiki/Introduction
 - The new wiki: https://github.com/The-Revolution-Network/BrightChain/wiki (old will be rewritten/migrated)
