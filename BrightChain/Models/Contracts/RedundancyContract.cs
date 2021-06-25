@@ -18,16 +18,21 @@ namespace BrightChain.Models.Contracts
             this.RedundancyContractType = redundancy;
         }
 
-        public double Cost =>
-            ComputeCost(byteCount: this.StorageContract.ByteCount,
+        public double Cost
+        {
+            get => ComputeCost(byteCount: this.StorageContract.ByteCount,
                 durationSeconds: (ulong)this.StorageContract.Duration,
                 redundancy: this.RedundancyContractType);
+        }
 
-        public readonly ByteStorageRedundancyDuration RedundancyDuration =>
-            new ByteStorageRedundancyDuration(
+        public readonly ByteStorageRedundancyDuration RedundancyDuration
+        {
+            get => new ByteStorageRedundancyDuration(
                 byteCount: this.StorageContract.ByteCount,
                 durationSeconds: (ulong)this.StorageContract.Duration,
                 redundancy: this.RedundancyContractType);
+        }
+
 
         public static double ComputeCost(int byteCount, ulong durationSeconds, RedundancyContractType redundancy)
         {
@@ -51,5 +56,9 @@ namespace BrightChain.Models.Contracts
             this.StorageContract.Equals(((RedundancyContract)obj).StorageContract) &&
             this.RedundancyContractType.Equals(((RedundancyContract)obj).RedundancyContractType);
 
+        public override int GetHashCode()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

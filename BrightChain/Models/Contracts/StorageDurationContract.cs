@@ -49,5 +49,10 @@ namespace BrightChain.Models.Contracts
 
         public static bool operator !=(StorageDurationContract a, StorageDurationContract b) =>
             !a.Equals(b);
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
