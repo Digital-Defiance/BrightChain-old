@@ -1,4 +1,5 @@
 ﻿using BrightChain.Enumerations;
+using BrightChain.Extensions;
 using BrightChain.Models.Blocks;
 using BrightChain.Services;
 using Microsoft.Extensions.Logging;

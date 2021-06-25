@@ -39,14 +39,14 @@ namespace BrightChain.Models.Blocks
         /// <summary>
         /// Emits the serialization of the block minus data and any ignored attributes (including itself).
         /// </summary>
-        public ReadOnlyMemory<byte> MetaData =>
-            this.MetaDataBytes();
+        public ReadOnlyMemory<byte> Metadata =>
+            this.MetadataBytes();
 
         public abstract Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit);
 
         public Block AsBlock => this;
 
-        public IEnumerable<BrightChainValidationException> ValidationExceptions { get; protected set; }
+        public IEnumerable<BrightChainValidationException> ValidationExceptions { get; internal set; }
 
         public Block(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data)
         {
@@ -169,102 +169,6 @@ namespace BrightChain.Models.Blocks
                 allowCommit: true); // these XOR functions should be one of the only places this even happens
             result.ConstituentBlocks = newList.ToArray();
             return result;
-        }
-
-        /// <summary>
-        /// return true or throw an exception with the error
-        /// </summary>
-        /// <returns></returns>
-        public bool Validate()
-        {
-            List<BrightChainValidationException> validationExceptions = new List<BrightChainValidationException>();
-
-            if (this.BlockSize == BlockSize.Unknown)
-            {
-                validationExceptions.Add(new BrightChainValidationException(
-                    element: nameof(this.BlockSize),
-                    message: String.Format("{0} is invalid: {1}", nameof(this.BlockSize), this.BlockSize.ToString())));
-            }
-
-            if (this.BlockSize != BlockSizeMap.BlockSize(this.Data.Length))
-            {
-                validationExceptions.Add(new BrightChainValidationException(
-                    element: nameof(this.BlockSize),
-                    message: String.Format("{0} is invalid: {1}, actual {2} bytes", nameof(this.BlockSize), this.BlockSize.ToString(), this.Data.Length)));
-            }
-
-            try
-            {
-                var recomputedHash = new BlockHash(this);
-                if (this.Id != recomputedHash)
-                {
-                    validationExceptions.Add(new BrightChainValidationException(
-                        element: nameof(this.Id),
-                        message: String.Format("{0} is invalid: {1}, actual {2}", nameof(this.Id), this.Id, recomputedHash)));
-                }
-            }
-            catch (Exception e)
-            {
-                validationExceptions.Add(new BrightChainValidationException(
-                    element: nameof(this.Id),
-                    message: String.Format("{0} is invalid: {1}, unable to recompute hash: {2}", nameof(this.Id), this.Id, e.Message)));
-            }
-
-            if (this.Data.Length != BlockSizeMap.BlockSize(this.BlockSize))
-            {
-                validationExceptions.Add(new BrightChainValidationException(
-                    element: nameof(this.Data),
-                    message: String.Format("{0} has no data: {1} bytes", nameof(this.Data), this.Data.Length)));
-            }
-
-            if (this.StorageContract.ByteCount != this.Data.Length)
-            {
-                validationExceptions.Add(new BrightChainValidationException(
-                    element: nameof(this.StorageContract.ByteCount),
-                    message: String.Format("{0} length {1} does not match data length of {1} bytes", nameof(this.StorageContract.ByteCount), this.StorageContract.ByteCount, this.Data.Length)));
-            }
-
-            if (!this.RedundancyContract.StorageContract.Equals(this.StorageContract))
-            {
-                validationExceptions.Add(new BrightChainValidationException(
-                    element: nameof(this.RedundancyContract.StorageContract),
-                    message: String.Format("{0} on redundancy contract does not match StorageContract", nameof(this.StorageContract))));
-            }
-
-            this.ValidationExceptions = validationExceptions;
-
-            return (validationExceptions.Count == 0);
-        }
-
-        internal bool reloadMetadata(string key, object value, out Exception exception)
-        {
-            var prop = this.GetType().GetProperty(key);
-            try
-            {
-                foreach (object attr in prop.GetCustomAttributes(true))
-                {
-                    if (attr is BrightChainMetadataAttribute)
-                    {
-                        prop.SetValue(this, value);
-                        if (value is RedundancyContract redundancyContract)
-                        {
-                            this.StorageContract = redundancyContract.StorageContract;
-                        }
-
-                        exception = null;
-                        return true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                exception = ex;
-                return false;
-            }
-
-            // not settable attribute
-            exception = new BrightChainException("Invalid Metadata attribute");
-            return false;
         }
 
         public static bool operator ==(Block a, Block b) => ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;

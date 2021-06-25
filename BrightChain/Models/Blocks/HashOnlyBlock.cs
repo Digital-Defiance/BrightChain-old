@@ -27,7 +27,7 @@ namespace BrightChain.Models.Blocks
         public BlockSize BlockSize { get; }
         public bool HashVerified { get; }
 
-        public ReadOnlyMemory<byte> MetaData => throw new NotImplementedException();
+        public ReadOnlyMemory<byte> Metadata => throw new NotImplementedException();
 
         private HashOnlyBlock(BlockHash blockHash)
         {

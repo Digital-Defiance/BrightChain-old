@@ -39,7 +39,7 @@ namespace BrightChain.Tests
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
                 allowCommit: true);
             Assert.IsTrue(block.Validate());
-            var metaData = block.MetaData;
+            var metaData = block.Metadata;
             var metaDataString = System.Text.Encoding.ASCII.GetString(metaData.ToArray());
             Dictionary<string, object> metaDataDictionary = (Dictionary<string, object>)JsonConvert.DeserializeObject(metaDataString, typeof(Dictionary<string, object>));
             Assert.IsNotNull(metaDataDictionary);
@@ -69,7 +69,7 @@ namespace BrightChain.Tests
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
                 allowCommit: true);
             Assert.IsTrue(block.Validate());
-            var metaData = block.MetaData;
+            var metaData = block.Metadata;
 
             var block2 = new RandomizerBlock(
                 pregeneratedRandomizerCache: this.cacheManager,
@@ -78,7 +78,7 @@ namespace BrightChain.Tests
                 keepUntilAtLeast: testStart.AddDays(1).AddSeconds(5),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
                 allowCommit: true);
-            Assert.IsTrue(block2.RestoreMetaDataFromBytes(metaData));
+            Assert.IsTrue(block2.TryRestoreMetadataFromBytes(metaData));
             Assert.AreEqual(block.RedundancyContract, block2.RedundancyContract);
             Assert.AreEqual(block.StorageContract, block2.RedundancyContract.StorageContract);
             Assert.AreEqual(block.StorageContract, block2.StorageContract);

@@ -50,7 +50,7 @@ namespace BrightChain.Helpers
                 redundancy: RedundancyContractType.HeapAuto,
                 data: blockData) as T;
             // fill in metadata
-            restoredBlock.RestoreMetaDataFromBytes(metaData);
+            restoredBlock.TryRestoreMetadataFromBytes(metaData);
 
             return restoredBlock;
         }
@@ -68,7 +68,7 @@ namespace BrightChain.Helpers
                 offset: 0,
                 count: value.Data.Length);
             // part 2: metadata
-            ReadOnlyMemory<byte> metaData = value.MetaDataBytes();
+            ReadOnlyMemory<byte> metaData = value.MetadataBytes();
             buffer = BitConverter.GetBytes(metaData.Length);
             stream.Write(
                 buffer: buffer,
