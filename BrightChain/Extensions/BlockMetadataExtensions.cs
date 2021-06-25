@@ -15,9 +15,15 @@ namespace BrightChain.Extensions
         {
             Dictionary<string, object> metadataDictionary = new Dictionary<string, object>();
             foreach (PropertyInfo prop in typeof(Block).GetProperties())
+            {
                 foreach (object attr in prop.GetCustomAttributes(true))
+                {
                     if (attr is BrightChainMetadataAttribute)
+                    {
                         metadataDictionary.Add(prop.Name, prop.GetValue(block));
+                    }
+                }
+            }
 
             // get assembly version
             Assembly assembly = Assembly.GetEntryAssembly();
@@ -44,6 +50,7 @@ namespace BrightChain.Extensions
 
                 Dictionary<string, object> metadataDictionary = (Dictionary<string, object>)metaDataObject;
                 foreach (string key in metadataDictionary.Keys)
+                {
                     if (!key.StartsWith("_"))
                     {
                         var keyProperty = block.GetType().GetProperty(key);
@@ -52,10 +59,15 @@ namespace BrightChain.Extensions
                         bool wasSet = block.reloadMetadata(key, keyValue, out reloadException);
 
                         if (reloadException != null)
+                        {
                             throw reloadException;
+                        }
                         else if (!wasSet)
+                        {
                             return false;
+                        }
                     }
+                }
             }
             catch (Exception e)
             {

@@ -15,7 +15,10 @@ namespace BrightChain.Models.Blocks
         {
             var rnd = new byte[BlockSizeMap.BlockSize(blockSize)];
             using (var rng = RandomNumberGenerator.Create()) // TODO: guarantee is CSPRNG
+            {
                 rng.GetBytes(rnd);
+            }
+
             return new ReadOnlyMemory<byte>(rnd);
         }
 
@@ -26,10 +29,7 @@ namespace BrightChain.Models.Blocks
                 keepUntilAtLeast: keepUntilAtLeast,
                 redundancy: redundancy,
                 data: NewRandomBlockData(blockSize),
-                allowCommit: allowCommit)
-        {
-            this.CacheManager.Set(this.Id, this);
-        }
+                allowCommit: allowCommit) => this.CacheManager.Set(this.Id, this);
         /// <summary>
         /// replace incoming data (will be empty byte array to fit conventions) with random data
         /// </summary>
@@ -39,17 +39,15 @@ namespace BrightChain.Models.Blocks
         /// <param name="_"></param>
         /// <param name="allowCommit"></param>
         /// <returns></returns>
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> _, bool allowCommit) =>
-            new RandomizerBlock(
-                pregeneratedRandomizerCache: this.CacheManager as BlockCacheManager,
-                blockSize: this.BlockSize,
-                requestTime: requestTime,
-                keepUntilAtLeast: keepUntilAtLeast,
-                redundancy: redundancy,
-                allowCommit: allowCommit);
+        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> _, bool allowCommit) => new RandomizerBlock(
+pregeneratedRandomizerCache: this.CacheManager as BlockCacheManager,
+blockSize: this.BlockSize,
+requestTime: requestTime,
+keepUntilAtLeast: keepUntilAtLeast,
+redundancy: redundancy,
+allowCommit: allowCommit);
 
-        public int CompareTo(RandomizerBlock other) =>
-            BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
+        public int CompareTo(RandomizerBlock other) => BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
 
         public override void Dispose()
         {

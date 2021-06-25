@@ -15,17 +15,22 @@ namespace BrightChain.Services
 
         public BlockCacheManager(BPlusTreeCacheManager<BlockHash, TransactableBlock, BlockHashSerializer, BlockSerializer<TransactableBlock>> other) : base(other) { }
 
-        public BlockCacheManager AsBlockCacheManager { get => this as BlockCacheManager; }
+        public BlockCacheManager AsBlockCacheManager => this;
 
-        public void Set(TransactableBlock block) =>
-            base.Set(block.Id, block);
+        public void Set(TransactableBlock block) => base.Set(block.Id, block);
 
         public new void Set(BlockHash key, TransactableBlock value)
         {
             if (value is null)
+            {
                 throw new BrightChain.Exceptions.BrightChainException("Can not set null value");
+            }
+
             if (key != value.Id)
+            {
                 throw new BrightChain.Exceptions.BrightChainException("Key does not match supplied block");
+            }
+
             base.Set(value.Id, value);
         }
     }

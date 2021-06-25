@@ -39,7 +39,9 @@ namespace BrightChain.Helpers
         public void WriteTo(BlockHash value, Stream stream)
         {
             if (value.HashBytes.Length == 0)
+            {
                 throw new BrightChainException("HashBytes is empty");
+            }
 
             stream.Write(
                 buffer: value.HashBytes.ToArray(),

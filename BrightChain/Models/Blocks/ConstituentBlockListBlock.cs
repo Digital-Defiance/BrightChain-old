@@ -33,29 +33,27 @@ namespace BrightChain.Models.Blocks
         }
 
         public IEnumerable<BlockHash> ConstituentBlockHashes =>
-            ConstituentBlocks
+            this.ConstituentBlocks
                 .Select(b => b.Id)
                     .ToArray();
 
         public new ReadOnlyMemory<byte> Data =>
             new ReadOnlyMemory<byte>(
-                ConstituentBlocks
+                this.ConstituentBlocks
                     .SelectMany(b =>
                         b.Id.HashBytes.ToArray())
                     .ToArray());
 
         public double TotalCost =>
-            ConstituentBlocks.Sum(b => b.RedundancyContract.Cost);
+            this.ConstituentBlocks.Sum(b => b.RedundancyContract.Cost);
 
         public override void Dispose()
         {
         }
 
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) =>
-            (this.sourceBlock is null) ?
-                this.sourceBlock.NewBlock(requestTime: requestTime, keepUntilAtLeast: keepUntilAtLeast, redundancy: redundancy, data: data, allowCommit: allowCommit)
-            :
-                throw new NullReferenceException(nameof(this.sourceBlock));
-
+        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) => (this.sourceBlock is null) ?
+this.sourceBlock.NewBlock(requestTime: requestTime, keepUntilAtLeast: keepUntilAtLeast, redundancy: redundancy, data: data, allowCommit: allowCommit)
+:
+throw new NullReferenceException(nameof(this.sourceBlock));
     }
 }

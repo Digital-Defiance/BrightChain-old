@@ -21,7 +21,10 @@ namespace BrightChain.Models.Blocks
         {
             this.BlockSize = block.BlockSize;
             using (SHA256 mySHA256 = SHA256.Create())
+            {
                 this.HashBytes = mySHA256.ComputeHash(block.Data.ToArray());
+            }
+
             this.Computed = true;
         }
 
@@ -43,29 +46,25 @@ namespace BrightChain.Models.Blocks
         {
             this.BlockSize = BlockSizeMap.BlockSize(dataBytes.Length);
             using (SHA256 mySHA256 = SHA256.Create())
+            {
                 this.HashBytes = mySHA256.ComputeHash(dataBytes.ToArray());
+            }
+
             this.Computed = true;
         }
 
-        public string ToString(string format, IFormatProvider _) =>
-            this.ToString();
+        public string ToString(string format, IFormatProvider _) => this.ToString();
 
-        public new string ToString() =>
-            BitConverter.ToString(this.HashBytes.ToArray());
+        public new string ToString() => BitConverter.ToString(this.HashBytes.ToArray());
 
-        public static bool operator ==(BlockHash a, BlockHash b) =>
-            ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;
+        public static bool operator ==(BlockHash a, BlockHash b) => ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;
 
-        public static bool operator !=(BlockHash a, BlockHash b) =>
-            !a.Equals(b);
+        public static bool operator !=(BlockHash a, BlockHash b) => !a.Equals(b);
 
-        public override bool Equals(object obj) =>
-            ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, (obj as BlockHash).HashBytes) == 0;
+        public override bool Equals(object obj) => ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, (obj as BlockHash).HashBytes) == 0;
 
-        public override int GetHashCode() =>
-            this.HashBytes.GetHashCode();
+        public override int GetHashCode() => this.HashBytes.GetHashCode();
 
-        public int CompareTo(BlockHash other) =>
-            BinaryComparer.Compare(this.HashBytes.ToArray(), other.HashBytes.ToArray());
+        public int CompareTo(BlockHash other) => BinaryComparer.Compare(this.HashBytes.ToArray(), other.HashBytes.ToArray());
     }
 }

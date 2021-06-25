@@ -24,7 +24,9 @@ namespace BrightChain.Models.Blocks
         public static int BlockSize(BlockSize blockSize)
         {
             if (!BlockSizeMap.Map.ContainsKey(blockSize))
+            {
                 throw new KeyNotFoundException(message: nameof(blockSize));
+            }
 
             return BlockSizeMap.Map[blockSize];
         }
@@ -39,7 +41,9 @@ namespace BrightChain.Models.Blocks
             foreach (KeyValuePair<BlockSize, int> pair in BlockSizeMap.Map)
             {
                 if (pair.Value == blockSize)
+                {
                     return pair.Key;
+                }
             }
 
             throw new KeyNotFoundException(message: nameof(blockSize));

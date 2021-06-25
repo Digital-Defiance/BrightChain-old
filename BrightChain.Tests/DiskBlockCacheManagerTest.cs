@@ -45,23 +45,22 @@ namespace BrightChain.Tests
             var random = new Random(Guid.NewGuid().GetHashCode());
             var data = new byte[BlockSizeMap.BlockSize(BlockSize.Message)];
             for (int i = 0; i < data.Length; i++)
+            {
                 data[i] = (byte)random.Next(0, 255);
+            }
+
             return new ReadOnlyMemory<byte>(data);
         }
 
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) =>
-            new DiskCacheTestBlock(
-                cacheManager: CacheManager,
-                requestTime: requestTime,
-                keepUntilAtLeast: keepUntilAtLeast,
-                redundancy: redundancy,
-                data: data,
-                allowCommit: allowCommit);
+        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) => new DiskCacheTestBlock(
+cacheManager: CacheManager,
+requestTime: requestTime,
+keepUntilAtLeast: keepUntilAtLeast,
+redundancy: redundancy,
+data: data,
+allowCommit: allowCommit);
 
-        public override void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+        public override void Dispose() => throw new NotImplementedException();
     }
 
     /// <summary>
@@ -75,25 +74,26 @@ namespace BrightChain.Tests
             this.logger = new Mock<ILogger<BlockCacheManager>>();
             DiskCacheTestBlock.CacheManager = new DiskBlockCacheManager(
                                                     new BlockCacheManager(
-                                                        NewCacheManager(this.logger.Object)));
+                                                        this.NewCacheManager(this.logger.Object)));
         }
 
-        public static BPlusTree<BlockHash, TransactableBlock>.OptionsV2 DefaultOptions() =>
-            new BPlusTree<BlockHash, TransactableBlock>.OptionsV2(
-                keySerializer: new BlockHashSerializer(),
-                valueSerializer: new BlockSerializer<TransactableBlock>());
+        public static BPlusTree<BlockHash, TransactableBlock>.OptionsV2 DefaultOptions() => new BPlusTree<BlockHash, TransactableBlock>.OptionsV2(
+keySerializer: new BlockHashSerializer(),
+valueSerializer: new BlockSerializer<TransactableBlock>());
 
-        internal override DiskBlockCacheManager NewCacheManager(ILogger logger) =>
-            new DiskBlockCacheManager(
-                logger: logger,
-                optionsV2: DefaultOptions());
+        internal override DiskBlockCacheManager NewCacheManager(ILogger logger) => new DiskBlockCacheManager(
+logger: logger,
+optionsV2: DefaultOptions());
 
         internal override KeyValuePair<BlockHash, TransactableBlock> NewKeyValue()
         {
             var random = new Random(Guid.NewGuid().GetHashCode());
             var data = new byte[BlockSizeMap.BlockSize(BlockSize.Message)];
             for (int i = 0; i < BlockSizeMap.BlockSize(BlockSize.Message); i++)
+            {
                 data[i] = (byte)random.Next(0, 255);
+            }
+
             var block = new DiskCacheTestBlock(
                 new DiskBlockCacheManager(
                     new BlockCacheManager(
@@ -115,11 +115,11 @@ namespace BrightChain.Tests
         public override void ItPutsNullValuesTest()
         {
             // Arrange
-            var newData = NewNullData();
+            var newData = this.NewNullData();
 
             // Act/Expect
             Exceptions.BrightChainException brightChainException = Assert.ThrowsException<BrightChain.Exceptions.BrightChainException>(() =>
-                cacheManager.Set(testPair.Key, newData));
+                this.cacheManager.Set(this.testPair.Key, newData));
 
             this.logger.Verify(l => l.Log(
                 LogLevel.Information,

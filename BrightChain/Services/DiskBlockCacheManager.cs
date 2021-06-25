@@ -26,8 +26,8 @@ namespace BrightChain.Services
         {
             options.CalcBTreeOrder(16, 24);
             options.CreateFile = CreatePolicy.Always;
-            options.FileName = backingFile.TempPath;
-            options.TransactionLogFileName = transactionLog.TempPath;
+            options.FileName = this.backingFile.TempPath;
+            options.TransactionLogFileName = this.transactionLog.TempPath;
             return options;
         }
     }

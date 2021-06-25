@@ -22,50 +22,31 @@ namespace BrightChain.Models.Contracts
         }
 
         [JsonIgnore]
-        public double Duration
-        {
-            get => KeepUntilAtLeast.Subtract(RequestTime).TotalSeconds;
-        }
+        public double Duration => this.KeepUntilAtLeast.Subtract(this.RequestTime).TotalSeconds;
 
         [JsonIgnore]
-        public ByteStorageDuration ByteStorageDuration
-        {
-            get => new ByteStorageDuration(
-                byteCount: ByteCount,
-                durationSeconds: (ulong)Duration);
-        }
+        public ByteStorageDuration ByteStorageDuration => new ByteStorageDuration(
+                byteCount: this.ByteCount,
+                durationSeconds: (ulong)this.Duration);
 
         [JsonIgnore]
-        public readonly bool DoNotStore
-        {
-            get => this.KeepUntilAtLeast.Equals(DateTime.MinValue);
-        }
+        public readonly bool DoNotStore => this.KeepUntilAtLeast.Equals(DateTime.MinValue);
 
         [JsonIgnore]
-        public readonly bool NonExpiring
-        {
-            get => this.KeepUntilAtLeast.Equals(DateTime.MaxValue);
-        }
+        public readonly bool NonExpiring => this.KeepUntilAtLeast.Equals(DateTime.MaxValue);
 
-        public bool Equals(StorageDurationContract other) =>
-            this.RequestTime.Equals(other.RequestTime) &&
-            this.KeepUntilAtLeast.Equals(other.KeepUntilAtLeast) &&
-            this.ByteCount.Equals(other.ByteCount);
+        public bool Equals(StorageDurationContract other) => this.RequestTime.Equals(other.RequestTime) &&
+this.KeepUntilAtLeast.Equals(other.KeepUntilAtLeast) &&
+this.ByteCount.Equals(other.ByteCount);
 
-        public override bool Equals(object other) =>
-            other is StorageDurationContract && (StorageDurationContract)other == this;
+        public override bool Equals(object other) => other is StorageDurationContract && (StorageDurationContract)other == this;
 
-        public static bool operator ==(StorageDurationContract a, StorageDurationContract b) =>
-            a.RequestTime == b.RequestTime &&
-            a.KeepUntilAtLeast == b.KeepUntilAtLeast &&
-            a.ByteCount == b.ByteCount;
+        public static bool operator ==(StorageDurationContract a, StorageDurationContract b) => a.RequestTime == b.RequestTime &&
+a.KeepUntilAtLeast == b.KeepUntilAtLeast &&
+a.ByteCount == b.ByteCount;
 
-        public static bool operator !=(StorageDurationContract a, StorageDurationContract b) =>
-            !a.Equals(b);
+        public static bool operator !=(StorageDurationContract a, StorageDurationContract b) => !a.Equals(b);
 
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
+        public override int GetHashCode() => throw new NotImplementedException();
     }
 }

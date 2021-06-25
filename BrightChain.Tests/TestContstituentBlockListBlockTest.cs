@@ -10,16 +10,11 @@ namespace BrightChain.Tests
     public class TestContstituentBlockListBlockTest
     {
         [TestMethod, Ignore]
-        public void ItCalculatesTotalCostSumTest()
-        {
+        public void ItCalculatesTotalCostSumTest() =>
             // TODO: create a block set and verify the total cost
             throw new NotImplementedException();
-        }
 
         [TestMethod, Ignore]
-        public void ItIncludesAllBlocksTest()
-        {
-            throw new NotImplementedException();
-        }
+        public void ItIncludesAllBlocksTest() => throw new NotImplementedException();
     }
 }

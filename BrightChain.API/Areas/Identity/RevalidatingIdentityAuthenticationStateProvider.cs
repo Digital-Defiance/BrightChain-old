@@ -23,8 +23,8 @@ namespace BrightChain.API.Areas.Identity
             IOptions<IdentityOptions> optionsAccessor)
             : base(loggerFactory)
         {
-            _scopeFactory = scopeFactory;
-            _options = optionsAccessor.Value;
+            this._scopeFactory = scopeFactory;
+            this._options = optionsAccessor.Value;
         }
 
         protected override TimeSpan RevalidationInterval => TimeSpan.FromMinutes(30);
@@ -33,11 +33,11 @@ namespace BrightChain.API.Areas.Identity
             AuthenticationState authenticationState, CancellationToken cancellationToken)
         {
             // Get the user manager from a new scope to ensure it fetches fresh data
-            var scope = _scopeFactory.CreateScope();
+            var scope = this._scopeFactory.CreateScope();
             try
             {
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<TUser>>();
-                return await ValidateSecurityStampAsync(userManager, authenticationState.User);
+                return await this.ValidateSecurityStampAsync(userManager, authenticationState.User);
             }
             finally
             {
@@ -65,7 +65,7 @@ namespace BrightChain.API.Areas.Identity
             }
             else
             {
-                var principalStamp = principal.FindFirstValue(_options.ClaimsIdentity.SecurityStampClaimType);
+                var principalStamp = principal.FindFirstValue(this._options.ClaimsIdentity.SecurityStampClaimType);
                 var userStamp = await userManager.GetSecurityStampAsync(user);
                 return principalStamp == userStamp;
             }

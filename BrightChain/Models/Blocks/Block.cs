@@ -34,7 +34,7 @@ namespace BrightChain.Models.Blocks
         /// <summary>
         /// Returns a block which contains only the constituent block hashes, ready to write to disk.
         /// </summary>
-        public ConstituentBlockListBlock ConstituentBlockListBlock { get => new ConstituentBlockListBlock(sourceBlock: this.AsBlock); }
+        public ConstituentBlockListBlock ConstituentBlockListBlock => new ConstituentBlockListBlock(sourceBlock: this.AsBlock);
 
         /// <summary>
         /// Emits the serialization of the block minus data and any ignored attributes (including itself).
@@ -44,14 +44,16 @@ namespace BrightChain.Models.Blocks
 
         public abstract Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit);
 
-        public Block AsBlock { get => this as Block; }
+        public Block AsBlock => this;
 
         public IEnumerable<BrightChainValidationException> ValidationExceptions { get; protected set; }
 
         public Block(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data)
         {
             if (!BlockSizeMap.Map.ContainsValue(data.Length))
+            {
                 throw new BrightChainException("Invalid Block Size"); // TODO: make (more) special exception type
+            }
 
             this.BlockSize = BlockSizeMap.BlockSize(data.Length);
             this.StorageContract = new StorageDurationContract(
@@ -75,9 +77,14 @@ namespace BrightChain.Models.Blocks
         public Block XOR(Block other)
         {
             if (other is SourceBlock)
+            {
                 throw new BrightChainException("Unexpected SourceBlock");
+            }
+
             if (this.BlockSize != other.BlockSize)
+            {
                 throw new BrightChainException("BlockSize mismatch");
+            }
 
             DateTime keepUntil = DateTime.Compare(this.StorageContract.KeepUntilAtLeast, other.StorageContract.KeepUntilAtLeast) > 0 ?
                 this.StorageContract.KeepUntilAtLeast :
@@ -88,16 +95,27 @@ namespace BrightChain.Models.Blocks
             int blockSize = BlockSizeMap.Map[this.BlockSize];
             byte[] xorData = new byte[blockSize];
             for (int i = 0; i < blockSize; i++)
+            {
                 xorData[i] = this.Data.Slice(start: i, length: 1).ToArray()[0];
-            var result = NewBlock(
+            }
+
+            var result = this.NewBlock(
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: keepUntil,
                 redundancy: redundancy,
                 data: new ReadOnlyMemory<byte>(xorData),
                 allowCommit: true); // these XOR functions should be one of the only places this even happens
             var newList = new List<Block>(this.ConstituentBlocks);
-            if (!(this is SourceBlock)) newList.Add(this);
-            if (!(other is SourceBlock)) newList.Add(other);
+            if (!(this is SourceBlock))
+            {
+                newList.Add(this);
+            }
+
+            if (!(other is SourceBlock))
+            {
+                newList.Add(other);
+            }
+
             result.ConstituentBlocks = newList.ToArray();
             return result;
         }
@@ -113,25 +131,37 @@ namespace BrightChain.Models.Blocks
             RedundancyContractType redundancy = this.RedundancyContract.RedundancyContractType;
             int blockSize = BlockSizeMap.Map[this.BlockSize];
             var newList = new List<Block>(this.ConstituentBlocks);
-            if (!(this is SourceBlock)) newList.Add(this);
+            if (!(this is SourceBlock))
+            {
+                newList.Add(this);
+            }
+
             byte[] xorData = this.Data.ToArray();
 
             foreach (Block b in others)
             {
                 if (b is SourceBlock)
+                {
                     throw new BrightChainException("Unexpected SourceBlock");
+                }
+
                 if (b.BlockSize != this.BlockSize)
+                {
                     throw new BrightChainException("BlockSize mismatch");
+                }
 
                 keepUntil = (b.StorageContract.KeepUntilAtLeast > keepUntil) ? b.StorageContract.KeepUntilAtLeast : keepUntil;
                 redundancy = (b.RedundancyContract.RedundancyContractType > redundancy) ? b.RedundancyContract.RedundancyContractType : redundancy;
                 byte[] xorWith = b.Data.ToArray();
                 for (int i = 0; i < blockSize; i++)
+                {
                     xorData[i] = (byte)(xorData[0] ^ xorWith[i]);
+                }
+
                 newList.Add(b);
             }
 
-            var result = NewBlock(
+            var result = this.NewBlock(
                 requestTime: System.DateTime.Now,
                 keepUntilAtLeast: keepUntil,
                 redundancy: redundancy,
@@ -150,22 +180,28 @@ namespace BrightChain.Models.Blocks
             List<BrightChainValidationException> validationExceptions = new List<BrightChainValidationException>();
 
             if (this.BlockSize == BlockSize.Unknown)
+            {
                 validationExceptions.Add(new BrightChainValidationException(
                     element: nameof(this.BlockSize),
                     message: String.Format("{0} is invalid: {1}", nameof(this.BlockSize), this.BlockSize.ToString())));
+            }
 
             if (this.BlockSize != BlockSizeMap.BlockSize(this.Data.Length))
+            {
                 validationExceptions.Add(new BrightChainValidationException(
                     element: nameof(this.BlockSize),
                     message: String.Format("{0} is invalid: {1}, actual {2} bytes", nameof(this.BlockSize), this.BlockSize.ToString(), this.Data.Length)));
+            }
 
             try
             {
                 var recomputedHash = new BlockHash(this);
                 if (this.Id != recomputedHash)
+                {
                     validationExceptions.Add(new BrightChainValidationException(
                         element: nameof(this.Id),
                         message: String.Format("{0} is invalid: {1}, actual {2}", nameof(this.Id), this.Id, recomputedHash)));
+                }
             }
             catch (Exception e)
             {
@@ -175,19 +211,25 @@ namespace BrightChain.Models.Blocks
             }
 
             if (this.Data.Length != BlockSizeMap.BlockSize(this.BlockSize))
+            {
                 validationExceptions.Add(new BrightChainValidationException(
                     element: nameof(this.Data),
                     message: String.Format("{0} has no data: {1} bytes", nameof(this.Data), this.Data.Length)));
+            }
 
             if (this.StorageContract.ByteCount != this.Data.Length)
+            {
                 validationExceptions.Add(new BrightChainValidationException(
                     element: nameof(this.StorageContract.ByteCount),
                     message: String.Format("{0} length {1} does not match data length of {1} bytes", nameof(this.StorageContract.ByteCount), this.StorageContract.ByteCount, this.Data.Length)));
+            }
 
             if (!this.RedundancyContract.StorageContract.Equals(this.StorageContract))
+            {
                 validationExceptions.Add(new BrightChainValidationException(
                     element: nameof(this.RedundancyContract.StorageContract),
                     message: String.Format("{0} on redundancy contract does not match StorageContract", nameof(this.StorageContract))));
+            }
 
             this.ValidationExceptions = validationExceptions;
 
@@ -200,14 +242,19 @@ namespace BrightChain.Models.Blocks
             try
             {
                 foreach (object attr in prop.GetCustomAttributes(true))
+                {
                     if (attr is BrightChainMetadataAttribute)
                     {
                         prop.SetValue(this, value);
                         if (value is RedundancyContract redundancyContract)
+                        {
                             this.StorageContract = redundancyContract.StorageContract;
+                        }
+
                         exception = null;
                         return true;
                     }
+                }
             }
             catch (Exception ex)
             {
@@ -220,24 +267,18 @@ namespace BrightChain.Models.Blocks
             return false;
         }
 
-        public static bool operator ==(Block a, Block b) =>
-            ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;
+        public static bool operator ==(Block a, Block b) => ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;
 
-        public static bool operator !=(Block a, Block b) =>
-            !a.Equals(b);
+        public static bool operator !=(Block a, Block b) => !a.Equals(b);
 
-        public override bool Equals(object obj) =>
-            ReadOnlyMemoryComparer<byte>.Compare(this.Data, (obj as Block).Data) == 0;
+        public override bool Equals(object obj) => ReadOnlyMemoryComparer<byte>.Compare(this.Data, (obj as Block).Data) == 0;
 
-        public override int GetHashCode() =>
-            this.Data.GetHashCode();
+        public override int GetHashCode() => this.Data.GetHashCode();
 
         public abstract void Dispose();
 
-        public int CompareTo(IBlock other) =>
-            BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
+        public int CompareTo(IBlock other) => BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
 
-        public int CompareTo(Block other) =>
-            BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
+        public int CompareTo(Block other) => BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
     }
 }

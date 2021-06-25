@@ -25,24 +25,23 @@ namespace BrightChain.Tests
         where TvalueSerializer : ISerializer<Tvalue>, new()
     {
 
-        public TransactionLogOptions<Tkey, Tvalue> NewTransactionLogOptions() =>
-            new TransactionLogOptions<Tkey, Tvalue>(
-                    fileName: this.cacheManager.TransactionLogPath,
-                    keySerializer: new TkeySerializer(),
-                    valueSerializer: new TvalueSerializer());
+        public TransactionLogOptions<Tkey, Tvalue> NewTransactionLogOptions() => new TransactionLogOptions<Tkey, Tvalue>(
+fileName: this.cacheManager.TransactionLogPath,
+keySerializer: new TkeySerializer(),
+valueSerializer: new TvalueSerializer());
 
         [TestMethod, Ignore]
         public void ItCommitsDataTest()
         {
-            var alternateValue = NewKeyValue();
+            var alternateValue = this.NewKeyValue();
 
             using (var tlog = new TransactionLog<Tkey, Tvalue>(
                 this.NewTransactionLogOptions()))
             {
-                this.cacheManager.Set(testPair.Key, testPair.Value);
-                Assert.AreEqual(testPair.Value, this.cacheManager.Get(testPair.Key));
+                this.cacheManager.Set(this.testPair.Key, this.testPair.Value);
+                Assert.AreEqual(this.testPair.Value, this.cacheManager.Get(this.testPair.Key));
                 this.cacheManager.Commit();
-                this.cacheManager.Drop(testPair.Key);
+                this.cacheManager.Drop(this.testPair.Key);
                 this.cacheManager.Set(alternateValue.Key, alternateValue.Value);
                 this.cacheManager.Commit();
                 this.cacheManager.Rollback();

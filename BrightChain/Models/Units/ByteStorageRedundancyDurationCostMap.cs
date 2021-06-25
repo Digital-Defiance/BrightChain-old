@@ -32,10 +32,14 @@ namespace BrightChain.Models.Units
         public static double Cost(BlockSize blockSize, RedundancyContractType redundancy)
         {
             if (!ByteStorageRedundancyDurationCostMap.SizeMap.ContainsKey(blockSize))
+            {
                 throw new KeyNotFoundException(message: nameof(blockSize));
+            }
 
             if (!ByteStorageRedundancyDurationCostMap.RedundancyMap.ContainsKey(redundancy))
+            {
                 throw new KeyNotFoundException(message: nameof(redundancy));
+            }
 
             return ByteStorageRedundancyDurationCostMap.SizeMap[blockSize] * ByteStorageRedundancyDurationCostMap.RedundancyMap[redundancy];
         }

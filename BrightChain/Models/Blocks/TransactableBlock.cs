@@ -49,25 +49,25 @@ namespace BrightChain.Models.Blocks
             this.tree = cacheManager is null ? null : this.CacheManager.tree;
         }
 
-        public bool TreeIsEqual(BPlusTree<BlockHash, TransactableBlock> other) =>
-            this.tree is null ? false : this.tree.Equals(other);
+        public bool TreeIsEqual(BPlusTree<BlockHash, TransactableBlock> other) => this.tree is null ? false : this.tree.Equals(other);
 
-        public bool TreeIsSame(BPlusTree<BlockHash, TransactableBlock> other) =>
-            this.tree is null ? false : object.ReferenceEquals(this.tree, other);
+        public bool TreeIsSame(BPlusTree<BlockHash, TransactableBlock> other) => this.tree is null ? false : object.ReferenceEquals(this.tree, other);
 
-        public static bool operator ==(TransactableBlock a, TransactableBlock b) =>
-            ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;
+        public static bool operator ==(TransactableBlock a, TransactableBlock b) => ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;
 
-        public static bool operator !=(TransactableBlock a, TransactableBlock b) =>
-            !a.Equals(b);
+        public static bool operator !=(TransactableBlock a, TransactableBlock b) => !a.Equals(b);
 
         public void Commit()
         {
             if (this.tree is null)
+            {
                 throw new NullReferenceException(nameof(this.tree));
+            }
 
             if (!this.AllowCommit)
+            {
                 throw new BrightChainException("Block is not allowed to be committed");
+            }
 
             this.tree.Commit();
             this.Committed = true;
@@ -76,30 +76,27 @@ namespace BrightChain.Models.Blocks
         public void Rollback()
         {
             if (this.tree is null)
+            {
                 throw new NullReferenceException(nameof(this.tree));
+            }
 
             this.tree.Rollback();
             this.Committed = false;
         }
 
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) =>
-            new TransactableBlock(this.CacheManager, requestTime, keepUntilAtLeast, redundancy, data, allowCommit);
+        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) => new TransactableBlock(this.CacheManager, requestTime, keepUntilAtLeast, redundancy, data, allowCommit);
 
-        public override bool Equals(object obj) =>
-            BinaryComparer.Compare(this.Data.ToArray(), (obj as TransactableBlock).Data.ToArray()) == 0;
+        public override bool Equals(object obj) => BinaryComparer.Compare(this.Data.ToArray(), (obj as TransactableBlock).Data.ToArray()) == 0;
 
-        public override int GetHashCode() =>
-            this.Data.GetHashCode();
+        public override int GetHashCode() => this.Data.GetHashCode();
 
-        public int CompareTo(TransactableBlock other) =>
-            BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
+        public int CompareTo(TransactableBlock other) => BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
 
-        public int CompareTo(ITransactableBlock other) =>
-            BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
+        public int CompareTo(ITransactableBlock other) => BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!this.disposedValue)
             {
                 if (disposing)
                 {
@@ -111,7 +108,7 @@ namespace BrightChain.Models.Blocks
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer
                 // TODO: set large fields to null
-                disposedValue = true;
+                this.disposedValue = true;
             }
         }
 
@@ -125,7 +122,7 @@ namespace BrightChain.Models.Blocks
         public override void Dispose()
         {
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
+            this.Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
     }

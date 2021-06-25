@@ -17,19 +17,15 @@ namespace BrightChain.Models.Blocks
                 keepUntilAtLeast: keepUntilAtLeast,
                 redundancy: redundancy,
                 data: data,
-                allowCommit: allowCommit)
-        {
-            this.CacheManager.Set(this.Id, this);
-        }
+                allowCommit: allowCommit) => this.CacheManager.Set(this.Id, this);
 
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) =>
-            new MemoryBlock(
-                cacheManager: (MemoryBlockCacheManager)this.CacheManager,
-                requestTime: requestTime,
-                keepUntilAtLeast: keepUntilAtLeast,
-                redundancy: redundancy,
-                data: data,
-                allowCommit: allowCommit);
+        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) => new MemoryBlock(
+cacheManager: (MemoryBlockCacheManager)this.CacheManager,
+requestTime: requestTime,
+keepUntilAtLeast: keepUntilAtLeast,
+redundancy: redundancy,
+data: data,
+allowCommit: allowCommit);
 
         public override void Dispose()
         {

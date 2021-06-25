@@ -15,14 +15,12 @@ namespace BrightChain.Models.Blocks
         private BPlusTreeCacheManager<BlockHash, TransactableBlock, BlockHashSerializer, BlockSerializer<TransactableBlock>> cacheManager;
 
         public SourceBlock(BPlusTreeCacheManager<BlockHash, TransactableBlock, BlockHashSerializer, BlockSerializer<TransactableBlock>> destinationCacheManager, ReadOnlyMemory<byte> data) :
-            base(requestTime: DateTime.Now, keepUntilAtLeast: DateTime.MinValue, redundancy: RedundancyContractType.LocalNone, data: data)
-        {
-            this.cacheManager = destinationCacheManager;
-        }
+            base(requestTime: DateTime.Now, keepUntilAtLeast: DateTime.MinValue, redundancy: RedundancyContractType.LocalNone, data: data) => this.cacheManager = destinationCacheManager;
 
         public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool _)
         {
             if (this.cacheManager is MemoryBlockCacheManager memoryBlockCacheManager)
+            {
                 return new MemoryBlock(
                     cacheManager: memoryBlockCacheManager,
                     requestTime: requestTime,
@@ -30,7 +28,9 @@ namespace BrightChain.Models.Blocks
                     redundancy: redundancy,
                     data: data,
                     allowCommit: false);
+            }
             else if (this.cacheManager is DiskBlockCacheManager diskBlockCacheManager)
+            {
                 return new DiskBlock(
                     cacheManager: diskBlockCacheManager,
                     requestTime: requestTime,
@@ -38,12 +38,14 @@ namespace BrightChain.Models.Blocks
                     redundancy: redundancy,
                     data: data,
                     allowCommit: false);
+            }
             else
+            {
                 throw new BrightChainException("Unexpected destination cache type");
+            }
         }
 
-        public int CompareTo(SourceBlock other) =>
-            BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
+        public int CompareTo(SourceBlock other) => BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
 
         public override void Dispose()
         {

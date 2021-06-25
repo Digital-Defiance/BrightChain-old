@@ -40,15 +40,14 @@ namespace BrightChain.Services
         public BPlusTree<Tkey, Tvalue>.OptionsV2 DefaultOptions(BPlusTree<Tkey, Tvalue>.OptionsV2 options)
         {
             //options.CalcBTreeOrder(16, 24);
-            options.TransactionLogFileName = transactionLog.TempPath;
+            options.TransactionLogFileName = this.transactionLog.TempPath;
             return options;
         }
 
-        public TransactionLogOptions<Tkey, Tvalue> NewTransactionLogOptions() =>
-            new TransactionLogOptions<Tkey, Tvalue>(
-                    fileName: this.transactionLog.TempPath,
-                    keySerializer: new TkeySerializer(),
-                    valueSerializer: new TvalueSerializer());
+        public TransactionLogOptions<Tkey, Tvalue> NewTransactionLogOptions() => new TransactionLogOptions<Tkey, Tvalue>(
+fileName: this.transactionLog.TempPath,
+keySerializer: new TkeySerializer(),
+valueSerializer: new TvalueSerializer());
 
         public string TransactionLogPath => this.transactionLog.TempPath;
 
@@ -57,8 +56,8 @@ namespace BrightChain.Services
             this.logger = logger;
             this.logger.LogInformation(String.Format("<{0}>: initalizing", nameof(BPlusTreeCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer>)));
             this.tree = tree;
-            ApplyTreeActions(new Action<BPlusTree<Tkey, Tvalue>>[] {
-                GarbageCollect
+            this.ApplyTreeActions(new Action<BPlusTree<Tkey, Tvalue>>[] {
+                this.GarbageCollect
             });
         }
 
@@ -69,17 +68,18 @@ namespace BrightChain.Services
             this.expirationCache = other.expirationCache;
         }
 
-        internal void GarbageCollect(BPlusTree<Tkey, Tvalue> tree)
-        {
+        internal void GarbageCollect(BPlusTree<Tkey, Tvalue> tree) =>
             // TODO: get (keep and store elsewhere?) list of keys expiring this second in the given tree (and which haven't been required longer by renewed/extended contracts)
             // remove expired entries
             this.logger.LogInformation("GarbageCollect");
-        }
 
         public void ApplyTreeActions(Action<BPlusTree<Tkey, Tvalue>>[] actions)
         {
             mreStop.Reset();
-            if (EnableCount) this.tree.EnableCount();
+            if (EnableCount)
+            {
+                this.tree.EnableCount();
+            }
 
             var result = actions.Select(t =>
                 Task.Run(() => t(this.tree))
@@ -117,13 +117,16 @@ namespace BrightChain.Services
             KeyAdded?.Invoke(this, eventArgs);
         }
 
-        public bool Contains(Tkey key) =>
-            this.tree.ContainsKey(key);
+        public bool Contains(Tkey key) => this.tree.ContainsKey(key);
 
         public bool Drop(Tkey key, bool noCheckContains = true)
         {
             this.logger.LogInformation(String.Format("Drop({0})", key));
-            if (!noCheckContains && !Contains(key)) return false;
+            if (!noCheckContains && !this.Contains(key))
+            {
+                return false;
+            }
+
             var eventArgs = new CacheEventArgs<Tkey, Tvalue>();
             eventArgs.KeyValue = new KeyValuePair<Tkey, Tvalue>(key, this.tree[key]);
             this.tree.Remove(key);
@@ -131,16 +134,16 @@ namespace BrightChain.Services
             return true;
         }
 
-        public bool TreeIsEqual(BPlusTree<Tkey, Tvalue> other) =>
-            this.tree is null ? false : this.tree.Equals(other);
+        public bool TreeIsEqual(BPlusTree<Tkey, Tvalue> other) => this.tree is null ? false : this.tree.Equals(other);
 
-        public bool TreeIsSame(BPlusTree<Tkey, Tvalue> other) =>
-            this.tree is null ? false : object.ReferenceEquals(this.tree, other);
+        public bool TreeIsSame(BPlusTree<Tkey, Tvalue> other) => this.tree is null ? false : object.ReferenceEquals(this.tree, other);
 
         public void Commit()
         {
             if (this.tree is null)
+            {
                 throw new NullReferenceException(nameof(this.tree));
+            }
 
             this.tree.Commit();
         }
@@ -148,7 +151,9 @@ namespace BrightChain.Services
         public void Rollback()
         {
             if (this.tree is null)
+            {
                 throw new NullReferenceException(nameof(this.tree));
+            }
 
             this.tree.Rollback();
         }

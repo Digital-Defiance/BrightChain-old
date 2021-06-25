@@ -54,10 +54,10 @@ namespace BrightChain.Tests
         {
             this.logger = new Mock<ILogger<Tcache>>();
             // the cache manager under test
-            this.cacheManager = NewCacheManager(logger: logger.Object);
+            this.cacheManager = this.NewCacheManager(logger: this.logger.Object);
             // a key to be used for each test
-            this.testPair = NewKeyValue();
-            Assert.IsFalse(cacheManager.Contains(testPair.Key));
+            this.testPair = this.NewKeyValue();
+            Assert.IsFalse(this.cacheManager.Contains(this.testPair.Key));
             // at this point, the tests begin, knowing the key is not already in the cache
         }
 
@@ -72,11 +72,11 @@ namespace BrightChain.Tests
             // pre-setup
 
             // Act
-            cacheManager.Set(testPair.Key, testPair.Value);
+            this.cacheManager.Set(this.testPair.Key, this.testPair.Value);
 
             // Assert
-            Assert.IsNotNull(testPair.Key);
-            Assert.IsTrue(cacheManager.Contains(testPair.Key));
+            Assert.IsNotNull(this.testPair.Key);
+            Assert.IsTrue(this.cacheManager.Contains(this.testPair.Key));
             this.logger.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
@@ -93,14 +93,14 @@ namespace BrightChain.Tests
         public virtual void ItPutsNullValuesTest()
         {
             // Arrange
-            Tvalue newData = NewNullData();
+            Tvalue newData = this.NewNullData();
 
             // Act
-            cacheManager.Set(testPair.Key, newData);
+            this.cacheManager.Set(this.testPair.Key, newData);
 
             // Assert
             Assert.IsNull(newData);
-            Assert.IsTrue(cacheManager.Contains(testPair.Key));
+            Assert.IsTrue(this.cacheManager.Contains(this.testPair.Key));
             this.logger.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
@@ -117,12 +117,12 @@ namespace BrightChain.Tests
         public void ItHitsTheCacheTest()
         {
             // Arrange
-            var expectation = testPair.Value;
-            cacheManager.Set(testPair.Key, expectation);
-            Assert.IsTrue(cacheManager.Contains(testPair.Key));
+            var expectation = this.testPair.Value;
+            this.cacheManager.Set(this.testPair.Key, expectation);
+            Assert.IsTrue(this.cacheManager.Contains(this.testPair.Key));
 
             // Act
-            Tvalue result = cacheManager.Get(testPair.Key);
+            Tvalue result = this.cacheManager.Get(this.testPair.Key);
 
             // Assert
             Assert.IsNotNull(expectation);
@@ -150,7 +150,7 @@ namespace BrightChain.Tests
             Assert.ThrowsException<IndexOutOfRangeException>(() =>
             {
                 // Act
-                Tvalue result = cacheManager.Get(testPair.Key);
+                Tvalue result = this.cacheManager.Get(this.testPair.Key);
             });
             this.logger.Verify(l => l.Log(
                 LogLevel.Information,
@@ -168,15 +168,15 @@ namespace BrightChain.Tests
         public void ItDropsCachKeysTest()
         {
             // Arrange
-            cacheManager.Set(testPair.Key, testPair.Value);
+            this.cacheManager.Set(this.testPair.Key, this.testPair.Value);
             // verify that the key tests good before we drop
-            Assert.IsTrue(cacheManager.Contains(testPair.Key));
+            Assert.IsTrue(this.cacheManager.Contains(this.testPair.Key));
 
             // Act
-            cacheManager.Drop(testPair.Key);
+            this.cacheManager.Drop(this.testPair.Key);
 
             // Assert
-            Assert.IsFalse(cacheManager.Contains(testPair.Key));
+            Assert.IsFalse(this.cacheManager.Contains(this.testPair.Key));
             this.logger.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
@@ -193,14 +193,14 @@ namespace BrightChain.Tests
         [TestMethod, Ignore]
         public void ItExpiresCacheKeysTest()
         {
-            var expectation = testPair.Value;
-            cacheManager.Set(testPair.Key, expectation);
-            Assert.IsTrue(cacheManager.Contains(testPair.Key));
+            var expectation = this.testPair.Value;
+            this.cacheManager.Set(this.testPair.Key, expectation);
+            Assert.IsTrue(this.cacheManager.Contains(this.testPair.Key));
             // TODO: System.Threading.Thread.Sleep((cacheManager.TTL * 1000) + 1);
-            Assert.IsFalse(cacheManager.Contains(testPair.Key));
+            Assert.IsFalse(this.cacheManager.Contains(this.testPair.Key));
             Assert.ThrowsException<KeyNotFoundException>(() =>
             {
-                Tvalue result = cacheManager.Get(testPair.Key);
+                Tvalue result = this.cacheManager.Get(this.testPair.Key);
                 Assert.IsNull(result);
             });
             this.logger.Verify(l => l.Log(
@@ -216,11 +216,11 @@ namespace BrightChain.Tests
         public void VerifyCacheDataIntegrityTest()
         {
             // Arrange
-            var expectation = testPair.Value;
-            cacheManager.Set(testPair.Key, expectation);
+            var expectation = this.testPair.Value;
+            this.cacheManager.Set(this.testPair.Key, expectation);
 
             // Act
-            Tvalue result = cacheManager.Get(testPair.Key);
+            Tvalue result = this.cacheManager.Get(this.testPair.Key);
 
             // Assert
             Assert.IsNotNull(expectation);

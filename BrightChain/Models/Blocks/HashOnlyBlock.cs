@@ -13,13 +13,13 @@ namespace BrightChain.Models.Blocks
     /// </summary>
     public class HashOnlyBlock : IBlock
     {
-        public ReadOnlyMemory<byte> Data { get => throw new NotImplementedException(); }
+        public ReadOnlyMemory<byte> Data => throw new NotImplementedException();
 
         public BlockHash Id { get; }
         [BrightChainMetadata]
-        public StorageDurationContract StorageContract { get => throw new NotImplementedException(); }
+        public StorageDurationContract StorageContract => throw new NotImplementedException();
         [BrightChainMetadata]
-        public RedundancyContract RedundancyContract { get => throw new NotImplementedException(); }
+        public RedundancyContract RedundancyContract => throw new NotImplementedException();
 
         public bool Committed { get; } = false;
         public bool AllowCommit { get; } = false;
@@ -40,13 +40,10 @@ namespace BrightChain.Models.Blocks
 
         }
 
-        public Block XOR(Block other) =>
-            throw new NotImplementedException();
+        public Block XOR(Block other) => throw new NotImplementedException();
 
-        public Block XOR(Block[] others) =>
-            throw new NotImplementedException();
+        public Block XOR(Block[] others) => throw new NotImplementedException();
 
-        public int CompareTo(IBlock other) =>
-            BinaryComparer.Compare(this.Id.HashBytes.ToArray(), other.Id.HashBytes.ToArray());
+        public int CompareTo(IBlock other) => BinaryComparer.Compare(this.Id.HashBytes.ToArray(), other.Id.HashBytes.ToArray());
     }
 }

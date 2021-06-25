@@ -38,15 +38,9 @@ namespace BrightChain.Tests
             this.lastCommittedMemory = new Memory<byte>();
         }
 
-        public void Commit()
-        {
-            this.lastCommittedMemory = new Memory<byte>(this.Memory.ToArray());
-        }
+        public void Commit() => this.lastCommittedMemory = new Memory<byte>(this.Memory.ToArray());
 
-        public void Rollback()
-        {
-            this.Memory = new Memory<byte>(this.lastCommittedMemory.ToArray());
-        }
+        public void Rollback() => this.Memory = new Memory<byte>(this.lastCommittedMemory.ToArray());
 
         public void Dispose()
         {
@@ -54,9 +48,7 @@ namespace BrightChain.Tests
             this.lastCommittedMemory = null;
         }
 
-        public int CompareTo(TestDiskCacheObject other) =>
-            BinaryComparer.Compare(this.Memory.ToArray(), other.Memory.ToArray());
-
+        public int CompareTo(TestDiskCacheObject other) => BinaryComparer.Compare(this.Memory.ToArray(), other.Memory.ToArray());
     }
 
     /// <summary>
@@ -80,15 +72,23 @@ namespace BrightChain.Tests
             {
                 bytesRead = stream.Read(buffer, 0, buffer.Length);
                 if (bytesRead <= 0)
+                {
                     break;
+                }
+
                 bytesRemaining -= bytesRead;
 
                 if (bytesRead == bufferSize)
+                {
                     aggregatedBytes.AddRange(buffer);
+                }
                 else
+                {
                     for (int i = 0; i < bytesRead; i++)
+                    {
                         aggregatedBytes.Add(buffer[i]);
-
+                    }
+                }
             } while (bytesRemaining > 0);
 
             return new TestDiskCacheObject(aggregatedBytes.ToArray());
@@ -121,7 +121,7 @@ namespace BrightChain.Tests
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
             var random = new Random(Guid.NewGuid().GetHashCode());
-            var randomString = new string(Enumerable.Repeat(chars, TestKeyLength)
+            var randomString = new string(Enumerable.Repeat(chars, this.TestKeyLength)
                                                     .Select(s => s[random.Next(s.Length)]).ToArray());
             return randomString;
         }
@@ -134,16 +134,18 @@ namespace BrightChain.Tests
             return options;
         }
 
-        internal override DiskBPlusTreeCacheManager<string, TestDiskCacheObject, PrimitiveSerializer, TestDiskCacheObjectSerializer> NewCacheManager(ILogger logger) =>
-            new DiskBPlusTreeCacheManager<string, TestDiskCacheObject, PrimitiveSerializer, TestDiskCacheObjectSerializer>(logger: logger, optionsV2: DefaultOptions());
+        internal override DiskBPlusTreeCacheManager<string, TestDiskCacheObject, PrimitiveSerializer, TestDiskCacheObjectSerializer> NewCacheManager(ILogger logger) => new DiskBPlusTreeCacheManager<string, TestDiskCacheObject, PrimitiveSerializer, TestDiskCacheObjectSerializer>(logger: logger, optionsV2: this.DefaultOptions());
 
         internal override KeyValuePair<string, TestDiskCacheObject> NewKeyValue()
         {
             var random = new Random(Guid.NewGuid().GetHashCode());
-            var data = new byte[TestKeyLength];
-            for (int i = 0; i < TestKeyLength; i++)
+            var data = new byte[this.TestKeyLength];
+            for (int i = 0; i < this.TestKeyLength; i++)
+            {
                 data[i] = (byte)random.Next(0, 255);
-            return new KeyValuePair<string, TestDiskCacheObject>(GenerateTestKey(), new TestDiskCacheObject(data));
+            }
+
+            return new KeyValuePair<string, TestDiskCacheObject>(this.GenerateTestKey(), new TestDiskCacheObject(data));
         }
 
         internal override TestDiskCacheObject NewNullData() => null;

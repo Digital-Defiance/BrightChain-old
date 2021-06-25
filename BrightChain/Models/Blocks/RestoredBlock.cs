@@ -14,9 +14,6 @@ namespace BrightChain.Models.Blocks
 
         }
 
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit)
-        {
-            throw new NotImplementedException();
-        }
+        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) => throw new NotImplementedException();
     }
 }

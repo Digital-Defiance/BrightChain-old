@@ -17,33 +17,17 @@ namespace BrightChain.Tests
     {
         public string id;
 
-        public MemoryCacheTestObject(string id)
-        {
-            this.id = id;
-        }
+        public MemoryCacheTestObject(string id) => this.id = id;
 
-        public MemoryCacheTestObject()
-        {
-            this.id = MemoryBPlusTreeCacheManagerTest.GenerateTestKey();
-        }
+        public MemoryCacheTestObject() => this.id = MemoryBPlusTreeCacheManagerTest.GenerateTestKey();
 
-        public void Commit()
-        {
-            throw new NotImplementedException();
-        }
+        public void Commit() => throw new NotImplementedException();
 
-        public void Rollback()
-        {
-            throw new NotImplementedException();
-        }
+        public void Rollback() => throw new NotImplementedException();
 
-        public void Dispose()
-        {
-            this.id = null;
-        }
+        public void Dispose() => this.id = null;
 
-        public int CompareTo(MemoryCacheTestObject other) =>
-            this.id.CompareTo(other.id);
+        public int CompareTo(MemoryCacheTestObject other) => this.id.CompareTo(other.id);
     }
 
     /// <summary>
@@ -58,9 +42,15 @@ namespace BrightChain.Tests
             {
                 int b = stream.ReadByte();
                 if (b == -1)
+                {
                     break;
+                }
+
                 if (b == 0)
+                {
                     break; // end of string
+                }
+
                 streamdata.Add(streamdata[0]);
             } while (true);
 
@@ -68,8 +58,7 @@ namespace BrightChain.Tests
                 id: System.Text.ASCIIEncoding.ASCII.GetString(streamdata.ToArray()));
         }
 
-        public void WriteTo(MemoryCacheTestObject value, Stream stream) =>
-            stream.Write(System.Text.ASCIIEncoding.ASCII.GetBytes(value.id));
+        public void WriteTo(MemoryCacheTestObject value, Stream stream) => stream.Write(System.Text.ASCIIEncoding.ASCII.GetBytes(value.id));
     }
 
     /// <summary>
@@ -89,8 +78,7 @@ namespace BrightChain.Tests
             return randomString;
         }
 
-        internal override MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject, PrimitiveSerializer, MemoryCacheTestObjectSerializer> NewCacheManager(ILogger logger) =>
-            new MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject, PrimitiveSerializer, MemoryCacheTestObjectSerializer>(logger: logger);
+        internal override MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject, PrimitiveSerializer, MemoryCacheTestObjectSerializer> NewCacheManager(ILogger logger) => new MemoryBPlusTreeCacheManager<string, MemoryCacheTestObject, PrimitiveSerializer, MemoryCacheTestObjectSerializer>(logger: logger);
 
         internal override KeyValuePair<string, MemoryCacheTestObject> NewKeyValue()
         {
@@ -105,18 +93,18 @@ namespace BrightChain.Tests
         public void TestSetGetIntegrity()
         {
             // Arrange
-            var expectation = testPair.Value;
-            cacheManager.Set(testPair.Key, expectation);
-            Assert.IsTrue(cacheManager.Contains(testPair.Key));
+            var expectation = this.testPair.Value;
+            this.cacheManager.Set(this.testPair.Key, expectation);
+            Assert.IsTrue(this.cacheManager.Contains(this.testPair.Key));
 
             // Act
-            object result = cacheManager.Get(testPair.Key);
+            object result = this.cacheManager.Get(this.testPair.Key);
 
             // Assert
             Assert.IsNotNull(expectation);
             Assert.AreEqual(expectation, result);
             Assert.AreSame(expectation, result);
-            Assert.AreEqual(testPair.Key, expectation.id);
+            Assert.AreEqual(this.testPair.Key, expectation.id);
         }
     }
 }
