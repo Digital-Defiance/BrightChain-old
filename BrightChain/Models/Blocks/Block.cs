@@ -185,6 +185,30 @@ namespace BrightChain.Models.Blocks
             return (validationExceptions.Count == 0);
         }
 
+        internal bool reloadMetadata(string key, object value, out Exception exception)
+        {
+            var prop = this.GetType().GetProperty(key);
+            try
+            {
+                foreach (object attr in prop.GetCustomAttributes(true))
+                    if (attr is BrightChainMetadataAttribute)
+                    {
+                        prop.SetValue(this, value);
+                        exception = null;
+                        return true;
+                    }
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+                return false;
+            }
+
+            // not settable attribute
+            exception = new BrightChainException("Invalid Metadata attribute");
+            return false;
+        }
+
         public static bool operator ==(Block a, Block b) =>
             ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;
 
