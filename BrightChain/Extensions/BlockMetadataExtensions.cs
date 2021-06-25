@@ -1,6 +1,5 @@
 ﻿using BrightChain.Attributes;
 using BrightChain.Models.Blocks;
-using BrightChain.Models.Contracts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -48,25 +47,13 @@ namespace BrightChain.Extensions
                 foreach (string key in metadataDictionary.Keys)
                     if (!key.StartsWith("_"))
                     {
-                        bool wasSet = false;
+                        var keyProperty = block.GetType().GetProperty(key);
+                        var keyValue = (metadataDictionary[key] as JObject).ToObject(keyProperty.PropertyType);
                         Exception reloadException = null;
-                        switch (key)
-                        {
-                            case "DurationContract":
-                                var durationContract = (metadataDictionary["DurationContract"] as JObject).ToObject<StorageDurationContract>();
-                                wasSet = block.reloadMetadata(key, durationContract, out reloadException);
-                                break;
-
-                            case "RedundancyContract":
-                                var redundancyContract = (metadataDictionary["RedundancyContract"] as JObject).ToObject<RedundancyContract>();
-                                wasSet = block.reloadMetadata(key, redundancyContract, out reloadException);
-                                break;
-
-                            default:
-                                wasSet = block.reloadMetadata(key, metadataDictionary[key], out reloadException);
-                                break;
-                        }
-                        if (reloadException != null)
+                        bool wasSet = block.reloadMetadata(key, keyValue, out reloadException);
+                        if (wasSet)
+                            return true;
+                        else if (reloadException != null)
                             throw reloadException;
                     }
             }
