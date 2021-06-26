@@ -24,7 +24,6 @@ namespace BrightChain.Models.Blocks
             {
                 this.HashBytes = mySHA256.ComputeHash(block.Data.ToArray());
             }
-
             this.Computed = true;
         }
 

@@ -30,21 +30,12 @@ namespace BrightChain.Extensions
                     message: String.Format("{0} is invalid: {1}, actual {2} bytes", nameof(block.BlockSize), block.BlockSize.ToString(), block.Data.Length)));
             }
 
-            try
-            {
-                var recomputedHash = new BlockHash(block);
-                if (block.Id != recomputedHash)
-                {
-                    validationExceptions.Add(new BrightChainValidationException(
-                        element: nameof(block.Id),
-                        message: String.Format("{0} is invalid: {1}, actual {2}", nameof(block.Id), block.Id, recomputedHash)));
-                }
-            }
-            catch (Exception e)
+            var recomputedHash = new BlockHash(block);
+            if (block.Id != recomputedHash)
             {
                 validationExceptions.Add(new BrightChainValidationException(
                     element: nameof(block.Id),
-                    message: String.Format("{0} is invalid: {1}, unable to recompute hash: {2}", nameof(block.Id), block.Id, e.Message)));
+                    message: String.Format("{0} is invalid: {1}, actual {2}", nameof(block.Id), block.Id, recomputedHash)));
             }
 
             if (block.Data.Length != BlockSizeMap.BlockSize(block.BlockSize))
