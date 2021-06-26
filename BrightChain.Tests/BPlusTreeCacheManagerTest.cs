@@ -2,7 +2,9 @@
 using CSharpTest.Net.Collections;
 using CSharpTest.Net.Interfaces;
 using CSharpTest.Net.Serialization;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 
 namespace BrightChain.Tests
@@ -47,6 +49,14 @@ valueSerializer: new TvalueSerializer());
                 this.cacheManager.Rollback();
                 Assert.IsFalse(this.cacheManager.Contains(alternateValue.Key));
             }
+
+            this.logger.Verify(l => l.Log(
+                LogLevel.Information,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(3));
+            this.logger.VerifyNoOtherCalls();
         }
 
         [TestMethod, Ignore]

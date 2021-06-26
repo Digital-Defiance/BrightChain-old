@@ -3,6 +3,7 @@ using CSharpTest.Net.Interfaces;
 using CSharpTest.Net.Serialization;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -105,6 +106,14 @@ namespace BrightChain.Tests
             Assert.AreEqual(expectation, result);
             Assert.AreSame(expectation, result);
             Assert.AreEqual(this.testPair.Key, expectation.id);
+
+            this.logger.Verify(l => l.Log(
+                LogLevel.Information,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(4));
+            this.logger.VerifyNoOtherCalls();
         }
     }
 }

@@ -5,6 +5,7 @@ using BrightChain.Models.Contracts;
 using BrightChain.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -54,6 +55,15 @@ namespace BrightChain.Tests
                 redundancy: contractObj.GetValue("RedundancyContractType").ToObject<RedundancyContractType>());
             Assert.AreEqual(block.RedundancyContract, blockRedundancyContract);
             Assert.AreEqual(block.StorageContract, blockRedundancyContract.StorageContract);
+
+            var loggerMock = Mock.Get(this.logger);
+            loggerMock.Verify(l => l.Log(
+                LogLevel.Information,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(3));
+            loggerMock.VerifyNoOtherCalls();
         }
 
         [TestMethod]
@@ -82,6 +92,15 @@ namespace BrightChain.Tests
             Assert.AreEqual(block.RedundancyContract, block2.RedundancyContract);
             Assert.AreEqual(block.StorageContract, block2.RedundancyContract.StorageContract);
             Assert.AreEqual(block.StorageContract, block2.StorageContract);
+
+            var loggerMock = Mock.Get(this.logger);
+            loggerMock.Verify(l => l.Log(
+                LogLevel.Information,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(4));
+            loggerMock.VerifyNoOtherCalls();
         }
     }
 }
