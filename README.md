@@ -8,6 +8,8 @@
 - Coming soon (GitHub Pages): https://the-revolution-network.github.io/gh-pages/
 
 Recent thoughts:
+ - If you haven't noticed- BrightChain is almost BrightChainS with an S. It's a pool of chains. Each with its own value.
+ - Something I was implementing in the old code but haven't yet gotten to is also a deduplication for public blocks. Basically any chain that has its CBL block committed to the network will have the hash of the overall chain checked for deduplication.
  - Likely to use https://dapr.io https://github.com/dapr for node sync in the near future.
  - API throttle will continue as planned to be mathematically rate limited by minimal proof of works for bad actors and an algorithm to determine the maximum request r/w rates.
  - Block consensus will be proof of stake
@@ -25,4 +27,4 @@ Recent thoughts:
 * This software is open source, and offered as a "best-effort" thereoetical construct at this time and it may well lose all your data at this point in time.
 
 <!-- this timestamp is updated by a pre-commit hook in git-hooks/pre-commit then added to .git/hooks -->
-Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-06-25T11:41:10-0700</time>
+Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-06-27T08:47:40-0700</time>
