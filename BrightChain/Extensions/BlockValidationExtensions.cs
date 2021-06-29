@@ -12,9 +12,9 @@ namespace BrightChain.Extensions
         /// return true or throw an exception with the error
         /// </summary>
         /// <returns></returns>
-        public static bool Validate(this Block block)
+        public static bool PerformValidation(this Block block, out List<BrightChainValidationException> validationExceptions)
         {
-            List<BrightChainValidationException> validationExceptions = new List<BrightChainValidationException>();
+            validationExceptions = new List<BrightChainValidationException>();
 
             if (block.BlockSize == BlockSize.Unknown)
             {

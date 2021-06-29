@@ -1,5 +1,4 @@
-﻿using BrightChain.Extensions;
-using BrightChain.Models.Blocks;
+﻿using BrightChain.Models.Blocks;
 using BrightChain.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

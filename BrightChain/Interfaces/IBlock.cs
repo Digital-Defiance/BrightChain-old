@@ -7,7 +7,7 @@ namespace BrightChain.Interfaces
     /// <summary>
     /// Basic description for a block
     /// </summary>
-    public interface IBlock : IDisposable, IComparable<IBlock>
+    public interface IBlock : IDisposable, IComparable<IBlock>, IValidatable
     {
         /// <summary>
         /// Block's SHA-256 hash
@@ -18,21 +18,21 @@ namespace BrightChain.Interfaces
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        Block XOR(Block other);
+        Block XOR(IBlock other);
         /// <summary>
         /// Function to XOR this block's data with an array of others
         /// </summary>
         /// <param name="others"></param>
         /// <returns></returns>
-        Block XOR(Block[] others);
+        Block XOR(IBlock[] others);
         /// <summary>
         /// Parameters of the duration contract for this block
         /// </summary>
-        StorageDurationContract StorageContract { get; }
+        StorageDurationContract StorageContract { get; set; }
         /// <summary>
         /// Parameters of the redundancy contract for this block
         /// </summary>
-        RedundancyContract RedundancyContract { get; }
+        RedundancyContract RedundancyContract { get; set; }
         /// <summary>
         /// Returns the serialized MetaData pulled from attributes
         /// </summary>

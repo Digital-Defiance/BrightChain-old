@@ -10,9 +10,10 @@ namespace BrightChain.Models.Blocks
     /// </summary>
     public class MemoryBlock : TransactableBlock, IBlock
     {
-        public MemoryBlock(MemoryBlockCacheManager cacheManager, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
+        public MemoryBlock(MemoryBlockCacheManager cacheManager, BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
             base(
                 cacheManager: cacheManager,
+                blockSize: blockSize,
                 requestTime: requestTime,
                 keepUntilAtLeast: keepUntilAtLeast,
                 redundancy: redundancy,
@@ -21,6 +22,7 @@ namespace BrightChain.Models.Blocks
 
         public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) => new MemoryBlock(
 cacheManager: (MemoryBlockCacheManager)this.CacheManager,
+blockSize: this.BlockSize,
 requestTime: requestTime,
 keepUntilAtLeast: keepUntilAtLeast,
 redundancy: redundancy,

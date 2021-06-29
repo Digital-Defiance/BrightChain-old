@@ -1,6 +1,5 @@
-﻿using BrightChain.Helpers;
+﻿using BrightChain.Interfaces;
 using BrightChain.Models.Blocks;
-using BrightChain.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BrightChain.Tests
@@ -9,7 +8,8 @@ namespace BrightChain.Tests
     /// Test transactable blocks using the BPlusTreeCacheManagerTest
     /// </summary>
     [TestClass]
-    public abstract class TransactableBlockCacheManagerTest : BPlusTreeCacheManagerTest<BlockCacheManager, BlockHash, TransactableBlock, BlockHashSerializer, BlockSerializer<TransactableBlock>>
+    public abstract class TransactableBlockCacheManagerTest<TcacheManager> : CacheManagerTest<TcacheManager, BlockHash, TransactableBlock>
+        where TcacheManager : ICacheManager<BlockHash, TransactableBlock>
     {
     }
 }

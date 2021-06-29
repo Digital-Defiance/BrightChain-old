@@ -5,7 +5,6 @@ using BrightChain.Extensions;
 using BrightChain.Helpers;
 using BrightChain.Interfaces;
 using BrightChain.Models.Contracts;
-using CSharpTest.Net.IO;
 using System;
 using System.Collections.Generic;
 
@@ -29,12 +28,7 @@ namespace BrightChain.Models.Blocks
         /// A list of the blocks, in order, required to complete this block. Not persisted to disk.
         /// Generally only used during construction of a chain
         /// </summary>
-        public IEnumerable<Block> ConstituentBlocks { get; private set; }
-
-        /// <summary>
-        /// Returns a block which contains only the constituent block hashes, ready to write to disk.
-        /// </summary>
-        public ConstituentBlockListBlock ConstituentBlockListBlock => new ConstituentBlockListBlock(sourceBlock: this.AsBlock);
+        public IEnumerable<IBlock> ConstituentBlocks { get; protected set; }
 
         /// <summary>
         /// Emits the serialization of the block minus data and any ignored attributes (including itself).
@@ -48,7 +42,7 @@ namespace BrightChain.Models.Blocks
 
         public IEnumerable<BrightChainValidationException> ValidationExceptions { get; internal set; }
 
-        public Block(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data)
+        public Block(BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data)
         {
             if (!BlockSizeMap.Map.ContainsValue(data.Length))
             {
@@ -56,6 +50,11 @@ namespace BrightChain.Models.Blocks
             }
 
             this.BlockSize = BlockSizeMap.BlockSize(data.Length);
+            if (this.BlockSize != blockSize)
+            {
+                throw new BrightChainException("Block size mismatch");
+            }
+
             this.StorageContract = new StorageDurationContract(
                 requestTime: requestTime,
                 keepUntilAtLeast: keepUntilAtLeast,
@@ -74,14 +73,14 @@ namespace BrightChain.Models.Blocks
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public Block XOR(Block other)
+        public Block XOR(IBlock other)
         {
             if (other is SourceBlock)
             {
                 throw new BrightChainException("Unexpected SourceBlock");
             }
 
-            if (this.BlockSize != other.BlockSize)
+            if (this.Data.Length != other.Data.Length)
             {
                 throw new BrightChainException("BlockSize mismatch");
             }
@@ -105,7 +104,7 @@ namespace BrightChain.Models.Blocks
                 redundancy: redundancy,
                 data: new ReadOnlyMemory<byte>(xorData),
                 allowCommit: true); // these XOR functions should be one of the only places this even happens
-            var newList = new List<Block>(this.ConstituentBlocks);
+            var newList = new List<IBlock>(this.ConstituentBlocks);
             if (!(this is SourceBlock))
             {
                 newList.Add(this);
@@ -125,12 +124,12 @@ namespace BrightChain.Models.Blocks
         /// </summary>
         /// <param name="others"></param>
         /// <returns></returns>
-        public Block XOR(Block[] others)
+        public Block XOR(IBlock[] others)
         {
             DateTime keepUntil = this.StorageContract.KeepUntilAtLeast;
             RedundancyContractType redundancy = this.RedundancyContract.RedundancyContractType;
             int blockSize = BlockSizeMap.Map[this.BlockSize];
-            var newList = new List<Block>(this.ConstituentBlocks);
+            var newList = new List<IBlock>(this.ConstituentBlocks);
             if (!(this is SourceBlock))
             {
                 newList.Add(this);
@@ -179,10 +178,18 @@ namespace BrightChain.Models.Blocks
 
         public override int GetHashCode() => this.Data.GetHashCode();
 
+        public bool Validate()
+        {
+            List<BrightChainValidationException> validationExceptions;
+            var result = this.PerformValidation(out validationExceptions);
+            this.ValidationExceptions = validationExceptions;
+            return result;
+        }
+
         public abstract void Dispose();
 
-        public int CompareTo(IBlock other) => BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
+        public int CompareTo(IBlock other) => ReadOnlyMemoryComparer<byte>.Compare(this.Data, (other as TransactableBlock).Data);
 
-        public int CompareTo(Block other) => BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
+        public int CompareTo(Block other) => ReadOnlyMemoryComparer<byte>.Compare(this.Data, (other as TransactableBlock).Data);
     }
 }

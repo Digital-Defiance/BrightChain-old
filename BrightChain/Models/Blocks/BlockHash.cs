@@ -1,7 +1,6 @@
 using BrightChain.Enumerations;
 using BrightChain.Helpers;
 using BrightChain.Interfaces;
-using CSharpTest.Net.IO;
 using System;
 using System.Security.Cryptography;
 
@@ -17,9 +16,9 @@ namespace BrightChain.Models.Blocks
 
         public bool Computed { get; }
 
-        public BlockHash(Block block)
+        public BlockHash(IBlock block)
         {
-            this.BlockSize = block.BlockSize;
+            this.BlockSize = BlockSizeMap.BlockSize(block.Data.Length);
             using (SHA256 mySHA256 = SHA256.Create())
             {
                 this.HashBytes = mySHA256.ComputeHash(block.Data.ToArray());
@@ -64,6 +63,6 @@ namespace BrightChain.Models.Blocks
 
         public override int GetHashCode() => this.HashBytes.GetHashCode();
 
-        public int CompareTo(BlockHash other) => BinaryComparer.Compare(this.HashBytes.ToArray(), other.HashBytes.ToArray());
+        public int CompareTo(BlockHash other) => ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes);
     }
 }

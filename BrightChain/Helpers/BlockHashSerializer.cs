@@ -1,6 +1,6 @@
 ﻿using BrightChain.Exceptions;
+using BrightChain.Interfaces;
 using BrightChain.Models.Blocks;
-using CSharpTest.Net.Serialization;
 using System;
 using System.IO;
 

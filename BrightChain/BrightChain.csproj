@@ -19,18 +19,27 @@
     <FileVersion>0.0.0.1</FileVersion>
     <SignAssembly>false</SignAssembly>
     <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <AnalysisLevel>preview</AnalysisLevel>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CSharpTest.Net.Collections" Version="14.906.1403.1082" />
     <PackageReference Include="Dapr.Actors" Version="1.2.0" />
     <PackageReference Include="Dapr.Actors.AspNetCore" Version="1.2.0" />
     <PackageReference Include="Dapr.AspNetCore" Version="1.2.0" />
     <PackageReference Include="Dapr.Client" Version="1.2.0" />
     <PackageReference Include="Dapr.Extensions.Configuration" Version="1.2.0" />
     <PackageReference Include="docfx" Version="2.58.0" />
+    <PackageReference Include="FileContextCore" Version="3.4.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Versioning" Version="4.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.OData.Versioning" Version="5.0.0" />
     <PackageReference Include="Microsoft.CodeCoverage" Version="16.10.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0-preview.5.21301.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0-preview.5.21301.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.0-preview.5.21301.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.0-preview.5.21301.9" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0-preview.5.21301.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-preview.5.21301.5" />
@@ -38,6 +47,7 @@
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="Microsoft.Data.OData" Version="5.8.4" />
     <PackageReference Include="FluentValidation" Version="10.2.3" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
     <PackageReference Include="System.Runtime.Caching" Version="6.0.0-preview.5.21301.5" />
   </ItemGroup>
 

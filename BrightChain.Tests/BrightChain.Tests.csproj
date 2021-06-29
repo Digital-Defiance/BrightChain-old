@@ -6,6 +6,10 @@
     <IsPackable>false</IsPackable>
 
     <StartupObject></StartupObject>
+
+    <Description>Tests for the BrightChain library</Description>
+
+    <AnalysisLevel>preview</AnalysisLevel>
   </PropertyGroup>
 
   <ItemGroup>

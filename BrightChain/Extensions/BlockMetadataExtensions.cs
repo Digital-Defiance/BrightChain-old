@@ -1,5 +1,6 @@
 ﻿using BrightChain.Attributes;
 using BrightChain.Exceptions;
+using BrightChain.Interfaces;
 using BrightChain.Models.Blocks;
 using BrightChain.Models.Contracts;
 using Newtonsoft.Json;
@@ -18,7 +19,7 @@ namespace BrightChain.Extensions
         /// </summary>
         /// <param name="block"></param>
         /// <returns></returns>
-        public static ReadOnlyMemory<byte> MetadataBytes(this Block block)
+        public static ReadOnlyMemory<byte> MetadataBytes(this IBlock block)
         {
             Dictionary<string, object> metadataDictionary = new Dictionary<string, object>();
             foreach (PropertyInfo prop in typeof(Block).GetProperties())
@@ -47,7 +48,7 @@ namespace BrightChain.Extensions
             return new ReadOnlyMemory<byte>(readonlyChars.ToArray().Select(c => (byte)c).ToArray());
         }
 
-        private static bool ReloadMetadata(this Block block, string key, object value, out Exception exception)
+        private static bool ReloadMetadata(this IBlock block, string key, object value, out Exception exception)
         {
             var prop = block.GetType().GetProperty(key);
             try

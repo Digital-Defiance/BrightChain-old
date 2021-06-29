@@ -4,6 +4,10 @@ using System.Runtime.InteropServices;
 
 namespace BrightChain.Helpers
 {
+    /// <summary>
+    /// Poor implementation of a 1:1 comparator on a ReadOnlyMemory<typeparamref name="T"/>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public sealed class ReadOnlyMemoryComparer<T> : IEqualityComparer<ReadOnlyMemory<T>>, IComparer<ReadOnlyMemory<T>>
         where T : IEquatable<T>, IComparable<T>
     {
@@ -52,6 +56,11 @@ namespace BrightChain.Helpers
             var tArray = memoryT.ToArray();
 
             var size = Marshal.SizeOf(tArray);
+            if (size == 0)
+            {
+                return 0;
+            }
+
             // Both managed and unmanaged buffers required.
             var bytes = new byte[size];
             var ptr = Marshal.AllocHGlobal(size);
@@ -62,7 +71,8 @@ namespace BrightChain.Helpers
             // Release unmanaged memory.
             Marshal.FreeHGlobal(ptr);
 
-            return (bytes.Length == 0) ? 0 : new CSharpTest.Net.IO.Crc32(bytes).Value;
+            var crc32Instance = new Crc32();
+            return (int)crc32Instance.ComputeChecksum(bytes);
         }
 
 

@@ -1,7 +1,7 @@
 ﻿using BrightChain.Enumerations;
 using BrightChain.Extensions;
+using BrightChain.Interfaces;
 using BrightChain.Models.Blocks;
-using CSharpTest.Net.Serialization;
 using System;
 using System.IO;
 namespace BrightChain.Helpers
@@ -45,6 +45,7 @@ namespace BrightChain.Helpers
 
             // make block
             var restoredBlock = new RestoredBlock(
+                blockSize: BlockSizeMap.BlockSize(blockData.Length),
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.MaxValue,
                 redundancy: RedundancyContractType.HeapAuto,

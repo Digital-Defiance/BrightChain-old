@@ -5,7 +5,7 @@ namespace BrightChain.Models.Blocks
 {
     public class RestoredBlock : Block
     {
-        public RestoredBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data) : base(requestTime, keepUntilAtLeast, redundancy, data)
+        public RestoredBlock(BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data) : base(blockSize: blockSize, requestTime, keepUntilAtLeast, redundancy, data)
         {
         }
 

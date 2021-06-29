@@ -1,9 +1,8 @@
 ﻿#nullable enable
 using BrightChain.Exceptions;
-using BrightChain.Helpers;
-using BrightChain.Models.Blocks;
-using CSharpTest.Net.Collections;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 
@@ -20,9 +19,6 @@ namespace BrightChain.Services
         protected MemoryBlockCacheManager blockMemoryCache;
         protected DiskBlockCacheManager blockDiskCache;
 
-        public static BPlusTree<BlockHash, TransactableBlock>.OptionsV2 DefaultOptions() => new BPlusTree<BlockHash, TransactableBlock>.OptionsV2(
-keySerializer: new BlockHashSerializer(),
-valueSerializer: new BlockSerializer<TransactableBlock>());
 
         public BrightBlockService(ILoggerFactory logger, IConfiguration configuration)
         {
@@ -36,8 +32,26 @@ valueSerializer: new BlockSerializer<TransactableBlock>());
             this.configuration = configuration;
 
             this.blockMemoryCache = new MemoryBlockCacheManager(logger: this.logger);
-            this.blockDiskCache = new DiskBlockCacheManager(logger: this.logger, optionsV2: DefaultOptions());
+            this.blockDiskCache = new DiskBlockCacheManager(logger: this.logger);
             this.logger.LogInformation(String.Format("<{0}>: caches initialized", nameof(BrightBlockService)));
+
+            var services = new ServiceCollection();
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+            //);
+            services.AddPersistence(this.configuration);
+            #region API Versioning
+            // Add API Versioning to the Project
+            services.AddApiVersioning(config =>
+            {
+                // Specify the default API Version as 1.0
+                config.DefaultApiVersion = new ApiVersion(1, 0);
+                // If the client hasn't specified the API version in the request, use the default API version number 
+                config.AssumeDefaultVersionWhenUnspecified = true;
+                // Advertise the API versions supported for the particular endpoint
+                config.ReportApiVersions = true;
+            });
+            #endregion
         }
 
         public IDisposable BeginScope<TState>(TState state) => this.logger.BeginScope(state);

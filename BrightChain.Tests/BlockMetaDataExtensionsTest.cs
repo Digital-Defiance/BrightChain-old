@@ -24,9 +24,7 @@ namespace BrightChain.Tests
         public BlockMetaDataExtensionsTest()
         {
             this.logger = new Moq.Mock<ILogger>().Object;
-            this.cacheManager = new MemoryBlockCacheManager(
-                logger: this.logger,
-                optionsV2: null);
+            this.cacheManager = new MemoryBlockCacheManager(logger: this.logger);
         }
 
         [TestMethod]

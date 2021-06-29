@@ -11,7 +11,7 @@ namespace BrightChain.Services
     /// </summary>
     public class BlockWhitener
     {
-        public byte TupleCount { get; } = 5;
+        public static byte TupleCount { get; } = 5;
 
         private MemoryBlockCacheManager pregeneratedRandomizerCache;
 
@@ -20,7 +20,7 @@ namespace BrightChain.Services
         public IBlock Whiten(SourceBlock block)
         {
             // the incoming block should be a raw disk block and is never used again
-            Block[] tuples = new Block[this.TupleCount - 1];
+            Block[] tuples = new Block[TupleCount - 1];
             for (int i = 0; i < tuples.Length; i++)
             {
                 // select or generate pre-generated random blocks

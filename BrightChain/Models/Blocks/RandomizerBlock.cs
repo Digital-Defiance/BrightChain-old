@@ -1,6 +1,6 @@
 using BrightChain.Enumerations;
+using BrightChain.Helpers;
 using BrightChain.Services;
-using CSharpTest.Net.IO;
 using System;
 using System.Security.Cryptography;
 
@@ -25,6 +25,7 @@ namespace BrightChain.Models.Blocks
         public RandomizerBlock(BlockCacheManager pregeneratedRandomizerCache, BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, bool allowCommit) :
             base(
                 cacheManager: pregeneratedRandomizerCache,
+                blockSize: blockSize,
                 requestTime: requestTime,
                 keepUntilAtLeast: keepUntilAtLeast,
                 redundancy: redundancy,
@@ -47,7 +48,7 @@ keepUntilAtLeast: keepUntilAtLeast,
 redundancy: redundancy,
 allowCommit: allowCommit);
 
-        public int CompareTo(RandomizerBlock other) => BinaryComparer.Compare(this.Data.ToArray(), other.Data.ToArray());
+        public int CompareTo(RandomizerBlock other) => ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
 
         public override void Dispose()
         {

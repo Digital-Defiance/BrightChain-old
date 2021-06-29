@@ -1,8 +1,6 @@
 ﻿using BrightChain.Enumerations;
-using BrightChain.Helpers;
 using BrightChain.Models.Blocks;
 using BrightChain.Services;
-using CSharpTest.Net.Collections;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -18,9 +16,10 @@ namespace BrightChain.Tests
     {
         public new static DiskBlockCacheManager CacheManager;
 
-        public DiskCacheTestBlock(DiskBlockCacheManager cacheManager, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
+        public DiskCacheTestBlock(DiskBlockCacheManager cacheManager, BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
             base(
                 cacheManager: cacheManager,
+                blockSize: blockSize,
                 requestTime: requestTime,
                 keepUntilAtLeast: keepUntilAtLeast,
                 redundancy: redundancy,
@@ -33,6 +32,7 @@ namespace BrightChain.Tests
         public DiskCacheTestBlock() :
             base(
                 cacheManager: CacheManager,
+                blockSize: BlockSize.Message,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.MaxValue,
                 redundancy: RedundancyContractType.LocalNone,
@@ -54,6 +54,7 @@ namespace BrightChain.Tests
 
         public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) => new DiskCacheTestBlock(
 cacheManager: CacheManager,
+blockSize: this.BlockSize,
 requestTime: requestTime,
 keepUntilAtLeast: keepUntilAtLeast,
 redundancy: redundancy,
@@ -67,23 +68,17 @@ allowCommit: allowCommit);
     /// Tests disk block cache managers
     /// </summary>
     [TestClass]
-    public class DiskBlockCacheManagerTest : TransactableBlockCacheManagerTest
+    public class DiskBlockCacheManagerTest : TransactableBlockCacheManagerTest<DiskBlockCacheManager>
     {
         public DiskBlockCacheManagerTest()
         {
-            this.logger = new Mock<ILogger<BlockCacheManager>>();
-            DiskCacheTestBlock.CacheManager = new DiskBlockCacheManager(
-                                                    new BlockCacheManager(
-                                                        this.NewCacheManager(this.logger.Object)));
+            this.logger = new Mock<ILogger<DiskBlockCacheManager>>();
+            DiskCacheTestBlock.CacheManager = new DiskBlockCacheManager(this.logger.Object);
+            this.cacheManager = DiskCacheTestBlock.CacheManager;
         }
 
-        public static BPlusTree<BlockHash, TransactableBlock>.OptionsV2 DefaultOptions() => new BPlusTree<BlockHash, TransactableBlock>.OptionsV2(
-keySerializer: new BlockHashSerializer(),
-valueSerializer: new BlockSerializer<TransactableBlock>());
-
         internal override DiskBlockCacheManager NewCacheManager(ILogger logger) => new DiskBlockCacheManager(
-logger: logger,
-optionsV2: DefaultOptions());
+logger: logger);
 
         internal override KeyValuePair<BlockHash, TransactableBlock> NewKeyValue()
         {
@@ -95,9 +90,8 @@ optionsV2: DefaultOptions());
             }
 
             var block = new DiskCacheTestBlock(
-                new DiskBlockCacheManager(
-                    new BlockCacheManager(
-                        this.cacheManager)),
+                cacheManager: this.cacheManager,
+                blockSize: BlockSize.Message,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.MaxValue,
                 redundancy: Enumerations.RedundancyContractType.LocalNone,

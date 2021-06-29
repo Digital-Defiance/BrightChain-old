@@ -1,9 +1,11 @@
 ﻿using BrightChain.Attributes;
 using BrightChain.Enumerations;
+using BrightChain.Exceptions;
+using BrightChain.Helpers;
 using BrightChain.Interfaces;
 using BrightChain.Models.Contracts;
-using CSharpTest.Net.IO;
 using System;
+using System.Collections.Generic;
 
 namespace BrightChain.Models.Blocks
 {
@@ -29,6 +31,11 @@ namespace BrightChain.Models.Blocks
 
         public ReadOnlyMemory<byte> Metadata => throw new NotImplementedException();
 
+        StorageDurationContract IBlock.StorageContract { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        RedundancyContract IBlock.RedundancyContract { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public IEnumerable<BrightChainValidationException> ValidationExceptions => throw new NotImplementedException();
+
         private HashOnlyBlock(BlockHash blockHash)
         {
             this.BlockSize = blockHash.BlockSize;
@@ -44,6 +51,9 @@ namespace BrightChain.Models.Blocks
 
         public Block XOR(Block[] others) => throw new NotImplementedException();
 
-        public int CompareTo(IBlock other) => BinaryComparer.Compare(this.Id.HashBytes.ToArray(), other.Id.HashBytes.ToArray());
+        public int CompareTo(IBlock other) => ReadOnlyMemoryComparer<byte>.Compare(this.Id.HashBytes, other.Id.HashBytes);
+        public Block XOR(IBlock other) => throw new NotImplementedException();
+        public Block XOR(IBlock[] others) => throw new NotImplementedException();
+        public bool Validate() => false;
     }
 }

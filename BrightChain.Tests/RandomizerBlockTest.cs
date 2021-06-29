@@ -1,5 +1,4 @@
 ﻿using BrightChain.Enumerations;
-using BrightChain.Extensions;
 using BrightChain.Models.Blocks;
 using BrightChain.Services;
 using Microsoft.Extensions.Logging;
@@ -26,9 +25,7 @@ namespace BrightChain.Tests
         public void PreTestSetUp()
         {
             this.logger = new Moq.Mock<ILogger>().Object;
-            this.cacheManager = new MemoryBlockCacheManager(
-                logger: this.logger,
-                optionsV2: null);
+            this.cacheManager = new MemoryBlockCacheManager(logger: this.logger);
         }
 
         [TestMethod]

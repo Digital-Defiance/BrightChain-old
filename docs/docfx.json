@@ -26,6 +26,7 @@
         "files": [
           "articles/**.md",
           "articles/**/toc.yml",
+          "articles/BrightChain.wiki/**.md",
           "toc.yml",
           "*.md"
         ]
