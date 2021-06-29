@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using BrightChain.Exceptions;
+using BrightChain.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,13 +37,10 @@ namespace BrightChain.Services
             this.logger.LogInformation(String.Format("<{0}>: caches initialized", nameof(BrightBlockService)));
 
             var services = new ServiceCollection();
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-            //);
-            services.AddPersistence(this.configuration);
+            services.AddPersistence(configuration: this.configuration);
             #region API Versioning
             // Add API Versioning to the Project
-            services.AddApiVersioning(config =>
+            services.AddApiVersioning(setupAction: config =>
             {
                 // Specify the default API Version as 1.0
                 config.DefaultApiVersion = new ApiVersion(1, 0);

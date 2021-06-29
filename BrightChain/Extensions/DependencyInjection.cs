@@ -4,7 +4,7 @@ using BrightChain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BrightChain.Services
+namespace BrightChain.Extensions
 {
     public static class DependencyInjection
     {
