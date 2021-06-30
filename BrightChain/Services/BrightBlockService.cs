@@ -21,7 +21,7 @@ namespace BrightChain.Services
         protected DiskBlockCacheManager blockDiskCache;
 
 
-        public BrightBlockService(ILoggerFactory logger, IConfiguration configuration)
+        public BrightBlockService(ILoggerFactory logger)
         {
             this.logger = logger.CreateLogger(nameof(BrightBlockService));
             if (this.logger is null)
@@ -30,7 +30,9 @@ namespace BrightChain.Services
             }
 
             this.logger.LogInformation(String.Format("<{0}>: logging initialized", nameof(BrightBlockService)));
-            this.configuration = configuration;
+            this.configuration = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("brightchainSettings.json").Build();
 
             this.blockMemoryCache = new MemoryBlockCacheManager(logger: this.logger);
             this.blockDiskCache = new DiskBlockCacheManager(logger: this.logger);

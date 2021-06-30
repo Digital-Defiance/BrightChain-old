@@ -41,8 +41,7 @@ namespace BrightChain.Tests
             var loggerMock = Mock.Get(this._logger);
 
             var brightChainService = new BrightBlockService(
-                logger: this._loggerFactory,
-                configuration: this._configuration);
+                logger: this._loggerFactory);
 
             loggerMock.Verify(l => l.Log(
                 LogLevel.Information,
