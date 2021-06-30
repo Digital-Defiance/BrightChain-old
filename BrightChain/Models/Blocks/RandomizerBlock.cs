@@ -17,7 +17,7 @@ namespace BrightChain.Models.Blocks
                 requestTime: requestTime,
                 keepUntilAtLeast: keepUntilAtLeast,
                 redundancy: redundancy,
-                data: RandomDataBlock.NewRandomBlockData(blockSize),
+                data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockSize)),
                 allowCommit: allowCommit) => this.CacheManager.Set(this.Id, this);
         /// <summary>
         /// replace incoming data (will be empty byte array to fit conventions) with random data

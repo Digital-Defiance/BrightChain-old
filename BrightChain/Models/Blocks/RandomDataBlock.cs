@@ -1,7 +1,6 @@
 using BrightChain.Enumerations;
 using BrightChain.Helpers;
 using System;
-using System.Security.Cryptography;
 
 namespace BrightChain.Models.Blocks
 {
@@ -10,24 +9,13 @@ namespace BrightChain.Models.Blocks
     /// </summary>
     public class RandomDataBlock : Block, IComparable<EmptyDummyBlock>
     {
-        public static ReadOnlyMemory<byte> NewRandomBlockData(BlockSize blockSize)
-        {
-            var rnd = new byte[BlockSizeMap.BlockSize(blockSize)];
-            using (var rng = RandomNumberGenerator.Create()) // TODO: guarantee is CSPRNG
-            {
-                rng.GetBytes(rnd);
-            }
-
-            return new ReadOnlyMemory<byte>(rnd);
-        }
-
         public RandomDataBlock(BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy) :
             base(
                 blockSize: blockSize,
                 requestTime: requestTime,
                 keepUntilAtLeast: keepUntilAtLeast,
                 redundancy: redundancy,
-                data: NewRandomBlockData(blockSize))
+                data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockSize)))
         { }
 
         /// <summary>

@@ -37,6 +37,6 @@ namespace BrightChain.API.Controllers
         /// <param name="command"></param>
         /// <returns></returns>
         [HttpPut("[action]")]
-        public async Task<IActionResult> Update(Block block) => this.Ok(await this.Mediator.Send(new UpdateBlockCommand { Block = block } ));
+        public async Task<IActionResult> Update(Block block) => this.Ok(await this.Mediator.Send(new UpdateBlockCommand { Block = block }));
     }
 }
