@@ -14,9 +14,13 @@ namespace BrightChain.Models.Blocks.Chains
     public class BlockChainFileMap : ConstituentBlockListBlock
     {
         public IEnumerable<TupleStripe> Tuples { get; }
-
-        public BlockChainFileMap(ICacheManager<BlockHash, TransactableBlock> cacheManager, BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, BlockHash finalDataHash, IEnumerable<Block> constituentBlocks) : base(cacheManager: cacheManager, blockSize: blockSize, requestTime: requestTime, keepUntilAtLeast: keepUntilAtLeast, redundancy: redundancy, finalDataHash: finalDataHash, constituentBlocks: constituentBlocks, allowCommit: false)
+        public BlockChainFileMap(ICacheManager<BlockHash, TransactableBlock> cacheManager, BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, BlockHash finalDataHash, ulong totalLength, IEnumerable<Block> constituentBlocks) : base(cacheManager: cacheManager, blockSize: blockSize, requestTime: requestTime, keepUntilAtLeast: keepUntilAtLeast, redundancy: redundancy, finalDataHash: finalDataHash, totalLength: totalLength, constituentBlocks: constituentBlocks, allowCommit: false)
         {
+            // build the tuple stripes
+            foreach (var block in this.ConstituentBlocks)
+            {
+
+            }
         }
     }
 }

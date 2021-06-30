@@ -2,7 +2,6 @@
 using BrightChain.Extensions;
 using BrightChain.Models.Blocks;
 using BrightChain.Models.Contracts;
-using BrightChain.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -19,24 +18,17 @@ namespace BrightChain.Tests
     [TestClass]
     public class BlockMetaDataExtensionsTest
     {
-        protected readonly MemoryBlockCacheManager cacheManager;
         protected readonly ILogger logger;
-        public BlockMetaDataExtensionsTest()
-        {
-            this.logger = new Moq.Mock<ILogger>().Object;
-            this.cacheManager = new MemoryBlockCacheManager(logger: this.logger);
-        }
+        public BlockMetaDataExtensionsTest() => this.logger = new Moq.Mock<ILogger>().Object;
 
         [TestMethod]
         public void ItExtractsMetaDataCorrectlyTest()
         {
-            var block = new RandomizerBlock(
-                pregeneratedRandomizerCache: this.cacheManager,
+            var block = new EmptyDummyBlock(
                 blockSize: BlockSize.Message,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
-                redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                allowCommit: true);
+                redundancy: Enumerations.RedundancyContractType.HeapAuto);
             Assert.IsTrue(block.Validate());
             var metaData = block.Metadata;
             var metaDataString = System.Text.Encoding.ASCII.GetString(metaData.ToArray());
@@ -60,7 +52,7 @@ namespace BrightChain.Tests
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(3));
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
             loggerMock.VerifyNoOtherCalls();
         }
 
@@ -69,23 +61,19 @@ namespace BrightChain.Tests
         {
             var testStart = DateTime.Now;
 
-            var block = new RandomizerBlock(
-                pregeneratedRandomizerCache: this.cacheManager,
+            var block = new EmptyDummyBlock(
                 blockSize: BlockSize.Message,
                 requestTime: testStart,
                 keepUntilAtLeast: testStart.AddDays(1),
-                redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                allowCommit: true);
+                redundancy: Enumerations.RedundancyContractType.HeapAuto);
             Assert.IsTrue(block.Validate());
             var metaData = block.Metadata;
 
-            var block2 = new RandomizerBlock(
-                pregeneratedRandomizerCache: this.cacheManager,
+            var block2 = new EmptyDummyBlock(
                 blockSize: BlockSize.Message,
                 requestTime: testStart.AddSeconds(5),
                 keepUntilAtLeast: testStart.AddDays(1).AddSeconds(5),
-                redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                allowCommit: true);
+                redundancy: Enumerations.RedundancyContractType.HeapAuto);
             Assert.IsTrue(block2.TryRestoreMetadataFromBytes(metaData));
             Assert.AreEqual(block.RedundancyContract, block2.RedundancyContract);
             Assert.AreEqual(block.StorageContract, block2.RedundancyContract.StorageContract);
@@ -97,7 +85,7 @@ namespace BrightChain.Tests
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(4));
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
             loggerMock.VerifyNoOtherCalls();
         }
     }

@@ -40,7 +40,7 @@ namespace BrightChain.Models.Blocks
 
         public Block AsBlock => this;
 
-        public IEnumerable<BrightChainValidationException> ValidationExceptions { get; internal set; }
+        public IEnumerable<BrightChainValidationException> ValidationExceptions { get; private set; }
 
         public Block(BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data)
         {
@@ -180,7 +180,7 @@ namespace BrightChain.Models.Blocks
 
         public bool Validate()
         {
-            List<BrightChainValidationException> validationExceptions;
+            IEnumerable<BrightChainValidationException> validationExceptions;
             var result = this.PerformValidation(out validationExceptions);
             this.ValidationExceptions = validationExceptions;
             return result;

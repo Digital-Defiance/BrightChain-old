@@ -23,12 +23,18 @@ namespace BrightChain.Models.Blocks.Chains
         public BlockHash SourceId { get; }
 
         /// <summary>
+        /// Total length of bytes in the user data section
+        /// </summary>
+        [BrightChainMetadata]
+        public ulong TotalLength { get; }
+
+        /// <summary>
         /// TupleCount at the time
         /// </summary>
         [BrightChainMetadata]
         public int TupleCount { get; } = BlockWhitener.TupleCount;
 
-        public ConstituentBlockListBlock(ICacheManager<BlockHash, TransactableBlock> cacheManager, BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, BlockHash finalDataHash, IEnumerable<Block> constituentBlocks, bool allowCommit)
+        public ConstituentBlockListBlock(ICacheManager<BlockHash, TransactableBlock> cacheManager, BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, BlockHash finalDataHash, ulong totalLength, IEnumerable<Block> constituentBlocks, bool allowCommit)
         : base(destinationCacheManager: cacheManager,
               blockSize: blockSize,
               data: new ReadOnlyMemory<byte>(
@@ -40,6 +46,7 @@ namespace BrightChain.Models.Blocks.Chains
             this.AllowCommit = allowCommit;
             this.ConstituentBlocks = new Block[] { };
             this.SourceId = finalDataHash;
+            this.TotalLength = totalLength;
             // TODO : if finalDataHash is null, reconstitute and compute- or accept the validation result's hash essentially?
         }
 

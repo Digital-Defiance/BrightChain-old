@@ -21,20 +21,20 @@ namespace BrightChain.Contexts
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
             //Default: JSON-Serializer
             optionsBuilder.UseFileContextDatabase<JSONSerializer, DefaultFileManager>();
-            // optionsBuilder.UseFileContextDatabase<JSONSerializer, DefaultFileManager>();
-            // optionsBuilder.UseFileContextDatabase<BSONSerializer, DefaultFileManager>();
-            //JSON-Serialize + simple Encryption
-            // optionsBuilder.UseFileContextDatabase<JSONSerializer, EncryptedFileManager>();
-            //XML
-            // optionsBuilder.UseFileContextDatabase<XMLSerializer, DefaultFileManager>();
-            // optionsBuilder.UseFileContextDatabase<XMLSerializer, PrivateFileManager>();
-            //CSV
-            // optionsBuilder.UseFileContextDatabase<CSVSerializer, DefaultFileManager>();
-            //Custom location
-            // optionsBuilder.UseFileContextDatabase(location: @"D:\t");
-            //Excel
-            // ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            // optionsBuilder.UseFileContextDatabase<EXCELStoreManager>(databaseName: "test");
+        // optionsBuilder.UseFileContextDatabase<JSONSerializer, DefaultFileManager>();
+        // optionsBuilder.UseFileContextDatabase<BSONSerializer, DefaultFileManager>();
+        //JSON-Serialize + simple Encryption
+        // optionsBuilder.UseFileContextDatabase<JSONSerializer, EncryptedFileManager>();
+        //XML
+        // optionsBuilder.UseFileContextDatabase<XMLSerializer, DefaultFileManager>();
+        // optionsBuilder.UseFileContextDatabase<XMLSerializer, PrivateFileManager>();
+        //CSV
+        // optionsBuilder.UseFileContextDatabase<CSVSerializer, DefaultFileManager>();
+        //Custom location
+        // optionsBuilder.UseFileContextDatabase(location: @"D:\t");
+        //Excel
+        // ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        // optionsBuilder.UseFileContextDatabase<EXCELStoreManager>(databaseName: "test");
 
         public new async Task<int> SaveChanges() => await base.SaveChangesAsync();
     }
