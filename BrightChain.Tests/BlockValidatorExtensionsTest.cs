@@ -8,7 +8,7 @@ using System;
 namespace BrightChain.Tests
 {
     [TestClass]
-    public class BlockValidatorExtensionTest
+    public class BlockValidatorExtensionsTest
     {
         protected ILogger logger { get; set; }
 
