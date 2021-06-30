@@ -37,13 +37,6 @@ namespace BrightChain.API.Controllers
         /// <param name="command"></param>
         /// <returns></returns>
         [HttpPut("[action]")]
-        public async Task<IActionResult> Update(BlockHash id, UpdateBlockCommand command)
-        {
-            if (id != command.Id)
-            {
-                return this.BadRequest();
-            }
-            return this.Ok(await this.Mediator.Send(command));
-        }
+        public async Task<IActionResult> Update(Block block) => this.Ok(await this.Mediator.Send(new UpdateBlockCommand { Block = block } ));
     }
 }
