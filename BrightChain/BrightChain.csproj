@@ -33,13 +33,12 @@
     <PackageReference Include="docfx" Version="2.58.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Versioning" Version="4.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.OData.Versioning" Version="5.0.0" />
-    <PackageReference Include="Microsoft.CodeCoverage" Version="16.10.0" />
+    <PackageReference Include="Microsoft.CodeCoverage" Version="16.11.0-release-20210626-04" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0-preview.5.21301.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0-preview.5.21301.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.0-preview.5.21301.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.0-preview.5.21301.9" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0-preview.5.21301.5" />
@@ -75,9 +74,5 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\FileContextCore\FileContextCore\FileContextCore.csproj" />
   </ItemGroup>
 </Project>

@@ -57,6 +57,10 @@ namespace BrightChain.Models.Blocks
 
         public static bool operator ==(BlockHash a, BlockHash b) => ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;
 
+        public static bool operator ==(ReadOnlyMemory<byte> b, BlockHash a) => ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b) == 0;
+
+        public static bool operator !=(ReadOnlyMemory<byte> b, BlockHash a) => !(b == a);
+
         public static bool operator !=(BlockHash a, BlockHash b) => !a.Equals(b);
 
         public override bool Equals(object obj) => ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, (obj as BlockHash).HashBytes) == 0;

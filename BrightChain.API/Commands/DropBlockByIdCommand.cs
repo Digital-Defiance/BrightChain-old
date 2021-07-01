@@ -1,4 +1,4 @@
-﻿using BrightChain.Contexts;
+﻿using BrightChain.EntityFrameworkCore.Contexts;
 using BrightChain.Models.Blocks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -13,19 +13,20 @@ namespace BrightChain.API.Commands
         public BlockHash Id { get; set; }
         public class DropBlockByIdCommandHandler : IRequestHandler<DropBlockByIdCommand, BlockHash>
         {
-            private readonly ApplicationDbContext _context;
-            public DropBlockByIdCommandHandler(ApplicationDbContext context) => this._context = context;
+            private readonly BrightChainDbContext _context;
+            public DropBlockByIdCommandHandler(BrightChainDbContext context) => this._context = context;
             public async Task<BlockHash> Handle(DropBlockByIdCommand command, CancellationToken cancellationToken)
             {
-                var block = await this._context.Blocks.Where(a => a.Id == command.Id).FirstOrDefaultAsync();
+                var block = await this._context.Blocks.Where(a => a.Id == command.Id.ToString()).FirstOrDefaultAsync();
                 if (block == null)
                 {
                     return default;
                 }
 
+                var id = block.ToBlock().Id;
                 this._context.Blocks.Remove(block);
                 await this._context.SaveChanges();
-                return block.Id;
+                return id;
             }
         }
     }

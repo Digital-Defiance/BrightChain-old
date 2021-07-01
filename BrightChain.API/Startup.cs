@@ -1,7 +1,8 @@
 using BrightChain.API.Areas.Identity;
 using BrightChain.API.Data;
-using BrightChain.Contexts;
-using BrightChain.Extensions;
+using BrightChain.EntityFrameworkCore.Contexts;
+using BrightChain.EntityFrameworkCore.Data;
+using BrightChain.EntityFrameworkCore.Extensions;
 using BrightChain.Services;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -28,9 +29,12 @@ namespace BrightChain.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddLogging();
-            services.AddPersistence(configuration: this.Configuration);
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddPersistence<BrightChainDbContext>(configuration: this.Configuration);
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDefaultIdentity<BrightChainUser>(options =>
+                options.SignIn.RequireConfirmedAccount = true)
+                    .AddEntityFrameworkStores<BrightChainDbContext>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();

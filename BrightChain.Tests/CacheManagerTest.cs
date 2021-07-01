@@ -1,4 +1,5 @@
 ﻿using BrightChain.Interfaces;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -20,6 +21,7 @@ namespace BrightChain.Tests
         where Tcache : ICacheManager<Tkey, Tvalue>
     {
         protected Mock<ILogger<Tcache>> logger;
+        protected Mock<IConfiguration> configuration;
         protected Tcache cacheManager;
 
         /// <summary>
@@ -38,7 +40,7 @@ namespace BrightChain.Tests
         /// Method for the derived tests to instantiate the cache manager for the tests with all the right options
         /// </summary>
         /// <returns></returns>
-        abstract internal Tcache NewCacheManager(ILogger logger);
+        abstract internal Tcache NewCacheManager(ILogger logger, IConfiguration configuration);
 
         /// <summary>
         /// Each test will generate a cache key to be set/get/etc
@@ -53,8 +55,9 @@ namespace BrightChain.Tests
         public void PreTestSetup()
         {
             this.logger = new Mock<ILogger<Tcache>>();
+            this.configuration = new Mock<IConfiguration>();
             // the cache manager under test
-            this.cacheManager = this.NewCacheManager(logger: this.logger.Object);
+            this.cacheManager = this.NewCacheManager(logger: this.logger.Object, configuration: this.configuration.Object);
             // a key to be used for each test
             this.testPair = this.NewKeyValue();
             Assert.IsFalse(this.cacheManager.Contains(this.testPair.Key));
@@ -82,7 +85,7 @@ namespace BrightChain.Tests
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(3));
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
             this.logger.VerifyNoOtherCalls();
         }
 
@@ -106,7 +109,7 @@ namespace BrightChain.Tests
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(3));
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
             this.logger.VerifyNoOtherCalls();
         }
 
@@ -133,7 +136,7 @@ namespace BrightChain.Tests
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(4));
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
             this.logger.VerifyNoOtherCalls();
         }
 
@@ -157,7 +160,7 @@ namespace BrightChain.Tests
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(3));
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
             this.logger.VerifyNoOtherCalls();
         }
 
@@ -182,7 +185,7 @@ namespace BrightChain.Tests
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(4));
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
             this.logger.VerifyNoOtherCalls();
         }
 

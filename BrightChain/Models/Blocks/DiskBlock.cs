@@ -20,7 +20,7 @@ namespace BrightChain.Models.Blocks
                 data: data,
                 allowCommit: allowCommit)
         {
-            if (!(cacheManager is DiskBlockCacheManager))
+            if (!(cacheManager is BrightChainBlockCacheManager))
             {
                 throw new InvalidCastException();
             }

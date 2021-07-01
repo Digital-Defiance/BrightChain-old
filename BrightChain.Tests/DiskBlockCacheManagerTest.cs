@@ -1,6 +1,7 @@
 ﻿using BrightChain.Enumerations;
 using BrightChain.Models.Blocks;
 using BrightChain.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -14,9 +15,9 @@ namespace BrightChain.Tests
     /// </summary>
     public class DiskCacheTestBlock : TransactableBlock
     {
-        public new static DiskBlockCacheManager CacheManager;
+        public new static BrightChainBlockCacheManager CacheManager;
 
-        public DiskCacheTestBlock(DiskBlockCacheManager cacheManager, BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
+        public DiskCacheTestBlock(BrightChainBlockCacheManager cacheManager, BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
             base(
                 cacheManager: cacheManager,
                 blockSize: blockSize,
@@ -68,17 +69,18 @@ allowCommit: allowCommit);
     /// Tests disk block cache managers
     /// </summary>
     [TestClass]
-    public class DiskBlockCacheManagerTest : TransactableBlockCacheManagerTest<DiskBlockCacheManager>
+    public class DiskBlockCacheManagerTest : TransactableBlockCacheManagerTest<BrightChainBlockCacheManager>
     {
-        public DiskBlockCacheManagerTest()
+        [TestInitialize]
+        public new void PreTestSetup()
         {
-            this.logger = new Mock<ILogger<DiskBlockCacheManager>>();
-            DiskCacheTestBlock.CacheManager = new DiskBlockCacheManager(this.logger.Object);
+            base.PreTestSetup();
+            DiskCacheTestBlock.CacheManager = new BrightChainBlockCacheManager(this.logger.Object, this.configuration.Object);
             this.cacheManager = DiskCacheTestBlock.CacheManager;
         }
 
-        internal override DiskBlockCacheManager NewCacheManager(ILogger logger) => new DiskBlockCacheManager(
-logger: logger);
+        internal override BrightChainBlockCacheManager NewCacheManager(ILogger logger, IConfiguration configuration) => new BrightChainBlockCacheManager(
+logger: logger, configuration: configuration);
 
         internal override KeyValuePair<BlockHash, TransactableBlock> NewKeyValue()
         {
@@ -120,7 +122,7 @@ logger: logger);
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(2));
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
             this.logger.VerifyNoOtherCalls();
         }
     }

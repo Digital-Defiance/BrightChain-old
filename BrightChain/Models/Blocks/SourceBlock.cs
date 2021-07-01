@@ -31,7 +31,7 @@ namespace BrightChain.Models.Blocks
                     data: data,
                     allowCommit: false);
             }
-            else if (this.cacheManager is DiskBlockCacheManager diskBlockCacheManager)
+            else if (this.cacheManager is BrightChainBlockCacheManager diskBlockCacheManager)
             {
                 return new DiskBlock(
                     cacheManager: diskBlockCacheManager,

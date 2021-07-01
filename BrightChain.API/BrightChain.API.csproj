@@ -23,7 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BrightChain.EntityFrameworkCore\BrightChain.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\BrightChain\BrightChain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Contexts\" />
+  </ItemGroup>
 </Project>

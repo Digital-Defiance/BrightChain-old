@@ -1,4 +1,5 @@
-﻿using BrightChain.Contexts;
+﻿using BrightChain.EntityFrameworkCore.Contexts;
+using BrightChain.EntityFrameworkCore.Data;
 using BrightChain.Models.Blocks;
 using MediatR;
 using System.Threading;
@@ -11,11 +12,11 @@ namespace BrightChain.API.Commands
         public Block Block { get; set; }
         public class StoreBlockCommandHandler : IRequestHandler<StoreBlockCommand, BlockHash>
         {
-            private readonly ApplicationDbContext _context;
-            public StoreBlockCommandHandler(ApplicationDbContext context) => this._context = context;
+            private readonly BrightChainDbContext _context;
+            public StoreBlockCommandHandler(BrightChainDbContext context) => this._context = context;
             public async Task<BlockHash> Handle(StoreBlockCommand command, CancellationToken cancellationToken)
             {
-                this._context.Blocks.Add(command.Block);
+                this._context.Blocks.Add(BrightChainBlock.FromBrightChainBlock(command.Block));
                 await this._context.SaveChanges();
                 return command.Block.Id;
             }

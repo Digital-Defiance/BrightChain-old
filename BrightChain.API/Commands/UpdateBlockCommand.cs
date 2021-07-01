@@ -1,4 +1,4 @@
-﻿using BrightChain.Contexts;
+﻿using BrightChain.EntityFrameworkCore.Contexts;
 using BrightChain.Models.Blocks;
 using MediatR;
 using System.Linq;
@@ -12,11 +12,11 @@ namespace BrightChain.API.Commands
         public Block Block { get; set; }
         public class UpdateBlockCommandHandler : IRequestHandler<UpdateBlockCommand, Block>
         {
-            private readonly ApplicationDbContext _context;
-            public UpdateBlockCommandHandler(ApplicationDbContext context) => this._context = context;
+            private readonly BrightChainDbContext _context;
+            public UpdateBlockCommandHandler(BrightChainDbContext context) => this._context = context;
             public async Task<Block> Handle(UpdateBlockCommand command, CancellationToken cancellationToken)
             {
-                var block = this._context.Blocks.Where(a => a.Id == command.Block.Id).FirstOrDefault();
+                var block = this._context.Blocks.Where(a => a.Id == command.Block.Id.ToString()).FirstOrDefault();
                 if (block == null)
                 {
                     return default;
@@ -25,7 +25,7 @@ namespace BrightChain.API.Commands
                 {
                     // block.prop = value
                     await this._context.SaveChanges();
-                    return block;
+                    return block.ToBlock();
                 }
             }
         }

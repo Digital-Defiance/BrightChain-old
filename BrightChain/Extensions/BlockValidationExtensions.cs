@@ -36,7 +36,7 @@ namespace BrightChain.Extensions
             {
                 exceptions.Add(new BrightChainValidationException(
                     element: nameof(block.Id),
-                    message: String.Format("{0} is invalid: {1}, actual {2}", nameof(block.Id), block.Id, recomputedHash)));
+                    message: String.Format("{0} is invalid: {1}, actual {2}", nameof(block.Id), block.Id.ToString(), recomputedHash.ToString())));
             }
 
             if (block.Data.Length != BlockSizeMap.BlockSize(block.BlockSize))
