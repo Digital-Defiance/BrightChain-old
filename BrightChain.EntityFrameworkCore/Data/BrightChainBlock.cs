@@ -1,33 +1,23 @@
-﻿using BrightChain.Exceptions;
-using BrightChain.Interfaces;
-using BrightChain.Models.Blocks;
-using BrightChain.Models.Contracts;
+﻿using BrightChain.Models.Blocks;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BrightChain.EntityFrameworkCore.Data
 {
+    /// <summary>
+    /// Stripped model representation of Block class compatible with EntityFramework. Essentially a "rendered block". Strings are raw binary.
+    /// </summary>
     public class BrightChainBlock
     {
         [Required]
         public string Id { get; set; }
-        [Required] 
+        [Required]
         public string Data { get; set; }
         [Required]
         public string Metadata { get; set; }
- 
-        public Block ToBlock()
-        {
-            throw new NotImplementedException();
-        }
 
-        public static BrightChainBlock FromBrightChainBlock(Block block)
-        {
-            throw new NotImplementedException();
-        }
+        public Block ToBlock() => throw new NotImplementedException();
+
+        public static BrightChainBlock FromBrightChainBlock(Block block) => throw new NotImplementedException();
     }
 }

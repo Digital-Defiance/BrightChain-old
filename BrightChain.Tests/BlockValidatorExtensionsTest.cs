@@ -19,10 +19,13 @@ namespace BrightChain.Tests
         public void ItValidatesValidBlocksTest()
         {
             Assert.IsTrue((new RandomDataBlock(
+                blockArguments: new BlockArguments(
                 blockSize: Enumerations.BlockSize.Message,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.MaxValue,
-                redundancy: Enumerations.RedundancyContractType.HeapAuto)).Validate());
+                redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                allowCommit: true,
+                privateEncrypted: false))).Validate());
 
             var loggerMock = Mock.Get(this.logger);
             loggerMock.Verify(l => l.Log(

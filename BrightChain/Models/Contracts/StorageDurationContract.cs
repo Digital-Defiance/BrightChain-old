@@ -9,15 +9,33 @@ namespace BrightChain.Models.Contracts
     /// </summary>
     public struct StorageDurationContract
     {
+        /// <summary>
+        /// Date/Time the block was received by the network
+        /// </summary>
         public DateTime RequestTime { get; internal set; }
+
+        /// <summary>
+        /// Minimum date the block will be preserved until
+        /// </summary>
         public DateTime KeepUntilAtLeast { get; internal set; }
+
+        /// <summary>
+        /// Number of bytes stored in this block
+        /// </summary>
         public int ByteCount { get; internal set; }
 
-        public StorageDurationContract(DateTime requestTime, DateTime keepUntilAtLeast, int byteCount)
+        /// <summary>
+        /// Whether the data is being stored for public use.
+        /// Factors into cost and other matters later on.
+        /// </summary>
+        public bool PrivateEncrypted { get; internal set; }
+
+        public StorageDurationContract(DateTime requestTime, DateTime keepUntilAtLeast, int byteCount, bool privateEncrypted)
         {
             this.RequestTime = requestTime;
             this.KeepUntilAtLeast = keepUntilAtLeast;
             this.ByteCount = byteCount;
+            this.PrivateEncrypted = privateEncrypted;
         }
 
         [JsonIgnore]

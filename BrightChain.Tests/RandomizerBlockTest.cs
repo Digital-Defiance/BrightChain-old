@@ -32,12 +32,15 @@ namespace BrightChain.Tests
         public void ItCreatesValidRandomDataBlocksTest()
         {
             var block = new RandomizerBlock(
-                pregeneratedRandomizerCache: this.cacheManager,
-                blockSize: BlockSize.Message,
-                requestTime: DateTime.Now,
-                keepUntilAtLeast: DateTime.Now.AddDays(1),
-                redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                allowCommit: true);
+                new TransactableBlockArguments(
+                cacheManager: this.cacheManager,
+                blockArguments: new BlockArguments(
+                    blockSize: BlockSize.Message,
+                    requestTime: DateTime.Now,
+                    keepUntilAtLeast: DateTime.Now.AddDays(1),
+                    redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                    allowCommit: true,
+                    privateEncrypted: false)));
 
             Assert.IsTrue(block.Validate());
             Assert.IsTrue(this.cacheManager.Contains(block.Id));

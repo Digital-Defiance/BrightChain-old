@@ -26,10 +26,13 @@ namespace BrightChain.Tests
         public void ItCreatesValidRandomDataBlocksTest()
         {
             var block = new RandomDataBlock(
+                blockArguments: new BlockArguments(
                 blockSize: BlockSize.Message,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
-                redundancy: Enumerations.RedundancyContractType.HeapAuto);
+                redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                allowCommit: true,
+                privateEncrypted: false));
 
             Assert.IsTrue(block.Validate());
 

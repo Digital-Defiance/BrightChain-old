@@ -34,21 +34,44 @@ namespace BrightChain.Models.Blocks.Chains
         [BrightChainMetadata]
         public int TupleCount { get; } = BlockWhitener.TupleCount;
 
-        public ConstituentBlockListBlock(ICacheManager<BlockHash, TransactableBlock> cacheManager, BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, BlockHash finalDataHash, ulong totalLength, IEnumerable<Block> constituentBlocks, bool allowCommit)
-        : base(destinationCacheManager: cacheManager,
-              blockSize: blockSize,
+        /// <summary>
+        /// Whether this "file" is encrypted or for public use
+        /// </summary>
+        [BrightChainMetadata]
+        public bool PrivateEncrypted { get; }
+
+        [BrightChainMetadata]
+        public BrokeredAnonymityIdentifier CreatorId { get; }
+
+        public BlockChainFileMap BlockMap => new BlockChainFileMap(this);
+
+        public ConstituentBlockListBlock(ConstituentBlockListBlockArguments blockArguments)
+        : base(
+              blockArguments: new TransactableBlockArguments(
+                  cacheManager: blockArguments.CacheManager,
+                  blockArguments: new BlockArguments(
+                      blockSize: blockArguments.BlockSize,
+                      requestTime: blockArguments.RequestTime,
+                      keepUntilAtLeast: blockArguments.KeepUntilAtLeast,
+                      redundancy: blockArguments.Redundancy,
+                      allowCommit: blockArguments.AllowCommit,
+                      privateEncrypted: blockArguments.PrivateEncrypted)
+            ),
               data: new ReadOnlyMemory<byte>(
-                constituentBlocks
+                blockArguments.ConstituentBlocks
                     .SelectMany(b =>
                         b.Id.HashBytes.ToArray())
-                    .ToArray()))
+                    .ToArray())
+        )
         {
-            this.AllowCommit = allowCommit;
-            this.ConstituentBlocks = new Block[] { };
-            this.SourceId = finalDataHash;
-            this.TotalLength = totalLength;
             // TODO : if finalDataHash is null, reconstitute and compute- or accept the validation result's hash essentially?
         }
+
+        public ReadOnlyMemory<byte> ConstituentBlockHashesBytes => new ReadOnlyMemory<byte>(
+                this.ConstituentBlocks
+                    .SelectMany(b =>
+                        b.Id.HashBytes.ToArray())
+                    .ToArray());
 
         public IEnumerable<BlockHash> ConstituentBlockHashes =>
             this.ConstituentBlocks
@@ -57,6 +80,20 @@ namespace BrightChain.Models.Blocks.Chains
 
         public double TotalCost =>
             this.ConstituentBlocks.Sum(b => b.RedundancyContract.Cost);
+
+
+        public static ConstituentBlockListBlock SplitHashList(IEnumerable<BlockHash> blockHashes, BlockSize blockSize)
+        {
+            var iBlockSize = BlockSizeMap.BlockSize(blockSize);
+            var hashesPerBlock = (int)Math.Floor((double)(iBlockSize / iBlockSize));
+            while (blockHashes.Any())
+            {
+                var newCBLHashes = blockHashes.Take(hashesPerBlock);
+                // do something
+                blockHashes = blockHashes.Skip(hashesPerBlock);
+            }
+            throw new NotImplementedException();
+        }
 
         public new bool Validate() =>
             // TODO: perform additional validation as described above

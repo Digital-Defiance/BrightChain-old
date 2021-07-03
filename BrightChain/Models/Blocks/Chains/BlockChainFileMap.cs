@@ -1,6 +1,4 @@
-﻿using BrightChain.Enumerations;
-using BrightChain.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace BrightChain.Models.Blocks.Chains
@@ -14,13 +12,35 @@ namespace BrightChain.Models.Blocks.Chains
     public class BlockChainFileMap : ConstituentBlockListBlock
     {
         public IEnumerable<TupleStripe> Tuples { get; }
-        public BlockChainFileMap(ICacheManager<BlockHash, TransactableBlock> cacheManager, BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, BlockHash finalDataHash, ulong totalLength, IEnumerable<Block> constituentBlocks) : base(cacheManager: cacheManager, blockSize: blockSize, requestTime: requestTime, keepUntilAtLeast: keepUntilAtLeast, redundancy: redundancy, finalDataHash: finalDataHash, totalLength: totalLength, constituentBlocks: constituentBlocks, allowCommit: false)
+        public BlockChainFileMap(ConstituentBlockListBlockArguments blockArguments) : base(blockArguments: blockArguments)
         {
-            // build the tuple stripes
-            foreach (var block in this.ConstituentBlocks)
-            {
-
-            }
         }
+
+        public static IEnumerable<TupleStripe> ReconstructTupleStripes(IEnumerable<Block> constituentBlocks) =>
+            // var stripe = constituentBlocks.Take(BlockWhitener.TupleCount);
+            throw new NotImplementedException();
+
+        public BlockChainFileMap(ConstituentBlockListBlock cblBlock, IEnumerable<TupleStripe> tuples = null)
+        : base(
+              blockArguments: new ConstituentBlockListBlockArguments(
+                  blockArguments: new TransactableBlockArguments(
+                  cacheManager: cblBlock.CacheManager,
+                  blockArguments: new BlockArguments(
+                      blockSize: cblBlock.BlockSize,
+                      requestTime: cblBlock.StorageContract.RequestTime,
+                      keepUntilAtLeast: cblBlock.StorageContract.KeepUntilAtLeast,
+                      redundancy: cblBlock.RedundancyContract.RedundancyContractType,
+                      allowCommit: cblBlock.AllowCommit,
+                      privateEncrypted: cblBlock.PrivateEncrypted)),
+              finalDataHash: cblBlock.SourceId,
+              totalLength: cblBlock.TotalLength,
+              constituentBlocks: cblBlock.ConstituentBlocks)) =>
+                    this.Tuples = (tuples is null) ? tuples : ReconstructTupleStripes(cblBlock.ConstituentBlocks);
+
+        /// <summary>
+        /// TODO: extend
+        /// </summary>
+        /// <returns></returns>
+        public new bool Validate() => base.Validate();
     }
 }

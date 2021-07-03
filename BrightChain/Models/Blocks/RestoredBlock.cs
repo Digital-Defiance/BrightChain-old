@@ -1,11 +1,12 @@
-﻿using BrightChain.Enumerations;
-using System;
+﻿using System;
 
 namespace BrightChain.Models.Blocks
 {
     public class RestoredBlock : Block
     {
-        public RestoredBlock(BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data) : base(blockSize: blockSize, requestTime, keepUntilAtLeast, redundancy, data)
+        public RestoredBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> data) : base(
+            blockArguments: blockArguments,
+            data: data)
         {
         }
 
@@ -14,6 +15,7 @@ namespace BrightChain.Models.Blocks
 
         }
 
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) => throw new NotImplementedException();
+        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> data) =>
+            new RestoredBlock(blockArguments, data);
     }
 }

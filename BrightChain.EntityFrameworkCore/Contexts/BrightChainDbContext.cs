@@ -1,10 +1,7 @@
 ﻿using BrightChain.EntityFrameworkCore.Data;
-using BrightChain.EntityFrameworkCore.Extensions;
 using BrightChain.EntityFrameworkCore.Interfaces;
-using BrightChain.Models.Blocks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Data;
 using System.Threading.Tasks;
 using DbContext = Microsoft.EntityFrameworkCore.DbContext;

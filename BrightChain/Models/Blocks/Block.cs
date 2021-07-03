@@ -28,7 +28,7 @@ namespace BrightChain.Models.Blocks
         /// A list of the blocks, in order, required to complete this block. Not persisted to disk.
         /// Generally only used during construction of a chain
         /// </summary>
-        public IEnumerable<IBlock> ConstituentBlocks { get; protected set; }
+        public IEnumerable<Block> ConstituentBlocks { get; protected set; }
 
         /// <summary>
         /// Emits the serialization of the block minus data and any ignored attributes (including itself).
@@ -36,32 +36,33 @@ namespace BrightChain.Models.Blocks
         public ReadOnlyMemory<byte> Metadata =>
             this.MetadataBytes();
 
-        public abstract Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit);
+        public abstract Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> data);
 
         public Block AsBlock => this;
 
         public IEnumerable<BrightChainValidationException> ValidationExceptions { get; private set; }
 
-        public Block(BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data)
+        public Block(BlockArguments blockArguments, ReadOnlyMemory<byte> data)
         {
             if (!BlockSizeMap.Map.ContainsValue(data.Length))
             {
                 throw new BrightChainException("Invalid Block Size"); // TODO: make (more) special exception type
             }
 
-            this.BlockSize = BlockSizeMap.BlockSize(data.Length);
-            if (this.BlockSize != blockSize)
+            if (BlockSizeMap.BlockSize(data.Length) != blockArguments.BlockSize)
             {
                 throw new BrightChainException("Block size mismatch");
             }
 
+            this.BlockSize = blockArguments.BlockSize;
             this.StorageContract = new StorageDurationContract(
-                requestTime: requestTime,
-                keepUntilAtLeast: keepUntilAtLeast,
-                byteCount: data.Length);
+                requestTime: blockArguments.RequestTime,
+                keepUntilAtLeast: blockArguments.KeepUntilAtLeast,
+                byteCount: data.Length,
+                privateEncrypted: blockArguments.PrivateEncrypted);
             this.RedundancyContract = new RedundancyContract(
                 storageDurationContract: this.StorageContract,
-                redundancy: redundancy);
+                redundancy: blockArguments.Redundancy);
             this.Data = data;
             this.Id = new BlockHash(this); // must happen after data is in place
             this.ConstituentBlocks = new Block[] { };
@@ -99,11 +100,16 @@ namespace BrightChain.Models.Blocks
             }
 
             var result = this.NewBlock(
-                requestTime: DateTime.Now,
-                keepUntilAtLeast: keepUntil,
-                redundancy: redundancy,
-                data: new ReadOnlyMemory<byte>(xorData),
-                allowCommit: true); // these XOR functions should be one of the only places this even happens
+                blockArguments: new BlockArguments(
+                    blockSize: this.BlockSize,
+                    requestTime: DateTime.Now,
+                    keepUntilAtLeast: keepUntil,
+                    redundancy: redundancy,
+                    allowCommit: true,
+                    privateEncrypted: this.StorageContract.PrivateEncrypted
+                ),
+                data: new ReadOnlyMemory<byte>(xorData)
+            ); // these XOR functions should be one of the only places this even happens
             var newList = new List<IBlock>(this.ConstituentBlocks);
             if (!(this is SourceBlock))
             {
@@ -115,7 +121,7 @@ namespace BrightChain.Models.Blocks
                 newList.Add(other);
             }
 
-            result.ConstituentBlocks = newList.ToArray();
+            result.ConstituentBlocks = (IEnumerable<Block>)newList.ToArray();
             return result;
         }
 
@@ -161,12 +167,15 @@ namespace BrightChain.Models.Blocks
             }
 
             var result = this.NewBlock(
-                requestTime: System.DateTime.Now,
-                keepUntilAtLeast: keepUntil,
-                redundancy: redundancy,
-                data: new ReadOnlyMemory<byte>(xorData),
-                allowCommit: true); // these XOR functions should be one of the only places this even happens
-            result.ConstituentBlocks = newList.ToArray();
+                new BlockArguments(
+                    blockSize: this.BlockSize,
+                    requestTime: System.DateTime.Now,
+                    keepUntilAtLeast: keepUntil,
+                    redundancy: redundancy,
+                    allowCommit: true,
+                    privateEncrypted: this.StorageContract.PrivateEncrypted), // these XOR functions should be one of the only places this even happens
+                data: new ReadOnlyMemory<byte>(xorData));
+            result.ConstituentBlocks = (IEnumerable<Block>)newList.ToArray();
             return result;
         }
 

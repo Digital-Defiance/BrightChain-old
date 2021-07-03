@@ -1,4 +1,4 @@
-using BrightChain.Enumerations;
+using BrightChain.Exceptions;
 using BrightChain.Interfaces;
 using BrightChain.Services;
 using System;
@@ -10,24 +10,23 @@ namespace BrightChain.Models.Blocks
     /// </summary>
     public class MemoryBlock : TransactableBlock, IBlock
     {
-        public MemoryBlock(MemoryBlockCacheManager cacheManager, BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
+        public MemoryBlock(TransactableBlockArguments blockArguments, ReadOnlyMemory<byte> data) :
             base(
-                cacheManager: cacheManager,
-                blockSize: blockSize,
-                requestTime: requestTime,
-                keepUntilAtLeast: keepUntilAtLeast,
-                redundancy: redundancy,
-                data: data,
-                allowCommit: allowCommit) => this.CacheManager.Set(this.Id, this);
+                blockArguments: blockArguments,
+                data: data)
+        {
+            if (!(this.CacheManager is MemoryBlockCacheManager))
+            {
+                throw new BrightChainException(this.CacheManager.GetType().Name);
+            }
 
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) => new MemoryBlock(
-cacheManager: (MemoryBlockCacheManager)this.CacheManager,
-blockSize: this.BlockSize,
-requestTime: requestTime,
-keepUntilAtLeast: keepUntilAtLeast,
-redundancy: redundancy,
-data: data,
-allowCommit: allowCommit);
+            this.CacheManager.Set(this.Id, this);
+        }
+
+        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> data) =>
+            new MemoryBlock(
+                blockArguments: new TransactableBlockArguments(this.CacheManager, blockArguments),
+            data: data);
 
         public override void Dispose()
         {

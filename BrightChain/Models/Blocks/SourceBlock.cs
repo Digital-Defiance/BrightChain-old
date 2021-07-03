@@ -1,5 +1,5 @@
-﻿using BrightChain.Enumerations;
-using BrightChain.Exceptions;
+﻿using BrightChain.Exceptions;
+using BrightChain.Extensions;
 using BrightChain.Helpers;
 using BrightChain.Interfaces;
 using BrightChain.Services;
@@ -15,32 +15,41 @@ namespace BrightChain.Models.Blocks
     {
         private ICacheManager<BlockHash, TransactableBlock> cacheManager;
 
-        public SourceBlock(ICacheManager<BlockHash, TransactableBlock> destinationCacheManager, BlockSize blockSize, ReadOnlyMemory<byte> data) :
-            base(cacheManager: destinationCacheManager, blockSize: blockSize, requestTime: DateTime.Now, keepUntilAtLeast: DateTime.MinValue, redundancy: RedundancyContractType.LocalNone, data: data, allowCommit: false) => this.cacheManager = destinationCacheManager;
+        public SourceBlock(TransactableBlockArguments blockArguments, ReadOnlyMemory<byte> data) :
+            base(
+                blockArguments: blockArguments,
+                data: data)
+        { }
 
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool _)
+        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> data)
         {
             if (this.cacheManager is MemoryBlockCacheManager memoryBlockCacheManager)
             {
                 return new MemoryBlock(
-                    cacheManager: memoryBlockCacheManager,
-                    blockSize: this.BlockSize,
-                    requestTime: requestTime,
-                    keepUntilAtLeast: keepUntilAtLeast,
-                    redundancy: redundancy,
-                    data: data,
-                    allowCommit: false);
+                    blockArguments: new TransactableBlockArguments(
+                        cacheManager: this.CacheManager,
+                        blockArguments: new BlockArguments(
+                            blockSize: this.BlockSize,
+                            requestTime: blockArguments.RequestTime,
+                            keepUntilAtLeast: blockArguments.KeepUntilAtLeast,
+                            redundancy: blockArguments.Redundancy,
+                            allowCommit: blockArguments.AllowCommit,
+                            privateEncrypted: blockArguments.PrivateEncrypted)),
+                        data: data);
             }
             else if (this.cacheManager is BrightChainBlockCacheManager diskBlockCacheManager)
             {
                 return new DiskBlock(
-                    cacheManager: diskBlockCacheManager,
-                    blockSize: this.BlockSize,
-                    requestTime: requestTime,
-                    keepUntilAtLeast: keepUntilAtLeast,
-                    redundancy: redundancy,
-                    data: data,
-                    allowCommit: false);
+                    blockArguments: new TransactableBlockArguments(
+                        cacheManager: diskBlockCacheManager,
+                        blockArguments: new BlockArguments(
+                            blockSize: this.BlockSize,
+                            requestTime: blockArguments.RequestTime,
+                            keepUntilAtLeast: blockArguments.KeepUntilAtLeast,
+                            redundancy: blockArguments.Redundancy,
+                            allowCommit: blockArguments.AllowCommit,
+                            privateEncrypted: blockArguments.PrivateEncrypted)),
+                        data: data);
             }
             else
             {
@@ -53,5 +62,7 @@ namespace BrightChain.Models.Blocks
         public override void Dispose()
         {
         }
+
+        public new bool Validate() => this.PerformValidation(out _);
     }
 }

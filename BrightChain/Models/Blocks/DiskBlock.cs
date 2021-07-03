@@ -1,4 +1,4 @@
-using BrightChain.Enumerations;
+using BrightChain.Exceptions;
 using BrightChain.Interfaces;
 using BrightChain.Services;
 using System;
@@ -6,40 +6,30 @@ using System;
 namespace BrightChain.Models.Blocks
 {
     /// <summary>
-    /// Block associated with a disk based bplus tree cache
+    /// Block that can be contained in a DiskBlockCacheManager / Btree
     /// </summary>
     public class DiskBlock : TransactableBlock, IBlock
     {
-        public DiskBlock(ICacheManager<BlockHash, TransactableBlock> cacheManager, BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
+        public DiskBlock(TransactableBlockArguments blockArguments, ReadOnlyMemory<byte> data) :
             base(
-                cacheManager: cacheManager,
-                blockSize: blockSize,
-                requestTime: requestTime,
-                keepUntilAtLeast: keepUntilAtLeast,
-                redundancy: redundancy,
-                data: data,
-                allowCommit: allowCommit)
+                blockArguments: blockArguments,
+                data: data)
         {
-            if (!(cacheManager is BrightChainBlockCacheManager))
+            if (!(this.CacheManager is BrightChainBlockCacheManager))
             {
-                throw new InvalidCastException();
+                throw new BrightChainException(this.CacheManager.GetType().Name);
             }
 
             this.CacheManager.Set(this.Id, this);
         }
 
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) => new DiskBlock(
-                cacheManager: this.CacheManager,
-                blockSize: this.BlockSize,
-                requestTime: requestTime,
-                keepUntilAtLeast: keepUntilAtLeast,
-                redundancy: redundancy,
-                data: data,
-                allowCommit: allowCommit);
+        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> data) =>
+            new DiskBlock(
+                blockArguments: new TransactableBlockArguments(this.CacheManager, blockArguments),
+            data: data);
 
         public override void Dispose()
         {
-
         }
     }
 }

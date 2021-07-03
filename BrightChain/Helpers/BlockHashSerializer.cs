@@ -14,19 +14,23 @@ namespace BrightChain.Helpers
 
         /// <summary>
         /// Generate a hash of an empty array to determine the block hash byte length
+        /// Used during testing
         /// </summary>
-        public static int getHashLength(out BlockHash tmpHash)
+        internal static void verifyHashLength(out BlockHash tmpHash)
         {
             var messageBytes = new byte[BlockSizeMap.BlockSize(Enumerations.BlockSize.Message)];
             Array.Fill<byte>(messageBytes, 0);
             tmpHash = new BlockHash(messageBytes);
-            return tmpHash.HashBytes.Length;
+            if (tmpHash.HashBytes.Length != BlockHash.HashSize)
+            {
+                throw new BrightChainException("hash size mismatch");
+            }
         }
 
         public BlockHash ReadFrom(Stream stream)
         {
             BlockHash blockHash;
-            var hashBytes = new byte[getHashLength(out blockHash)];
+            var hashBytes = new byte[BlockHash.HashSize];
             stream.Read(
                 buffer: hashBytes,
                 offset: 0,

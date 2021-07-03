@@ -16,13 +16,10 @@ namespace BrightChain.Models.Blocks
             return new ReadOnlyMemory<byte>(zeroBytes);
         }
 
-        public EmptyDummyBlock(BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy) :
+        public EmptyDummyBlock(BlockArguments blockArguments) :
             base(
-                blockSize: blockSize,
-                requestTime: requestTime,
-                keepUntilAtLeast: keepUntilAtLeast,
-                redundancy: redundancy,
-                data: NewEmptyBlockData(blockSize))
+                blockArguments: blockArguments,
+                data: NewEmptyBlockData(blockArguments.BlockSize))
         { }
 
         /// <summary>
@@ -34,11 +31,8 @@ namespace BrightChain.Models.Blocks
         /// <param name="_"></param>
         /// <param name="allowCommit"></param>
         /// <returns></returns>
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> _, bool allowCommit) => new EmptyDummyBlock(
-blockSize: this.BlockSize,
-requestTime: requestTime,
-keepUntilAtLeast: keepUntilAtLeast,
-redundancy: redundancy);
+        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> _) => new EmptyDummyBlock(
+            blockArguments: blockArguments);
 
         public int CompareTo(EmptyDummyBlock other) => ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
 

@@ -25,10 +25,13 @@ namespace BrightChain.Tests
         public void ItExtractsMetaDataCorrectlyTest()
         {
             var block = new EmptyDummyBlock(
+                blockArguments: new BlockArguments(
                 blockSize: BlockSize.Message,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
-                redundancy: Enumerations.RedundancyContractType.HeapAuto);
+                redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                allowCommit: true,
+                privateEncrypted: false));
             Assert.IsTrue(block.Validate());
             var metaData = block.Metadata;
             var metaDataString = System.Text.Encoding.ASCII.GetString(metaData.ToArray());
@@ -62,18 +65,24 @@ namespace BrightChain.Tests
             var testStart = DateTime.Now;
 
             var block = new EmptyDummyBlock(
+                blockArguments: new BlockArguments(
                 blockSize: BlockSize.Message,
                 requestTime: testStart,
                 keepUntilAtLeast: testStart.AddDays(1),
-                redundancy: Enumerations.RedundancyContractType.HeapAuto);
+                redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                allowCommit: true,
+                privateEncrypted: false));
             Assert.IsTrue(block.Validate());
             var metaData = block.Metadata;
 
             var block2 = new EmptyDummyBlock(
+                blockArguments: new BlockArguments(
                 blockSize: BlockSize.Message,
                 requestTime: testStart.AddSeconds(5),
                 keepUntilAtLeast: testStart.AddDays(1).AddSeconds(5),
-                redundancy: Enumerations.RedundancyContractType.HeapAuto);
+                redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                allowCommit: true,
+                privateEncrypted: false));
             Assert.IsTrue(block2.TryRestoreMetadataFromBytes(metaData));
             Assert.AreEqual(block.RedundancyContract, block2.RedundancyContract);
             Assert.AreEqual(block.StorageContract, block2.RedundancyContract.StorageContract);

@@ -1,6 +1,4 @@
-using BrightChain.Enumerations;
 using BrightChain.Helpers;
-using BrightChain.Services;
 using System;
 
 namespace BrightChain.Models.Blocks
@@ -10,15 +8,12 @@ namespace BrightChain.Models.Blocks
     /// </summary>
     public class RandomizerBlock : TransactableBlock, IComparable<RandomizerBlock>
     {
-        public RandomizerBlock(BlockCacheManager pregeneratedRandomizerCache, BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, bool allowCommit) :
+        public RandomizerBlock(TransactableBlockArguments blockArguments) :
             base(
-                cacheManager: pregeneratedRandomizerCache,
-                blockSize: blockSize,
-                requestTime: requestTime,
-                keepUntilAtLeast: keepUntilAtLeast,
-                redundancy: redundancy,
-                data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockSize)),
-                allowCommit: allowCommit) => this.CacheManager.Set(this.Id, this);
+                blockArguments: blockArguments,
+                data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockArguments.BlockSize))) =>
+                    this.CacheManager.Set(this.Id, this);
+
         /// <summary>
         /// replace incoming data (will be empty byte array to fit conventions) with random data
         /// </summary>
@@ -28,13 +23,10 @@ namespace BrightChain.Models.Blocks
         /// <param name="_"></param>
         /// <param name="allowCommit"></param>
         /// <returns></returns>
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> _, bool allowCommit) => new RandomizerBlock(
-pregeneratedRandomizerCache: this.CacheManager as BlockCacheManager,
-blockSize: this.BlockSize,
-requestTime: requestTime,
-keepUntilAtLeast: keepUntilAtLeast,
-redundancy: redundancy,
-allowCommit: allowCommit);
+        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> _) => new RandomizerBlock(
+            blockArguments: new TransactableBlockArguments(
+                cacheManager: this.CacheManager,
+                blockArguments: blockArguments));
 
         public int CompareTo(RandomizerBlock other) => ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
 

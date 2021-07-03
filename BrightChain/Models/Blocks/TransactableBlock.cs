@@ -19,10 +19,18 @@ namespace BrightChain.Models.Blocks
         public bool Committed { get; protected set; } = false;
         public bool AllowCommit { get; protected set; } = false;
 
-        public TransactableBlock(ICacheManager<BlockHash, TransactableBlock> cacheManager, BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
-            base(blockSize: blockSize, requestTime: requestTime, keepUntilAtLeast: keepUntilAtLeast, redundancy: redundancy, data: data)
+        public TransactableBlock(TransactableBlockArguments blockArguments, ReadOnlyMemory<byte> data) :
+            base(
+                blockArguments: new BlockArguments(
+                    blockSize: blockArguments.BlockSize,
+                    requestTime: blockArguments.RequestTime,
+                    keepUntilAtLeast: blockArguments.KeepUntilAtLeast,
+                    redundancy: blockArguments.Redundancy,
+                    allowCommit: blockArguments.AllowCommit,
+                    privateEncrypted: blockArguments.PrivateEncrypted),
+                data: data)
         {
-            this.CacheManager = cacheManager;
+            this.CacheManager = blockArguments.CacheManager;
             //this.tree = cacheManager is null ? null : this.CacheManager.tree;
             this.disposedValue = false;
         }
@@ -31,10 +39,13 @@ namespace BrightChain.Models.Blocks
         /// For test methods
         /// </summary>
         internal TransactableBlock() : base(
-            blockSize: BlockSize.Message,
-            requestTime: DateTime.Now,
-            keepUntilAtLeast: DateTime.MaxValue,
-            redundancy: RedundancyContractType.HeapAuto,
+            blockArguments: new BlockArguments(
+                blockSize: BlockSize.Message,
+                requestTime: DateTime.Now,
+                keepUntilAtLeast: DateTime.MaxValue,
+                redundancy: RedundancyContractType.HeapAuto,
+                allowCommit: true,
+                privateEncrypted: false),
             data: new ReadOnlyMemory<byte>() { })
         {
 
@@ -58,7 +69,11 @@ namespace BrightChain.Models.Blocks
 
         public void Rollback() => this.Committed = false;
 
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) => new TransactableBlock(this.CacheManager, this.BlockSize, requestTime, keepUntilAtLeast, redundancy, data, allowCommit);
+        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> data) => new TransactableBlock(
+            blockArguments: new TransactableBlockArguments(
+                cacheManager: this.CacheManager,
+                blockArguments: blockArguments),
+            data: data);
 
         public override bool Equals(object obj) => ReadOnlyMemoryComparer<byte>.Compare(this.Data, (obj as TransactableBlock).Data) == 0;
 

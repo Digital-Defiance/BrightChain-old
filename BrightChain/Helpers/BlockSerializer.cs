@@ -45,11 +45,15 @@ namespace BrightChain.Helpers
 
             // make block
             var restoredBlock = new RestoredBlock(
-                blockSize: BlockSizeMap.BlockSize(blockData.Length),
-                requestTime: DateTime.Now,
-                keepUntilAtLeast: DateTime.MaxValue,
-                redundancy: RedundancyContractType.HeapAuto,
+                new BlockArguments(
+                    blockSize: BlockSizeMap.BlockSize(blockData.Length),
+                    requestTime: DateTime.Now,
+                    keepUntilAtLeast: DateTime.MaxValue,
+                    redundancy: RedundancyContractType.HeapAuto,
+                    allowCommit: true,
+                    privateEncrypted: false),
                 data: blockData) as T;
+
             // fill in metadata
             restoredBlock.TryRestoreMetadataFromBytes(metaData);
 

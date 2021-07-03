@@ -1,4 +1,3 @@
-using BrightChain.Enumerations;
 using BrightChain.Helpers;
 using System;
 
@@ -9,13 +8,9 @@ namespace BrightChain.Models.Blocks
     /// </summary>
     public class RandomDataBlock : Block, IComparable<EmptyDummyBlock>
     {
-        public RandomDataBlock(BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy) :
-            base(
-                blockSize: blockSize,
-                requestTime: requestTime,
-                keepUntilAtLeast: keepUntilAtLeast,
-                redundancy: redundancy,
-                data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockSize)))
+        public RandomDataBlock(BlockArguments blockArguments) :
+            base(blockArguments: blockArguments,
+                data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockArguments.BlockSize)))
         { }
 
         /// <summary>
@@ -27,11 +22,8 @@ namespace BrightChain.Models.Blocks
         /// <param name="_"></param>
         /// <param name="allowCommit"></param>
         /// <returns></returns>
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> _, bool allowCommit) => new RandomDataBlock(
-blockSize: this.BlockSize,
-requestTime: requestTime,
-keepUntilAtLeast: keepUntilAtLeast,
-redundancy: redundancy);
+        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> _) =>
+            new RandomDataBlock(blockArguments: blockArguments);
 
         public int CompareTo(EmptyDummyBlock other) => ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
 

@@ -1,5 +1,4 @@
-﻿using BrightChain.Interfaces;
-using BrightChain.Models.Blocks;
+﻿using BrightChain.Models.Blocks;
 using System;
 
 namespace BrightChain.Services
@@ -17,23 +16,26 @@ namespace BrightChain.Services
 
         public BlockWhitener(MemoryBlockCacheManager pregeneratedRandomizerCache) => this.pregeneratedRandomizerCache = pregeneratedRandomizerCache;
 
-        public IBlock Whiten(SourceBlock block)
+        public Block Whiten(SourceBlock block)
         {
             // the incoming block should be a raw disk block and is never used again
-            Block[] tuples = new Block[TupleCount - 1];
-            for (int i = 0; i < tuples.Length; i++)
+            Block[] tupleStripeBlocks = new Block[TupleCount - 1];
+            for (int i = 0; i < tupleStripeBlocks.Length; i++)
             {
-                // select or generate pre-generated random blocks
+                // TODO: select or generate pre-generated random blocks (determine mixing)
                 // for now just generate on demand, but these can be pre-seeded
-                tuples[i] = new RandomizerBlock(
-                    pregeneratedRandomizerCache: this.pregeneratedRandomizerCache,
-                    blockSize: block.BlockSize,
-                    requestTime: DateTime.Now,
-                    keepUntilAtLeast: block.StorageContract.KeepUntilAtLeast,
-                    redundancy: block.RedundancyContract.RedundancyContractType,
-                    allowCommit: true);
+                tupleStripeBlocks[i] = new RandomizerBlock(
+                    new TransactableBlockArguments(
+                    cacheManager: this.pregeneratedRandomizerCache,
+                    blockArguments: new BlockArguments(
+                        blockSize: block.BlockSize,
+                        requestTime: DateTime.Now,
+                        keepUntilAtLeast: block.StorageContract.KeepUntilAtLeast,
+                        redundancy: block.RedundancyContract.RedundancyContractType,
+                        allowCommit: true,
+                        privateEncrypted: false)));
             }
-            return block.XOR(tuples);
+            return block.XOR(tupleStripeBlocks);
         }
     }
 }

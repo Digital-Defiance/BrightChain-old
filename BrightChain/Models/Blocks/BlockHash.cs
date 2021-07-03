@@ -11,6 +11,8 @@ namespace BrightChain.Models.Blocks
     /// </summary>
     public class BlockHash : IBlockHash, IComparable<BlockHash>
     {
+        public const int HashSize = 64;
+
         public ReadOnlyMemory<byte> HashBytes { get; protected set; }
         public BlockSize BlockSize { get; }
 

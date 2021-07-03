@@ -1,11 +1,17 @@
 ﻿#nullable enable
+using BrightChain.Enumerations;
 using BrightChain.Exceptions;
+using BrightChain.Models.Blocks;
+using BrightChain.Models.Blocks.Chains;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-
+using System.Collections.Generic;
+using System.IO;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
 
 namespace BrightChain.Services
 {
@@ -14,12 +20,13 @@ namespace BrightChain.Services
     /// </summary>
     public class BrightBlockService
     {
-        protected ILogger logger;
-        protected IConfiguration configuration;
+        protected readonly ILogger logger;
+        protected readonly IConfiguration configuration;
 
-        protected MemoryBlockCacheManager blockMemoryCache;
-        protected BrightChainBlockCacheManager blockDiskCache;
-
+        protected readonly MemoryBlockCacheManager blockMemoryCache;
+        protected readonly MemoryBlockCacheManager randomizerBlockMemoryCache;
+        protected readonly BrightChainBlockCacheManager blockDiskCache;
+        protected readonly BlockWhitener blockWhitener;
 
         public BrightBlockService(ILoggerFactory logger)
         {
@@ -50,8 +57,108 @@ namespace BrightChain.Services
 
             this.blockMemoryCache = new MemoryBlockCacheManager(logger: this.logger);
             this.blockDiskCache = new BrightChainBlockCacheManager(logger: this.logger, configuration: this.configuration);
+            this.randomizerBlockMemoryCache = new MemoryBlockCacheManager(logger: this.logger);
             this.logger.LogInformation(String.Format("<{0}>: caches initialized", nameof(BrightBlockService)));
+            this.blockWhitener = new BlockWhitener(pregeneratedRandomizerCache: this.randomizerBlockMemoryCache);
+        }
 
+        public async Task<ConstituentBlockListBlock> CreateCblFromFile(string fileName, DateTime keepUntilAtLeast, RedundancyContractType redundancy, bool allowCommit, bool privateEncrypted = false, BlockSize? blockSize = null)
+        {
+            var iBlockSize = BlockSizeMap.BlockSize(blockSize.Value);
+            FileStream inFile = File.OpenRead(fileName);
+            // decide best block size if null
+            if (!blockSize.HasValue)
+            {
+                throw new NotImplementedException();
+            }
+
+            if (privateEncrypted)
+            {
+                throw new NotImplementedException();
+            }
+
+            int tuplesRequired = (int)Math.Ceiling((double)(inFile.Length / iBlockSize));
+
+            SHA256 hasher = SHA256.Create();
+            byte[]? finalHash = null;
+            // TODO: figure out how to stream huge files with yield, etc
+            // TODO: use block whitener
+            TupleStripe[] tupleStripes = new TupleStripe[tuplesRequired];
+            List<Block> consumedBlocks = new List<Block>();
+            ulong offset = 0;
+            for (int i = 0; i < tuplesRequired; i++)
+            {
+                var finalBlock = i == (tuplesRequired - 1);
+                byte[] buffer = new byte[iBlockSize];
+                var bytesRead = (ulong)inFile.Read(buffer, 0, iBlockSize);
+
+                if ((bytesRead < (ulong)iBlockSize) && !finalBlock)
+                {
+                    throw new BrightChainException("Unexpected EOF");
+                }
+                else if ((bytesRead < (ulong)iBlockSize) && finalBlock)
+                {
+                    buffer = Helpers.RandomDataHelper.DataFiller(new ReadOnlyMemory<byte>(buffer), blockSize.Value).ToArray();
+                }
+
+                if (finalBlock)
+                {
+                    finalHash = hasher.TransformFinalBlock(buffer, 0, iBlockSize);
+                }
+                else
+                {
+                    hasher.TransformBlock(buffer, 0, iBlockSize, null, 0);
+                }
+
+                var sourceBlock = new SourceBlock(
+                    new TransactableBlockArguments(
+                            cacheManager: null,
+                            blockArguments: new BlockArguments(
+                                blockSize: blockSize.Value,
+                                requestTime: DateTime.Now,
+                                keepUntilAtLeast: DateTime.MaxValue,
+                                redundancy: RedundancyContractType.HeapAuto,
+                                allowCommit: true,
+                                privateEncrypted: privateEncrypted)),
+                            data: buffer);
+
+                Block whitened = this.blockWhitener.Whiten(sourceBlock);
+                Block[] randomizersUsed = (Block[])whitened.ConstituentBlocks;
+                Block[] allBlocks = new Block[BlockWhitener.TupleCount];
+                allBlocks[0] = whitened;
+                Array.Copy(sourceArray: randomizersUsed, sourceIndex: 0, destinationArray: allBlocks, destinationIndex: 1, length: randomizersUsed.Length);
+
+                tupleStripes[i] = new TupleStripe(
+                    tupleCount: BlockWhitener.TupleCount,
+                    blocks: allBlocks);
+
+                consumedBlocks.AddRange(allBlocks);
+            }
+
+            if (finalHash == null)
+            {
+                throw new BrightChainException("impossible");
+            }
+
+            var cbl = new ConstituentBlockListBlock(
+                blockArguments: new ConstituentBlockListBlockArguments(
+                    blockArguments: new TransactableBlockArguments(
+                        cacheManager: this.randomizerBlockMemoryCache,
+                        blockArguments: new BlockArguments(
+                            blockSize: blockSize.Value,
+                            requestTime: DateTime.Now,
+                            keepUntilAtLeast: keepUntilAtLeast,
+                            redundancy: redundancy,
+                            allowCommit: allowCommit,
+                            privateEncrypted: privateEncrypted)),
+                finalDataHash: new BlockHash(
+                    originalBlockSize: blockSize.Value,
+                    providedHashBytes:
+                    finalHash, true),
+                totalLength: (ulong)inFile.Length,
+                constituentBlocks: consumedBlocks.ToArray()));
+
+            return cbl;
         }
     }
 }

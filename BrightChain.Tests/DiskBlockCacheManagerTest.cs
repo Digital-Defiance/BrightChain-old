@@ -17,28 +17,26 @@ namespace BrightChain.Tests
     {
         public new static BrightChainBlockCacheManager CacheManager;
 
-        public DiskCacheTestBlock(BrightChainBlockCacheManager cacheManager, BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) :
+        public DiskCacheTestBlock(TransactableBlockArguments blockArguments, ReadOnlyMemory<byte> data) :
             base(
-                cacheManager: cacheManager,
-                blockSize: blockSize,
-                requestTime: requestTime,
-                keepUntilAtLeast: keepUntilAtLeast,
-                redundancy: redundancy,
-                data: data,
-                allowCommit: allowCommit)
+                blockArguments: blockArguments,
+                data: data)
         {
 
         }
 
-        public DiskCacheTestBlock() :
+        internal DiskCacheTestBlock() :
             base(
-                cacheManager: CacheManager,
-                blockSize: BlockSize.Message,
-                requestTime: DateTime.Now,
-                keepUntilAtLeast: DateTime.MaxValue,
-                redundancy: RedundancyContractType.LocalNone,
-                data: NewRandomData(),
-                allowCommit: true)
+                blockArguments: new TransactableBlockArguments(
+                    cacheManager: DiskCacheTestBlock.CacheManager,
+                    blockArguments: new BlockArguments(
+                    blockSize: BlockSize.Message,
+                    requestTime: DateTime.Now,
+                    keepUntilAtLeast: DateTime.MaxValue,
+                    redundancy: RedundancyContractType.HeapAuto,
+                    allowCommit: true,
+                    privateEncrypted: false)),
+                data: NewRandomData())
         { }
 
         public static ReadOnlyMemory<byte> NewRandomData()
@@ -53,14 +51,11 @@ namespace BrightChain.Tests
             return new ReadOnlyMemory<byte>(data);
         }
 
-        public override Block NewBlock(DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, ReadOnlyMemory<byte> data, bool allowCommit) => new DiskCacheTestBlock(
-cacheManager: CacheManager,
-blockSize: this.BlockSize,
-requestTime: requestTime,
-keepUntilAtLeast: keepUntilAtLeast,
-redundancy: redundancy,
-data: data,
-allowCommit: allowCommit);
+        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> data) => new DiskCacheTestBlock(
+            blockArguments: new TransactableBlockArguments(
+                cacheManager: DiskCacheTestBlock.CacheManager,
+                blockArguments: blockArguments),
+            data: data);
 
         public override void Dispose() => throw new NotImplementedException();
     }
@@ -92,13 +87,18 @@ logger: logger, configuration: configuration);
             }
 
             var block = new DiskCacheTestBlock(
-                cacheManager: this.cacheManager,
-                blockSize: BlockSize.Message,
-                requestTime: DateTime.Now,
-                keepUntilAtLeast: DateTime.MaxValue,
-                redundancy: Enumerations.RedundancyContractType.LocalNone,
-                data: data,
-                allowCommit: true);
+                blockArguments: new TransactableBlockArguments(
+                    cacheManager: this.cacheManager,
+                    blockArguments: new BlockArguments(
+                        blockSize: BlockSize.Message,
+                        requestTime: DateTime.Now,
+                        keepUntilAtLeast: DateTime.MaxValue,
+                        redundancy: Enumerations.RedundancyContractType.LocalNone,
+                        allowCommit: true,
+                        privateEncrypted: false)
+                    ),
+                data: data);
+
             return new KeyValuePair<BlockHash, TransactableBlock>(block.Id, block);
         }
 
