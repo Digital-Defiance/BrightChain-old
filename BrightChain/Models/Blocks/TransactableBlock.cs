@@ -2,6 +2,7 @@
 using BrightChain.Exceptions;
 using BrightChain.Helpers;
 using BrightChain.Interfaces;
+using BrightChain.Models.Blocks.DataObjects;
 using System;
 
 namespace BrightChain.Models.Blocks
@@ -19,9 +20,9 @@ namespace BrightChain.Models.Blocks
         public bool Committed { get; protected set; } = false;
         public bool AllowCommit { get; protected set; } = false;
 
-        public TransactableBlock(TransactableBlockArguments blockArguments, ReadOnlyMemory<byte> data) :
+        public TransactableBlock(TransactableBlockParams blockArguments, ReadOnlyMemory<byte> data) :
             base(
-                blockArguments: new BlockArguments(
+                blockArguments: new BlockParams(
                     blockSize: blockArguments.BlockSize,
                     requestTime: blockArguments.RequestTime,
                     keepUntilAtLeast: blockArguments.KeepUntilAtLeast,
@@ -39,7 +40,7 @@ namespace BrightChain.Models.Blocks
         /// For test methods
         /// </summary>
         internal TransactableBlock() : base(
-            blockArguments: new BlockArguments(
+            blockArguments: new BlockParams(
                 blockSize: BlockSize.Message,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.MaxValue,
@@ -69,8 +70,8 @@ namespace BrightChain.Models.Blocks
 
         public void Rollback() => this.Committed = false;
 
-        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> data) => new TransactableBlock(
-            blockArguments: new TransactableBlockArguments(
+        public override Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> data) => new TransactableBlock(
+            blockArguments: new TransactableBlockParams(
                 cacheManager: this.CacheManager,
                 blockArguments: blockArguments),
             data: data);

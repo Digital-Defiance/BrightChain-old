@@ -1,4 +1,5 @@
 using BrightChain.Helpers;
+using BrightChain.Models.Blocks.DataObjects;
 using System;
 
 namespace BrightChain.Models.Blocks
@@ -8,7 +9,7 @@ namespace BrightChain.Models.Blocks
     /// </summary>
     public class RandomizerBlock : TransactableBlock, IComparable<RandomizerBlock>
     {
-        public RandomizerBlock(TransactableBlockArguments blockArguments) :
+        public RandomizerBlock(TransactableBlockParams blockArguments) :
             base(
                 blockArguments: blockArguments,
                 data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockArguments.BlockSize))) =>
@@ -23,8 +24,8 @@ namespace BrightChain.Models.Blocks
         /// <param name="_"></param>
         /// <param name="allowCommit"></param>
         /// <returns></returns>
-        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> _) => new RandomizerBlock(
-            blockArguments: new TransactableBlockArguments(
+        public override Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> _) => new RandomizerBlock(
+            blockArguments: new TransactableBlockParams(
                 cacheManager: this.CacheManager,
                 blockArguments: blockArguments));
 

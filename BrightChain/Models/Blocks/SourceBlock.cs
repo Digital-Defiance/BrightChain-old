@@ -2,6 +2,7 @@
 using BrightChain.Extensions;
 using BrightChain.Helpers;
 using BrightChain.Interfaces;
+using BrightChain.Models.Blocks.DataObjects;
 using BrightChain.Services;
 using System;
 
@@ -15,20 +16,20 @@ namespace BrightChain.Models.Blocks
     {
         private ICacheManager<BlockHash, TransactableBlock> cacheManager;
 
-        public SourceBlock(TransactableBlockArguments blockArguments, ReadOnlyMemory<byte> data) :
+        public SourceBlock(TransactableBlockParams blockArguments, ReadOnlyMemory<byte> data) :
             base(
                 blockArguments: blockArguments,
                 data: data)
         { }
 
-        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> data)
+        public override Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> data)
         {
             if (this.cacheManager is MemoryBlockCacheManager memoryBlockCacheManager)
             {
                 return new MemoryBlock(
-                    blockArguments: new TransactableBlockArguments(
+                    blockArguments: new TransactableBlockParams(
                         cacheManager: this.CacheManager,
-                        blockArguments: new BlockArguments(
+                        blockArguments: new BlockParams(
                             blockSize: this.BlockSize,
                             requestTime: blockArguments.RequestTime,
                             keepUntilAtLeast: blockArguments.KeepUntilAtLeast,
@@ -40,9 +41,9 @@ namespace BrightChain.Models.Blocks
             else if (this.cacheManager is BrightChainBlockCacheManager diskBlockCacheManager)
             {
                 return new DiskBlock(
-                    blockArguments: new TransactableBlockArguments(
+                    blockArguments: new TransactableBlockParams(
                         cacheManager: diskBlockCacheManager,
-                        blockArguments: new BlockArguments(
+                        blockArguments: new BlockParams(
                             blockSize: this.BlockSize,
                             requestTime: blockArguments.RequestTime,
                             keepUntilAtLeast: blockArguments.KeepUntilAtLeast,

@@ -3,6 +3,7 @@ using BrightChain.Enumerations;
 using BrightChain.Exceptions;
 using BrightChain.Models.Blocks;
 using BrightChain.Models.Blocks.Chains;
+using BrightChain.Models.Blocks.DataObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -111,9 +112,9 @@ namespace BrightChain.Services
                 }
 
                 var sourceBlock = new SourceBlock(
-                    new TransactableBlockArguments(
+                    new TransactableBlockParams(
                             cacheManager: null,
-                            blockArguments: new BlockArguments(
+                            blockArguments: new BlockParams(
                                 blockSize: blockSize.Value,
                                 requestTime: DateTime.Now,
                                 keepUntilAtLeast: DateTime.MaxValue,
@@ -141,10 +142,10 @@ namespace BrightChain.Services
             }
 
             var cbl = new ConstituentBlockListBlock(
-                blockArguments: new ConstituentBlockListBlockArguments(
-                    blockArguments: new TransactableBlockArguments(
+                blockArguments: new ConstituentBlockListBlockParams(
+                    blockArguments: new TransactableBlockParams(
                         cacheManager: this.randomizerBlockMemoryCache,
-                        blockArguments: new BlockArguments(
+                        blockArguments: new BlockParams(
                             blockSize: blockSize.Value,
                             requestTime: DateTime.Now,
                             keepUntilAtLeast: keepUntilAtLeast,

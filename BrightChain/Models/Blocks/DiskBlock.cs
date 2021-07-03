@@ -1,5 +1,6 @@
 using BrightChain.Exceptions;
 using BrightChain.Interfaces;
+using BrightChain.Models.Blocks.DataObjects;
 using BrightChain.Services;
 using System;
 
@@ -10,7 +11,7 @@ namespace BrightChain.Models.Blocks
     /// </summary>
     public class DiskBlock : TransactableBlock, IBlock
     {
-        public DiskBlock(TransactableBlockArguments blockArguments, ReadOnlyMemory<byte> data) :
+        public DiskBlock(TransactableBlockParams blockArguments, ReadOnlyMemory<byte> data) :
             base(
                 blockArguments: blockArguments,
                 data: data)
@@ -23,9 +24,9 @@ namespace BrightChain.Models.Blocks
             this.CacheManager.Set(this.Id, this);
         }
 
-        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> data) =>
+        public override Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> data) =>
             new DiskBlock(
-                blockArguments: new TransactableBlockArguments(this.CacheManager, blockArguments),
+                blockArguments: new TransactableBlockParams(this.CacheManager, blockArguments),
             data: data);
 
         public override void Dispose()

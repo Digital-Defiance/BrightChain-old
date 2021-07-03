@@ -1,4 +1,5 @@
 ﻿using BrightChain.Models.Blocks;
+using BrightChain.Models.Blocks.DataObjects;
 using BrightChain.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -19,7 +20,7 @@ namespace BrightChain.Tests
         public void ItValidatesValidBlocksTest()
         {
             Assert.IsTrue((new RandomDataBlock(
-                blockArguments: new BlockArguments(
+                blockArguments: new BlockParams(
                 blockSize: Enumerations.BlockSize.Message,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.MaxValue,

@@ -4,6 +4,7 @@ using BrightChain.Exceptions;
 using BrightChain.Extensions;
 using BrightChain.Helpers;
 using BrightChain.Interfaces;
+using BrightChain.Models.Blocks.DataObjects;
 using BrightChain.Models.Contracts;
 using System;
 using System.Collections.Generic;
@@ -36,13 +37,13 @@ namespace BrightChain.Models.Blocks
         public ReadOnlyMemory<byte> Metadata =>
             this.MetadataBytes();
 
-        public abstract Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> data);
+        public abstract Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> data);
 
         public Block AsBlock => this;
 
         public IEnumerable<BrightChainValidationException> ValidationExceptions { get; private set; }
 
-        public Block(BlockArguments blockArguments, ReadOnlyMemory<byte> data)
+        public Block(BlockParams blockArguments, ReadOnlyMemory<byte> data)
         {
             if (!BlockSizeMap.Map.ContainsValue(data.Length))
             {
@@ -100,7 +101,7 @@ namespace BrightChain.Models.Blocks
             }
 
             var result = this.NewBlock(
-                blockArguments: new BlockArguments(
+                blockArguments: new BlockParams(
                     blockSize: this.BlockSize,
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: keepUntil,
@@ -167,7 +168,7 @@ namespace BrightChain.Models.Blocks
             }
 
             var result = this.NewBlock(
-                new BlockArguments(
+                new BlockParams(
                     blockSize: this.BlockSize,
                     requestTime: System.DateTime.Now,
                     keepUntilAtLeast: keepUntil,

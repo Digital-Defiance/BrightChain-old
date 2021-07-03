@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BrightChain.Models.Blocks.DataObjects;
+using System;
 using System.Collections.Generic;
 
 namespace BrightChain.Models.Blocks.Chains
@@ -12,7 +13,7 @@ namespace BrightChain.Models.Blocks.Chains
     public class BlockChainFileMap : ConstituentBlockListBlock
     {
         public IEnumerable<TupleStripe> Tuples { get; }
-        public BlockChainFileMap(ConstituentBlockListBlockArguments blockArguments) : base(blockArguments: blockArguments)
+        public BlockChainFileMap(ConstituentBlockListBlockParams blockArguments) : base(blockArguments: blockArguments)
         {
         }
 
@@ -22,10 +23,10 @@ namespace BrightChain.Models.Blocks.Chains
 
         public BlockChainFileMap(ConstituentBlockListBlock cblBlock, IEnumerable<TupleStripe> tuples = null)
         : base(
-              blockArguments: new ConstituentBlockListBlockArguments(
-                  blockArguments: new TransactableBlockArguments(
+              blockArguments: new ConstituentBlockListBlockParams(
+                  blockArguments: new TransactableBlockParams(
                   cacheManager: cblBlock.CacheManager,
-                  blockArguments: new BlockArguments(
+                  blockArguments: new BlockParams(
                       blockSize: cblBlock.BlockSize,
                       requestTime: cblBlock.StorageContract.RequestTime,
                       keepUntilAtLeast: cblBlock.StorageContract.KeepUntilAtLeast,

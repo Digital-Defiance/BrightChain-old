@@ -1,5 +1,6 @@
 ﻿using BrightChain.Enumerations;
 using BrightChain.Models.Blocks;
+using BrightChain.Models.Blocks.DataObjects;
 using BrightChain.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -32,9 +33,9 @@ namespace BrightChain.Tests
         public void ItCreatesValidRandomDataBlocksTest()
         {
             var block = new RandomizerBlock(
-                new TransactableBlockArguments(
+                new TransactableBlockParams(
                 cacheManager: this.cacheManager,
-                blockArguments: new BlockArguments(
+                blockArguments: new BlockParams(
                     blockSize: BlockSize.Message,
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.Now.AddDays(1),

@@ -2,6 +2,7 @@
 using BrightChain.Extensions;
 using BrightChain.Interfaces;
 using BrightChain.Models.Blocks;
+using BrightChain.Models.Blocks.DataObjects;
 using System;
 using System.IO;
 namespace BrightChain.Helpers
@@ -45,7 +46,7 @@ namespace BrightChain.Helpers
 
             // make block
             var restoredBlock = new RestoredBlock(
-                new BlockArguments(
+                new BlockParams(
                     blockSize: BlockSizeMap.BlockSize(blockData.Length),
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.MaxValue,

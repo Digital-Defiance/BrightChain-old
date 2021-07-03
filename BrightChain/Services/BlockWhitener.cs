@@ -1,4 +1,5 @@
 ﻿using BrightChain.Models.Blocks;
+using BrightChain.Models.Blocks.DataObjects;
 using System;
 
 namespace BrightChain.Services
@@ -25,9 +26,9 @@ namespace BrightChain.Services
                 // TODO: select or generate pre-generated random blocks (determine mixing)
                 // for now just generate on demand, but these can be pre-seeded
                 tupleStripeBlocks[i] = new RandomizerBlock(
-                    new TransactableBlockArguments(
+                    new TransactableBlockParams(
                     cacheManager: this.pregeneratedRandomizerCache,
-                    blockArguments: new BlockArguments(
+                    blockArguments: new BlockParams(
                         blockSize: block.BlockSize,
                         requestTime: DateTime.Now,
                         keepUntilAtLeast: block.StorageContract.KeepUntilAtLeast,

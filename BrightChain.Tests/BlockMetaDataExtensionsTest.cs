@@ -1,6 +1,7 @@
 ﻿using BrightChain.Enumerations;
 using BrightChain.Extensions;
 using BrightChain.Models.Blocks;
+using BrightChain.Models.Blocks.DataObjects;
 using BrightChain.Models.Contracts;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,7 +26,7 @@ namespace BrightChain.Tests
         public void ItExtractsMetaDataCorrectlyTest()
         {
             var block = new EmptyDummyBlock(
-                blockArguments: new BlockArguments(
+                blockArguments: new BlockParams(
                 blockSize: BlockSize.Message,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
@@ -65,7 +66,7 @@ namespace BrightChain.Tests
             var testStart = DateTime.Now;
 
             var block = new EmptyDummyBlock(
-                blockArguments: new BlockArguments(
+                blockArguments: new BlockParams(
                 blockSize: BlockSize.Message,
                 requestTime: testStart,
                 keepUntilAtLeast: testStart.AddDays(1),
@@ -76,7 +77,7 @@ namespace BrightChain.Tests
             var metaData = block.Metadata;
 
             var block2 = new EmptyDummyBlock(
-                blockArguments: new BlockArguments(
+                blockArguments: new BlockParams(
                 blockSize: BlockSize.Message,
                 requestTime: testStart.AddSeconds(5),
                 keepUntilAtLeast: testStart.AddDays(1).AddSeconds(5),

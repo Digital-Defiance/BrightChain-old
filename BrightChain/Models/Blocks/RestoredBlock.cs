@@ -1,10 +1,11 @@
-﻿using System;
+﻿using BrightChain.Models.Blocks.DataObjects;
+using System;
 
 namespace BrightChain.Models.Blocks
 {
     public class RestoredBlock : Block
     {
-        public RestoredBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> data) : base(
+        public RestoredBlock(BlockParams blockArguments, ReadOnlyMemory<byte> data) : base(
             blockArguments: blockArguments,
             data: data)
         {
@@ -15,7 +16,7 @@ namespace BrightChain.Models.Blocks
 
         }
 
-        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> data) =>
+        public override Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> data) =>
             new RestoredBlock(blockArguments, data);
     }
 }

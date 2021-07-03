@@ -1,6 +1,7 @@
 ﻿using BrightChain.Attributes;
 using BrightChain.Enumerations;
 using BrightChain.Interfaces;
+using BrightChain.Models.Blocks.DataObjects;
 using BrightChain.Services;
 using System;
 using System.Collections.Generic;
@@ -45,11 +46,11 @@ namespace BrightChain.Models.Blocks.Chains
 
         public BlockChainFileMap BlockMap => new BlockChainFileMap(this);
 
-        public ConstituentBlockListBlock(ConstituentBlockListBlockArguments blockArguments)
+        public ConstituentBlockListBlock(ConstituentBlockListBlockParams blockArguments)
         : base(
-              blockArguments: new TransactableBlockArguments(
+              blockArguments: new TransactableBlockParams(
                   cacheManager: blockArguments.CacheManager,
-                  blockArguments: new BlockArguments(
+                  blockArguments: new BlockParams(
                       blockSize: blockArguments.BlockSize,
                       requestTime: blockArguments.RequestTime,
                       keepUntilAtLeast: blockArguments.KeepUntilAtLeast,

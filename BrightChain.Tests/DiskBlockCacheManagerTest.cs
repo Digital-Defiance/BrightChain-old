@@ -1,5 +1,6 @@
 ﻿using BrightChain.Enumerations;
 using BrightChain.Models.Blocks;
+using BrightChain.Models.Blocks.DataObjects;
 using BrightChain.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -17,7 +18,7 @@ namespace BrightChain.Tests
     {
         public new static BrightChainBlockCacheManager CacheManager;
 
-        public DiskCacheTestBlock(TransactableBlockArguments blockArguments, ReadOnlyMemory<byte> data) :
+        public DiskCacheTestBlock(TransactableBlockParams blockArguments, ReadOnlyMemory<byte> data) :
             base(
                 blockArguments: blockArguments,
                 data: data)
@@ -27,9 +28,9 @@ namespace BrightChain.Tests
 
         internal DiskCacheTestBlock() :
             base(
-                blockArguments: new TransactableBlockArguments(
+                blockArguments: new TransactableBlockParams(
                     cacheManager: DiskCacheTestBlock.CacheManager,
-                    blockArguments: new BlockArguments(
+                    blockArguments: new BlockParams(
                     blockSize: BlockSize.Message,
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.MaxValue,
@@ -51,8 +52,8 @@ namespace BrightChain.Tests
             return new ReadOnlyMemory<byte>(data);
         }
 
-        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> data) => new DiskCacheTestBlock(
-            blockArguments: new TransactableBlockArguments(
+        public override Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> data) => new DiskCacheTestBlock(
+            blockArguments: new TransactableBlockParams(
                 cacheManager: DiskCacheTestBlock.CacheManager,
                 blockArguments: blockArguments),
             data: data);
@@ -87,9 +88,9 @@ logger: logger, configuration: configuration);
             }
 
             var block = new DiskCacheTestBlock(
-                blockArguments: new TransactableBlockArguments(
+                blockArguments: new TransactableBlockParams(
                     cacheManager: this.cacheManager,
-                    blockArguments: new BlockArguments(
+                    blockArguments: new BlockParams(
                         blockSize: BlockSize.Message,
                         requestTime: DateTime.Now,
                         keepUntilAtLeast: DateTime.MaxValue,

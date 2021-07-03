@@ -1,5 +1,6 @@
 using BrightChain.Enumerations;
 using BrightChain.Helpers;
+using BrightChain.Models.Blocks.DataObjects;
 using System;
 
 namespace BrightChain.Models.Blocks
@@ -16,7 +17,7 @@ namespace BrightChain.Models.Blocks
             return new ReadOnlyMemory<byte>(zeroBytes);
         }
 
-        public EmptyDummyBlock(BlockArguments blockArguments) :
+        public EmptyDummyBlock(BlockParams blockArguments) :
             base(
                 blockArguments: blockArguments,
                 data: NewEmptyBlockData(blockArguments.BlockSize))
@@ -31,7 +32,7 @@ namespace BrightChain.Models.Blocks
         /// <param name="_"></param>
         /// <param name="allowCommit"></param>
         /// <returns></returns>
-        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> _) => new EmptyDummyBlock(
+        public override Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> _) => new EmptyDummyBlock(
             blockArguments: blockArguments);
 
         public int CompareTo(EmptyDummyBlock other) => ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);

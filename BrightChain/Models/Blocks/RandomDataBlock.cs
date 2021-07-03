@@ -1,4 +1,5 @@
 using BrightChain.Helpers;
+using BrightChain.Models.Blocks.DataObjects;
 using System;
 
 namespace BrightChain.Models.Blocks
@@ -8,7 +9,7 @@ namespace BrightChain.Models.Blocks
     /// </summary>
     public class RandomDataBlock : Block, IComparable<EmptyDummyBlock>
     {
-        public RandomDataBlock(BlockArguments blockArguments) :
+        public RandomDataBlock(BlockParams blockArguments) :
             base(blockArguments: blockArguments,
                 data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockArguments.BlockSize)))
         { }
@@ -22,7 +23,7 @@ namespace BrightChain.Models.Blocks
         /// <param name="_"></param>
         /// <param name="allowCommit"></param>
         /// <returns></returns>
-        public override Block NewBlock(BlockArguments blockArguments, ReadOnlyMemory<byte> _) =>
+        public override Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> _) =>
             new RandomDataBlock(blockArguments: blockArguments);
 
         public int CompareTo(EmptyDummyBlock other) => ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
