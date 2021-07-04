@@ -1,5 +1,4 @@
-﻿using BrightChain.API.Data;
-using BrightChain.EntityFrameworkCore.Data;
+﻿using BrightChain.EntityFrameworkCore.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +17,17 @@ namespace BrightChain.API.Areas.Identity
 
             services.AddDefaultIdentity<BrightChainUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<BrightChainBlockDbContext>();
+
+            //services.AddPersistence<BrightChainBlockDbContext>(configuration: this.Configuration);
+            //services.AddPersistence<BrightChainAPIUserContext>(configuration: this.Configuration);
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+            //services.AddIdentity<BrightChainUser, MyRole>()
+            //    .AddEntityFrameworkStores<BrightChainAPIUserContext>()
+            //    .AddUserStore<MyUserStore>()
+            //    .AddRoleStore<MyRoleStore>()
+            //    .AddRoleManager<MyRoleManager>()
+            //    .AddDefaultTokenProviders();
         });
     }
 }
