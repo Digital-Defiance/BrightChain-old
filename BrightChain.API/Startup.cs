@@ -33,7 +33,7 @@ namespace BrightChain.API
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddDefaultIdentity<BrightChainUser>(options =>
                 options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<BrightChainAPIUserContext>();
+                    .AddEntityFrameworkStores<BrightChainBlockDbContext>();
 
 
             //services.AddIdentity<BrightChainUser, MyRole>()

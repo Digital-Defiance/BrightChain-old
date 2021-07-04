@@ -1,4 +1,5 @@
 ﻿using BrightChain.EntityFrameworkCore.Interfaces;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Data;
@@ -7,7 +8,7 @@ using DbContext = Microsoft.EntityFrameworkCore.DbContext;
 
 namespace BrightChain.EntityFrameworkCore.Data
 {
-    public class BrightChainBlockDbContext : DbContext, IBrightChainDbContext
+    public class BrightChainBlockDbContext : IdentityDbContext, IBrightChainDbContext
     {
         public IDbConnection Connection => this.Database.GetDbConnection();
         public DbSet<BrightChainBlock> Blocks { get; set; }

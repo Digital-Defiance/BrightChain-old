@@ -35,4 +35,8 @@
   <ItemGroup>
     <ProjectReference Include="..\BrightChain.EntityFrameworkCore\BrightChain.EntityFrameworkCore.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Data\" />
+  </ItemGroup>
 </Project>
