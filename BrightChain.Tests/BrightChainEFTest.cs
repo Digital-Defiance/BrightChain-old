@@ -11,7 +11,7 @@ namespace BrightChain.Tests
     public class BrightChainEFTest
     {
         [TestMethod]
-        public async Task testContextInitializes()
+        public async Task TestContextInitializes()
         {
             //create In Memory Database
             var options = new DbContextOptionsBuilder<BrightChainBlockDbContext>()

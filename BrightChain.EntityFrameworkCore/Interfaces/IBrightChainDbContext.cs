@@ -7,7 +7,6 @@ namespace BrightChain.EntityFrameworkCore.Interfaces
 {
     public interface IBrightChainDbContext
     {
-        public Microsoft.EntityFrameworkCore.DbSet<BrightChainBlock> Blocks { get; set; }
         DatabaseFacade Database { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
