@@ -8,7 +8,7 @@ using System;
 
 namespace BrightChain.API.Extensions
 {
-    public static class DependencyInjectionExtensions
+    public static class BrightChainAPIEntityDependencyInjectionExtensions
     {
         public static void AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {

@@ -6,9 +6,9 @@ using System;
 
 namespace BrightChain.EntityFrameworkCore.Extensions
 {
-    public static class DependencyInjectionExtensions
+    public static class BrightChainEntityDependencyInjectionExtensions
     {
-        private static void AddPersistenceSaved<T>(this IServiceCollection services, IConfiguration configuration)
+        private static void AddPersistence<T>(this IServiceCollection services, IConfiguration configuration)
             where T : DbContext
         {
             services.AddEntityFrameworkBrightChainDatabase();
