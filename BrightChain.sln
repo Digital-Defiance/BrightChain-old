@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31410.414
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain", "BrightChain\BrightChain.csproj", "{5E171D4F-5EF9-4511-B13D-E537C326B87A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.Tests", "BrightChain.Tests\BrightChain.Tests.csproj", "{2FE11136-5082-4B94-A8FD-D82DDD9D39A1}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CA544D08-926B-4C3F-B7D9-2327D6384A99} = {CA544D08-926B-4C3F-B7D9-2327D6384A99}
@@ -19,7 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "docs", "docs\docs.csproj", 
 	ProjectSection(ProjectDependencies) = postProject
 		{CA544D08-926B-4C3F-B7D9-2327D6384A99} = {CA544D08-926B-4C3F-B7D9-2327D6384A99}
 		{2FE11136-5082-4B94-A8FD-D82DDD9D39A1} = {2FE11136-5082-4B94-A8FD-D82DDD9D39A1}
-		{5E171D4F-5EF9-4511-B13D-E537C326B87A} = {5E171D4F-5EF9-4511-B13D-E537C326B87A}
 		{B06C38E8-8063-4CC5-801B-48C85F249363} = {B06C38E8-8063-4CC5-801B-48C85F249363}
 	EndProjectSection
 EndProject
@@ -32,9 +29,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.EntityFrameworkCore", "BrightChain.EntityFrameworkCore\BrightChain.EntityFrameworkCore.csproj", "{B06C38E8-8063-4CC5-801B-48C85F249363}"
-	ProjectSection(ProjectDependencies) = postProject
-		{5E171D4F-5EF9-4511-B13D-E537C326B87A} = {5E171D4F-5EF9-4511-B13D-E537C326B87A}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,10 +36,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5E171D4F-5EF9-4511-B13D-E537C326B87A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5E171D4F-5EF9-4511-B13D-E537C326B87A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5E171D4F-5EF9-4511-B13D-E537C326B87A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5E171D4F-5EF9-4511-B13D-E537C326B87A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2FE11136-5082-4B94-A8FD-D82DDD9D39A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2FE11136-5082-4B94-A8FD-D82DDD9D39A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FE11136-5082-4B94-A8FD-D82DDD9D39A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
