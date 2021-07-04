@@ -1,20 +1,18 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
-using BrightChain.EntityFrameworkCore.Interfaces;
+﻿using BrightChain.EntityFrameworkCore.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Threading.Tasks;
 using DbContext = Microsoft.EntityFrameworkCore.DbContext;
 
-namespace BrightChain.EntityFrameworkCore.Contexts
+namespace BrightChain.EntityFrameworkCore.Data
 {
-    public class BrightChainDbContext : DbContext, IBrightChainDbContext
+    public class BrightChainBlockDbContext : DbContext, IBrightChainDbContext
     {
         public IDbConnection Connection => this.Database.GetDbConnection();
         public DbSet<BrightChainBlock> Blocks { get; set; }
-        public DbSet<BrightChainUser> Users { get; set; }
 
-        public BrightChainDbContext(DbContextOptions<BrightChainDbContext> options) : base(options)
+        public BrightChainBlockDbContext(DbContextOptions<BrightChainBlockDbContext> options) : base(options)
         {
         }
 
@@ -44,22 +42,23 @@ namespace BrightChain.EntityFrameworkCore.Contexts
             //builder.Entity<Flag>().ToTable("Flags");
             //builder.Entity<LogRallyHistory>().HasKey(x => x.HistoryId);
             //builder.Entity<LogEventsLineHistory>().HasKey(x => x.LineHistoryId);
-
+            // Customize the ASP.NET Identity model and override the defaults if needed.
+            // For example, you can rename the ASP.NET Identity table names and more.
+            // Add your customizations after calling base.OnModelCreating(builder);
             base.OnModelCreating(builder);
 
-        public async Task<BrightChainUser> CreateUserAsync()
-        {
-            var user = new BrightChainUser();
-            user.Email = "test@example.com";
-            user.FirstName = "Testy";
-            user.LastName = "McTestface";
-            user.UserName = "mctestface";
+        //public async Task<BrightChainUser> CreateUserAsync()
+        //{
+        //    var user = new BrightChainUser();
+        //    user.Email = "test@example.com";
+        //    user.FirstName = "Testy";
+        //    user.LastName = "McTestface";
+        //    user.UserName = "mctestface";
 
-            this.Database.EnsureCreated();
-            this.Users.Add(user);
-            await this.SaveChanges();
-            return user;
-        }
-
+        //    this.Database.EnsureCreated();
+        //    this.Users.Add(user);
+        //    await this.SaveChanges();
+        //    return user;
+        //}
     }
 }

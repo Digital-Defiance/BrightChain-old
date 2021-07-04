@@ -1,4 +1,4 @@
-﻿using BrightChain.EntityFrameworkCore.Contexts;
+﻿using BrightChain.EntityFrameworkCore.Data;
 using BrightChain.EntityFrameworkCore.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,14 +14,15 @@ namespace BrightChain.Tests
         public async Task testContextInitializes()
         {
             //create In Memory Database
-            var options = new DbContextOptionsBuilder<BrightChainDbContext>()
+            var options = new DbContextOptionsBuilder<BrightChainBlockDbContext>()
             .UseBrightChainDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
-            using (var context = new BrightChainDbContext(options))
+            using (var context = new BrightChainBlockDbContext(options))
             {
-                var brightChainUser = await context.CreateUserAsync();
             }
+
+            //var brightChainUser = await context.CreateUserAsync();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using BrightChain.EntityFrameworkCore.Contexts;
+﻿using BrightChain.EntityFrameworkCore.Data;
 using BrightChain.Models.Blocks;
 using MediatR;
 using System.Linq;
@@ -12,8 +12,8 @@ namespace BrightChain.API.Commands
         public Block Block { get; set; }
         public class UpdateBlockCommandHandler : IRequestHandler<UpdateBlockCommand, Block>
         {
-            private readonly BrightChainDbContext _context;
-            public UpdateBlockCommandHandler(BrightChainDbContext context) => this._context = context;
+            private readonly BrightChainBlockDbContext _context;
+            public UpdateBlockCommandHandler(BrightChainBlockDbContext context) => this._context = context;
             public async Task<Block> Handle(UpdateBlockCommand command, CancellationToken cancellationToken)
             {
                 var block = this._context.Blocks.Where(a => a.Id == command.Block.Id.ToString()).FirstOrDefault();

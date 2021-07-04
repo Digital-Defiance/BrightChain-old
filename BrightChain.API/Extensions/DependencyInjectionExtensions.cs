@@ -1,4 +1,4 @@
-﻿using BrightChain.EntityFrameworkCore.Contexts;
+﻿using BrightChain.EntityFrameworkCore.Data;
 using BrightChain.EntityFrameworkCore.Extensions;
 using BrightChain.EntityFrameworkCore.Interfaces;
 using BrightChain.Extensions.DependencyInjection;
@@ -14,13 +14,13 @@ namespace BrightChain.API.Extensions
         {
             services.AddEntityFrameworkBrightChainDatabase();
             //services.AddDbContext<DbContext>();
-            services.AddDbContext<BrightChainDbContext>((p, o) =>
+            services.AddDbContext<BrightChainBlockDbContext>((p, o) =>
                     o.UseBrightChainDatabase(databaseName: Guid.NewGuid().ToString())
                         .UseInternalServiceProvider(p));
 
             services.AddScoped<IBrightChainDbContext>(provider =>
             {
-                var dbContext = provider.GetService<BrightChainDbContext>();
+                var dbContext = provider.GetService<BrightChainBlockDbContext>();
                 if (dbContext is null)
                 {
                     throw new Exception("could not obtain db context");

@@ -8,7 +8,7 @@ namespace BrightChain.EntityFrameworkCore.Extensions
 {
     public static class DependencyInjectionExtensions
     {
-        public static void AddPersistence<T>(this IServiceCollection services, IConfiguration configuration)
+        private static void AddPersistenceSaved<T>(this IServiceCollection services, IConfiguration configuration)
             where T : DbContext
         {
             services.AddEntityFrameworkBrightChainDatabase();

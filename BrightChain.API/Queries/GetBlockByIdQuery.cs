@@ -1,4 +1,4 @@
-﻿using BrightChain.EntityFrameworkCore.Contexts;
+﻿using BrightChain.EntityFrameworkCore.Data;
 using BrightChain.Models.Blocks;
 using MediatR;
 using System.Linq;
@@ -12,8 +12,8 @@ namespace BrightChain.API.Queries
         public BlockHash Id { get; set; }
         public class GetBlockByIdQueryHandler : IRequestHandler<GetBlockByIdQuery, Block>
         {
-            private readonly BrightChainDbContext _context;
-            public GetBlockByIdQueryHandler(BrightChainDbContext context) => this._context = context;
+            private readonly BrightChainBlockDbContext _context;
+            public GetBlockByIdQueryHandler(BrightChainBlockDbContext context) => this._context = context;
             public async Task<Block> Handle(GetBlockByIdQuery query, CancellationToken cancellationToken)
             {
                 var block = this._context.Blocks.Where(a => a.Id == query.Id.ToString()).FirstOrDefault();
