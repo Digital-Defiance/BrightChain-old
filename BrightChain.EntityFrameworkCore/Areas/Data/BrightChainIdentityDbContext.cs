@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace BrightChain.EntityFrameworkCore.Data
 {
-    public class BrightChainBlockDbContext : IdentityDbContext<IdentityUser>, IBrightChainDbContext
+    public class BrightChainIdentityDbContext : IdentityDbContext<IdentityUser>, IBrightChainDbContext
     {
         public IDbConnection Connection => this.Database.GetDbConnection();
 
-        public BrightChainBlockDbContext(DbContextOptions<BrightChainBlockDbContext> options) : base(options)
+        public BrightChainIdentityDbContext(DbContextOptions<BrightChainIdentityDbContext> options) : base(options)
         {
         }
 
@@ -37,18 +37,18 @@ namespace BrightChain.EntityFrameworkCore.Data
             // Add your customizations after calling base.OnModelCreating(builder);
             base.OnModelCreating(builder);//builder.Entity<Role>().HasData(new List<Role>//    {//      new Role {//        Id = 1,//        Name = "Admin",//        NormalizedName = "//        ADMIN"//      },//      new Role {//        Id = 2,//        Name = "Staff",//        NormalizedName = "STAFF"//      },//    });//builder.Entity<LogEvent>().HasKey(x => x.LogId);//builder.Entity<LogEvent>().ToTable("LogEvents");//builder.Entity<Client>().HasKey(x => x.ClientId);//builder.Entity<Client>().ToTable("Clients");//builder.Entity<LogEventsHistory>().HasKey(x => x.HistoryId);//builder.Entity<Flag>().HasKey(x => x.FlagId);//builder.Entity<Flag>().ToTable("Flags");//builder.Entity<LogRallyHistory>().HasKey(x => x.HistoryId);//builder.Entity<LogEventsLineHistory>().HasKey(x => x.LineHistoryId);
 
-        //public async Task<BrightChainUser> CreateUserAsync()
-        //{
-        //    var user = new BrightChainUser();
-        //    user.Email = "test@example.com";
-        //    user.FirstName = "Testy";
-        //    user.LastName = "McTestface";
-        //    user.UserName = "mctestface";
+        public async Task<BrightChainUser> CreateUserAsync()
+        {
+            var user = new BrightChainUser();
+            user.Email = "test@example.com";
+            user.FirstName = "Testy";
+            user.LastName = "McTestface";
+            user.UserName = "mctestface";
 
-        //    this.Database.EnsureCreated();
-        //    this.Users.Add(user);
-        //    await this.SaveChanges();
-        //    return user;
-        //}
+            this.Database.EnsureCreated();
+            this.Users.Add(user);
+            await this.SaveChanges();
+            return user;
+        }
     }
 }

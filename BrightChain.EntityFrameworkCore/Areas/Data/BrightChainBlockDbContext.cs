@@ -1,12 +1,15 @@
-using BrightChain.EntityFrameworkCore.Data;
 using BrightChain.EntityFrameworkCore.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-public class BrightChainBlockDbContext : DbContext, IBrightChainDbContext
+namespace BrightChain.EntityFrameworkCore.Data
 {
-    public DbSet<BrightChainBlock> Blocks { get; set; }
 
-    public BrightChainBlockDbContext(DbContextOptions options) : base(options)
+    public class BrightChainBlockDbContext : DbContext, IBrightChainDbContext
     {
+        public DbSet<BrightChainBlock> Blocks { get; set; }
+
+        public BrightChainBlockDbContext(DbContextOptions options) : base(options)
+        {
+        }
     }
 }

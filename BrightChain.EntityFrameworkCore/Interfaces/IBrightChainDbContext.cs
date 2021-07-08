@@ -1,5 +1,4 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Threading;
 using System.Threading.Tasks;
 
