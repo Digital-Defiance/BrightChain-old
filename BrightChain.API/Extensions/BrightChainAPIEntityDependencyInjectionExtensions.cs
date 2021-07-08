@@ -2,6 +2,7 @@
 using BrightChain.EntityFrameworkCore.Extensions;
 using BrightChain.EntityFrameworkCore.Interfaces;
 using BrightChain.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -17,7 +18,7 @@ namespace BrightChain.API.Extensions
             services.AddDbContext<BrightChainIdentityDbContext>((p, o) =>
                     o.UseBrightChainDatabase(databaseName: Guid.NewGuid().ToString())
                         .UseInternalServiceProvider(p));
-
+            
             services.AddScoped<IBrightChainDbContext>(provider =>
             {
                 var dbContext = provider.GetService<BrightChainIdentityDbContext>();
@@ -27,7 +28,7 @@ namespace BrightChain.API.Extensions
                 }
 
                 return dbContext;
-            });
+            });            
         }
     }
 }

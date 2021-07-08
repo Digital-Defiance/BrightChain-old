@@ -1,6 +1,7 @@
 using BrightChain.API.Areas.Identity;
 using BrightChain.API.Data;
 using BrightChain.EntityFrameworkCore.Data;
+using BrightChain.EntityFrameworkCore.Interfaces;
 using BrightChain.Services;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Reflection;
 
 namespace BrightChain.API
@@ -30,6 +32,16 @@ namespace BrightChain.API
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<BrightChainUser>>();
+            services.AddScoped<BrightChainBlockDbContext>(provider =>
+            {
+                var dbContext = provider.GetService<BrightChainBlockDbContext>();
+                if (dbContext is null)
+                {
+                    throw new Exception("could not obtain db context");
+                }
+
+                return dbContext;
+            });
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<BrightBlockService>();
