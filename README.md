@@ -21,10 +21,13 @@ Recent thoughts:
   - Ultimately bad users are just bad blocks and will get flushed and expired out while good stuff will get extended on forever. They will have to work too hard for their network access/wasteful contribution/access and will leave.
   - It is not the necessity of this chain to store every bit forever. The chain is very transparent and ultimately when things do expire out if not needed by the system, others can easily back them up. Some blocks of course are immediately set immutable with a DateTime.MaxValue and don't need to be renewed.
 
+# Eventually
+* CLR dApps & Digital Contracts
+
 # Disclaimers
 * This project is still pre-Alpha and is not suitable nor warranted for any level of fitness or function.
 * This project is not affiliated with GitHub, The DotNet Foundation, Microsoft, or any of its affiliates or holdings.
 * This software is open source, and offered as a "best-effort" thereoetical construct at this time and it may well lose all your data at this point in time.
 
 <!-- this timestamp is updated by a pre-commit hook in git-hooks/pre-commit then added to .git/hooks -->
-Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-06-30T10:42:19-0700</time>
+Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-07-08T12:20:49-0700</time>
