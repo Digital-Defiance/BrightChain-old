@@ -1,5 +1,6 @@
 using BrightChain.EntityFrameworkCore.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace BrightChain.EntityFrameworkCore.Data
 {
@@ -11,5 +12,7 @@ namespace BrightChain.EntityFrameworkCore.Data
         public BrightChainBlockDbContext(DbContextOptions options) : base(options)
         {
         }
+
+        public new async Task<int> SaveChanges() => await base.SaveChangesAsync();
     }
 }
