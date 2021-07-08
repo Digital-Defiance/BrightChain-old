@@ -16,7 +16,7 @@ namespace BrightChain.API.Commands
             public async Task<BlockHash> Handle(StoreBlockCommand command, CancellationToken cancellationToken)
             {
                 this._context.Blocks.Add(BrightChainBlock.FromBrightChainBlock(command.Block));
-                await this._context.SaveChanges();
+                this._context.SaveChanges();
                 return command.Block.Id;
             }
         }

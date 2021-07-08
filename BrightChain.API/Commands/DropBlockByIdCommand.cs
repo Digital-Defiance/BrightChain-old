@@ -25,7 +25,7 @@ namespace BrightChain.API.Commands
 
                 var id = block.ToBlock().Id;
                 this._context.Blocks.Remove(block);
-                await this._context.SaveChanges();
+                this._context.SaveChanges();
                 return id;
             }
         }

@@ -24,7 +24,7 @@ namespace BrightChain.API.Commands
                 else
                 {
                     // block.prop = value
-                    await this._context.SaveChanges();
+                    this._context.SaveChanges();
                     return block.ToBlock();
                 }
             }

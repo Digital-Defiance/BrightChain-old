@@ -6,7 +6,7 @@
           "files": [
             "**.csproj"
           ],
-          "src": "../BrightChain"
+          "src": "../BrightChain.API"
         }
       ],
       "dest": "api",
@@ -15,6 +15,11 @@
     }
   ],
   "build": {
+    "globalMetadata": {
+      "_gitContribute": {
+        "apiSpecFolder": "docs/docfx_project/apidoc"
+      }
+    },
     "content": [
       {
         "files": [
