@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using BrightChain.EntityFrameworkCore.Data;
 using BrightChain.EntityFrameworkCore.Extensions;
 using BrightChain.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;

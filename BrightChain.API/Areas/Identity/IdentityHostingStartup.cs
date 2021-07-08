@@ -11,12 +11,12 @@ namespace BrightChain.API.Areas.Identity
     {
         public void Configure(IWebHostBuilder builder) => builder.ConfigureServices((context, services) =>
         {
-            services.AddDbContext<BrightChainBlockDbContext>(options =>
+            services.AddDbContext<BrightChainIdentityDbContext>(options =>
                 options.UseSqlServer(
                     context.Configuration.GetConnectionString("BrightChainAPIContextConnection")));
 
             services.AddDefaultIdentity<BrightChainUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<BrightChainBlockDbContext>();
+                .AddEntityFrameworkStores<BrightChainIdentityDbContext>();
 
             //services.AddPersistence<BrightChainBlockDbContext>(configuration: this.Configuration);
             //services.AddPersistence<BrightChainAPIUserContext>(configuration: this.Configuration);

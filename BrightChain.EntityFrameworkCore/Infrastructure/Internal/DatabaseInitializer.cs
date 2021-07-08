@@ -19,7 +19,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         {
             if (!useInMemoryStores)
             {
-                provider.GetRequiredService<BrightChainBlockDbContext>().Database.Migrate();
+                provider.GetRequiredService<BrightChainIdentityDbContext>().Database.Migrate();
                 provider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
                 provider.GetRequiredService<ConfigurationDbContext>().Database.Migrate();
             }

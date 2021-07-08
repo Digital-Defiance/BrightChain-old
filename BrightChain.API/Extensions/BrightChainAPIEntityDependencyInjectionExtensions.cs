@@ -14,13 +14,13 @@ namespace BrightChain.API.Extensions
         {
             services.AddEntityFrameworkBrightChainDatabase();
             //services.AddDbContext<DbContext>();
-            services.AddDbContext<BrightChainBlockDbContext>((p, o) =>
+            services.AddDbContext<BrightChainIdentityDbContext>((p, o) =>
                     o.UseBrightChainDatabase(databaseName: Guid.NewGuid().ToString())
                         .UseInternalServiceProvider(p));
 
             services.AddScoped<IBrightChainDbContext>(provider =>
             {
-                var dbContext = provider.GetService<BrightChainBlockDbContext>();
+                var dbContext = provider.GetService<BrightChainIdentityDbContext>();
                 if (dbContext is null)
                 {
                     throw new Exception("could not obtain db context");
