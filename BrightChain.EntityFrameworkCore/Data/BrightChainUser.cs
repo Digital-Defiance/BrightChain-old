@@ -9,14 +9,6 @@ namespace BrightChain.EntityFrameworkCore.Data
     /// </summary>
     public class BrightChainUser : IdentityUser
     {
-        [Required]
-        [Display(Name = "First Name")]
-        public string FirstName { get; set; }
-
-        [Required]
-        [Display(Name = "Last Name")]
-        public string LastName { get; set; }
-
         /// <summary>
         /// Blocks whose CBLs are stored in-chain
         /// </summary>
