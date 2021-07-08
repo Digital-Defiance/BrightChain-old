@@ -1,4 +1,5 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
+﻿using Bogus;
+using BrightChain.EntityFrameworkCore.Data;
 using BrightChain.EntityFrameworkCore.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -35,8 +36,21 @@ namespace BrightChain.Tests
 
             using (var context = new BrightChainIdentityDbContext(options))
             {
-                var brightChainUser = await context.CreateUserAsync();
+                context.Database.EnsureCreated();
 
+                var user = new Faker<BrightChainUser>();
+                //Use an enum outside scope.
+
+                //Basic rules using built-in generators
+                user.RuleFor(u => u.FirstName, (f, u) => f.Name.FirstName())
+                .RuleFor(u => u.LastName, (f, u) => f.Name.LastName())
+                .RuleFor(u => u.UserName, (f, u) => f.Internet.UserName(u.FirstName, u.LastName))
+                .RuleFor(u => u.Email, (f, u) => f.Internet.Email(u.FirstName, u.LastName));
+                //Compound property with context, use the first/last name properties
+                //.RuleFor(u => u.FullName, (f, u) => u.FirstName + " " + u.LastName)
+                //And composability of a complex collection.
+                context.Users.Add(user);
+                await context.SaveChanges();
             }
 
         }

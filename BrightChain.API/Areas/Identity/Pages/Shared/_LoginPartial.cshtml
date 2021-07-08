@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@using BrightChain.EntityFrameworkCore.Data
+@inject SignInManager<BrightChainUser> SignInManager
+@inject UserManager<BrightChainUser> UserManager
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <ul class="navbar-nav">

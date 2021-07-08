@@ -25,11 +25,11 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
             }
             InitializeIdentityServer(provider);
 
-            var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = provider.GetRequiredService<UserManager<BrightChainUser>>();
             var defaultUser = userManager.FindByNameAsync(DefaultUser).Result;
             if (defaultUser == null)
             {
-                defaultUser = new IdentityUser
+                defaultUser = new BrightChainUser
                 {
                     UserName = DefaultUser
                 };
