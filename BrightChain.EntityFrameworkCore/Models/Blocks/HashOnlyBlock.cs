@@ -1,4 +1,5 @@
 ﻿using BrightChain.Attributes;
+using BrightChain.EntityFrameworkCore.Data;
 using BrightChain.Enumerations;
 using BrightChain.Exceptions;
 using BrightChain.Helpers;
@@ -36,6 +37,12 @@ namespace BrightChain.Models.Blocks
 
         public IEnumerable<BrightChainValidationException> ValidationExceptions => throw new NotImplementedException();
 
+        public BlockSignature Signature => null;
+
+        public bool Signed => false;
+
+        public bool SignatureVerified => false;
+
         private HashOnlyBlock(BlockHash blockHash)
         {
             this.BlockSize = blockHash.BlockSize;
@@ -55,5 +62,6 @@ namespace BrightChain.Models.Blocks
         public Block XOR(IBlock other) => throw new NotImplementedException();
         public Block XOR(IBlock[] others) => throw new NotImplementedException();
         public bool Validate() => false;
+        public BlockSignature Sign(BrightChainUser _, string __) => throw new NotImplementedException();
     }
 }

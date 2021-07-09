@@ -1,4 +1,5 @@
 using BrightChain.Attributes;
+using BrightChain.EntityFrameworkCore.Data;
 using BrightChain.Enumerations;
 using BrightChain.Exceptions;
 using BrightChain.Extensions;
@@ -17,13 +18,20 @@ namespace BrightChain.Models.Blocks
     public abstract class Block : IBlock, IComparable<IBlock>, IComparable<Block>
     {
         public BlockHash Id { get; }
+
         public StorageDurationContract StorageContract { get; set; }
         [BrightChainMetadata]
         public RedundancyContract RedundancyContract { get; set; }
+
         public ReadOnlyMemory<byte> Data { get; protected set; }
 
         public BlockSize BlockSize { get; }
         public bool HashVerified { get; private set; }
+
+        [BrightChainMetadata]
+        public BlockSignature Signature { get; internal set; }
+        public bool Signed => (this.Signature != null);
+        public bool SignatureVerified { get; internal set; }
 
         /// <summary>
         /// A list of the blocks, in order, required to complete this block. Not persisted to disk.
@@ -68,6 +76,8 @@ namespace BrightChain.Models.Blocks
             this.Id = new BlockHash(this); // must happen after data is in place
             this.ConstituentBlocks = new Block[] { };
             this.HashVerified = this.Validate(); // also fills in any validation errors in the array
+            this.Signature = null;
+            this.SignatureVerified = false;
         }
 
         /// <summary>
@@ -178,6 +188,12 @@ namespace BrightChain.Models.Blocks
                 data: new ReadOnlyMemory<byte>(xorData));
             result.ConstituentBlocks = (IEnumerable<Block>)newList.ToArray();
             return result;
+        }
+
+        public BlockSignature Sign(BrightChainUser user, string password)
+        {
+            throw new NotImplementedException();
+            this.SignatureVerified = true;
         }
 
         public static bool operator ==(Block a, Block b) => ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;

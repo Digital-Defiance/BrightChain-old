@@ -60,6 +60,8 @@ namespace BrightChain.Extensions
                     message: String.Format("{0} on redundancy contract does not match StorageContract", nameof(block.StorageContract))));
             }
 
+            // TODO: Validate signature
+
             // fill the "out" variable
             validationExceptions = exceptions.ToArray();
 

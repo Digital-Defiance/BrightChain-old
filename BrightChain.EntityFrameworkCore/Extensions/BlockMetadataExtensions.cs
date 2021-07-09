@@ -110,7 +110,8 @@ namespace BrightChain.Extensions
                     else if (!key.StartsWith("_"))
                     {
                         var keyProperty = block.GetType().GetProperty(key);
-                        var keyValue = (metadataDictionary[key] as JObject).ToObject(keyProperty.PropertyType);
+                        var valueObject = metadataDictionary[key];
+                        var keyValue = (valueObject is null) ? null : (valueObject as JObject).ToObject(keyProperty.PropertyType);
                         Exception reloadException = null;
                         bool wasSet = block.ReloadMetadata(key, keyValue, out reloadException);
 

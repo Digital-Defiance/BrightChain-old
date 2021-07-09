@@ -42,7 +42,7 @@ namespace BrightChain.Tests
             Assert.IsTrue(metaDataDictionary.ContainsKey("_v"));
             Assert.IsTrue(metaDataDictionary.ContainsKey("RedundancyContract"));
             var contractObj = metaDataDictionary["RedundancyContract"] as JObject;
-            Assert.AreEqual(3, metaDataDictionary.Count);
+            Assert.AreEqual(4, metaDataDictionary.Count); // Hash, Signature, RedundancyContract, _t, _v
 
             RedundancyContract blockRedundancyContract = new RedundancyContract(
                 storageDurationContract: contractObj.GetValue("StorageContract").ToObject<StorageDurationContract>(),
@@ -88,6 +88,7 @@ namespace BrightChain.Tests
             Assert.AreEqual(block.RedundancyContract, block2.RedundancyContract);
             Assert.AreEqual(block.StorageContract, block2.RedundancyContract.StorageContract);
             Assert.AreEqual(block.StorageContract, block2.StorageContract);
+            Assert.AreEqual(block.Signature, block2.Signature);
 
             var loggerMock = Mock.Get(this.logger);
             loggerMock.Verify(l => l.Log(

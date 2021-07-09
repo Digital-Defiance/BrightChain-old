@@ -1,3 +1,4 @@
+using BrightChain.EntityFrameworkCore.Data;
 using BrightChain.Models.Blocks;
 using BrightChain.Models.Contracts;
 using System;
@@ -25,6 +26,7 @@ namespace BrightChain.Interfaces
         /// <param name="others"></param>
         /// <returns></returns>
         Block XOR(IBlock[] others);
+        BlockSignature Sign(BrightChainUser user, string password);
         /// <summary>
         /// Parameters of the duration contract for this block
         /// </summary>
@@ -42,5 +44,17 @@ namespace BrightChain.Interfaces
         /// </summary>
         ReadOnlyMemory<byte> Data { get; }
         /// <summary>
+        /// Signature hash of the data by the committer
+        /// </summary>
+        BlockSignature Signature { get; }
+        /// <summary>
+        /// Whether a signature hash is present
+        /// </summary>
+        bool Signed { get; }
+        /// <summary>
+        /// Whether the signature hash has been compared against the data
+        /// </summary>
+        bool SignatureVerified { get; }
+
     }
 }
