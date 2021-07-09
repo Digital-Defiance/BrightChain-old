@@ -17,6 +17,7 @@ namespace BrightChain.EntityFrameworkCore.Data
         }
 
         public new async Task<int> SaveChanges() => await base.SaveChangesAsync();
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);

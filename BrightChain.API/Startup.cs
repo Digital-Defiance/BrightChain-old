@@ -1,7 +1,6 @@
 using BrightChain.API.Areas.Identity;
 using BrightChain.API.Data;
 using BrightChain.EntityFrameworkCore.Data;
-using BrightChain.EntityFrameworkCore.Interfaces;
 using BrightChain.Services;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -61,7 +60,7 @@ namespace BrightChain.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, BrightChainIdentityDbContext dbContext)
         {
             if (env.IsDevelopment())
             {
@@ -89,6 +88,8 @@ namespace BrightChain.API
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+            dbContext.Database.EnsureCreated();
         }
     }
 }

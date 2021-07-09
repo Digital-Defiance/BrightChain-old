@@ -1,8 +1,6 @@
 ﻿using BrightChain.EntityFrameworkCore.Data;
 using BrightChain.EntityFrameworkCore.Extensions;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
