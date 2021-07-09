@@ -23,6 +23,7 @@ Recent thoughts:
 
 # Eventually
 * CLR dApps & Digital Contracts
+* Hope to provide a low-overhead digital contract / dApp ecosystem based on the CIL/CLR, without the computational overhead of traditional blockchain, making use of the efficiencies of Brightnet Blockstores and still benefitting from the power of blockchain like properties.
 
 # Disclaimers
 * This project is still pre-Alpha and is not suitable nor warranted for any level of fitness or function.
@@ -30,4 +31,4 @@ Recent thoughts:
 * This software is open source, and offered as a "best-effort" thereoetical construct at this time and it may well lose all your data at this point in time.
 
 <!-- this timestamp is updated by a pre-commit hook in git-hooks/pre-commit then added to .git/hooks -->
-Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-07-08T12:20:49-0700</time>
+Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-07-08T23:26:02-0700</time>
