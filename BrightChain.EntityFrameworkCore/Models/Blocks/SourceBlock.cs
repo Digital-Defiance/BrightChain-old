@@ -14,13 +14,12 @@ namespace BrightChain.Models.Blocks
     /// </summary>
     public class SourceBlock : TransactableBlock, IComparable<SourceBlock>, IComparable<Block>
     {
-        private ICacheManager<BlockHash, TransactableBlock> cacheManager;
+        private readonly ICacheManager<BlockHash, TransactableBlock> cacheManager;
 
         public SourceBlock(TransactableBlockParams blockArguments, ReadOnlyMemory<byte> data) :
             base(
                 blockArguments: blockArguments,
-                data: data)
-        { }
+                data: data) => this.cacheManager = blockArguments.CacheManager;
 
         public override Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> data)
         {

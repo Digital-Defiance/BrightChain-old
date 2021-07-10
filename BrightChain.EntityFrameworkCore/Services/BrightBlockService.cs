@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 
 namespace BrightChain.Services
 {
@@ -63,13 +62,13 @@ namespace BrightChain.Services
             this.blockWhitener = new BlockWhitener(pregeneratedRandomizerCache: this.randomizerBlockMemoryCache);
         }
 
-        public async Task<ConstituentBlockListBlock> CreateCblFromFile(string fileName, DateTime keepUntilAtLeast, RedundancyContractType redundancy, bool allowCommit, bool privateEncrypted = false, BlockSize? blockSize = null)
+        public ConstituentBlockListBlock CreateCblFromFile(string fileName, DateTime keepUntilAtLeast, RedundancyContractType redundancy, bool allowCommit, bool privateEncrypted = false, BlockSize? blockSize = null)
         {
-            var iBlockSize = BlockSizeMap.BlockSize(blockSize.Value);
             FileStream inFile = File.OpenRead(fileName);
-            // decide best block size if null
+
             if (!blockSize.HasValue)
             {
+                // decide best block size if null
                 throw new NotImplementedException();
             }
 
@@ -78,6 +77,7 @@ namespace BrightChain.Services
                 throw new NotImplementedException();
             }
 
+            var iBlockSize = BlockSizeMap.BlockSize(blockSize.Value);
             int tuplesRequired = (int)Math.Ceiling((double)(inFile.Length / iBlockSize));
 
             SHA256 hasher = SHA256.Create();
@@ -113,7 +113,7 @@ namespace BrightChain.Services
 
                 var sourceBlock = new SourceBlock(
                     new TransactableBlockParams(
-                            cacheManager: null,
+                            cacheManager: this.blockMemoryCache, // SourceBlock itself cannot be persisted to cache, but resultant blocks from NewBlock via XOR go here
                             blockArguments: new BlockParams(
                                 blockSize: blockSize.Value,
                                 requestTime: DateTime.Now,
@@ -144,7 +144,7 @@ namespace BrightChain.Services
             var cbl = new ConstituentBlockListBlock(
                 blockArguments: new ConstituentBlockListBlockParams(
                     blockArguments: new TransactableBlockParams(
-                        cacheManager: this.randomizerBlockMemoryCache,
+                        cacheManager: this.blockMemoryCache,
                         blockArguments: new BlockParams(
                             blockSize: blockSize.Value,
                             requestTime: DateTime.Now,

@@ -70,7 +70,8 @@ namespace BrightChain.Tests
             }
         }
 
-        public async void ItWhitensBlocksAndCreatesCblsTest()
+        [TestMethod]
+        public void ItWhitensBlocksAndCreatesCblsTest()
         {
             var loggerMock = Mock.Get(this._logger);
 
@@ -78,13 +79,14 @@ namespace BrightChain.Tests
                 logger: this._loggerFactory);
 
             var fileName = Path.GetTempFileName();
-            var cbl = await brightChainService.CreateCblFromFile(
+            CreateRandomFile(fileName, 10);
+            var cbl = brightChainService.CreateCblFromFile(
                 fileName: fileName,
                 keepUntilAtLeast: DateTime.MaxValue,
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
                 allowCommit: false,
                 privateEncrypted: false,
-                blockSize: Enumerations.BlockSize.Tiny
+                blockSize: Enumerations.BlockSize.Medium
             );
             Assert.IsTrue(cbl.Validate());
 

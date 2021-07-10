@@ -53,11 +53,6 @@ namespace BrightChain.Models.Blocks
 
         public Block(BlockParams blockArguments, ReadOnlyMemory<byte> data)
         {
-            if (!BlockSizeMap.Map.ContainsValue(data.Length))
-            {
-                throw new BrightChainException("Invalid Block Size"); // TODO: make (more) special exception type
-            }
-
             if (BlockSizeMap.BlockSize(data.Length) != blockArguments.BlockSize)
             {
                 throw new BrightChainException("Block size mismatch");
@@ -146,7 +141,7 @@ namespace BrightChain.Models.Blocks
             DateTime keepUntil = this.StorageContract.KeepUntilAtLeast;
             RedundancyContractType redundancy = this.RedundancyContract.RedundancyContractType;
             int blockSize = BlockSizeMap.Map[this.BlockSize];
-            var newList = new List<IBlock>(this.ConstituentBlocks);
+            var newList = new List<Block>(this.ConstituentBlocks);
             if (!(this is SourceBlock))
             {
                 newList.Add(this);
@@ -186,7 +181,7 @@ namespace BrightChain.Models.Blocks
                     allowCommit: true,
                     privateEncrypted: this.StorageContract.PrivateEncrypted), // these XOR functions should be one of the only places this even happens
                 data: new ReadOnlyMemory<byte>(xorData));
-            result.ConstituentBlocks = (IEnumerable<Block>)newList.ToArray();
+            result.ConstituentBlocks = newList.ToArray();
             return result;
         }
 

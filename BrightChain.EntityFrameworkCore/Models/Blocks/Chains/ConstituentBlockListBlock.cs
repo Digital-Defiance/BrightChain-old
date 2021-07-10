@@ -58,11 +58,13 @@ namespace BrightChain.Models.Blocks.Chains
                       allowCommit: blockArguments.AllowCommit,
                       privateEncrypted: blockArguments.PrivateEncrypted)
             ),
-              data: new ReadOnlyMemory<byte>(
-                blockArguments.ConstituentBlocks
-                    .SelectMany(b =>
-                        b.Id.HashBytes.ToArray())
-                    .ToArray())
+              data: Helpers.RandomDataHelper.DataFiller(
+                  inputData: new ReadOnlyMemory<byte>(
+                    blockArguments.ConstituentBlocks
+                        .SelectMany(b =>
+                            b.Id.HashBytes.ToArray())
+                        .ToArray()),
+                  blockSize: blockArguments.BlockSize)
         )
         {
             // TODO : if finalDataHash is null, reconstitute and compute- or accept the validation result's hash essentially?

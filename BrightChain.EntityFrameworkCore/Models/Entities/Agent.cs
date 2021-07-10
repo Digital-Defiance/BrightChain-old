@@ -1,6 +1,8 @@
-﻿namespace BrightChain.Models.Entities
+﻿using BrightChain.EntityFrameworkCore.Data;
+
+namespace BrightChain.Models.Entities
 {
-    public class Agent
+    public class Agent : BrightChainUser
     {
     }
 }
