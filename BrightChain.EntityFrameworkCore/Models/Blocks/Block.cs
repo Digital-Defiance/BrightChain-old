@@ -60,13 +60,13 @@ namespace BrightChain.Models.Blocks
 
             this.BlockSize = blockArguments.BlockSize;
             this.StorageContract = new StorageDurationContract(
-                requestTime: blockArguments.RequestTime,
-                keepUntilAtLeast: blockArguments.KeepUntilAtLeast,
-                byteCount: data.Length,
-                privateEncrypted: blockArguments.PrivateEncrypted);
+                RequestTime: blockArguments.RequestTime,
+                KeepUntilAtLeast: blockArguments.KeepUntilAtLeast,
+                ByteCount: data.Length,
+                PrivateEncrypted: blockArguments.PrivateEncrypted);
             this.RedundancyContract = new RedundancyContract(
-                storageDurationContract: this.StorageContract,
-                redundancy: blockArguments.Redundancy);
+                StorageContract: this.StorageContract,
+                RedundancyContractType: blockArguments.Redundancy);
             this.Data = data;
             this.Id = new BlockHash(this); // must happen after data is in place
             this.ConstituentBlocks = new Block[] { };
@@ -195,7 +195,7 @@ namespace BrightChain.Models.Blocks
 
         public static bool operator !=(Block a, Block b) => !a.Equals(b);
 
-        public override bool Equals(object obj) => ReadOnlyMemoryComparer<byte>.Compare(this.Data, (obj as Block).Data) == 0;
+        public override bool Equals(object obj) => obj is Block ? ReadOnlyMemoryComparer<byte>.Compare(this.Data, (obj as Block).Data) == 0 : false;
 
         public override int GetHashCode() => this.Data.GetHashCode();
 
@@ -209,8 +209,8 @@ namespace BrightChain.Models.Blocks
 
         public abstract void Dispose();
 
-        public int CompareTo(IBlock other) => ReadOnlyMemoryComparer<byte>.Compare(this.Data, (other as TransactableBlock).Data);
+        public int CompareTo(IBlock other) => other is null ? -1 : ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
 
-        public int CompareTo(Block other) => ReadOnlyMemoryComparer<byte>.Compare(this.Data, (other as TransactableBlock).Data);
+        public int CompareTo(Block other) => other is null ? -1 : ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using BrightChain.Enumerations;
 using BrightChain.Models.Blocks;
 using BrightChain.Models.Units;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace BrightChain.Models.Contracts
 {
@@ -13,10 +13,11 @@ namespace BrightChain.Models.Contracts
         public StorageDurationContract StorageContract { get; set; }
         public RedundancyContractType RedundancyContractType { get; set; }
 
-        public RedundancyContract(StorageDurationContract storageDurationContract, RedundancyContractType redundancy)
+        [JsonConstructor]
+        public RedundancyContract(StorageDurationContract StorageContract, RedundancyContractType RedundancyContractType)
         {
-            this.StorageContract = storageDurationContract;
-            this.RedundancyContractType = redundancy;
+            this.StorageContract = StorageContract;
+            this.RedundancyContractType = RedundancyContractType;
         }
 
         [JsonIgnore]

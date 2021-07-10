@@ -1,6 +1,6 @@
 ﻿using BrightChain.Models.Units;
-using Newtonsoft.Json;
 using System;
+using System.Text.Json.Serialization;
 
 namespace BrightChain.Models.Contracts
 {
@@ -30,12 +30,13 @@ namespace BrightChain.Models.Contracts
         /// </summary>
         public bool PrivateEncrypted { get; internal set; }
 
-        public StorageDurationContract(DateTime requestTime, DateTime keepUntilAtLeast, int byteCount, bool privateEncrypted)
+        [JsonConstructor]
+        public StorageDurationContract(DateTime RequestTime, DateTime KeepUntilAtLeast, int ByteCount, bool PrivateEncrypted)
         {
-            this.RequestTime = requestTime;
-            this.KeepUntilAtLeast = keepUntilAtLeast;
-            this.ByteCount = byteCount;
-            this.PrivateEncrypted = privateEncrypted;
+            this.RequestTime = RequestTime;
+            this.KeepUntilAtLeast = KeepUntilAtLeast;
+            this.ByteCount = ByteCount;
+            this.PrivateEncrypted = PrivateEncrypted;
         }
 
         [JsonIgnore]

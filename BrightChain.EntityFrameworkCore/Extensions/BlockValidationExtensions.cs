@@ -50,7 +50,7 @@ namespace BrightChain.Extensions
             {
                 exceptions.Add(new BrightChainValidationException(
                     element: nameof(block.StorageContract.ByteCount),
-                    message: String.Format("{0} length {1} does not match data length of {1} bytes", nameof(block.StorageContract.ByteCount), block.StorageContract.ByteCount, block.Data.Length)));
+                    message: String.Format("{0} length {1} does not match data length of {2} bytes", nameof(block.StorageContract.ByteCount), block.StorageContract.ByteCount, block.Data.Length)));
             }
 
             if (!block.RedundancyContract.StorageContract.Equals(block.StorageContract))

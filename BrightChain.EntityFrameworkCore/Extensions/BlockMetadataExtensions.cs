@@ -1,19 +1,30 @@
 ﻿using BrightChain.Attributes;
+using BrightChain.EntityFrameworkCore.Internal;
 using BrightChain.Exceptions;
 using BrightChain.Interfaces;
 using BrightChain.Models.Blocks;
 using BrightChain.Models.Contracts;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 
 namespace BrightChain.Extensions
 {
     public static class BlockMetadataExtensions
     {
+        public static JsonSerializerOptions NewSerializerOptions() =>
+            new JsonSerializerOptions
+            {
+                WriteIndented = false,
+                Converters =
+                    {
+                        new BlockHashJsonFactory()
+                    }
+            };
+
         /// <summary>
         /// Emits a json binary blob from the metadata properties 
         /// </summary>
@@ -22,7 +33,7 @@ namespace BrightChain.Extensions
         public static ReadOnlyMemory<byte> MetadataBytes(this IBlock block)
         {
             Dictionary<string, object> metadataDictionary = new Dictionary<string, object>();
-            foreach (PropertyInfo prop in typeof(Block).GetProperties())
+            foreach (PropertyInfo prop in block.GetType().GetProperties())
             {
                 foreach (object attr in prop.GetCustomAttributes(true))
                 {
@@ -43,7 +54,8 @@ namespace BrightChain.Extensions
             // add assembly version
             metadataDictionary.Add("_v", assemblyVersion);
 
-            string jsonData = JsonConvert.SerializeObject(metadataDictionary);
+
+            string jsonData = JsonSerializer.Serialize(metadataDictionary, NewSerializerOptions());
             var readonlyChars = jsonData.AsMemory();
             return new ReadOnlyMemory<byte>(readonlyChars.ToArray().Select(c => (byte)c).ToArray());
         }
@@ -93,7 +105,7 @@ namespace BrightChain.Extensions
             var jsonString = new string(metadataBytes.ToArray().Select(c => (char)c).ToArray());
             try
             {
-                object metaDataObject = JsonConvert.DeserializeObject(jsonString, typeof(Dictionary<string, object>));
+                object metaDataObject = JsonSerializer.Deserialize(jsonString, typeof(Dictionary<string, object>), NewSerializerOptions());
 
                 Dictionary<string, object> metadataDictionary = (Dictionary<string, object>)metaDataObject;
                 foreach (string key in metadataDictionary.Keys)
@@ -111,7 +123,7 @@ namespace BrightChain.Extensions
                     {
                         var keyProperty = block.GetType().GetProperty(key);
                         var valueObject = metadataDictionary[key];
-                        var keyValue = (valueObject is null) ? null : (valueObject as JObject).ToObject(keyProperty.PropertyType);
+                        var keyValue = (valueObject is null) ? null : ((JsonElement)valueObject).ToObject(keyProperty.PropertyType, NewSerializerOptions());
                         Exception reloadException = null;
                         bool wasSet = block.ReloadMetadata(key, keyValue, out reloadException);
 
@@ -156,5 +168,49 @@ namespace BrightChain.Extensions
 
             return validated;
         }
+
+        #region https://stackoverflow.com/a/61047681/4009129
+        public static T ToObject<T>(this JsonElement element, JsonSerializerOptions options = null)
+        {
+            var bufferWriter = new ArrayBufferWriter<byte>();
+            using (var writer = new Utf8JsonWriter(bufferWriter))
+            {
+                element.WriteTo(writer);
+            }
+
+            return JsonSerializer.Deserialize<T>(bufferWriter.WrittenSpan, options);
+        }
+
+        public static T ToObject<T>(this JsonDocument document, JsonSerializerOptions options = null)
+        {
+            if (document == null)
+            {
+                throw new ArgumentNullException(nameof(document));
+            }
+
+            return document.RootElement.ToObject<T>(options);
+        }
+
+        public static object ToObject(this JsonElement element, Type returnType, JsonSerializerOptions options = null)
+        {
+            var bufferWriter = new ArrayBufferWriter<byte>();
+            using (var writer = new Utf8JsonWriter(bufferWriter))
+            {
+                element.WriteTo(writer);
+            }
+
+            return JsonSerializer.Deserialize(bufferWriter.WrittenSpan, returnType, options);
+        }
+
+        public static object ToObject(this JsonDocument document, Type returnType, JsonSerializerOptions options = null)
+        {
+            if (document == null)
+            {
+                throw new ArgumentNullException(nameof(document));
+            }
+
+            return document.RootElement.ToObject(returnType, options);
+        }
+        #endregion
     }
 }

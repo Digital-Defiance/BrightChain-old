@@ -68,6 +68,10 @@ namespace BrightChain.Models.Blocks.Chains
         )
         {
             // TODO : if finalDataHash is null, reconstitute and compute- or accept the validation result's hash essentially?
+            this.SourceId = blockArguments.FinalDataHash;
+            this.TotalLength = blockArguments.TotalLength;
+            this.PrivateEncrypted = blockArguments.PrivateEncrypted;
+            this.ConstituentBlocks = blockArguments.ConstituentBlocks;
         }
 
         public ReadOnlyMemory<byte> ConstituentBlockHashesBytes => new ReadOnlyMemory<byte>(
@@ -87,6 +91,7 @@ namespace BrightChain.Models.Blocks.Chains
 
         public static ConstituentBlockListBlock SplitHashList(IEnumerable<BlockHash> blockHashes, BlockSize blockSize)
         {
+            throw new NotImplementedException();
             var iBlockSize = BlockSizeMap.BlockSize(blockSize);
             var hashesPerBlock = (int)Math.Floor((double)(iBlockSize / iBlockSize));
             while (blockHashes.Any())
@@ -95,7 +100,6 @@ namespace BrightChain.Models.Blocks.Chains
                 // do something
                 blockHashes = blockHashes.Skip(hashesPerBlock);
             }
-            throw new NotImplementedException();
         }
 
         public new bool Validate() =>

@@ -76,13 +76,13 @@ namespace BrightChain.Models.Blocks
                 blockArguments: blockArguments),
             data: data);
 
-        public override bool Equals(object obj) => ReadOnlyMemoryComparer<byte>.Compare(this.Data, (obj as TransactableBlock).Data) == 0;
+        public override bool Equals(object obj) => obj is Block ? ReadOnlyMemoryComparer<byte>.Compare(this.Data, (obj as Block).Data) == 0 : false;
 
         public override int GetHashCode() => this.Data.GetHashCode();
 
         public int CompareTo(TransactableBlock other) => ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
 
-        public int CompareTo(ITransactableBlock other) => ReadOnlyMemoryComparer<byte>.Compare(this.Data, (other as TransactableBlock).Data);
+        public int CompareTo(ITransactableBlock other) => other is null ? -1 : ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
 
         protected virtual void Dispose(bool disposing)
         {

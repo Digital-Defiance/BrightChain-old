@@ -59,7 +59,7 @@ namespace BrightChain.Models.Blocks
 
         public static bool operator !=(DataSignature a, DataSignature b) => !a.Equals(b);
 
-        public override bool Equals(object obj) => ReadOnlyMemoryComparer<byte>.Compare(this.SignatureHashBytes, (obj as DataSignature).SignatureHashBytes) == 0;
+        public override bool Equals(object obj) => obj is DataSignature ? ReadOnlyMemoryComparer<byte>.Compare(this.SignatureHashBytes, (obj as DataSignature).SignatureHashBytes) == 0 : false;
 
         public override int GetHashCode() => this.SignatureHashBytes.GetHashCode();
 

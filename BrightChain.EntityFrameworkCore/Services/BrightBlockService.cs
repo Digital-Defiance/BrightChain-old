@@ -92,6 +92,7 @@ namespace BrightChain.Services
                 var finalBlock = i == (tuplesRequired - 1);
                 byte[] buffer = new byte[iBlockSize];
                 var bytesRead = (ulong)inFile.Read(buffer, 0, iBlockSize);
+                offset += bytesRead;
 
                 if ((bytesRead < (ulong)iBlockSize) && !finalBlock)
                 {

@@ -1,15 +1,17 @@
 ﻿using BrightChain.Enumerations;
 using BrightChain.Extensions;
 using BrightChain.Models.Blocks;
+using BrightChain.Models.Blocks.Chains;
 using BrightChain.Models.Blocks.DataObjects;
 using BrightChain.Models.Contracts;
+using BrightChain.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 
 namespace BrightChain.Tests
 {
@@ -35,20 +37,19 @@ namespace BrightChain.Tests
                 privateEncrypted: false));
             Assert.IsTrue(block.Validate());
             var metaData = block.Metadata;
-            var metaDataString = System.Text.Encoding.ASCII.GetString(metaData.ToArray());
-            Dictionary<string, object> metaDataDictionary = (Dictionary<string, object>)JsonConvert.DeserializeObject(metaDataString, typeof(Dictionary<string, object>));
+            var metaDataString = new string(metaData.ToArray().Select(c => (char)c).ToArray());
+            Dictionary<string, object> metaDataDictionary = (Dictionary<string, object>)JsonSerializer.Deserialize(metaDataString, typeof(Dictionary<string, object>));
             Assert.IsNotNull(metaDataDictionary);
             Assert.IsTrue(metaDataDictionary.ContainsKey("_t"));
             Assert.IsTrue(metaDataDictionary.ContainsKey("_v"));
             Assert.IsTrue(metaDataDictionary.ContainsKey("RedundancyContract"));
-            var contractObj = metaDataDictionary["RedundancyContract"] as JObject;
+            Assert.IsTrue(metaDataDictionary.ContainsKey("Signature"));
             Assert.AreEqual(4, metaDataDictionary.Count); // Hash, Signature, RedundancyContract, _t, _v
+            var contractObj = (JsonElement)metaDataDictionary["RedundancyContract"];
+            var contract = contractObj.ToObject<RedundancyContract>(BlockMetadataExtensions.NewSerializerOptions());
 
-            RedundancyContract blockRedundancyContract = new RedundancyContract(
-                storageDurationContract: contractObj.GetValue("StorageContract").ToObject<StorageDurationContract>(),
-                redundancy: contractObj.GetValue("RedundancyContractType").ToObject<RedundancyContractType>());
-            Assert.AreEqual(block.RedundancyContract, blockRedundancyContract);
-            Assert.AreEqual(block.StorageContract, blockRedundancyContract.StorageContract);
+            Assert.AreEqual(block.RedundancyContract, contract);
+            Assert.AreEqual(block.StorageContract, contract.StorageContract);
 
             var loggerMock = Mock.Get(this.logger);
             loggerMock.Verify(l => l.Log(
@@ -58,6 +59,56 @@ namespace BrightChain.Tests
                 It.IsAny<Exception>(),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
             loggerMock.VerifyNoOtherCalls();
+        }
+
+        [TestMethod]
+        public void ItExtractsCBLMetadataCorrectlyTest()
+        {
+            var dummyBlock = new EmptyDummyBlock(
+                blockArguments: new BlockParams(
+                blockSize: BlockSize.Message,
+                requestTime: DateTime.Now,
+                keepUntilAtLeast: DateTime.Now.AddDays(1),
+                redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                allowCommit: true,
+                privateEncrypted: false));
+
+            var block = new ConstituentBlockListBlock(
+                            blockArguments: new ConstituentBlockListBlockParams(
+                                blockArguments: new TransactableBlockParams(
+                                    cacheManager: new MemoryBlockCacheManager(this.logger),
+                                    blockArguments: new BlockParams(
+                                        blockSize: BlockSize.Message,
+                                        requestTime: DateTime.Now,
+                                        keepUntilAtLeast: DateTime.Now.AddDays(1),
+                                        redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                                        allowCommit: true,
+                                        privateEncrypted: false)),
+                                finalDataHash: new BlockHash(dummyBlock),
+                                totalLength: 0,
+                                constituentBlocks: new Block[] { dummyBlock }));
+
+            Assert.IsTrue(block.Validate());
+            var metaData = block.Metadata;
+            var metaDataString = new string(metaData.ToArray().Select(c => (char)c).ToArray());
+            Dictionary<string, object> metaDataDictionary = (Dictionary<string, object>)JsonSerializer.Deserialize(metaDataString, typeof(Dictionary<string, object>), BlockMetadataExtensions.NewSerializerOptions());
+            Assert.IsNotNull(metaDataDictionary);
+            Assert.IsTrue(metaDataDictionary.ContainsKey("_t"));
+            Assert.IsTrue(metaDataDictionary.ContainsKey("_v"));
+            Assert.IsTrue(metaDataDictionary.ContainsKey("RedundancyContract"));
+            Assert.IsTrue(metaDataDictionary.ContainsKey("Signature"));
+            Assert.IsTrue(metaDataDictionary.ContainsKey("PrivateEncrypted"));
+            Assert.IsTrue(metaDataDictionary.ContainsKey("TotalLength"));
+            Assert.IsTrue(metaDataDictionary.ContainsKey("SourceId"));
+            var contractObj = (JsonElement)metaDataDictionary["RedundancyContract"];
+            var contract = contractObj.ToObject<RedundancyContract>(BlockMetadataExtensions.NewSerializerOptions());
+            Assert.AreEqual(9, metaDataDictionary.Count); // Hash, Signature, RedundancyContract, _t, _v
+            Assert.AreEqual(block.RedundancyContract, contract);
+            Assert.AreEqual(block.StorageContract, contract.StorageContract);
+            var sourceIdObj = (JsonElement)metaDataDictionary["SourceId"];
+            var sourceId = sourceIdObj.ToObject<BlockHash>(BlockMetadataExtensions.NewSerializerOptions());
+            Assert.AreEqual(block.BlockSize, sourceId.BlockSize);
+            Assert.AreEqual("076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560", sourceId.ToString()); // all-zero vector
         }
 
         [TestMethod]

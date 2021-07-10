@@ -53,9 +53,9 @@ namespace BrightChain.Models.Blocks
             this.Computed = true;
         }
 
-        public string ToString(string format, IFormatProvider _) => this.ToString();
+        public string ToString(string format, IFormatProvider _) => this.HashBytes.ToString().Replace("-","").ToLower();
 
-        public new string ToString() => BitConverter.ToString(this.HashBytes.ToArray());
+        public new string ToString() => BitConverter.ToString(this.HashBytes.ToArray()).Replace("-","").ToLower();
 
         public static bool operator ==(BlockHash a, BlockHash b) => ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;
 
@@ -65,7 +65,7 @@ namespace BrightChain.Models.Blocks
 
         public static bool operator !=(BlockHash a, BlockHash b) => !a.Equals(b);
 
-        public override bool Equals(object obj) => ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, (obj as BlockHash).HashBytes) == 0;
+        public override bool Equals(object obj) => obj is BlockHash ? ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, (obj as BlockHash).HashBytes) == 0 : false;
 
         public override int GetHashCode() => this.HashBytes.GetHashCode();
 
