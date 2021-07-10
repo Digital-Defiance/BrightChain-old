@@ -8,6 +8,7 @@
 - Coming soon (GitHub Pages): https://the-revolution-network.github.io/gh-pages/
 
 Recent thoughts:
+ - I think calling BrightChain a LightChain makes sense. it's a lightweight blockchain. It's got blockchain features people want, but without the actual overhead of blockchain, which is unnecessary.
  - If you haven't noticed- BrightChain is almost BrightChainS with an S. It's a pool of chains. Each with its own value.
  - Something I was implementing in the old code but haven't yet gotten to is also a deduplication for public blocks. Basically any chain that has its CBL block committed to the network will have the hash of the overall chain checked for deduplication.
  - Likely to use https://dapr.io https://github.com/dapr for node sync in the near future.
