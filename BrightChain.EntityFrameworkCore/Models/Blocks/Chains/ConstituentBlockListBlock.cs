@@ -21,28 +21,28 @@ namespace BrightChain.Models.Blocks.Chains
         /// Hash of the sum bytes of the file when assembled in order
         /// </summary>
         [BrightChainMetadata]
-        public BlockHash SourceId { get; }
+        public BlockHash SourceId { get; set; }
 
         /// <summary>
         /// Total length of bytes in the user data section
         /// </summary>
         [BrightChainMetadata]
-        public ulong TotalLength { get; }
+        public ulong TotalLength { get; set; }
 
         /// <summary>
         /// TupleCount at the time
         /// </summary>
         [BrightChainMetadata]
-        public int TupleCount { get; } = BlockWhitener.TupleCount;
+        public int TupleCount { get; set; } = BlockWhitener.TupleCount;
 
         /// <summary>
         /// Whether this "file" is encrypted or for public use
         /// </summary>
         [BrightChainMetadata]
-        public bool PrivateEncrypted { get; }
+        public bool PrivateEncrypted { get; set; }
 
         [BrightChainMetadata]
-        public BrokeredAnonymityIdentifier CreatorId { get; }
+        public BrokeredAnonymityIdentifier CreatorId { get; set; }
 
         public BlockChainFileMap BlockMap => new BlockChainFileMap(this);
 

@@ -150,5 +150,69 @@ namespace BrightChain.Tests
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
             loggerMock.VerifyNoOtherCalls();
         }
+
+        [TestMethod]
+        public void ItRestoresCBLMetaDataCorrectlyTest()
+        {
+            var testStart = DateTime.Now;
+
+            var dummyBlock = new EmptyDummyBlock(
+                blockArguments: new BlockParams(
+                blockSize: BlockSize.Message,
+                requestTime: DateTime.Now,
+                keepUntilAtLeast: DateTime.Now.AddDays(1),
+                redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                allowCommit: true,
+                privateEncrypted: false));
+
+            var block = new ConstituentBlockListBlock(
+                            blockArguments: new ConstituentBlockListBlockParams(
+                                blockArguments: new TransactableBlockParams(
+                                    cacheManager: new MemoryBlockCacheManager(this.logger),
+                                    blockArguments: new BlockParams(
+                                        blockSize: BlockSize.Message,
+                                        requestTime: DateTime.Now,
+                                        keepUntilAtLeast: DateTime.Now.AddDays(1),
+                                        redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                                        allowCommit: true,
+                                        privateEncrypted: false)),
+                                finalDataHash: new BlockHash(dummyBlock),
+                                totalLength: 0,
+                                constituentBlocks: new Block[] { dummyBlock }));
+
+            Assert.IsTrue(block.Validate());
+            var metaData = block.Metadata;
+            var metaDataString = new string(metaData.ToArray().Select(c => (char)c).ToArray());
+
+            var block2 = new ConstituentBlockListBlock(new ConstituentBlockListBlockParams(new TransactableBlockParams(
+                cacheManager: block.CacheManager,
+                blockArguments: new BlockParams(
+                    blockSize: BlockSize.Message, // match
+                    requestTime: DateTime.MinValue, // bad
+                    keepUntilAtLeast: DateTime.MinValue, // bad
+                    redundancy: RedundancyContractType.LocalNone, // different
+                    allowCommit: true, // irrelevant
+                    privateEncrypted: true)), // opposite
+                    finalDataHash: new BlockHash(originalBlockSize: BlockSize.Message, providedHashBytes: dummyBlock.Id.HashBytes), // known incorrect hash
+                    totalLength: (ulong)BlockSizeMap.BlockSize(BlockSize.Message),
+                    constituentBlocks: new Block[] { dummyBlock }));
+            Assert.IsTrue(block2.TryRestoreMetadataFromBytes(metaData));
+            Assert.AreEqual(block.RedundancyContract, block2.RedundancyContract);
+            Assert.AreEqual(block.StorageContract, block2.RedundancyContract.StorageContract);
+            Assert.AreEqual(block.StorageContract, block2.StorageContract);
+            Assert.AreEqual(block.Signature, block2.Signature);
+            Assert.AreEqual(block.SourceId, block2.SourceId);
+            Assert.AreEqual(block.TotalLength, block2.TotalLength);
+            Assert.AreEqual(block.ConstituentBlocks.Count(), block2.ConstituentBlocks.Count()); // TODO: IMPROVE THIS TEST
+
+            var loggerMock = Mock.Get(this.logger);
+            loggerMock.Verify(l => l.Log(
+                LogLevel.Information,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
+            loggerMock.VerifyNoOtherCalls();
+        }
     }
 }

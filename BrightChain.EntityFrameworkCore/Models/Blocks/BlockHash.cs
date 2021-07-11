@@ -53,9 +53,9 @@ namespace BrightChain.Models.Blocks
             this.Computed = true;
         }
 
-        public string ToString(string format, IFormatProvider _) => this.HashBytes.ToString().Replace("-","").ToLower();
+        public string ToString(string format, IFormatProvider _) => this.HashBytes.ToString().Replace("-", "").ToLower();
 
-        public new string ToString() => BitConverter.ToString(this.HashBytes.ToArray()).Replace("-","").ToLower();
+        public new string ToString() => BitConverter.ToString(this.HashBytes.ToArray()).Replace("-", "").ToLower();
 
         public static bool operator ==(BlockHash a, BlockHash b) => ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;
 
