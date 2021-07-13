@@ -1,5 +1,7 @@
 # BrightChain
-A Lightweight BlockChain- LightChain based on a Brightnet Blockstore- BrightChain. All the benefits of blockchain dApps and contracts without the mining and waste. Unlimited storage for everyone, and a mathematically reinforced and moderated community that will last for the ages.
+A Lightweight BlockChain- LightChain based on a Brightnet Blockstore- BrightChain.
+All the benefits of blockchain dApps and contracts without the mining and waste.
+Unlimited storage for everyone, and a mathematically reinforced and moderated community that will last for the ages.
 
 - BrightChain Engine in C#/.Net 6 (Currently requires VS 2022 Preview, or IntelliJ Rider)
 - BrightNet BlockStore and API for BrightChain: The Revolution(ary) Network
@@ -34,4 +36,4 @@ Recent thoughts:
 * This software is open source, and offered as a "best-effort" thereoetical construct at this time and it may well lose all your data at this point in time.
 
 <!-- this timestamp is updated by a pre-commit hook in git-hooks/pre-commit then added to .git/hooks -->
-Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-07-08T23:26:02-0700</time>
+Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-07-13T10:08:55-0700</time>
