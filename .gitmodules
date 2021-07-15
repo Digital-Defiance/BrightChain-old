@@ -1,3 +1,6 @@
 [submodule "BrightChain.wiki"]
 	path = docs/articles/BrightChain.wiki
 	url = git@github.com:The-Revolution-Network/BrightChain.wiki.git
+[submodule "efcore"]
+	path = efcore
+	url = git@github.com:dotnet/efcore.git
