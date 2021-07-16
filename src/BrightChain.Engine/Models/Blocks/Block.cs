@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BrightChain.Engine.Attributes;
 using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Exceptions;
@@ -20,6 +21,7 @@ namespace BrightChain.Engine.Models.Blocks
         public BlockHash Id { get; }
 
         public StorageDurationContract StorageContract { get; set; }
+
         [BrightChainMetadata]
         public RedundancyContract RedundancyContract { get; set; }
 
@@ -34,7 +36,18 @@ namespace BrightChain.Engine.Models.Blocks
         public bool SignatureVerified { get; internal set; }
 
         /// <summary>
-        /// A list of the blocks, in order, required to complete this block. Not persisted to disk.
+        /// For private encrypted files, a special token encrypted with the original user's key will allow revocation
+        /// </summary>
+        [BrightChainMetadata]
+        public IEnumerable<RevocationCertificate> RevocationCertificates { get; internal set; }
+
+        /// <summary>
+        /// Gets a boolean whether the revocation list contains possible revocation tokens.
+        /// </summary>
+        public bool Revokable => RevocationCertificates.Count() > 0;
+
+        /// <summary>
+        /// Gets or sets a list of the blocks, in order, required to complete this block. Not persisted to disk.
         /// Generally only used during construction of a chain
         /// </summary>
         public IEnumerable<Block> ConstituentBlocks { get; protected set; }
@@ -45,34 +58,37 @@ namespace BrightChain.Engine.Models.Blocks
         public ReadOnlyMemory<byte> Metadata =>
             this.MetadataBytes();
 
-        public abstract Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> data);
+        public abstract Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data);
 
         public Block AsBlock => this;
 
         public IEnumerable<BrightChainValidationException> ValidationExceptions { get; private set; }
 
-        public Block(BlockParams blockArguments, ReadOnlyMemory<byte> data)
+        public Block(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
-            if (BlockSizeMap.BlockSize(data.Length) != blockArguments.BlockSize)
+            var detectedBlockSize = BlockSizeMap.BlockSize(data.Length);
+
+            if (blockParams.BlockSize != BlockSize.Unknown && detectedBlockSize != blockParams.BlockSize)
             {
                 throw new BrightChainException("Block size mismatch");
             }
 
-            BlockSize = blockArguments.BlockSize;
+            BlockSize = detectedBlockSize;
             StorageContract = new StorageDurationContract(
-                RequestTime: blockArguments.RequestTime,
-                KeepUntilAtLeast: blockArguments.KeepUntilAtLeast,
+                RequestTime: blockParams.RequestTime,
+                KeepUntilAtLeast: blockParams.KeepUntilAtLeast,
                 ByteCount: data.Length,
-                PrivateEncrypted: blockArguments.PrivateEncrypted);
+                PrivateEncrypted: blockParams.PrivateEncrypted);
             RedundancyContract = new RedundancyContract(
                 StorageContract: StorageContract,
-                RedundancyContractType: blockArguments.Redundancy);
+                RedundancyContractType: blockParams.Redundancy);
             Data = data;
             Id = new BlockHash(this); // must happen after data is in place
             ConstituentBlocks = new Block[] { };
             HashVerified = Validate(); // also fills in any validation errors in the array
             Signature = null;
             SignatureVerified = false;
+            RevocationCertificates = new List<RevocationCertificate>();
         }
 
         /// <summary>
@@ -106,7 +122,7 @@ namespace BrightChain.Engine.Models.Blocks
             }
 
             var result = NewBlock(
-                blockArguments: new BlockParams(
+                blockParams: new BlockParams(
                     blockSize: BlockSize,
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: keepUntil,

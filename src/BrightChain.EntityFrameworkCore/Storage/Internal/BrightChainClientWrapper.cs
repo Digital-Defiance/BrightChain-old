@@ -635,7 +635,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
                 private readonly string? _partitionKey;
                 private readonly BrightChainSqlQuery _brightChainSqlQuery;
 
-                private JsonDocument? _current;
+                private readonly JsonDocument? _current;
                 private HttpWebResponse? _responseMessage;
                 private Stream? _responseStream;
                 private StreamReader? _reader;
@@ -713,7 +713,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
                 private readonly BrightChainSqlQuery _brightChainSqlQuery;
                 private readonly CancellationToken _cancellationToken;
 
-                private JsonDocument? _current;
+                private readonly JsonDocument? _current;
                 private HttpWebResponse? _responseMessage;
                 private Stream? _responseStream;
                 private StreamReader? _reader;

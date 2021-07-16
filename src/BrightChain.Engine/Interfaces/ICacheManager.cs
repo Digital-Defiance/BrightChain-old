@@ -12,16 +12,42 @@ namespace BrightChain.Engine.Interfaces
         where Tkey : IComparable<Tkey>
         where Tvalue : IComparable<Tvalue>
     {
+        /// <summary>
+        /// Retrieves an object from the cache if it is present
+        /// </summary>
+        /// <param name="key">key to retrieve</param>
+        /// <returns>returns requested block or throws</returns>
         Tvalue Get(Tkey key);
-        void Set(Tkey key, Tvalue value);
+
+        /// <summary>
+        /// Adds a key to the cache if it is not already present
+        /// </summary>
+        /// <param name="key">key to palce in the cache</param>
+        void Set(Tvalue key);
+
+        /// <summary>
+        /// 
+        /// Returns whether the cache manager has the given key and it is not expired
+        /// </summary>
+        /// <param name="key">key to check the collection for</param>
+        /// <returns>boolean with whether key is present</returns>
         bool Contains(Tkey key);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="noCheckContains"></param>
+        /// <returns></returns>
         bool Drop(Tkey key, bool noCheckContains = false);
 
         delegate void KeyAddedEventHandler(object sender, CacheEventArgs<Tkey, Tvalue> cacheEventArgs);
+        delegate void KeyExpiredEventHandler(object sender, CacheEventArgs<Tkey, Tvalue> cacheEventArgs);
         delegate void KeyRemovedEventHandler(object sender, CacheEventArgs<Tkey, Tvalue> cacheEventArgs);
         delegate void CacheMissEventHandler(object sender, CacheEventArgs<Tkey, Tvalue> cacheEventArgs);
 
         event KeyAddedEventHandler KeyAdded;
+        event KeyExpiredEventHandler KeyExpired;
         event KeyRemovedEventHandler KeyRemoved;
         event CacheMissEventHandler CacheMiss;
     }

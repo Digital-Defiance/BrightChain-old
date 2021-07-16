@@ -1,14 +1,14 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using BrightChain.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.TestUtilities;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BrightChain.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.TestUtilities;
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace BrightChain.EntityFrameworkCore.TestUtilities

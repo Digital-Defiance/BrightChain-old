@@ -9,9 +9,9 @@ namespace BrightChain.Engine.Models.Blocks
     /// </summary>
     public class RandomDataBlock : Block, IComparable<EmptyDummyBlock>
     {
-        public RandomDataBlock(BlockParams blockArguments) :
-            base(blockArguments: blockArguments,
-                data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockArguments.BlockSize)))
+        public RandomDataBlock(BlockParams blockParams) :
+            base(blockParams: blockParams,
+                data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockParams.BlockSize)))
         { }
 
         /// <summary>
@@ -23,9 +23,9 @@ namespace BrightChain.Engine.Models.Blocks
         /// <param name="_"></param>
         /// <param name="allowCommit"></param>
         /// <returns></returns>
-        public override Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> _)
+        public override Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> _)
         {
-            return new RandomDataBlock(blockArguments: blockArguments);
+            return new RandomDataBlock(blockParams: blockParams);
         }
 
         public int CompareTo(EmptyDummyBlock other)

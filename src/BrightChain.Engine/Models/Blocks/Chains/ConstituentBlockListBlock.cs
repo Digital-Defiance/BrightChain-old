@@ -46,32 +46,32 @@ namespace BrightChain.Engine.Models.Blocks.Chains
 
         public BlockChainFileMap BlockMap => new BlockChainFileMap(this);
 
-        public ConstituentBlockListBlock(ConstituentBlockListBlockParams blockArguments)
+        public ConstituentBlockListBlock(ConstituentBlockListBlockParams blockParams)
         : base(
-              blockArguments: new TransactableBlockParams(
-                  cacheManager: blockArguments.CacheManager,
-                  blockArguments: new BlockParams(
-                      blockSize: blockArguments.BlockSize,
-                      requestTime: blockArguments.RequestTime,
-                      keepUntilAtLeast: blockArguments.KeepUntilAtLeast,
-                      redundancy: blockArguments.Redundancy,
-                      allowCommit: blockArguments.AllowCommit,
-                      privateEncrypted: blockArguments.PrivateEncrypted)
+              blockParams: new TransactableBlockParams(
+                  cacheManager: blockParams.CacheManager,
+                  blockParams: new BlockParams(
+                      blockSize: blockParams.BlockSize,
+                      requestTime: blockParams.RequestTime,
+                      keepUntilAtLeast: blockParams.KeepUntilAtLeast,
+                      redundancy: blockParams.Redundancy,
+                      allowCommit: blockParams.AllowCommit,
+                      privateEncrypted: blockParams.PrivateEncrypted)
             ),
               data: Helpers.RandomDataHelper.DataFiller(
                   inputData: new ReadOnlyMemory<byte>(
-                    blockArguments.ConstituentBlocks
+                    blockParams.ConstituentBlocks
                         .SelectMany(b =>
                             b.Id.HashBytes.ToArray())
                         .ToArray()),
-                  blockSize: blockArguments.BlockSize)
+                  blockSize: blockParams.BlockSize)
         )
         {
             // TODO : if finalDataHash is null, reconstitute and compute- or accept the validation result's hash essentially?
-            SourceId = blockArguments.FinalDataHash;
-            TotalLength = blockArguments.TotalLength;
-            PrivateEncrypted = blockArguments.PrivateEncrypted;
-            ConstituentBlocks = blockArguments.ConstituentBlocks;
+            SourceId = blockParams.FinalDataHash;
+            TotalLength = blockParams.TotalLength;
+            PrivateEncrypted = blockParams.PrivateEncrypted;
+            ConstituentBlocks = blockParams.ConstituentBlocks;
         }
 
         public ReadOnlyMemory<byte> ConstituentBlockHashesBytes => new ReadOnlyMemory<byte>(

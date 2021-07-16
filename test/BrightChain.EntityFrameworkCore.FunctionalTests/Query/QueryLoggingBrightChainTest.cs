@@ -16,6 +16,9 @@ namespace BrightChain.EntityFrameworkCore.Query
         {
         }
 
+        protected override bool ExpectSensitiveData
+            => false;
+
         public class NorthwindQueryBrightChainFixtureInsensitive<TModelCustomizer> : NorthwindQueryBrightChainFixture<TModelCustomizer>
             where TModelCustomizer : IModelCustomizer, new()
         {
@@ -24,8 +27,5 @@ namespace BrightChain.EntityFrameworkCore.Query
                 return base.AddOptions(builder).EnableSensitiveDataLogging(false);
             }
         }
-
-        protected override bool ExpectSensitiveData
-            => false;
     }
 }

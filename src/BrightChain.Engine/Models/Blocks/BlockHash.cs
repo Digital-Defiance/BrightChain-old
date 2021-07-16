@@ -55,12 +55,12 @@ namespace BrightChain.Engine.Models.Blocks
 
         public string ToString(string format, IFormatProvider _)
         {
-            return HashBytes.ToString().Replace("-", "").ToLower(culture: System.Globalization.CultureInfo.InvariantCulture);
+            return BitConverter.ToString(HashBytes.ToArray()).Replace("-", string.Empty).ToLower(culture: System.Globalization.CultureInfo.InvariantCulture);
         }
 
         public new string ToString()
         {
-            return BitConverter.ToString(HashBytes.ToArray()).Replace("-", "").ToLower(culture: System.Globalization.CultureInfo.InvariantCulture);
+            return BitConverter.ToString(HashBytes.ToArray()).Replace("-", string.Empty).ToLower(culture: System.Globalization.CultureInfo.InvariantCulture);
         }
 
         public static bool operator ==(BlockHash a, BlockHash b)

@@ -1,6 +1,9 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using BrightChain.Engine.Exceptions;
 using BrightChain.EntityFrameworkCore.Metadata.Conventions;
 using BrightChain.EntityFrameworkCore.Properties;
@@ -10,9 +13,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.TestUtilities;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 // ReSharper disable UnusedMember.Local

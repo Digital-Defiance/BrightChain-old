@@ -1,12 +1,12 @@
-﻿using BrightChain.Engine.Models.Blocks.Chains;
+﻿using System;
+using System.IO;
+using BrightChain.Engine.Models.Blocks.Chains;
 using BrightChain.Engine.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.IO;
 
 namespace BrightChain.Engine.Tests
 {

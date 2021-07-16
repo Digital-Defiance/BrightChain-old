@@ -1,11 +1,11 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System.Threading.Tasks;
 using BrightChain.Engine.Client;
 using BrightChain.EntityFrameworkCore.TestUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.TestUtilities;
-using System.Threading.Tasks;
 using Xunit;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local

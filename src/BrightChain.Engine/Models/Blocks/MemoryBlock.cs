@@ -11,9 +11,9 @@ namespace BrightChain.Engine.Models.Blocks
     /// </summary>
     public class MemoryBlock : TransactableBlock, IBlock
     {
-        public MemoryBlock(TransactableBlockParams blockArguments, ReadOnlyMemory<byte> data) :
+        public MemoryBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data) :
             base(
-                blockArguments: blockArguments,
+                blockParams: blockParams,
                 data: data)
         {
             if (!(CacheManager is MemoryBlockCacheManager))
@@ -21,13 +21,13 @@ namespace BrightChain.Engine.Models.Blocks
                 throw new BrightChainException(CacheManager.GetType().Name);
             }
 
-            CacheManager.Set(Id, this);
+            CacheManager.Set(this);
         }
 
-        public override Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> data)
+        public override Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
             return new MemoryBlock(
-blockArguments: new TransactableBlockParams(CacheManager, blockArguments),
+blockParams: new TransactableBlockParams(CacheManager, blockParams),
 data: data);
         }
 

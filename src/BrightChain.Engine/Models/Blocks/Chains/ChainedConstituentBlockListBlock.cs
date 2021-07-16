@@ -12,9 +12,9 @@ namespace BrightChain.Engine.Models.Blocks.Chains
     /// </summary>
     public class ChainedConstituentBlockListBlock : ConstituentBlockListBlock, IBlock, IDisposable, IValidatable
     {
-        public ChainedConstituentBlockListBlock(ConstituentBlockListBlockParams blockArguments, ReadOnlyMemory<byte> data)
+        public ChainedConstituentBlockListBlock(ConstituentBlockListBlockParams blockParams, ReadOnlyMemory<byte> data)
         : base(
-              blockArguments: blockArguments)
+              blockParams: blockParams)
         {
             // TODO : if finalDataHash is null, reconstitute and compute- or accept the validation result's hash essentially?
         }

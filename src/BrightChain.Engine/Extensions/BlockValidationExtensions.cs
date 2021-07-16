@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Models.Blocks;
@@ -21,14 +20,14 @@ namespace BrightChain.Engine.Extensions
             {
                 exceptions.Add(new BrightChainValidationException(
                     element: nameof(block.BlockSize),
-                    message: String.Format("{0} is invalid: {1}", nameof(block.BlockSize), block.BlockSize.ToString())));
+                    message: string.Format("{0} is invalid: {1}", nameof(block.BlockSize), block.BlockSize.ToString())));
             }
 
             if (block.BlockSize != BlockSizeMap.BlockSize(block.Data.Length))
             {
                 exceptions.Add(new BrightChainValidationException(
                     element: nameof(block.BlockSize),
-                    message: String.Format("{0} is invalid: {1}, actual {2} bytes", nameof(block.BlockSize), block.BlockSize.ToString(), block.Data.Length)));
+                    message: string.Format("{0} is invalid: {1}, actual {2} bytes", nameof(block.BlockSize), block.BlockSize.ToString(), block.Data.Length)));
             }
 
             var recomputedHash = new BlockHash(block);
@@ -36,28 +35,28 @@ namespace BrightChain.Engine.Extensions
             {
                 exceptions.Add(new BrightChainValidationException(
                     element: nameof(block.Id),
-                    message: String.Format("{0} is invalid: {1}, actual {2}", nameof(block.Id), block.Id.ToString(), recomputedHash.ToString())));
+                    message: string.Format("{0} is invalid: {1}, actual {2}", nameof(block.Id), block.Id.ToString(), recomputedHash.ToString())));
             }
 
             if (block.Data.Length != BlockSizeMap.BlockSize(block.BlockSize))
             {
                 exceptions.Add(new BrightChainValidationException(
                     element: nameof(block.Data),
-                    message: String.Format("{0} has no data: {1} bytes", nameof(block.Data), block.Data.Length)));
+                    message: string.Format("{0} has no data: {1} bytes", nameof(block.Data), block.Data.Length)));
             }
 
             if (block.StorageContract.ByteCount != block.Data.Length)
             {
                 exceptions.Add(new BrightChainValidationException(
                     element: nameof(block.StorageContract.ByteCount),
-                    message: String.Format("{0} length {1} does not match data length of {2} bytes", nameof(block.StorageContract.ByteCount), block.StorageContract.ByteCount, block.Data.Length)));
+                    message: string.Format("{0} length {1} does not match data length of {2} bytes", nameof(block.StorageContract.ByteCount), block.StorageContract.ByteCount, block.Data.Length)));
             }
 
             if (!block.RedundancyContract.StorageContract.Equals(block.StorageContract))
             {
                 exceptions.Add(new BrightChainValidationException(
                     element: nameof(block.RedundancyContract.StorageContract),
-                    message: String.Format("{0} on redundancy contract does not match StorageContract", nameof(block.StorageContract))));
+                    message: string.Format("{0} on redundancy contract does not match StorageContract", nameof(block.StorageContract))));
             }
 
             // TODO: Validate signature

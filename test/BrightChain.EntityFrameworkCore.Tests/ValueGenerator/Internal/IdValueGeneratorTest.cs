@@ -1,13 +1,13 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using BrightChain.EntityFrameworkCore.Metadata.Conventions;
 using BrightChain.EntityFrameworkCore.TestUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace BrightChain.EntityFrameworkCore.ValueGenerator.Internal
@@ -48,8 +48,10 @@ namespace BrightChain.EntityFrameworkCore.ValueGenerator.Internal
 
             string Create<TEntity>(TEntity entity)
                 where TEntity : class, new()
-                => (string)BrightChainTestHelpers.Instance.CreateInternalEntry(model, EntityState.Added, entity)
-                    [model.FindEntityType(typeof(TEntity)).FindProperty(StoreKeyConvention.DefaultIdPropertyName)];
+            {
+                return (string)BrightChainTestHelpers.Instance.CreateInternalEntry(model, EntityState.Added, entity)
+                                   [model.FindEntityType(typeof(TEntity)).FindProperty(StoreKeyConvention.DefaultIdPropertyName)];
+            }
         }
 
         private class Blog

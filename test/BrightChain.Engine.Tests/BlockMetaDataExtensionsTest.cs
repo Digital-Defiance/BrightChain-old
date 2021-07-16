@@ -1,17 +1,18 @@
-﻿using BrightChain.Engine.Enumerations;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
+using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Extensions;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Blocks.Chains;
 using BrightChain.Engine.Models.Blocks.DataObjects;
 using BrightChain.Engine.Models.Contracts;
 using BrightChain.Engine.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
 
 namespace BrightChain.Engine.Tests
 {
@@ -31,7 +32,7 @@ namespace BrightChain.Engine.Tests
         public void ItExtractsMetaDataCorrectlyTest()
         {
             var block = new EmptyDummyBlock(
-                blockArguments: new BlockParams(
+                blockParams: new BlockParams(
                 blockSize: BlockSize.Message,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
@@ -47,7 +48,8 @@ namespace BrightChain.Engine.Tests
             Assert.IsTrue(metaDataDictionary.ContainsKey("_v"));
             Assert.IsTrue(metaDataDictionary.ContainsKey("RedundancyContract"));
             Assert.IsTrue(metaDataDictionary.ContainsKey("Signature"));
-            Assert.AreEqual(4, metaDataDictionary.Count); // Hash, Signature, RedundancyContract, _t, _v
+            Assert.IsTrue(metaDataDictionary.ContainsKey("RevocationCertificates"));
+            Assert.AreEqual(5, metaDataDictionary.Count); // Hash, Signature, RedundancyContract, _t, _v
             var contractObj = (JsonElement)metaDataDictionary["RedundancyContract"];
             var contract = contractObj.ToObject<RedundancyContract>(BlockMetadataExtensions.NewSerializerOptions());
 
@@ -68,7 +70,7 @@ namespace BrightChain.Engine.Tests
         public void ItExtractsCBLMetadataCorrectlyTest()
         {
             var dummyBlock = new EmptyDummyBlock(
-                blockArguments: new BlockParams(
+                blockParams: new BlockParams(
                 blockSize: BlockSize.Message,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
@@ -77,10 +79,10 @@ namespace BrightChain.Engine.Tests
                 privateEncrypted: false));
 
             var block = new ConstituentBlockListBlock(
-                            blockArguments: new ConstituentBlockListBlockParams(
-                                blockArguments: new TransactableBlockParams(
-                                    cacheManager: new MemoryBlockCacheManager(logger),
-                                    blockArguments: new BlockParams(
+                            blockParams: new ConstituentBlockListBlockParams(
+                                blockParams: new TransactableBlockParams(
+                                    cacheManager: new MemoryBlockCacheManager(logger: logger, configuration: new Configuration()),
+                                    blockParams: new BlockParams(
                                         blockSize: BlockSize.Message,
                                         requestTime: DateTime.Now,
                                         keepUntilAtLeast: DateTime.Now.AddDays(1),
@@ -103,9 +105,10 @@ namespace BrightChain.Engine.Tests
             Assert.IsTrue(metaDataDictionary.ContainsKey("PrivateEncrypted"));
             Assert.IsTrue(metaDataDictionary.ContainsKey("TotalLength"));
             Assert.IsTrue(metaDataDictionary.ContainsKey("SourceId"));
+            Assert.IsTrue(metaDataDictionary.ContainsKey("RevocationCertificates"));
             var contractObj = (JsonElement)metaDataDictionary["RedundancyContract"];
             var contract = contractObj.ToObject<RedundancyContract>(BlockMetadataExtensions.NewSerializerOptions());
-            Assert.AreEqual(9, metaDataDictionary.Count); // Hash, Signature, RedundancyContract, _t, _v
+            Assert.AreEqual(10, metaDataDictionary.Count); // Hash, Signature, RedundancyContract, _t, _v
             Assert.AreEqual(block.RedundancyContract, contract);
             Assert.AreEqual(block.StorageContract, contract.StorageContract);
             var sourceIdObj = (JsonElement)metaDataDictionary["SourceId"];
@@ -120,7 +123,7 @@ namespace BrightChain.Engine.Tests
             var testStart = DateTime.Now;
 
             var block = new EmptyDummyBlock(
-                blockArguments: new BlockParams(
+                blockParams: new BlockParams(
                 blockSize: BlockSize.Message,
                 requestTime: testStart,
                 keepUntilAtLeast: testStart.AddDays(1),
@@ -131,7 +134,7 @@ namespace BrightChain.Engine.Tests
             var metaData = block.Metadata;
 
             var block2 = new EmptyDummyBlock(
-                blockArguments: new BlockParams(
+                blockParams: new BlockParams(
                 blockSize: BlockSize.Message,
                 requestTime: testStart.AddSeconds(5),
                 keepUntilAtLeast: testStart.AddDays(1).AddSeconds(5),
@@ -160,7 +163,7 @@ namespace BrightChain.Engine.Tests
             var testStart = DateTime.Now;
 
             var dummyBlock = new EmptyDummyBlock(
-                blockArguments: new BlockParams(
+                blockParams: new BlockParams(
                 blockSize: BlockSize.Message,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
@@ -169,10 +172,10 @@ namespace BrightChain.Engine.Tests
                 privateEncrypted: false));
 
             var block = new ConstituentBlockListBlock(
-                            blockArguments: new ConstituentBlockListBlockParams(
-                                blockArguments: new TransactableBlockParams(
-                                    cacheManager: new MemoryBlockCacheManager(logger),
-                                    blockArguments: new BlockParams(
+                            blockParams: new ConstituentBlockListBlockParams(
+                                blockParams: new TransactableBlockParams(
+                                    cacheManager: new MemoryBlockCacheManager(logger: logger, configuration: new Configuration()),
+                                    blockParams: new BlockParams(
                                         blockSize: BlockSize.Message,
                                         requestTime: DateTime.Now,
                                         keepUntilAtLeast: DateTime.Now.AddDays(1),
@@ -189,7 +192,7 @@ namespace BrightChain.Engine.Tests
 
             var block2 = new ConstituentBlockListBlock(new ConstituentBlockListBlockParams(new TransactableBlockParams(
                 cacheManager: block.CacheManager,
-                blockArguments: new BlockParams(
+                blockParams: new BlockParams(
                     blockSize: BlockSize.Message, // match
                     requestTime: DateTime.MinValue, // bad
                     keepUntilAtLeast: DateTime.MinValue, // bad

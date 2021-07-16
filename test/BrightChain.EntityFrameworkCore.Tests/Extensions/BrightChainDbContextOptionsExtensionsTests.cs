@@ -1,11 +1,11 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Net;
 using BrightChain.EntityFrameworkCore.Infrastructure.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using System;
-using System.Net;
 using Xunit;
 using static Microsoft.EntityFrameworkCore.InMemoryDbContextOptionsExtensions;
 

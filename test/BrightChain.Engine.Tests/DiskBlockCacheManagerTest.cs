@@ -1,4 +1,6 @@
-﻿using BrightChain.Engine.Enumerations;
+﻿using System;
+using System.Collections.Generic;
+using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Blocks.DataObjects;
 using BrightChain.Engine.Services;
@@ -6,8 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
 
 namespace BrightChain.Engine.Tests
 {
@@ -16,11 +16,11 @@ namespace BrightChain.Engine.Tests
     /// </summary>
     public class DiskCacheTestBlock : TransactableBlock
     {
-        public new static BrightChainBlockCacheManager CacheManager;
+        public static new DiskBlockCacheManager CacheManager;
 
-        public DiskCacheTestBlock(TransactableBlockParams blockArguments, ReadOnlyMemory<byte> data) :
+        public DiskCacheTestBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data) :
             base(
-                blockArguments: blockArguments,
+                blockParams: blockParams,
                 data: data)
         {
 
@@ -28,9 +28,9 @@ namespace BrightChain.Engine.Tests
 
         internal DiskCacheTestBlock() :
             base(
-                blockArguments: new TransactableBlockParams(
+                blockParams: new TransactableBlockParams(
                     cacheManager: DiskCacheTestBlock.CacheManager,
-                    blockArguments: new BlockParams(
+                    blockParams: new BlockParams(
                     blockSize: BlockSize.Message,
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.MaxValue,
@@ -52,12 +52,12 @@ namespace BrightChain.Engine.Tests
             return new ReadOnlyMemory<byte>(data);
         }
 
-        public override Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> data)
+        public override Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
             return new DiskCacheTestBlock(
-blockArguments: new TransactableBlockParams(
+blockParams: new TransactableBlockParams(
 cacheManager: DiskCacheTestBlock.CacheManager,
-blockArguments: blockArguments),
+blockParams: blockParams),
 data: data);
         }
 
@@ -71,19 +71,19 @@ data: data);
     /// Tests disk block cache managers
     /// </summary>
     [TestClass]
-    public class DiskBlockCacheManagerTest : TransactableBlockCacheManagerTest<BrightChainBlockCacheManager>
+    public class DiskBlockCacheManagerTest : TransactableBlockCacheManagerTest<DiskBlockCacheManager>
     {
         [TestInitialize]
         public new void PreTestSetup()
         {
             base.PreTestSetup();
-            DiskCacheTestBlock.CacheManager = new BrightChainBlockCacheManager(logger.Object, configuration.Object);
+            DiskCacheTestBlock.CacheManager = new DiskBlockCacheManager(logger.Object, configuration.Object);
             cacheManager = DiskCacheTestBlock.CacheManager;
         }
 
-        internal override BrightChainBlockCacheManager NewCacheManager(ILogger logger, IConfiguration configuration)
+        internal override DiskBlockCacheManager NewCacheManager(ILogger logger, IConfiguration configuration)
         {
-            return new BrightChainBlockCacheManager(
+            return new DiskBlockCacheManager(
 logger: logger, configuration: configuration);
         }
 
@@ -97,9 +97,9 @@ logger: logger, configuration: configuration);
             }
 
             var block = new DiskCacheTestBlock(
-                blockArguments: new TransactableBlockParams(
+                blockParams: new TransactableBlockParams(
                     cacheManager: cacheManager,
-                    blockArguments: new BlockParams(
+                    blockParams: new BlockParams(
                         blockSize: BlockSize.Message,
                         requestTime: DateTime.Now,
                         keepUntilAtLeast: DateTime.MaxValue,
@@ -118,7 +118,7 @@ logger: logger, configuration: configuration);
         }
 
         /// <summary>
-        /// Push a null value into the cache
+        /// Tries to push a null value into the cache and expects an exception.
         /// </summary>
         [TestMethod]
         public override void ItPutsNullValuesTest()
@@ -128,7 +128,7 @@ logger: logger, configuration: configuration);
 
             // Act/Expect
             Exceptions.BrightChainException brightChainException = Assert.ThrowsException<BrightChain.Engine.Exceptions.BrightChainException>(() =>
-                cacheManager.Set(testPair.Key, newData));
+                cacheManager.Set(newData));
 
             logger.Verify(l => l.Log(
                 LogLevel.Information,

@@ -17,10 +17,10 @@ namespace BrightChain.Engine.Models.Blocks
             return new ReadOnlyMemory<byte>(zeroBytes);
         }
 
-        public EmptyDummyBlock(BlockParams blockArguments) :
+        public EmptyDummyBlock(BlockParams blockParams) :
             base(
-                blockArguments: blockArguments,
-                data: NewEmptyBlockData(blockArguments.BlockSize))
+                blockParams: blockParams,
+                data: NewEmptyBlockData(blockParams.BlockSize))
         { }
 
         /// <summary>
@@ -32,10 +32,10 @@ namespace BrightChain.Engine.Models.Blocks
         /// <param name="_"></param>
         /// <param name="allowCommit"></param>
         /// <returns></returns>
-        public override Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> _)
+        public override Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> _)
         {
             return new EmptyDummyBlock(
-blockArguments: blockArguments);
+blockParams: blockParams);
         }
 
         public int CompareTo(EmptyDummyBlock other)

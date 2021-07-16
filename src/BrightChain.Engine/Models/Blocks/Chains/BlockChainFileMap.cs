@@ -13,7 +13,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
     public class BlockChainFileMap : ConstituentBlockListBlock
     {
         public IEnumerable<TupleStripe> Tuples { get; }
-        public BlockChainFileMap(ConstituentBlockListBlockParams blockArguments) : base(blockArguments: blockArguments)
+        public BlockChainFileMap(ConstituentBlockListBlockParams blockParams) : base(blockParams: blockParams)
         {
         }
 
@@ -25,10 +25,10 @@ namespace BrightChain.Engine.Models.Blocks.Chains
 
         public BlockChainFileMap(ConstituentBlockListBlock cblBlock, IEnumerable<TupleStripe> tuples = null)
         : base(
-              blockArguments: new ConstituentBlockListBlockParams(
-                  blockArguments: new TransactableBlockParams(
+              blockParams: new ConstituentBlockListBlockParams(
+                  blockParams: new TransactableBlockParams(
                   cacheManager: cblBlock.CacheManager,
-                  blockArguments: new BlockParams(
+                  blockParams: new BlockParams(
                       blockSize: cblBlock.BlockSize,
                       requestTime: cblBlock.StorageContract.RequestTime,
                       keepUntilAtLeast: cblBlock.StorageContract.KeepUntilAtLeast,

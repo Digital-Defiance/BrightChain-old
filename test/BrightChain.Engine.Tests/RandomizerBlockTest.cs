@@ -1,11 +1,12 @@
-﻿using BrightChain.Engine.Enumerations;
+﻿using System;
+using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Blocks.DataObjects;
 using BrightChain.Engine.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
 
 namespace BrightChain.Engine.Tests
 {
@@ -15,8 +16,8 @@ namespace BrightChain.Engine.Tests
     [TestClass]
     public class RandomizerBlockTest
     {
-        protected MemoryBlockCacheManager cacheManager;
-        protected ILogger logger;
+        private MemoryBlockCacheManager cacheManager;
+        private ILogger logger;
 
         public RandomizerBlockTest()
         {
@@ -26,7 +27,7 @@ namespace BrightChain.Engine.Tests
         public void PreTestSetUp()
         {
             logger = new Moq.Mock<ILogger>().Object;
-            cacheManager = new MemoryBlockCacheManager(logger: logger);
+            cacheManager = new MemoryBlockCacheManager(logger: logger, configuration: new Configuration());
         }
 
         [TestMethod]
@@ -35,7 +36,7 @@ namespace BrightChain.Engine.Tests
             var block = new RandomizerBlock(
                 new TransactableBlockParams(
                 cacheManager: cacheManager,
-                blockArguments: new BlockParams(
+                blockParams: new BlockParams(
                     blockSize: BlockSize.Message,
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.Now.AddDays(1),

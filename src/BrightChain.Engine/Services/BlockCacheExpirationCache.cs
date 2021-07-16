@@ -14,8 +14,8 @@ namespace BrightChain.Engine.Services
         where TkeySerializer : IBrightChainSerializer<Tkey>, new()
         where TvalueSerializer : IBrightChainSerializer<Tvalue>, new()
     {
-        private BlockCacheManager expirationCache;
-        private ICacheManager<Tkey, Tvalue> sourceCache;
+        private readonly BlockCacheManager expirationCache;
+        private readonly ICacheManager<Tkey, Tvalue> sourceCache;
 
         public BlockCacheExpirationCache(ICacheManager<Tkey, Tvalue> sourceCache)
         {

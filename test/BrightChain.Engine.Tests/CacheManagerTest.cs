@@ -1,10 +1,12 @@
-﻿using BrightChain.Engine.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using BrightChain.Engine.Interfaces;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
 
 namespace BrightChain.Engine.Tests
 {
@@ -54,13 +56,20 @@ namespace BrightChain.Engine.Tests
         [TestInitialize]
         public void PreTestSetup()
         {
-            logger = new Mock<ILogger<Tcache>>();
-            configuration = new Mock<IConfiguration>();
+            this.logger = new Mock<ILogger<Tcache>>();
+            this.configuration = new Mock<IConfiguration>();
+
+            Mock<IConfigurationSection> mockSection = new Mock<IConfigurationSection>();
+            mockSection.Setup(x => x.Value).Returns(Path.GetTempPath());
+
+            this.configuration.Setup(x => x.GetSection(It.Is<string>(k => k == "BasePath"))).Returns(mockSection.Object);
+
             // the cache manager under test
             cacheManager = NewCacheManager(logger: logger.Object, configuration: configuration.Object);
+
             // a key to be used for each test
-            testPair = NewKeyValue();
-            Assert.IsFalse(cacheManager.Contains(testPair.Key));
+            this.testPair = this.NewKeyValue();
+            Assert.IsFalse(this.cacheManager.Contains(this.testPair.Key));
             // at this point, the tests begin, knowing the key is not already in the cache
         }
 
@@ -75,7 +84,7 @@ namespace BrightChain.Engine.Tests
             // pre-setup
 
             // Act
-            cacheManager.Set(testPair.Key, testPair.Value);
+            cacheManager.Set(testPair.Value);
 
             // Assert
             Assert.IsNotNull(testPair.Key);
@@ -99,7 +108,7 @@ namespace BrightChain.Engine.Tests
             Tvalue newData = NewNullData();
 
             // Act
-            cacheManager.Set(testPair.Key, newData);
+            cacheManager.Set(newData);
 
             // Assert
             Assert.IsNull(newData);
@@ -120,17 +129,16 @@ namespace BrightChain.Engine.Tests
         public void ItHitsTheCacheTest()
         {
             // Arrange
-            var expectation = testPair.Value;
-            cacheManager.Set(testPair.Key, expectation);
-            Assert.IsTrue(cacheManager.Contains(testPair.Key));
+            var expectation = this.testPair.Value;
+            this.cacheManager.Set(expectation);
+            Assert.IsTrue(this.cacheManager.Contains(this.testPair.Key));
 
             // Act
-            Tvalue result = cacheManager.Get(testPair.Key);
+            Tvalue result = this.cacheManager.Get(this.testPair.Key);
 
             // Assert
             Assert.IsNotNull(expectation);
             Assert.AreEqual(expectation, result);
-            Assert.AreSame(expectation, result);
             logger.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
@@ -171,7 +179,7 @@ namespace BrightChain.Engine.Tests
         public void ItDropsCachKeysTest()
         {
             // Arrange
-            cacheManager.Set(testPair.Key, testPair.Value);
+            cacheManager.Set(testPair.Value);
             // verify that the key tests good before we drop
             Assert.IsTrue(cacheManager.Contains(testPair.Key));
 
@@ -197,7 +205,7 @@ namespace BrightChain.Engine.Tests
         public void ItExpiresCacheKeysTest()
         {
             var expectation = testPair.Value;
-            cacheManager.Set(testPair.Key, expectation);
+            cacheManager.Set(expectation);
             Assert.IsTrue(cacheManager.Contains(testPair.Key));
             // TODO: System.Threading.Thread.Sleep((cacheManager.TTL * 1000) + 1);
             Assert.IsFalse(cacheManager.Contains(testPair.Key));
@@ -219,17 +227,15 @@ namespace BrightChain.Engine.Tests
         public void VerifyCacheDataIntegrityTest()
         {
             // Arrange
-            var expectation = testPair.Value;
-            cacheManager.Set(testPair.Key, expectation);
+            var expectation = this.testPair.Value;
+            this.cacheManager.Set(expectation);
 
             // Act
-            Tvalue result = cacheManager.Get(testPair.Key);
+            Tvalue result = this.cacheManager.Get(this.testPair.Key);
 
             // Assert
             Assert.IsNotNull(expectation);
             Assert.AreEqual(expectation, result);
-            Assert.AreSame(expectation, result);
         }
-
     }
 }

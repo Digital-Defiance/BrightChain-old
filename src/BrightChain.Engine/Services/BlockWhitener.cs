@@ -13,7 +13,7 @@ namespace BrightChain.Engine.Services
     {
         public static byte TupleCount { get; } = 5;
 
-        private MemoryBlockCacheManager pregeneratedRandomizerCache;
+        private readonly MemoryBlockCacheManager pregeneratedRandomizerCache;
 
         public BlockWhitener(MemoryBlockCacheManager pregeneratedRandomizerCache)
         {
@@ -31,7 +31,7 @@ namespace BrightChain.Engine.Services
                 tupleStripeBlocks[i] = new RandomizerBlock(
                     new TransactableBlockParams(
                     cacheManager: pregeneratedRandomizerCache,
-                    blockArguments: new BlockParams(
+                    blockParams: new BlockParams(
                         blockSize: block.BlockSize,
                         requestTime: DateTime.Now,
                         keepUntilAtLeast: block.StorageContract.KeepUntilAtLeast,

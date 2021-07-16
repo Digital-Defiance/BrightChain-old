@@ -16,42 +16,42 @@ namespace BrightChain.Engine.Models.Blocks
     {
         private readonly ICacheManager<BlockHash, TransactableBlock> cacheManager;
 
-        public SourceBlock(TransactableBlockParams blockArguments, ReadOnlyMemory<byte> data) :
+        public SourceBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data) :
             base(
-                blockArguments: blockArguments,
+                blockParams: blockParams,
                 data: data)
         {
-            cacheManager = blockArguments.CacheManager;
+            cacheManager = blockParams.CacheManager;
         }
 
-        public override Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> data)
+        public override Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
             if (cacheManager is MemoryBlockCacheManager memoryBlockCacheManager)
             {
                 return new MemoryBlock(
-                    blockArguments: new TransactableBlockParams(
+                    blockParams: new TransactableBlockParams(
                         cacheManager: CacheManager,
-                        blockArguments: new BlockParams(
+                        blockParams: new BlockParams(
                             blockSize: BlockSize,
-                            requestTime: blockArguments.RequestTime,
-                            keepUntilAtLeast: blockArguments.KeepUntilAtLeast,
-                            redundancy: blockArguments.Redundancy,
-                            allowCommit: blockArguments.AllowCommit,
-                            privateEncrypted: blockArguments.PrivateEncrypted)),
+                            requestTime: blockParams.RequestTime,
+                            keepUntilAtLeast: blockParams.KeepUntilAtLeast,
+                            redundancy: blockParams.Redundancy,
+                            allowCommit: blockParams.AllowCommit,
+                            privateEncrypted: blockParams.PrivateEncrypted)),
                         data: data);
             }
-            else if (cacheManager is BrightChainBlockCacheManager diskBlockCacheManager)
+            else if (cacheManager is DiskBlockCacheManager diskBlockCacheManager)
             {
                 return new DiskBlock(
-                    blockArguments: new TransactableBlockParams(
+                    blockParams: new TransactableBlockParams(
                         cacheManager: diskBlockCacheManager,
-                        blockArguments: new BlockParams(
+                        blockParams: new BlockParams(
                             blockSize: BlockSize,
-                            requestTime: blockArguments.RequestTime,
-                            keepUntilAtLeast: blockArguments.KeepUntilAtLeast,
-                            redundancy: blockArguments.Redundancy,
-                            allowCommit: blockArguments.AllowCommit,
-                            privateEncrypted: blockArguments.PrivateEncrypted)),
+                            requestTime: blockParams.RequestTime,
+                            keepUntilAtLeast: blockParams.KeepUntilAtLeast,
+                            redundancy: blockParams.Redundancy,
+                            allowCommit: blockParams.AllowCommit,
+                            privateEncrypted: blockParams.PrivateEncrypted)),
                         data: data);
             }
             else

@@ -8,7 +8,7 @@ namespace BrightChain.Engine.Models.Units
     {
         readonly int ByteCount;
         readonly ulong DurationSeconds;
-        RedundancyContractType Redundancy;
+        readonly RedundancyContractType Redundancy;
 
         public ByteStorageRedundancyDuration(int byteCount, ulong durationSeconds, RedundancyContractType redundancy)
         {

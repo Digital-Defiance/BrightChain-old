@@ -1,6 +1,8 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Linq;
 using BrightChain.EntityFrameworkCore.Diagnostics.Internal;
 using BrightChain.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore;
@@ -10,8 +12,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.TestModels.Northwind;
 using Microsoft.EntityFrameworkCore.TestUtilities;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
 using Xunit;
 
 namespace BrightChain.EntityFrameworkCore.Query

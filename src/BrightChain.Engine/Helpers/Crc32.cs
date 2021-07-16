@@ -4,7 +4,7 @@ namespace BrightChain.Engine.Helpers
 {
     public class Crc32
     {
-        uint[] table;
+        readonly uint[] table;
 
         public uint ComputeChecksum(byte[] bytes)
         {

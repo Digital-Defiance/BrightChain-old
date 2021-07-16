@@ -9,9 +9,9 @@ namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
 {
     public class ResetAuthenticatorModel : PageModel
     {
-        UserManager<BrightChainEntityUser> _userManager;
+        readonly UserManager<BrightChainEntityUser> _userManager;
         private readonly SignInManager<BrightChainEntityUser> _signInManager;
-        ILogger<ResetAuthenticatorModel> _logger;
+        readonly ILogger<ResetAuthenticatorModel> _logger;
 
         public ResetAuthenticatorModel(
             UserManager<BrightChainEntityUser> userManager,

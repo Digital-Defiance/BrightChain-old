@@ -4,6 +4,7 @@ using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Helpers;
 using BrightChain.Engine.Interfaces;
 using BrightChain.Engine.Models.Blocks.DataObjects;
+using BrightChain.Engine.Services;
 
 namespace BrightChain.Engine.Models.Blocks
 {
@@ -14,25 +15,33 @@ namespace BrightChain.Engine.Models.Blocks
     /// </summary>
     public class TransactableBlock : Block, IDisposable, ITransactable, ITransactableBlock, IComparable<TransactableBlock>, IComparable<ITransactableBlock>
     {
-        private bool disposedValue;
-        //protected BPlusTree<BlockHash, TransactableBlock> tree;
-        public ICacheManager<BlockHash, TransactableBlock> CacheManager { get; internal set; }
-        public bool Committed { get; protected set; } = false;
-        public bool AllowCommit { get; protected set; } = false;
 
-        public TransactableBlock(TransactableBlockParams blockArguments, ReadOnlyMemory<byte> data) :
+        public TransactableBlock(BlockCacheManager cacheManager, RestoredBlock sourceBlock, bool allowCommit)
+            : base(
+                blockParams: new BlockParams(
+                    blockSize: sourceBlock.BlockSize,
+                    requestTime: sourceBlock.StorageContract.RequestTime,
+                    keepUntilAtLeast: sourceBlock.StorageContract.KeepUntilAtLeast,
+                    redundancy: sourceBlock.RedundancyContract.RedundancyContractType,
+                    allowCommit: allowCommit,
+                    privateEncrypted: sourceBlock.Revokable),
+                data: sourceBlock.Data)
+        {
+            CacheManager = cacheManager;
+        }
+
+        public TransactableBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data) :
             base(
-                blockArguments: new BlockParams(
-                    blockSize: blockArguments.BlockSize,
-                    requestTime: blockArguments.RequestTime,
-                    keepUntilAtLeast: blockArguments.KeepUntilAtLeast,
-                    redundancy: blockArguments.Redundancy,
-                    allowCommit: blockArguments.AllowCommit,
-                    privateEncrypted: blockArguments.PrivateEncrypted),
+                blockParams: new BlockParams(
+                    blockSize: blockParams.BlockSize,
+                    requestTime: blockParams.RequestTime,
+                    keepUntilAtLeast: blockParams.KeepUntilAtLeast,
+                    redundancy: blockParams.Redundancy,
+                    allowCommit: blockParams.AllowCommit,
+                    privateEncrypted: blockParams.PrivateEncrypted),
                 data: data)
         {
-            CacheManager = blockArguments.CacheManager;
-            //this.tree = cacheManager is null ? null : this.CacheManager.tree;
+            CacheManager = blockParams.CacheManager;
             disposedValue = false;
         }
 
@@ -40,7 +49,7 @@ namespace BrightChain.Engine.Models.Blocks
         /// For test methods
         /// </summary>
         internal TransactableBlock() : base(
-            blockArguments: new BlockParams(
+            blockParams: new BlockParams(
                 blockSize: BlockSize.Message,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.MaxValue,
@@ -49,8 +58,13 @@ namespace BrightChain.Engine.Models.Blocks
                 privateEncrypted: false),
             data: new ReadOnlyMemory<byte>() { })
         {
-
         }
+
+        private bool disposedValue;
+        //protected BPlusTree<BlockHash, TransactableBlock> tree;
+        public ICacheManager<BlockHash, TransactableBlock> CacheManager { get; internal set; }
+        public bool Committed { get; protected set; } = false;
+        public bool AllowCommit { get; protected set; } = false;
 
         public void SetCacheManager(ICacheManager<BlockHash, TransactableBlock> cacheManager)
         {
@@ -82,12 +96,12 @@ namespace BrightChain.Engine.Models.Blocks
             Committed = false;
         }
 
-        public override Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> data)
+        public override Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
             return new TransactableBlock(
-blockArguments: new TransactableBlockParams(
+blockParams: new TransactableBlockParams(
 cacheManager: CacheManager,
-blockArguments: blockArguments),
+blockParams: blockParams),
 data: data);
         }
 

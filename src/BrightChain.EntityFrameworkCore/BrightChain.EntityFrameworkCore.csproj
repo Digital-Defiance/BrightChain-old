@@ -19,6 +19,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DotNetAnalyzers.DocumentationAnalyzers" Version="1.0.0-beta.59">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Hangfire.Core" Version="1.8.0-beta3" />
     <PackageReference Include="IdentityModel" Version="5.1.0" />
     <PackageReference Include="IdentityServer4" Version="4.1.2" />
@@ -27,11 +31,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.0-preview.6.21355.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0-preview.6.21352.12" />
-    <PackageReference Include="Dapr.Actors" Version="1.2.0" />
-    <PackageReference Include="Dapr.Actors.AspNetCore" Version="1.2.0" />
     <PackageReference Include="Dapr.AspNetCore" Version="1.2.0" />
-    <PackageReference Include="Dapr.Client" Version="1.2.0" />
-    <PackageReference Include="Dapr.Extensions.Configuration" Version="1.2.0" />
     <PackageReference Include="docfx" Version="2.58.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Versioning" Version="4.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.OData.Versioning" Version="5.0.0" />
@@ -39,14 +39,15 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-preview.6.21352.12" />
     <PackageReference Include="Microsoft.IdentityModel" Version="7.0.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.11.1" />
-    <PackageReference Include="FluentAssertions" Version="6.0.0-beta0001" />
     <PackageReference Include="Microsoft.Data.OData" Version="5.8.4" />
-    <PackageReference Include="FluentValidation" Version="10.3.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-20206-02">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.Runtime.Caching" Version="6.0.0-preview.6.21352.12" />
   </ItemGroup>
 
   <ItemGroup>

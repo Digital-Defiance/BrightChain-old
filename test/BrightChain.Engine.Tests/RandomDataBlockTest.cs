@@ -1,10 +1,10 @@
-﻿using BrightChain.Engine.Enumerations;
+﻿using System;
+using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Blocks.DataObjects;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
 
 namespace BrightChain.Engine.Tests
 {
@@ -30,7 +30,7 @@ namespace BrightChain.Engine.Tests
         public void ItCreatesValidRandomDataBlocksTest()
         {
             var block = new RandomDataBlock(
-                blockArguments: new BlockParams(
+                blockParams: new BlockParams(
                 blockSize: BlockSize.Message,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),

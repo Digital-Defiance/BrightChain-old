@@ -1,6 +1,7 @@
 ﻿using System;
 using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Interfaces;
+using BrightChain.Engine.Models.Contracts;
 
 namespace BrightChain.Engine.Models.Blocks
 {

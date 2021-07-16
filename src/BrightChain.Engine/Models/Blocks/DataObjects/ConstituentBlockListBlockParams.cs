@@ -8,10 +8,10 @@ namespace BrightChain.Engine.Models.Blocks.DataObjects
         public ulong TotalLength;
         public IEnumerable<Block> ConstituentBlocks;
 
-        public ConstituentBlockListBlockParams(TransactableBlockParams blockArguments, BlockHash finalDataHash, ulong totalLength, IEnumerable<Block> constituentBlocks)
+        public ConstituentBlockListBlockParams(TransactableBlockParams blockParams, BlockHash finalDataHash, ulong totalLength, IEnumerable<Block> constituentBlocks)
        : base(
-             cacheManager: blockArguments.CacheManager,
-             blockArguments: blockArguments)
+             cacheManager: blockParams.CacheManager,
+             blockParams: blockParams)
         {
             FinalDataHash = finalDataHash;
             TotalLength = totalLength;

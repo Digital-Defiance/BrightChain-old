@@ -4,7 +4,7 @@ using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Helpers;
 using BrightChain.Engine.Interfaces;
 
-namespace BrightChain.Engine.Models.Blocks
+namespace BrightChain.Engine.Models.Contracts
 {
     /// <summary>
     /// Type box for the sha hashes of signatures
@@ -49,12 +49,12 @@ namespace BrightChain.Engine.Models.Blocks
 
         public string ToString(string format, IFormatProvider _)
         {
-            return ToString();
+            return BitConverter.ToString(SignatureHashBytes.ToArray()).Replace("-", string.Empty).ToLower(culture: System.Globalization.CultureInfo.InvariantCulture);
         }
 
         public new string ToString()
         {
-            return BitConverter.ToString(SignatureHashBytes.ToArray());
+            return BitConverter.ToString(SignatureHashBytes.ToArray()).Replace("-", string.Empty).ToLower(culture: System.Globalization.CultureInfo.InvariantCulture);
         }
 
         public static bool operator ==(DataSignature a, DataSignature b)

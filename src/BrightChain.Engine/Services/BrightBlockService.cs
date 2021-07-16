@@ -19,13 +19,13 @@ namespace BrightChain.Engine.Services
     /// </summary>
     public class BrightBlockService
     {
-        protected readonly ILogger logger;
-        protected readonly IConfiguration configuration;
+        private readonly ILogger logger;
+        private readonly IConfiguration configuration;
 
-        protected readonly MemoryBlockCacheManager blockMemoryCache;
-        protected readonly MemoryBlockCacheManager randomizerBlockMemoryCache;
-        protected readonly BrightChainBlockCacheManager blockDiskCache;
-        protected readonly BlockWhitener blockWhitener;
+        private readonly MemoryBlockCacheManager blockMemoryCache;
+        private readonly MemoryBlockCacheManager randomizerBlockMemoryCache;
+        private readonly DiskBlockCacheManager blockDiskCache;
+        private readonly BlockWhitener blockWhitener;
 
         public BrightBlockService(ILoggerFactory logger)
         {
@@ -35,21 +35,38 @@ namespace BrightChain.Engine.Services
                 throw new BrightChainException("CreateLogger failed");
             }
 
-            this.logger.LogInformation(String.Format("<{0}>: logging initialized", nameof(BrightBlockService)));
+            this.logger.LogInformation(string.Format("<{0}>: logging initialized", nameof(BrightBlockService)));
             configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("brightchainSettings.json").Build();
 
             var services = new ServiceCollection();
 
+            blockMemoryCache = new MemoryBlockCacheManager(
+                logger: this.logger,
+                configuration: configuration);
+            blockDiskCache = new DiskBlockCacheManager(
+                logger: this.logger,
+                configuration: configuration);
+            randomizerBlockMemoryCache = new MemoryBlockCacheManager(
+                logger: this.logger,
+                configuration: configuration);
+            blockWhitener = new BlockWhitener(
+                pregeneratedRandomizerCache: randomizerBlockMemoryCache);
 
-            blockMemoryCache = new MemoryBlockCacheManager(logger: this.logger);
-            blockDiskCache = new BrightChainBlockCacheManager(logger: this.logger, configuration: configuration);
-            randomizerBlockMemoryCache = new MemoryBlockCacheManager(logger: this.logger);
-            this.logger.LogInformation(String.Format("<{0}>: caches initialized", nameof(BrightBlockService)));
-            blockWhitener = new BlockWhitener(pregeneratedRandomizerCache: randomizerBlockMemoryCache);
+            this.logger.LogInformation(string.Format("<{0}>: caches initialized", nameof(BrightBlockService)));
         }
 
+        /// <summary>
+        /// Creates a descriptor block for a given input file, found on disk.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="keepUntilAtLeast"></param>
+        /// <param name="redundancy"></param>
+        /// <param name="allowCommit"></param>
+        /// <param name="privateEncrypted"></param>
+        /// <param name="blockSize"></param>
+        /// <returns>Resultant CBL block</returns>
         public ConstituentBlockListBlock CreateCblFromFile(string fileName, DateTime keepUntilAtLeast, RedundancyContractType redundancy, bool allowCommit, bool privateEncrypted = false, BlockSize? blockSize = null)
         {
             FileStream inFile = File.OpenRead(fileName);
@@ -103,7 +120,7 @@ namespace BrightChain.Engine.Services
                 var sourceBlock = new SourceBlock(
                     new TransactableBlockParams(
                             cacheManager: blockMemoryCache, // SourceBlock itself cannot be persisted to cache, but resultant blocks from NewBlock via XOR go here
-                            blockArguments: new BlockParams(
+                            blockParams: new BlockParams(
                                 blockSize: blockSize.Value,
                                 requestTime: DateTime.Now,
                                 keepUntilAtLeast: DateTime.MaxValue,
@@ -131,10 +148,10 @@ namespace BrightChain.Engine.Services
             }
 
             var cbl = new ConstituentBlockListBlock(
-                blockArguments: new ConstituentBlockListBlockParams(
-                    blockArguments: new TransactableBlockParams(
+                blockParams: new ConstituentBlockListBlockParams(
+                    blockParams: new TransactableBlockParams(
                         cacheManager: blockMemoryCache,
-                        blockArguments: new BlockParams(
+                        blockParams: new BlockParams(
                             blockSize: blockSize.Value,
                             requestTime: DateTime.Now,
                             keepUntilAtLeast: keepUntilAtLeast,

@@ -5,8 +5,8 @@ namespace BrightChain.Engine.Models.Blocks
 {
     public class RestoredBlock : Block
     {
-        public RestoredBlock(BlockParams blockArguments, ReadOnlyMemory<byte> data) : base(
-            blockArguments: blockArguments,
+        public RestoredBlock(BlockParams blockParams, ReadOnlyMemory<byte> data) : base(
+            blockParams: blockParams,
             data: data)
         {
         }
@@ -16,9 +16,9 @@ namespace BrightChain.Engine.Models.Blocks
 
         }
 
-        public override Block NewBlock(BlockParams blockArguments, ReadOnlyMemory<byte> data)
+        public override Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
-            return new RestoredBlock(blockArguments, data);
+            return new RestoredBlock(blockParams, data);
         }
     }
 }

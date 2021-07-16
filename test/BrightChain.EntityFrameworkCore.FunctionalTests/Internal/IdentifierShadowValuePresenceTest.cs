@@ -1,7 +1,7 @@
-﻿using BrightChain.EntityFrameworkCore.TestUtilities;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using BrightChain.EntityFrameworkCore.TestUtilities;
+using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace BrightChain.EntityFrameworkCore.Internal
