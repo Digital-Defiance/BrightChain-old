@@ -1,6 +1,7 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System.Linq;
 using BrightChain.EntityFrameworkCore.Metadata.Internal;
 using BrightChain.EntityFrameworkCore.Utilities;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -8,7 +9,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions.Infrastructure;
 using Microsoft.EntityFrameworkCore.Utilities;
-using System.Linq;
 
 namespace BrightChain.EntityFrameworkCore.Metadata.Conventions
 {

@@ -1,6 +1,9 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Linq;
+using System.Text.Json;
 using BrightChain.EntityFrameworkCore.Metadata.Internal;
 using BrightChain.EntityFrameworkCore.ValueGeneration;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -8,9 +11,6 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions.Infrastructure;
-using System;
-using System.Linq;
-using System.Text.Json;
 
 // ReSharper disable once CheckNamespace
 namespace BrightChain.EntityFrameworkCore.Metadata.Conventions

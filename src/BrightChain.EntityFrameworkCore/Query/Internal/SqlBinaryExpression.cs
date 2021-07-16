@@ -1,14 +1,14 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using BrightChain.EntityFrameworkCore.Properties;
 using BrightChain.EntityFrameworkCore.Utilities;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace BrightChain.EntityFrameworkCore.Query.Internal
 {
@@ -168,7 +168,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             }
 
             static bool RequiresBrackets(SqlExpression expression)
-                => expression is SqlBinaryExpression;
+            {
+                return expression is SqlBinaryExpression;
+            }
         }
 
         /// <summary>

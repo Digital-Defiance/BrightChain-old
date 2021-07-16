@@ -1,16 +1,16 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using BrightChain.EntityFrameworkCore.Internal;
-using BrightChain.EntityFrameworkCore.Storage.Internal;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using BrightChain.EntityFrameworkCore.Internal;
+using BrightChain.EntityFrameworkCore.Storage.Internal;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 // ReSharper disable once CheckNamespace
 namespace BrightChain.EntityFrameworkCore.Diagnostics.Internal

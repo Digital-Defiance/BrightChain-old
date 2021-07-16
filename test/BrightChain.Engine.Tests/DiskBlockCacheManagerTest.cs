@@ -1,7 +1,7 @@
-﻿using BrightChain.Enumerations;
-using BrightChain.Models.Blocks;
-using BrightChain.Models.Blocks.DataObjects;
-using BrightChain.Services;
+﻿using BrightChain.Engine.Enumerations;
+using BrightChain.Engine.Models.Blocks;
+using BrightChain.Engine.Models.Blocks.DataObjects;
+using BrightChain.Engine.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,7 +9,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 
-namespace BrightChain.Tests
+namespace BrightChain.Engine.Tests
 {
     /// <summary>
     /// Serializable testable test block class
@@ -127,7 +127,7 @@ logger: logger, configuration: configuration);
             var newData = NewNullData();
 
             // Act/Expect
-            Exceptions.BrightChainException brightChainException = Assert.ThrowsException<BrightChain.Exceptions.BrightChainException>(() =>
+            Exceptions.BrightChainException brightChainException = Assert.ThrowsException<BrightChain.Engine.Exceptions.BrightChainException>(() =>
                 cacheManager.Set(testPair.Key, newData));
 
             logger.Verify(l => l.Log(

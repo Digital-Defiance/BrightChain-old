@@ -1,9 +1,9 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
+﻿using System;
+using BrightChain.API.Identity.Data;
 using BrightChain.EntityFrameworkCore.Interfaces;
 using BrightChain.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using static BrightChain.EntityFrameworkCore.BrightChainDbContextOptionsExtensions;
 
 namespace BrightChain.API.Extensions

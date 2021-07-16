@@ -1,27 +1,27 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+using BrightChain.EntityFrameworkCore.Data.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BrightChain.API.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        private readonly UserManager<BrightChainUser> _userManager;
-        private readonly SignInManager<BrightChainUser> _signInManager;
+        private readonly UserManager<BrightChainEntityUser> _userManager;
+        private readonly SignInManager<BrightChainEntityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<BrightChainUser> signInManager,
+        public LoginModel(SignInManager<BrightChainEntityUser> signInManager,
             ILogger<LoginModel> logger,
-            UserManager<BrightChainUser> userManager)
+            UserManager<BrightChainEntityUser> userManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

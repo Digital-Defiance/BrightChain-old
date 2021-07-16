@@ -1,8 +1,12 @@
+using System;
+using System.Reflection;
 using BrightChain.API.Areas.Identity;
 using BrightChain.API.Data;
+using BrightChain.API.Identity.Data;
 using BrightChain.API.Services;
+using BrightChain.Engine.Services;
 using BrightChain.EntityFrameworkCore.Data;
-using BrightChain.Services;
+using BrightChain.EntityFrameworkCore.Data.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -12,8 +16,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Reflection;
 
 namespace BrightChain.API
 {
@@ -35,7 +37,7 @@ namespace BrightChain.API
             //services.AddPersistence(this.Configuration);
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<BrightChainUser>>();
+            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<BrightChainEntityUser>>();
             services.AddScoped<BrightChainBlockDbContext>(provider =>
             {
                 var dbContext = provider.GetService<BrightChainBlockDbContext>();

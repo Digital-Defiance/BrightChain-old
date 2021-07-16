@@ -1,6 +1,12 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Text.Json.Nodes;
 using BrightChain.EntityFrameworkCore.Metadata.Conventions;
 using BrightChain.EntityFrameworkCore.Metadata.Internal;
 using BrightChain.EntityFrameworkCore.Properties;
@@ -11,12 +17,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text.Json.Nodes;
 
 #nullable disable
 
@@ -239,98 +239,98 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 switch (extensionExpression)
                 {
                     case ProjectionBindingExpression projectionBindingExpression:
-                        {
-                            var projection = GetProjection(projectionBindingExpression);
+                    {
+                        var projection = GetProjection(projectionBindingExpression);
 
-                            return CreateGetValueExpression(
-                                _jObjectParameter,
-                                projection.Alias,
-                                projectionBindingExpression.Type, (projection.Expression as SqlExpression)?.TypeMapping);
-                        }
+                        return CreateGetValueExpression(
+                            _jObjectParameter,
+                            projection.Alias,
+                            projectionBindingExpression.Type, (projection.Expression as SqlExpression)?.TypeMapping);
+                    }
 
 #pragma warning disable CS0618 // Type or member is obsolete
                     case CollectionShaperExpression collectionShaperExpression:
 #pragma warning restore CS0618 // Type or member is obsolete
+                    {
+                        ObjectArrayProjectionExpression objectArrayProjection;
+                        switch (collectionShaperExpression.Projection)
                         {
-                            ObjectArrayProjectionExpression objectArrayProjection;
-                            switch (collectionShaperExpression.Projection)
-                            {
-                                case ProjectionBindingExpression projectionBindingExpression:
-                                    var projection = GetProjection(projectionBindingExpression);
-                                    objectArrayProjection = (ObjectArrayProjectionExpression)projection.Expression;
-                                    break;
-                                case ObjectArrayProjectionExpression objectArrayProjectionExpression:
-                                    objectArrayProjection = objectArrayProjectionExpression;
-                                    break;
-                                default:
-                                    throw new InvalidOperationException(CoreStrings.TranslationFailed(extensionExpression.Print()));
-                            }
-
-                            var jArray = _projectionBindings[objectArrayProjection];
-                            var jObjectParameter = Expression.Parameter(typeof(JsonNode), jArray.Name + "Object");
-                            var ordinalParameter = Expression.Parameter(typeof(int), jArray.Name + "Ordinal");
-
-                            var accessExpression = objectArrayProjection.InnerProjection.AccessExpression;
-                            _projectionBindings[accessExpression] = jObjectParameter;
-                            _ownerMappings[accessExpression] =
-                                (objectArrayProjection.Navigation.DeclaringEntityType, objectArrayProjection.AccessExpression);
-                            _ordinalParameterBindings[accessExpression] = Expression.Add(
-                                ordinalParameter, Expression.Constant(1, typeof(int)));
-
-                            var innerShaper = (BlockExpression)Visit(collectionShaperExpression.InnerShaper);
-
-                            innerShaper = AddIncludes(innerShaper);
-
-                            var entities = Expression.Call(
-                                EnumerableMethods.SelectWithOrdinal.MakeGenericMethod(typeof(JsonNode), innerShaper.Type),
-                                Expression.Call(
-                                    EnumerableMethods.Cast.MakeGenericMethod(typeof(JsonNode)),
-                                    jArray),
-                                Expression.Lambda(innerShaper, jObjectParameter, ordinalParameter));
-
-                            var navigation = collectionShaperExpression.Navigation;
-                            return Expression.Call(
-                                _populateCollectionMethodInfo.MakeGenericMethod(navigation.TargetEntityType.ClrType, navigation.ClrType),
-                                Expression.Constant(navigation.GetCollectionAccessor()),
-                                entities);
+                            case ProjectionBindingExpression projectionBindingExpression:
+                                var projection = GetProjection(projectionBindingExpression);
+                                objectArrayProjection = (ObjectArrayProjectionExpression)projection.Expression;
+                                break;
+                            case ObjectArrayProjectionExpression objectArrayProjectionExpression:
+                                objectArrayProjection = objectArrayProjectionExpression;
+                                break;
+                            default:
+                                throw new InvalidOperationException(CoreStrings.TranslationFailed(extensionExpression.Print()));
                         }
+
+                        var jArray = _projectionBindings[objectArrayProjection];
+                        var jObjectParameter = Expression.Parameter(typeof(JsonNode), jArray.Name + "Object");
+                        var ordinalParameter = Expression.Parameter(typeof(int), jArray.Name + "Ordinal");
+
+                        var accessExpression = objectArrayProjection.InnerProjection.AccessExpression;
+                        _projectionBindings[accessExpression] = jObjectParameter;
+                        _ownerMappings[accessExpression] =
+                            (objectArrayProjection.Navigation.DeclaringEntityType, objectArrayProjection.AccessExpression);
+                        _ordinalParameterBindings[accessExpression] = Expression.Add(
+                            ordinalParameter, Expression.Constant(1, typeof(int)));
+
+                        var innerShaper = (BlockExpression)Visit(collectionShaperExpression.InnerShaper);
+
+                        innerShaper = AddIncludes(innerShaper);
+
+                        var entities = Expression.Call(
+                            EnumerableMethods.SelectWithOrdinal.MakeGenericMethod(typeof(JsonNode), innerShaper.Type),
+                            Expression.Call(
+                                EnumerableMethods.Cast.MakeGenericMethod(typeof(JsonNode)),
+                                jArray),
+                            Expression.Lambda(innerShaper, jObjectParameter, ordinalParameter));
+
+                        var navigation = collectionShaperExpression.Navigation;
+                        return Expression.Call(
+                            _populateCollectionMethodInfo.MakeGenericMethod(navigation.TargetEntityType.ClrType, navigation.ClrType),
+                            Expression.Constant(navigation.GetCollectionAccessor()),
+                            entities);
+                    }
 
                     case IncludeExpression includeExpression:
+                    {
+                        if (!(includeExpression.Navigation is INavigation navigation)
+                            || navigation.IsOnDependent
+                            || navigation.ForeignKey.DeclaringEntityType.IsDocumentRoot())
                         {
-                            if (!(includeExpression.Navigation is INavigation navigation)
-                                || navigation.IsOnDependent
-                                || navigation.ForeignKey.DeclaringEntityType.IsDocumentRoot())
-                            {
-                                throw new InvalidOperationException(
-                                    BrightChainStrings.NonEmbeddedIncludeNotSupported(includeExpression.Navigation));
-                            }
-
-                            var isFirstInclude = _pendingIncludes.Count == 0;
-                            _pendingIncludes.Add(includeExpression);
-
-                            var jObjectBlock = Visit(includeExpression.EntityExpression) as BlockExpression;
-
-                            if (!isFirstInclude)
-                            {
-                                return jObjectBlock;
-                            }
-
-                            Check.DebugAssert(jObjectBlock != null, "The first include must end up on a valid shaper block");
-
-                            // These are the expressions added by JObjectInjectingExpressionVisitor
-                            var jObjectCondition = (ConditionalExpression)jObjectBlock.Expressions[^1];
-
-                            var shaperBlock = (BlockExpression)jObjectCondition.IfFalse;
-                            shaperBlock = AddIncludes(shaperBlock);
-
-                            var jObjectExpressions = new List<Expression>(jObjectBlock.Expressions);
-                            jObjectExpressions.RemoveAt(jObjectExpressions.Count - 1);
-
-                            jObjectExpressions.Add(
-                                jObjectCondition.Update(jObjectCondition.Test, jObjectCondition.IfTrue, shaperBlock));
-
-                            return jObjectBlock.Update(jObjectBlock.Variables, jObjectExpressions);
+                            throw new InvalidOperationException(
+                                BrightChainStrings.NonEmbeddedIncludeNotSupported(includeExpression.Navigation));
                         }
+
+                        var isFirstInclude = _pendingIncludes.Count == 0;
+                        _pendingIncludes.Add(includeExpression);
+
+                        var jObjectBlock = Visit(includeExpression.EntityExpression) as BlockExpression;
+
+                        if (!isFirstInclude)
+                        {
+                            return jObjectBlock;
+                        }
+
+                        Check.DebugAssert(jObjectBlock != null, "The first include must end up on a valid shaper block");
+
+                        // These are the expressions added by JObjectInjectingExpressionVisitor
+                        var jObjectCondition = (ConditionalExpression)jObjectBlock.Expressions[^1];
+
+                        var shaperBlock = (BlockExpression)jObjectCondition.IfFalse;
+                        shaperBlock = AddIncludes(shaperBlock);
+
+                        var jObjectExpressions = new List<Expression>(jObjectBlock.Expressions);
+                        jObjectExpressions.RemoveAt(jObjectExpressions.Count - 1);
+
+                        jObjectExpressions.Add(
+                            jObjectCondition.Update(jObjectCondition.Test, jObjectCondition.IfTrue, shaperBlock));
+
+                        return jObjectBlock.Update(jObjectBlock.Variables, jObjectExpressions);
+                    }
                 }
 
                 return base.VisitExtension(extensionExpression);

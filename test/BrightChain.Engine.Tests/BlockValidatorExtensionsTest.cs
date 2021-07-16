@@ -1,12 +1,12 @@
-﻿using BrightChain.Models.Blocks;
-using BrightChain.Models.Blocks.DataObjects;
-using BrightChain.Services;
+﻿using BrightChain.Engine.Models.Blocks;
+using BrightChain.Engine.Models.Blocks.DataObjects;
+using BrightChain.Engine.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 
-namespace BrightChain.Tests
+namespace BrightChain.Engine.Tests
 {
     [TestClass]
     public class BlockValidatorExtensionsTest

@@ -1,5 +1,5 @@
-﻿using BrightChain.Models.Blocks.Chains;
-using BrightChain.Services;
+﻿using BrightChain.Engine.Models.Blocks.Chains;
+using BrightChain.Engine.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -8,7 +8,7 @@ using Moq;
 using System;
 using System.IO;
 
-namespace BrightChain.Tests
+namespace BrightChain.Engine.Tests
 {
     /// <summary>
     /// Exercises the core API service

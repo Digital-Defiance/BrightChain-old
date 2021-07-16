@@ -1,10 +1,10 @@
-﻿using BrightChain.Enumerations;
-using BrightChain.Extensions;
-using BrightChain.Models.Blocks;
-using BrightChain.Models.Blocks.Chains;
-using BrightChain.Models.Blocks.DataObjects;
-using BrightChain.Models.Contracts;
-using BrightChain.Services;
+﻿using BrightChain.Engine.Enumerations;
+using BrightChain.Engine.Extensions;
+using BrightChain.Engine.Models.Blocks;
+using BrightChain.Engine.Models.Blocks.Chains;
+using BrightChain.Engine.Models.Blocks.DataObjects;
+using BrightChain.Engine.Models.Contracts;
+using BrightChain.Engine.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 
-namespace BrightChain.Tests
+namespace BrightChain.Engine.Tests
 {
     /// <summary>
     /// Exercises the block metadata extensions for storing/restoring metadata

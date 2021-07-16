@@ -1,21 +1,21 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
+﻿using System.Text;
+using System.Threading.Tasks;
+using BrightChain.EntityFrameworkCore.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BrightChain.API.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class ConfirmEmailChangeModel : PageModel
     {
-        private readonly UserManager<BrightChainUser> _userManager;
-        private readonly SignInManager<BrightChainUser> _signInManager;
+        private readonly UserManager<BrightChainEntityUser> _userManager;
+        private readonly SignInManager<BrightChainEntityUser> _signInManager;
 
-        public ConfirmEmailChangeModel(UserManager<BrightChainUser> userManager, SignInManager<BrightChainUser> signInManager)
+        public ConfirmEmailChangeModel(UserManager<BrightChainEntityUser> userManager, SignInManager<BrightChainEntityUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

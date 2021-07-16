@@ -1,21 +1,21 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
+﻿using System.Threading.Tasks;
+using BrightChain.EntityFrameworkCore.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
 {
     public class ResetAuthenticatorModel : PageModel
     {
-        UserManager<BrightChainUser> _userManager;
-        private readonly SignInManager<BrightChainUser> _signInManager;
+        UserManager<BrightChainEntityUser> _userManager;
+        private readonly SignInManager<BrightChainEntityUser> _signInManager;
         ILogger<ResetAuthenticatorModel> _logger;
 
         public ResetAuthenticatorModel(
-            UserManager<BrightChainUser> userManager,
-            SignInManager<BrightChainUser> signInManager,
+            UserManager<BrightChainEntityUser> userManager,
+            SignInManager<BrightChainEntityUser> signInManager,
             ILogger<ResetAuthenticatorModel> logger)
         {
             _userManager = userManager;

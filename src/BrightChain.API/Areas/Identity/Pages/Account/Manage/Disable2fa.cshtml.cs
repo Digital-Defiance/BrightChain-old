@@ -1,20 +1,20 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
+﻿using System;
+using System.Threading.Tasks;
+using BrightChain.EntityFrameworkCore.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
 
 namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
 {
     public class Disable2faModel : PageModel
     {
-        private readonly UserManager<BrightChainUser> _userManager;
+        private readonly UserManager<BrightChainEntityUser> _userManager;
         private readonly ILogger<Disable2faModel> _logger;
 
         public Disable2faModel(
-            UserManager<BrightChainUser> userManager,
+            UserManager<BrightChainEntityUser> userManager,
             ILogger<Disable2faModel> logger)
         {
             _userManager = userManager;

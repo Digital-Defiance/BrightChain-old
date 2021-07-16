@@ -1,6 +1,11 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using BrightChain.EntityFrameworkCore.Metadata.Internal;
 using BrightChain.EntityFrameworkCore.Properties;
 using BrightChain.EntityFrameworkCore.Utilities;
@@ -10,11 +15,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 
 #nullable disable
 
@@ -226,26 +226,26 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             switch (extensionExpression)
             {
                 case EntityShaperExpression entityShaperExpression:
+                {
+                    var projectionBindingExpression = (ProjectionBindingExpression)entityShaperExpression.ValueBufferExpression;
+                    VerifySelectExpression(projectionBindingExpression);
+
+                    if (_clientEval)
                     {
-                        var projectionBindingExpression = (ProjectionBindingExpression)entityShaperExpression.ValueBufferExpression;
-                        VerifySelectExpression(projectionBindingExpression);
-
-                        if (_clientEval)
-                        {
-                            var entityProjection = (EntityProjectionExpression)_selectExpression.GetMappedProjection(
-                                projectionBindingExpression.ProjectionMember);
-
-                            return entityShaperExpression.Update(
-                                new ProjectionBindingExpression(
-                                    _selectExpression, _selectExpression.AddToProjection(entityProjection), typeof(ValueBuffer)));
-                        }
-
-                        _projectionMapping[_projectionMembers.Peek()]
-                            = _selectExpression.GetMappedProjection(projectionBindingExpression.ProjectionMember);
+                        var entityProjection = (EntityProjectionExpression)_selectExpression.GetMappedProjection(
+                            projectionBindingExpression.ProjectionMember);
 
                         return entityShaperExpression.Update(
-                            new ProjectionBindingExpression(_selectExpression, _projectionMembers.Peek(), typeof(ValueBuffer)));
+                            new ProjectionBindingExpression(
+                                _selectExpression, _selectExpression.AddToProjection(entityProjection), typeof(ValueBuffer)));
                     }
+
+                    _projectionMapping[_projectionMembers.Peek()]
+                        = _selectExpression.GetMappedProjection(projectionBindingExpression.ProjectionMember);
+
+                    return entityShaperExpression.Update(
+                        new ProjectionBindingExpression(_selectExpression, _projectionMembers.Peek(), typeof(ValueBuffer)));
+                }
 
                 case MaterializeCollectionNavigationExpression materializeCollectionNavigationExpression:
                     return materializeCollectionNavigationExpression.Navigation is INavigation embeddableNavigation
@@ -363,21 +363,21 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         nullable: true);
 
                 case ObjectArrayProjectionExpression objectArrayProjectionExpression:
-                    {
-                        var innerShaperExpression = new EntityShaperExpression(
-                            navigation.TargetEntityType,
-                            Expression.Convert(
-                                Expression.Convert(objectArrayProjectionExpression.InnerProjection, typeof(object)), typeof(ValueBuffer)),
-                            nullable: true);
+                {
+                    var innerShaperExpression = new EntityShaperExpression(
+                        navigation.TargetEntityType,
+                        Expression.Convert(
+                            Expression.Convert(objectArrayProjectionExpression.InnerProjection, typeof(object)), typeof(ValueBuffer)),
+                        nullable: true);
 
 #pragma warning disable CS0618 // Type or member is obsolete
-                        return new CollectionShaperExpression(
+                    return new CollectionShaperExpression(
 #pragma warning restore CS0618 // Type or member is obsolete
                         objectArrayProjectionExpression,
-                            innerShaperExpression,
-                            navigation,
-                            innerShaperExpression.EntityType.ClrType);
-                    }
+                        innerShaperExpression,
+                        navigation,
+                        innerShaperExpression.EntityType.ClrType);
+                }
 
                 default:
                     throw new InvalidOperationException(CoreStrings.TranslationFailed(memberExpression.Print()));
@@ -569,21 +569,21 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                             nullable: true);
 
                     case ObjectArrayProjectionExpression objectArrayProjectionExpression:
-                        {
-                            var innerShaperExpression = new EntityShaperExpression(
-                                navigation.TargetEntityType,
-                                Expression.Convert(
-                                    Expression.Convert(objectArrayProjectionExpression.InnerProjection, typeof(object)), typeof(ValueBuffer)),
-                                nullable: true);
+                    {
+                        var innerShaperExpression = new EntityShaperExpression(
+                            navigation.TargetEntityType,
+                            Expression.Convert(
+                                Expression.Convert(objectArrayProjectionExpression.InnerProjection, typeof(object)), typeof(ValueBuffer)),
+                            nullable: true);
 
 #pragma warning disable CS0618 // Type or member is obsolete
-                            return new CollectionShaperExpression(
+                        return new CollectionShaperExpression(
 #pragma warning restore CS0618 // Type or member is obsolete
                             objectArrayProjectionExpression,
-                                innerShaperExpression,
-                                navigation,
-                                innerShaperExpression.EntityType.ClrType);
-                        }
+                            innerShaperExpression,
+                            navigation,
+                            innerShaperExpression.EntityType.ClrType);
+                    }
 
                     default:
                         throw new InvalidOperationException(CoreStrings.TranslationFailed(methodCallExpression.Print()));

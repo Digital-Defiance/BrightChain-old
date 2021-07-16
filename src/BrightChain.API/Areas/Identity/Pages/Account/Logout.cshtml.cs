@@ -1,20 +1,20 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
+﻿using System.Threading.Tasks;
+using BrightChain.EntityFrameworkCore.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 namespace BrightChain.API.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LogoutModel : PageModel
     {
-        private readonly SignInManager<BrightChainUser> _signInManager;
+        private readonly SignInManager<BrightChainEntityUser> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
 
-        public LogoutModel(SignInManager<BrightChainUser> signInManager, ILogger<LogoutModel> logger)
+        public LogoutModel(SignInManager<BrightChainEntityUser> signInManager, ILogger<LogoutModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;

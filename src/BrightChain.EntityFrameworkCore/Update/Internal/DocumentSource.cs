@@ -1,6 +1,10 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Collections;
+using System.Linq;
+using System.Text.Json.Nodes;
 using BrightChain.EntityFrameworkCore.Metadata.Conventions;
 using BrightChain.EntityFrameworkCore.Metadata.Internal;
 using BrightChain.EntityFrameworkCore.Properties;
@@ -9,10 +13,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Update;
-using System;
-using System.Collections;
-using System.Linq;
-using System.Text.Json.Nodes;
 
 namespace BrightChain.EntityFrameworkCore.Update.Internal
 {

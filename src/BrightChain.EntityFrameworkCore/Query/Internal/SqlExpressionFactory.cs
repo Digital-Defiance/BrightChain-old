@@ -1,6 +1,10 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using BrightChain.EntityFrameworkCore.Internal;
 using BrightChain.EntityFrameworkCore.Properties;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -8,10 +12,6 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 
 #nullable disable
 
@@ -118,12 +118,12 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 case ExpressionType.NotEqual:
                 case ExpressionType.Not
                     when sqlUnaryExpression.IsLogicalNot():
-                    {
-                        resultTypeMapping = _boolTypeMapping;
-                        resultType = typeof(bool);
-                        operand = ApplyDefaultTypeMapping(sqlUnaryExpression.Operand);
-                        break;
-                    }
+                {
+                    resultTypeMapping = _boolTypeMapping;
+                    resultType = typeof(bool);
+                    operand = ApplyDefaultTypeMapping(sqlUnaryExpression.Operand);
+                    break;
+                }
 
                 case ExpressionType.Convert:
                     resultTypeMapping = typeMapping;
@@ -167,25 +167,25 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 case ExpressionType.LessThan:
                 case ExpressionType.LessThanOrEqual:
                 case ExpressionType.NotEqual:
-                    {
-                        inferredTypeMapping = ExpressionExtensions.InferTypeMapping(left, right)
-                            // We avoid object here since the result does not get typeMapping from outside.
-                            ?? (left.Type != typeof(object)
-                                ? _typeMappingSource.FindMapping(left.Type)
-                                : _typeMappingSource.FindMapping(right.Type));
-                        resultType = typeof(bool);
-                        resultTypeMapping = _boolTypeMapping;
-                    }
-                    break;
+                {
+                    inferredTypeMapping = ExpressionExtensions.InferTypeMapping(left, right)
+                        // We avoid object here since the result does not get typeMapping from outside.
+                        ?? (left.Type != typeof(object)
+                            ? _typeMappingSource.FindMapping(left.Type)
+                            : _typeMappingSource.FindMapping(right.Type));
+                    resultType = typeof(bool);
+                    resultTypeMapping = _boolTypeMapping;
+                }
+                break;
 
                 case ExpressionType.AndAlso:
                 case ExpressionType.OrElse:
-                    {
-                        inferredTypeMapping = _boolTypeMapping;
-                        resultType = typeof(bool);
-                        resultTypeMapping = _boolTypeMapping;
-                    }
-                    break;
+                {
+                    inferredTypeMapping = _boolTypeMapping;
+                    resultType = typeof(bool);
+                    resultTypeMapping = _boolTypeMapping;
+                }
+                break;
 
                 case ExpressionType.Add:
                 case ExpressionType.Subtract:
@@ -196,12 +196,12 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 case ExpressionType.RightShift:
                 case ExpressionType.And:
                 case ExpressionType.Or:
-                    {
-                        inferredTypeMapping = typeMapping ?? ExpressionExtensions.InferTypeMapping(left, right);
-                        resultType = inferredTypeMapping?.ClrType ?? left.Type;
-                        resultTypeMapping = inferredTypeMapping;
-                    }
-                    break;
+                {
+                    inferredTypeMapping = typeMapping ?? ExpressionExtensions.InferTypeMapping(left, right);
+                    resultType = inferredTypeMapping?.ClrType ?? left.Type;
+                    resultTypeMapping = inferredTypeMapping;
+                }
+                break;
 
                 default:
                     throw new InvalidOperationException(

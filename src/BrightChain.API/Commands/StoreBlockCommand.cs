@@ -1,8 +1,9 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
-using BrightChain.Models.Blocks;
-using MediatR;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using BrightChain.Engine.Models.Blocks;
+using BrightChain.EntityFrameworkCore.Data;
+using BrightChain.EntityFrameworkCore.Data.Entities;
+using MediatR;
 
 namespace BrightChain.API.Commands
 {
@@ -19,7 +20,7 @@ namespace BrightChain.API.Commands
 
             public async Task<BlockHash> Handle(StoreBlockCommand command, CancellationToken cancellationToken)
             {
-                _context.Blocks.Add(BrightChainBlock.FromBrightChainBlock(command.Block));
+                _context.Blocks.Add(BrightChainEntityBlock.FromBrightChainBlock(command.Block));
                 _context.SaveChanges();
                 return command.Block.Id;
             }

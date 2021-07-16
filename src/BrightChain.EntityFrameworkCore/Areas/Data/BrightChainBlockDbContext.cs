@@ -1,19 +1,30 @@
+using System.Threading.Tasks;
+using BrightChain.EntityFrameworkCore.Data.Entities;
 using BrightChain.EntityFrameworkCore.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System.Threading.Tasks;
 
 namespace BrightChain.EntityFrameworkCore.Data
 {
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class BrightChainBlockDbContext : DbContext, IBrightChainDbContext
     {
-        public DbSet<BrightChainBlock> Blocks { get; set; }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="options"></param>
         public BrightChainBlockDbContext(DbContextOptions options) : base(options)
         {
         }
 
+        public DbSet<BrightChainEntityBlock> Blocks { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);

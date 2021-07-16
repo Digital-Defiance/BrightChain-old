@@ -1,17 +1,17 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Net;
+using System.Text;
 using BrightChain.EntityFrameworkCore.Properties;
 using BrightChain.EntityFrameworkCore.Utilities;
 using BrightChain.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Net;
-using System.Text;
 
 namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
 {

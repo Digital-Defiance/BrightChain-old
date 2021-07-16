@@ -1,25 +1,25 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
+using BrightChain.EntityFrameworkCore.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 
 namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
 {
     public partial class EmailModel : PageModel
     {
-        private readonly UserManager<BrightChainUser> _userManager;
-        private readonly SignInManager<BrightChainUser> _signInManager;
+        private readonly UserManager<BrightChainEntityUser> _userManager;
+        private readonly SignInManager<BrightChainEntityUser> _signInManager;
         private readonly IEmailSender _emailSender;
 
         public EmailModel(
-            UserManager<BrightChainUser> userManager,
-            SignInManager<BrightChainUser> signInManager,
+            UserManager<BrightChainEntityUser> userManager,
+            SignInManager<BrightChainEntityUser> signInManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -47,7 +47,7 @@ namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
             public string NewEmail { get; set; }
         }
 
-        private async Task LoadAsync(BrightChainUser user)
+        private async Task LoadAsync(BrightChainEntityUser user)
         {
             var email = await _userManager.GetEmailAsync(user).ConfigureAwait(false);
             Email = email;

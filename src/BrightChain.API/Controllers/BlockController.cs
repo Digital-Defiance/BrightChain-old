@@ -1,8 +1,8 @@
-﻿using BrightChain.API.Commands;
+﻿using System.Threading.Tasks;
+using BrightChain.API.Commands;
 using BrightChain.API.Queries;
-using BrightChain.Models.Blocks;
+using BrightChain.Engine.Models.Blocks;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace BrightChain.API.Controllers
 {

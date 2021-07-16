@@ -1,10 +1,10 @@
-﻿using BrightChain.Models.Blocks;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using BrightChain.Engine.Models.Blocks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace BrightChain.Interfaces
+namespace BrightChain.EntityFrameworkCore.Interfaces
 {
     public interface IApplicationDbContext
     {

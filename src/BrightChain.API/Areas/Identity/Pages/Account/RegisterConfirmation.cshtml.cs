@@ -1,22 +1,22 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
+﻿using System.Text;
+using System.Threading.Tasks;
+using BrightChain.EntityFrameworkCore.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BrightChain.API.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterConfirmationModel : PageModel
     {
-        private readonly UserManager<BrightChainUser> _userManager;
+        private readonly UserManager<BrightChainEntityUser> _userManager;
         private readonly IEmailSender _sender;
 
-        public RegisterConfirmationModel(UserManager<BrightChainUser> userManager, IEmailSender sender)
+        public RegisterConfirmationModel(UserManager<BrightChainEntityUser> userManager, IEmailSender sender)
         {
             _userManager = userManager;
             _sender = sender;

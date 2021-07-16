@@ -1,89 +1,89 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
-using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using BrightChain.EntityFrameworkCore.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace BrightChain.API.Infrastructure
 {
-    public class BrightChainUserStore : UserStoreBase<BrightChainUser, string, IdentityUserClaim<string>,
+    public class BrightChainUserStore : UserStoreBase<BrightChainEntityUser, string, IdentityUserClaim<string>,
         IdentityUserLogin<string>, IdentityUserToken<string>>
     {
         public BrightChainUserStore(IdentityErrorDescriber describer) : base(describer)
         {
         }
 
-        public override IQueryable<BrightChainUser> Users => throw new NotImplementedException();
+        public override IQueryable<BrightChainEntityUser> Users => throw new NotImplementedException();
 
-        public override Task AddClaimsAsync(BrightChainUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task AddClaimsAsync(BrightChainEntityUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public override Task AddLoginAsync(BrightChainUser user, UserLoginInfo login, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task AddLoginAsync(BrightChainEntityUser user, UserLoginInfo login, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public override Task<IdentityResult> CreateAsync(BrightChainUser user, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<IdentityResult> CreateAsync(BrightChainEntityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public override Task<IdentityResult> DeleteAsync(BrightChainUser user, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<IdentityResult> DeleteAsync(BrightChainEntityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public override Task<BrightChainUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<BrightChainEntityUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public override Task<BrightChainUser> FindByIdAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<BrightChainEntityUser> FindByIdAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public override Task<BrightChainUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<BrightChainEntityUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public override Task<IList<Claim>> GetClaimsAsync(BrightChainUser user, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<IList<Claim>> GetClaimsAsync(BrightChainEntityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public override Task<IList<UserLoginInfo>> GetLoginsAsync(BrightChainUser user, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<IList<UserLoginInfo>> GetLoginsAsync(BrightChainEntityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public override Task<IList<BrightChainUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<IList<BrightChainEntityUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public override Task RemoveClaimsAsync(BrightChainUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task RemoveClaimsAsync(BrightChainEntityUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public override Task RemoveLoginAsync(BrightChainUser user, string loginProvider, string providerKey, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task RemoveLoginAsync(BrightChainEntityUser user, string loginProvider, string providerKey, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public override Task ReplaceClaimAsync(BrightChainUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task ReplaceClaimAsync(BrightChainEntityUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public override Task<IdentityResult> UpdateAsync(BrightChainUser user, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<IdentityResult> UpdateAsync(BrightChainEntityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
@@ -93,12 +93,12 @@ namespace BrightChain.API.Infrastructure
             throw new NotImplementedException();
         }
 
-        protected override Task<IdentityUserToken<string>> FindTokenAsync(BrightChainUser user, string loginProvider, string name, CancellationToken cancellationToken)
+        protected override Task<IdentityUserToken<string>> FindTokenAsync(BrightChainEntityUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        protected override Task<BrightChainUser> FindUserAsync(string userId, CancellationToken cancellationToken)
+        protected override Task<BrightChainEntityUser> FindUserAsync(string userId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

@@ -14,8 +14,8 @@
     <AssemblyVersion>0.0.0.1</AssemblyVersion>
     <FileVersion>0.0.0.1</FileVersion>
     <AnalysisLevel>preview</AnalysisLevel>
-    <RootNamespace>BrightChain.EntityFrameworkCore</RootNamespace>
-    <AssemblyName>BrightChain.EntityFrameworkCore</AssemblyName>
+    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -50,10 +50,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
@@ -65,17 +61,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\BrightChain.EntityFrameworkCore.BrightChainClient\BrightChain.EntityFrameworkCore.Client.csproj" />
     <ProjectReference Include="..\..\efcore\src\EFCore\EFCore.csproj" />
+    <ProjectReference Include="..\..\src\BrightChain.Engine.Client\BrightChain.Engine.Client.csproj" />
+    <ProjectReference Include="..\..\src\BrightChain.Engine\BrightChain.Engine.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="brightchainSettings.Development.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="brightchainSettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Folder Include="Areas\Data\" />
   </ItemGroup>
 
 </Project>

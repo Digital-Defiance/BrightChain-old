@@ -1,8 +1,8 @@
-﻿using BrightChain.Extensions.DependencyInjection;
+﻿using System;
+using BrightChain.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace BrightChain.EntityFrameworkCore.Extensions
 {

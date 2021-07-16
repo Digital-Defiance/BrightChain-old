@@ -1,16 +1,16 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using BrightChain.EntityFrameworkCore.Properties;
 using BrightChain.EntityFrameworkCore.Utilities;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.EntityFrameworkCore.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 
 #nullable disable warnings
 
@@ -183,9 +183,11 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             }
 
             static string GetString(ValueConverter converter, object value)
-                => converter is null
-                    ? (string)value
-                    : (string)converter.ConvertToProvider(value);
+            {
+                return converter is null
+                                   ? (string)value
+                                   : (string)converter.ConvertToProvider(value);
+            }
         }
 
         /// <summary>

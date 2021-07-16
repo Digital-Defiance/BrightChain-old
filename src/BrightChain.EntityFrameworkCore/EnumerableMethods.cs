@@ -688,11 +688,13 @@ namespace BrightChain.EntityFrameworkCore
             }
 
             MethodInfo GetMethod(string name, int genericParameterCount, Func<Type[], Type[]> parameterGenerator)
-                => queryableMethodGroups[name].Single(
-                    mi => ((genericParameterCount == 0 && !mi.IsGenericMethod)
-                            || (mi.IsGenericMethod && mi.GetGenericArguments().Length == genericParameterCount))
-                        && mi.GetParameters().Select(e => e.ParameterType).SequenceEqual(
-                            parameterGenerator(mi.IsGenericMethod ? mi.GetGenericArguments() : Array.Empty<Type>())));
+            {
+                return queryableMethodGroups[name].Single(
+                                   mi => ((genericParameterCount == 0 && !mi.IsGenericMethod)
+                                           || (mi.IsGenericMethod && mi.GetGenericArguments().Length == genericParameterCount))
+                                       && mi.GetParameters().Select(e => e.ParameterType).SequenceEqual(
+                                           parameterGenerator(mi.IsGenericMethod ? mi.GetGenericArguments() : Array.Empty<Type>())));
+            }
         }
     }
 }

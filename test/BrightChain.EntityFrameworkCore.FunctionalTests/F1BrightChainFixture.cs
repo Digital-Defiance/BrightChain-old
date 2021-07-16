@@ -21,7 +21,7 @@ namespace BrightChain.EntityFrameworkCore
         {
             base.BuildModelExternal(modelBuilder);
 
-            modelBuilder.Entity<Engine>(
+            modelBuilder.Entity<Microsoft.EntityFrameworkCore.TestModels.ConcurrencyModel.Engine>(
                 b =>
                 {
                     b.Property(e => e.EngineSupplierId).IsConcurrencyToken(false);

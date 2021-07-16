@@ -1,12 +1,12 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using BrightChain.EntityFrameworkCore.Infrastructure;
 using BrightChain.EntityFrameworkCore.Infrastructure.Internal;
 using BrightChain.EntityFrameworkCore.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using System;
 
 // ReSharper disable once CheckNamespace
 namespace BrightChain.EntityFrameworkCore

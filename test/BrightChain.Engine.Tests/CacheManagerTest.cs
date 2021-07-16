@@ -1,4 +1,4 @@
-﻿using BrightChain.Interfaces;
+﻿using BrightChain.Engine.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -6,7 +6,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 
-namespace BrightChain.Tests
+namespace BrightChain.Engine.Tests
 {
     /// <summary>
     /// Test harness for cache managers. Inherit, implement, and run. It will excercise your cache.

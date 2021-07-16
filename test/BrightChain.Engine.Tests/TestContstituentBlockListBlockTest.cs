@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace BrightChain.Tests
+namespace BrightChain.Engine.Tests
 {
     /// <summary>
     /// Tests the CBL blocks for their ability to represent a file

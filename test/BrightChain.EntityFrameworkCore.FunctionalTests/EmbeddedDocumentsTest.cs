@@ -38,7 +38,7 @@ namespace BrightChain.EntityFrameworkCore
         {
             var options = Fixture.CreateOptions();
             Operator firstOperator;
-            Engine firstEngine;
+            Microsoft.EntityFrameworkCore.TestModels.TransportationModel.Engine firstEngine;
             using (var context = new EmbeddedTransportationContext(options))
             {
                 firstOperator = context.Set<Vehicle>().Select(v => v.Operator).OrderBy(o => o.VehicleName).First();
@@ -583,13 +583,13 @@ namespace BrightChain.EntityFrameworkCore
                         eb.OwnsOne(v => v.Operator).OwnsOne(v => v.Details);
                     });
 
-                modelBuilder.Entity<Engine>(
+                modelBuilder.Entity<Microsoft.EntityFrameworkCore.TestModels.TransportationModel.Engine>(
                     eb =>
                     {
                         eb.HasKey(e => e.VehicleName);
                         eb.HasOne(e => e.Vehicle)
                             .WithOne(e => e.Engine)
-                            .HasForeignKey<Engine>(e => e.VehicleName);
+                            .HasForeignKey<Microsoft.EntityFrameworkCore.TestModels.TransportationModel.Engine>(e => e.VehicleName);
                     });
 
                 modelBuilder.Entity<FuelTank>(

@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
+﻿using System;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
 {

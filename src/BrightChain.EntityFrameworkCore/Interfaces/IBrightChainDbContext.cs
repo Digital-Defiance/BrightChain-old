@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace BrightChain.EntityFrameworkCore.Interfaces
 {

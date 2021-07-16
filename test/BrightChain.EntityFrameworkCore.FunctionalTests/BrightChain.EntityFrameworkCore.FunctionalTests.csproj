@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>BrightChain.EntityFrameworkCore.FunctionalTests</AssemblyName>
-    <RootNamespace>BrightCHain.EntityFrameworkCore</RootNamespace>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <StartupObject></StartupObject>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +22,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.0-preview.6.21352.12" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0-preview.6.21352.12" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0-release-20210626-04" />
+    <PackageReference Include="Microsoft.TestPlatform" Version="16.11.0-release-20210626-04" />
+    <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="16.11.0-release-20210626-04" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -32,7 +36,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\BrightChain.EntityFrameworkCore.BrightChainClient\BrightChain.EntityFrameworkCore.Client.csproj" />
+    <ProjectReference Include="..\..\src\BrightChain.Engine.Client\BrightChain.Engine.Client.csproj" />
+    <ProjectReference Include="..\..\src\BrightChain.Engine\BrightChain.Engine.csproj" />
     <ProjectReference Include="..\..\src\BrightChain.EntityFrameworkCore\BrightChain.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\efcore\test\EFCore.Specification.Tests\EFCore.Specification.Tests.csproj" />
   </ItemGroup>

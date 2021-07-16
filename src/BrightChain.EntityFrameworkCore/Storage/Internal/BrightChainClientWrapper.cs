@@ -1,17 +1,6 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using BrightChain.EntityFrameworkCore.Client;
-using BrightChain.EntityFrameworkCore.Diagnostics.Internal;
-using BrightChain.EntityFrameworkCore.Infrastructure.Internal;
-using BrightChain.EntityFrameworkCore.Utilities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Update;
-using Microsoft.EntityFrameworkCore.Utilities;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,6 +12,17 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
+using BrightChain.Engine.Client;
+using BrightChain.EntityFrameworkCore.Diagnostics.Internal;
+using BrightChain.EntityFrameworkCore.Infrastructure.Internal;
+using BrightChain.EntityFrameworkCore.Utilities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Update;
+using Microsoft.EntityFrameworkCore.Utilities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BrightChain.EntityFrameworkCore.Storage.Internal
 {
@@ -533,7 +533,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         {
             if (responseMessage.StatusCode != HttpStatusCode.OK)
             {
-                throw new BrightChain.Exceptions.BrightChainException(nameof(responseMessage.StatusCode));
+                throw new BrightChain.Engine.Exceptions.BrightChainException(nameof(responseMessage.StatusCode));
             }
 
             var responseStream = responseMessage.GetResponseStream();

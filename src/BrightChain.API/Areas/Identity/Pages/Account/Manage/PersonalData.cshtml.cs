@@ -1,19 +1,19 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
+﻿using System.Threading.Tasks;
+using BrightChain.EntityFrameworkCore.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
 {
     public class PersonalDataModel : PageModel
     {
-        private readonly UserManager<BrightChainUser> _userManager;
+        private readonly UserManager<BrightChainEntityUser> _userManager;
         private readonly ILogger<PersonalDataModel> _logger;
 
         public PersonalDataModel(
-            UserManager<BrightChainUser> userManager,
+            UserManager<BrightChainEntityUser> userManager,
             ILogger<PersonalDataModel> logger)
         {
             _userManager = userManager;

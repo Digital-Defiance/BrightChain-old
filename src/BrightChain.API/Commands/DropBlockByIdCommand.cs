@@ -1,10 +1,10 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
-using BrightChain.Models.Blocks;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BrightChain.Engine.Models.Blocks;
+using BrightChain.EntityFrameworkCore.Data;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BrightChain.API.Commands
 {

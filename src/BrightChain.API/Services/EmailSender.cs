@@ -1,9 +1,9 @@
-﻿using BrightChain.API.Data;
+﻿using System.Threading.Tasks;
+using BrightChain.API.Data;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using System.Threading.Tasks;
 
 namespace BrightChain.API.Services
 {

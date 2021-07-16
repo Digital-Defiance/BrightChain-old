@@ -1,4 +1,5 @@
-﻿@inject SignInManager<BrightChainUser> SignInManager
+﻿@using BrightChain.EntityFrameworkCore.Data.Entities
+@inject SignInManager<BrightChainEntityUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }

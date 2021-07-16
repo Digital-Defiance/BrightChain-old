@@ -1,11 +1,11 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using BrightChain.EntityFrameworkCore.Utilities;
 using Microsoft.EntityFrameworkCore.Query;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 
 #nullable disable
 
@@ -24,17 +24,17 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 switch (extensionExpression)
                 {
                     case EntityShaperExpression shaperExpression:
-                        {
-                            _currentEntityIndex++;
+                    {
+                        _currentEntityIndex++;
 
-                            var valueBufferExpression = shaperExpression.ValueBufferExpression;
+                        var valueBufferExpression = shaperExpression.ValueBufferExpression;
 
-                            var jObjectVariable = Expression.Variable(
-                                typeof(JObject),
-                                "jObject" + _currentEntityIndex);
-                            var variables = new List<ParameterExpression> { jObjectVariable };
+                        var jObjectVariable = Expression.Variable(
+                            typeof(JObject),
+                            "jObject" + _currentEntityIndex);
+                        var variables = new List<ParameterExpression> { jObjectVariable };
 
-                            var expressions = new List<Expression>
+                        var expressions = new List<Expression>
                         {
                             Expression.Assign(
                                 jObjectVariable,
@@ -47,24 +47,24 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                                 shaperExpression)
                         };
 
-                            return Expression.Block(
-                                shaperExpression.Type,
-                                variables,
-                                expressions);
-                        }
+                        return Expression.Block(
+                            shaperExpression.Type,
+                            variables,
+                            expressions);
+                    }
 
 #pragma warning disable CS0618 // Type or member is obsolete
                     case CollectionShaperExpression collectionShaperExpression:
 #pragma warning restore CS0618 // Type or member is obsolete
-                        {
-                            _currentEntityIndex++;
+                    {
+                        _currentEntityIndex++;
 
-                            var jArrayVariable = Expression.Variable(
-                                typeof(JArray),
-                                "jArray" + _currentEntityIndex);
-                            var variables = new List<ParameterExpression> { jArrayVariable };
+                        var jArrayVariable = Expression.Variable(
+                            typeof(JArray),
+                            "jArray" + _currentEntityIndex);
+                        var variables = new List<ParameterExpression> { jArrayVariable };
 
-                            var expressions = new List<Expression>
+                        var expressions = new List<Expression>
                         {
                             Expression.Assign(
                                 jArrayVariable,
@@ -77,11 +77,11 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                                 collectionShaperExpression)
                         };
 
-                            return Expression.Block(
-                                collectionShaperExpression.Type,
-                                variables,
-                                expressions);
-                        }
+                        return Expression.Block(
+                            collectionShaperExpression.Type,
+                            variables,
+                            expressions);
+                    }
                 }
 
                 return base.VisitExtension(extensionExpression);

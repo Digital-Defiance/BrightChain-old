@@ -1,6 +1,13 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using BrightChain.EntityFrameworkCore.Properties;
 using BrightChain.EntityFrameworkCore.Utilities;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -9,13 +16,6 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Utilities;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 #nullable disable
 
 namespace BrightChain.EntityFrameworkCore.Query.Internal
@@ -535,11 +535,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return translation;
 
             static Expression RemoveObjectConvert(Expression expression)
-                => expression is UnaryExpression unaryExpression
-                    && (unaryExpression.NodeType == ExpressionType.Convert || unaryExpression.NodeType == ExpressionType.ConvertChecked)
-                    && unaryExpression.Type == typeof(object)
-                        ? unaryExpression.Operand
-                        : expression;
+            {
+                return expression is UnaryExpression unaryExpression
+                                   && (unaryExpression.NodeType == ExpressionType.Convert || unaryExpression.NodeType == ExpressionType.ConvertChecked)
+                                   && unaryExpression.Type == typeof(object)
+                                       ? unaryExpression.Operand
+                                       : expression;
+            }
         }
 
         /// <summary>

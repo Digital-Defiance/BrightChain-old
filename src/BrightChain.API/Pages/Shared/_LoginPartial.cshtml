@@ -1,8 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using BrightChain.EntityFrameworkCore.Data
-
-@inject SignInManager<BrightChainUser> SignInManager
-@inject UserManager<BrightChainUser> UserManager
+@using BrightChain.EntityFrameworkCore.Data.Entities
+@inject SignInManager<BrightChainEntityUser> SignInManager
+@inject UserManager<BrightChainEntityUser> UserManager
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))

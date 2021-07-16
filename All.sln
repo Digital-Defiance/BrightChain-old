@@ -10,6 +10,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.API", "src\Brig
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "docs", "docs\docs.csproj", "{A1A13294-9595-468D-964C-2281EAB05A7A}"
 	ProjectSection(ProjectDependencies) = postProject
+		{CA544D08-926B-4C3F-B7D9-2327D6384A99} = {CA544D08-926B-4C3F-B7D9-2327D6384A99}
+		{E5DDC909-4F18-47F6-B4C8-517EF29B748E} = {E5DDC909-4F18-47F6-B4C8-517EF29B748E}
 		{98A946BE-ECA9-46FF-908D-A136588ACFB8} = {98A946BE-ECA9-46FF-908D-A136588ACFB8}
 		{B06C38E8-8063-4CC5-801B-48C85F249363} = {B06C38E8-8063-4CC5-801B-48C85F249363}
 	EndProjectSection
@@ -27,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.EntityFramework
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.Engine.Tests", "test\BrightChain.Engine.Tests\BrightChain.Engine.Tests.csproj", "{B654DE7C-E8B7-4D70-A7D6-D843040F9336}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.EntityFrameworkCore.Client", "src\BrightChain.EntityFrameworkCore.BrightChainClient\BrightChain.EntityFrameworkCore.Client.csproj", "{98A946BE-ECA9-46FF-908D-A136588ACFB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.Engine.Client", "src\BrightChain.Engine.Client\BrightChain.Engine.Client.csproj", "{98A946BE-ECA9-46FF-908D-A136588ACFB8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.EntityFrameworkCore.Tests", "test\BrightChain.EntityFrameworkCore.Tests\BrightChain.EntityFrameworkCore.Tests.csproj", "{CAF1DE09-9EFC-4561-B27A-740E99D601F4}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -57,6 +59,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCore.Analyzers", "efcore\src\EFCore.Analyzers\EFCore.Analyzers.csproj", "{27BA33E5-CBCF-4695-B201-975B19246B77}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCore.InMemory.Tests", "efcore\test\EFCore.InMemory.Tests\EFCore.InMemory.Tests.csproj", "{D93320D5-6D1A-407A-B725-A734378F303C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.Engine.Client.Tests", "test\BrightChain.Engine.Client.Tests\BrightChain.Engine.Client.Tests.csproj", "{613E76A1-9C75-4A6B-AB09-4DD316EA0515}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.Engine", "src\BrightChain.Engine\BrightChain.Engine.csproj", "{E5DDC909-4F18-47F6-B4C8-517EF29B748E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -132,6 +138,14 @@ Global
 		{D93320D5-6D1A-407A-B725-A734378F303C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D93320D5-6D1A-407A-B725-A734378F303C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D93320D5-6D1A-407A-B725-A734378F303C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{613E76A1-9C75-4A6B-AB09-4DD316EA0515}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{613E76A1-9C75-4A6B-AB09-4DD316EA0515}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{613E76A1-9C75-4A6B-AB09-4DD316EA0515}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{613E76A1-9C75-4A6B-AB09-4DD316EA0515}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5DDC909-4F18-47F6-B4C8-517EF29B748E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5DDC909-4F18-47F6-B4C8-517EF29B748E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5DDC909-4F18-47F6-B4C8-517EF29B748E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5DDC909-4F18-47F6-B4C8-517EF29B748E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

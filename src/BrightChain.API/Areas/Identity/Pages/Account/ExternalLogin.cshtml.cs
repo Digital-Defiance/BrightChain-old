@@ -1,4 +1,9 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
+using BrightChain.EntityFrameworkCore.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -6,25 +11,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 
 namespace BrightChain.API.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel
     {
-        private readonly SignInManager<BrightChainUser> _signInManager;
-        private readonly UserManager<BrightChainUser> _userManager;
+        private readonly SignInManager<BrightChainEntityUser> _signInManager;
+        private readonly UserManager<BrightChainEntityUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
-            SignInManager<BrightChainUser> signInManager,
-            UserManager<BrightChainUser> userManager,
+            SignInManager<BrightChainEntityUser> signInManager,
+            UserManager<BrightChainEntityUser> userManager,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender)
         {
@@ -119,7 +119,7 @@ namespace BrightChain.API.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new BrightChainUser { UserName = Input.Email, Email = Input.Email };
+                var user = new BrightChainEntityUser { UserName = Input.Email, Email = Input.Email };
 
                 var result = await _userManager.CreateAsync(user).ConfigureAwait(false);
                 if (result.Succeeded)

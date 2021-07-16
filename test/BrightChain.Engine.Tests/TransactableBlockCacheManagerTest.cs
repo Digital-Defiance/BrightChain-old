@@ -1,8 +1,8 @@
-﻿using BrightChain.Interfaces;
-using BrightChain.Models.Blocks;
+﻿using BrightChain.Engine.Interfaces;
+using BrightChain.Engine.Models.Blocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BrightChain.Tests
+namespace BrightChain.Engine.Tests
 {
     /// <summary>
     /// Test transactable blocks using the BPlusTreeCacheManagerTest

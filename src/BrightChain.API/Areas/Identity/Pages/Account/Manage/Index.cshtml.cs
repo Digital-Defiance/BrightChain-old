@@ -1,20 +1,20 @@
-﻿using BrightChain.EntityFrameworkCore.Data;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+using BrightChain.EntityFrameworkCore.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 
 namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
 {
     public partial class IndexModel : PageModel
     {
-        private readonly UserManager<BrightChainUser> _userManager;
-        private readonly SignInManager<BrightChainUser> _signInManager;
+        private readonly UserManager<BrightChainEntityUser> _userManager;
+        private readonly SignInManager<BrightChainEntityUser> _signInManager;
 
         public IndexModel(
-            UserManager<BrightChainUser> userManager,
-            SignInManager<BrightChainUser> signInManager)
+            UserManager<BrightChainEntityUser> userManager,
+            SignInManager<BrightChainEntityUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -35,7 +35,7 @@ namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
         }
 
-        private async Task LoadAsync(BrightChainUser user)
+        private async Task LoadAsync(BrightChainEntityUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user).ConfigureAwait(false);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user).ConfigureAwait(false);
