@@ -4,7 +4,6 @@
 using BrightChain.EntityFrameworkCore.TestUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.TestModels.Northwind;
 using Microsoft.EntityFrameworkCore.TestUtilities;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BrightChain.EntityFrameworkCore.Query
 {
-    public class NorthwindQueryBrightChainFixture<TModelCustomizer> : NorthwindQueryFixtureBase<TModelCustomizer>
+    public class NorthwindQueryBrightChainFixture<TModelCustomizer> : Microsoft.EntityFrameworkCore.Query.NorthwindQueryFixtureBase<TModelCustomizer>
         where TModelCustomizer : IModelCustomizer, new()
     {
         protected override ITestStoreFactory TestStoreFactory
