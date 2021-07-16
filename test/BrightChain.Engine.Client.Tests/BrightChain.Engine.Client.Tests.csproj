@@ -14,10 +14,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0-preview.6.21352.12" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0-release-20210626-04" />
     <PackageReference Include="Microsoft.NETCore.TestHost" Version="6.0.0-preview.6.21352.12" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-20206-02">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.TestPlatform" Version="16.11.0-release-20210626-04" />
     <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="16.11.0-release-20210626-04" />
     <PackageReference Include="MicrosoftExtensions.Logging.Xunit" Version="1.0.0" />
