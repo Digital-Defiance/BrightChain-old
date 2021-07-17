@@ -224,7 +224,7 @@ namespace BrightChain.Engine.Tests
         }
 
         [TestMethod]
-        public void VerifyCacheDataIntegrityTest()
+        public void ItVerifiesCacheDataIntegrityTest()
         {
             // Arrange
             var expectation = this.testPair.Value;
