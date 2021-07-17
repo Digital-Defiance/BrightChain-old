@@ -37,7 +37,6 @@ namespace BrightChain.Engine.Tests
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                allowCommit: true,
                 privateEncrypted: false));
             Assert.IsTrue(block.Validate());
             var metaData = block.Metadata;
@@ -51,10 +50,9 @@ namespace BrightChain.Engine.Tests
             Assert.IsTrue(metaDataDictionary.ContainsKey("RevocationCertificates"));
             Assert.AreEqual(5, metaDataDictionary.Count); // Hash, Signature, RedundancyContract, _t, _v
             var contractObj = (JsonElement)metaDataDictionary["RedundancyContract"];
-            var contract = contractObj.ToObject<RedundancyContract>(BlockMetadataExtensions.NewSerializerOptions());
+            var contract = contractObj.ToObject<StorageContract>(BlockMetadataExtensions.NewSerializerOptions());
 
-            Assert.AreEqual(block.RedundancyContract, contract);
-            Assert.AreEqual(block.StorageContract, contract.StorageContract);
+            Assert.AreEqual(block.StorageContract, contract);
 
             var loggerMock = Mock.Get(logger);
             loggerMock.Verify(l => l.Log(
@@ -75,23 +73,23 @@ namespace BrightChain.Engine.Tests
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                allowCommit: true,
                 privateEncrypted: false));
 
             var block = new ConstituentBlockListBlock(
                             blockParams: new ConstituentBlockListBlockParams(
                                 blockParams: new TransactableBlockParams(
                                     cacheManager: new MemoryBlockCacheManager(logger: logger, configuration: new Configuration()),
+                                    allowCommit: true,
                                     blockParams: new BlockParams(
                                         blockSize: BlockSize.Message,
                                         requestTime: DateTime.Now,
                                         keepUntilAtLeast: DateTime.Now.AddDays(1),
                                         redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                                        allowCommit: true,
                                         privateEncrypted: false)),
-                                finalDataHash: new BlockHash(dummyBlock),
+                                sourceId: new BlockHash(dummyBlock),
+                                segmentHash: new SegmentHash(dummyBlock.Data),
                                 totalLength: 0,
-                                constituentBlocks: new Block[] { dummyBlock }));
+                                constituentBlocks: new BlockHash[] { dummyBlock.Id }));
 
             Assert.IsTrue(block.Validate());
             var metaData = block.Metadata;
@@ -107,14 +105,15 @@ namespace BrightChain.Engine.Tests
             Assert.IsTrue(metaDataDictionary.ContainsKey("SourceId"));
             Assert.IsTrue(metaDataDictionary.ContainsKey("RevocationCertificates"));
             var contractObj = (JsonElement)metaDataDictionary["RedundancyContract"];
-            var contract = contractObj.ToObject<RedundancyContract>(BlockMetadataExtensions.NewSerializerOptions());
+            var contract = contractObj.ToObject<StorageContract>(BlockMetadataExtensions.NewSerializerOptions());
             Assert.AreEqual(10, metaDataDictionary.Count); // Hash, Signature, RedundancyContract, _t, _v
-            Assert.AreEqual(block.RedundancyContract, contract);
-            Assert.AreEqual(block.StorageContract, contract.StorageContract);
+            Assert.AreEqual(block.StorageContract, contract);
             var sourceIdObj = (JsonElement)metaDataDictionary["SourceId"];
             var sourceId = sourceIdObj.ToObject<BlockHash>(BlockMetadataExtensions.NewSerializerOptions());
             Assert.AreEqual(block.BlockSize, sourceId.BlockSize);
-            Assert.AreEqual("076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560", sourceId.ToString()); // all-zero vector
+            Assert.AreEqual(
+                Helpers.Utilities.HashToFormattedString(Helpers.Utilities.GetZeroVector(sourceId.BlockSize).HashBytes.ToArray()),
+                Helpers.Utilities.HashToFormattedString(sourceId.HashBytes.ToArray()));
         }
 
         [TestMethod]
@@ -128,7 +127,6 @@ namespace BrightChain.Engine.Tests
                 requestTime: testStart,
                 keepUntilAtLeast: testStart.AddDays(1),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                allowCommit: true,
                 privateEncrypted: false));
             Assert.IsTrue(block.Validate());
             var metaData = block.Metadata;
@@ -139,11 +137,8 @@ namespace BrightChain.Engine.Tests
                 requestTime: testStart.AddSeconds(5),
                 keepUntilAtLeast: testStart.AddDays(1).AddSeconds(5),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                allowCommit: true,
                 privateEncrypted: false));
             Assert.IsTrue(block2.TryRestoreMetadataFromBytes(metaData));
-            Assert.AreEqual(block.RedundancyContract, block2.RedundancyContract);
-            Assert.AreEqual(block.StorageContract, block2.RedundancyContract.StorageContract);
             Assert.AreEqual(block.StorageContract, block2.StorageContract);
             Assert.AreEqual(block.Signature, block2.Signature);
 
@@ -168,43 +163,49 @@ namespace BrightChain.Engine.Tests
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                allowCommit: true,
                 privateEncrypted: false));
 
             var block = new ConstituentBlockListBlock(
                             blockParams: new ConstituentBlockListBlockParams(
                                 blockParams: new TransactableBlockParams(
-                                    cacheManager: new MemoryBlockCacheManager(logger: logger, configuration: new Configuration()),
+                                    cacheManager: new MemoryBlockCacheManager(
+                                        logger: this.logger,
+                                        configuration: new Configuration()),
+                                    allowCommit: true,
                                     blockParams: new BlockParams(
                                         blockSize: BlockSize.Message,
                                         requestTime: DateTime.Now,
                                         keepUntilAtLeast: DateTime.Now.AddDays(1),
                                         redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                                        allowCommit: true,
                                         privateEncrypted: false)),
-                                finalDataHash: new BlockHash(dummyBlock),
+                                sourceId: new BlockHash(dummyBlock),
+                                segmentHash: new SegmentHash(dummyBlock.Data),
                                 totalLength: 0,
-                                constituentBlocks: new Block[] { dummyBlock }));
+                                constituentBlocks: new BlockHash[] { dummyBlock.Id }));
 
             Assert.IsTrue(block.Validate());
             var metaData = block.Metadata;
             var metaDataString = new string(metaData.ToArray().Select(c => (char)c).ToArray());
 
-            var block2 = new ConstituentBlockListBlock(new ConstituentBlockListBlockParams(new TransactableBlockParams(
-                cacheManager: block.CacheManager,
-                blockParams: new BlockParams(
-                    blockSize: BlockSize.Message, // match
-                    requestTime: DateTime.MinValue, // bad
-                    keepUntilAtLeast: DateTime.MinValue, // bad
-                    redundancy: RedundancyContractType.LocalNone, // different
-                    allowCommit: true, // irrelevant
-                    privateEncrypted: true)), // opposite
-                    finalDataHash: new BlockHash(originalBlockSize: BlockSize.Message, providedHashBytes: dummyBlock.Id.HashBytes), // known incorrect hash
-                    totalLength: (ulong)BlockSizeMap.BlockSize(BlockSize.Message),
-                    constituentBlocks: new Block[] { dummyBlock }));
+            var block2 = new ConstituentBlockListBlock(
+                blockParams: new ConstituentBlockListBlockParams(
+                    blockParams: new TransactableBlockParams(
+                        cacheManager: block.CacheManager,
+                        allowCommit: true,
+                        blockParams: new BlockParams(
+                            blockSize: BlockSize.Message, // match
+                            requestTime: DateTime.MinValue, // bad
+                            keepUntilAtLeast: DateTime.MinValue, // bad
+                            redundancy: RedundancyContractType.LocalNone, // different
+                            privateEncrypted: true)), // opposite
+                    sourceId: new DataHash(
+                        providedHashBytes: dummyBlock.Id.HashBytes,
+                        sourceDataLength: dummyBlock.Data.Length,
+                        computed: true), // known incorrect hash
+                    segmentHash: new SegmentHash(dummyBlock.Data),
+                    totalLength: (long)BlockSizeMap.BlockSize(BlockSize.Message),
+                    constituentBlocks: new BlockHash[] { dummyBlock.Id }));
             Assert.IsTrue(block2.TryRestoreMetadataFromBytes(metaData));
-            Assert.AreEqual(block.RedundancyContract, block2.RedundancyContract);
-            Assert.AreEqual(block.StorageContract, block2.RedundancyContract.StorageContract);
             Assert.AreEqual(block.StorageContract, block2.StorageContract);
             Assert.AreEqual(block.Signature, block2.Signature);
             Assert.AreEqual(block.SourceId, block2.SourceId);

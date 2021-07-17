@@ -1,12 +1,12 @@
-﻿using System.Threading.Tasks;
-using BrightChain.EntityFrameworkCore.Data.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-
-namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
+﻿namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
 {
+    using System.Threading.Tasks;
+    using BrightChain.EntityFrameworkCore.Data.Entities;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.Extensions.Logging;
+
     public class TwoFactorAuthenticationModel : PageModel
     {
         private const string AuthenicatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}";

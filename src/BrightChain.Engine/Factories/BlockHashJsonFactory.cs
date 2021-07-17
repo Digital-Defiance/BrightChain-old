@@ -85,7 +85,7 @@ namespace BrightChain.Engine.Factories
 
                     string stringHash = reader.GetString();
 
-                    blockHash = new BlockHash(originalBlockSize: BlockSizeMap.BlockSize(blockSize), providedHashBytes: StringToByteArray(stringHash));
+                    blockHash = new BlockHash(blockType: typeof(Block), originalBlockSize: BlockSizeMap.BlockSize(blockSize), providedHashBytes: StringToByteArray(stringHash), computed: false);
                 }
 
                 throw new JsonException();

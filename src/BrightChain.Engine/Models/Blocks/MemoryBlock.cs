@@ -11,24 +11,27 @@ namespace BrightChain.Engine.Models.Blocks
     /// </summary>
     public class MemoryBlock : TransactableBlock, IBlock
     {
-        public MemoryBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data) :
-            base(
+        public MemoryBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data)
+            : base(
                 blockParams: blockParams,
                 data: data)
         {
-            if (!(CacheManager is MemoryBlockCacheManager))
+            if (!(this.CacheManager is MemoryBlockCacheManager))
             {
-                throw new BrightChainException(CacheManager.GetType().Name);
+                throw new BrightChainException(this.CacheManager.GetType().Name);
             }
 
-            CacheManager.Set(this);
+            this.CacheManager.Set(this);
         }
 
-        public override Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
+        public override MemoryBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
             return new MemoryBlock(
-blockParams: new TransactableBlockParams(CacheManager, blockParams),
-data: data);
+                blockParams: new TransactableBlockParams(
+                    cacheManager: this.CacheManager,
+                    allowCommit: this.AllowCommit,
+                    blockParams: blockParams),
+                data: data);
         }
 
         public override void Dispose()

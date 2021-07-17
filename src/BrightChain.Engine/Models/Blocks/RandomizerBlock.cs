@@ -9,12 +9,12 @@ namespace BrightChain.Engine.Models.Blocks
     /// </summary>
     public class RandomizerBlock : TransactableBlock, IComparable<RandomizerBlock>
     {
-        public RandomizerBlock(TransactableBlockParams blockParams) :
-            base(
+        public RandomizerBlock(TransactableBlockParams blockParams)
+            : base(
                 blockParams: blockParams,
                 data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockParams.BlockSize)))
         {
-            CacheManager.Set(this);
+            this.CacheManager.Set(this);
         }
 
         /// <summary>
@@ -26,17 +26,18 @@ namespace BrightChain.Engine.Models.Blocks
         /// <param name="_"></param>
         /// <param name="allowCommit"></param>
         /// <returns></returns>
-        public override Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> _)
+        public override RandomizerBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> _)
         {
             return new RandomizerBlock(
-blockParams: new TransactableBlockParams(
-cacheManager: CacheManager,
-blockParams: blockParams));
+                blockParams: new TransactableBlockParams(
+                allowCommit: this.AllowCommit,
+                cacheManager: this.CacheManager,
+                blockParams: blockParams));
         }
 
         public int CompareTo(RandomizerBlock other)
         {
-            return ReadOnlyMemoryComparer<byte>.Compare(Data, other.Data);
+            return ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
         }
 
         public override void Dispose()

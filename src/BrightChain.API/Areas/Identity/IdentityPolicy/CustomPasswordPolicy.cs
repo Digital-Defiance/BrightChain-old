@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BrightChain.EntityFrameworkCore.Data.Entities;
-using Microsoft.AspNetCore.Identity;
-
-namespace BrightChain.API.Identity.IdentityPolicy
+﻿namespace BrightChain.API.Identity.IdentityPolicy
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using BrightChain.EntityFrameworkCore.Data.Entities;
+    using Microsoft.AspNetCore.Identity;
+
     public class CustomPasswordPolicy : PasswordValidator<BrightChainEntityUser>
     {
         public override async Task<IdentityResult> ValidateAsync(UserManager<BrightChainEntityUser> manager, BrightChainEntityUser user, string password)

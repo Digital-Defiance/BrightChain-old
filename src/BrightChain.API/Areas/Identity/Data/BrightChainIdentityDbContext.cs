@@ -1,14 +1,14 @@
-﻿using System;
-using System.Data;
-using System.Threading.Tasks;
-using BrightChain.EntityFrameworkCore.Data.Entities;
-using BrightChain.EntityFrameworkCore.Interfaces;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-
-namespace BrightChain.API.Identity.Data
+﻿namespace BrightChain.API.Identity.Data
 {
+    using System;
+    using System.Data;
+    using System.Threading.Tasks;
+    using BrightChain.EntityFrameworkCore.Data.Entities;
+    using BrightChain.EntityFrameworkCore.Interfaces;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+
     public class BrightChainIdentityDbContext : IdentityDbContext<BrightChainEntityUser>, IBrightChainDbContext
     {
         public IDbConnection Connection => Database.GetDbConnection();

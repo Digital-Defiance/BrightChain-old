@@ -1,12 +1,12 @@
-﻿using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using BrightChain.Engine.Models.Blocks;
-using BrightChain.EntityFrameworkCore.Data;
-using MediatR;
-
-namespace BrightChain.API.Commands
+﻿namespace BrightChain.API.Commands
 {
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.EntityFrameworkCore.Data;
+    using MediatR;
+
     public class UpdateBlockCommand : IRequest<Block>
     {
         public Block Block { get; set; }

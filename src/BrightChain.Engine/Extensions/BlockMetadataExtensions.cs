@@ -80,9 +80,9 @@ namespace BrightChain.Engine.Extensions
                     if (attr is BrightChainMetadataAttribute)
                     {
                         prop.SetValue(block, value);
-                        if (value is RedundancyContract redundancyContract)
+                        if (value is StorageContract storageContract)
                         {
-                            block.StorageContract = redundancyContract.StorageContract;
+                            block.StorageContract = storageContract;
                         }
 
                         exception = null;

@@ -22,14 +22,14 @@ namespace BrightChain.Engine.Tests
         [TestMethod]
         public void ItValidatesValidBlocksTest()
         {
-            Assert.IsTrue((new RandomDataBlock(
+            Assert.IsTrue(new RandomDataBlock(
                 blockParams: new BlockParams(
-                blockSize: Enumerations.BlockSize.Message,
-                requestTime: DateTime.Now,
-                keepUntilAtLeast: DateTime.MaxValue,
-                redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                allowCommit: true,
-                privateEncrypted: false))).Validate());
+                    blockSize: Enumerations.BlockSize.Message,
+                    requestTime: DateTime.Now,
+                    keepUntilAtLeast: DateTime.MaxValue,
+                    redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                    privateEncrypted: false))
+                .Validate());
 
             var loggerMock = Mock.Get(logger);
             loggerMock.Verify(l => l.Log(
@@ -37,7 +37,8 @@ namespace BrightChain.Engine.Tests
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                Times.Exactly(0));
             loggerMock.VerifyNoOtherCalls();
         }
 
@@ -54,7 +55,7 @@ namespace BrightChain.Engine.Tests
         }
 
         [TestMethod, Ignore]
-        public void ItValidatesBlockHashMatchesDataHashTest()
+        public void ItValidatesBlockHashMatchesBlockHashTest()
         {
             throw new NotImplementedException();
         }

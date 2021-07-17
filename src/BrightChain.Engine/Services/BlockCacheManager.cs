@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Interfaces;
 using BrightChain.Engine.Models.Blocks;
+using BrightChain.Engine.Models.Nodes;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -9,10 +12,13 @@ namespace BrightChain.Engine.Services
     /// <summary>
     /// Block Cache Manager
     /// </summary>
-    public abstract class BlockCacheManager : ICacheManager<BlockHash, TransactableBlock>
+    public abstract class BlockCacheManager : IBlockCacheManager
     {
         private readonly ILogger logger;
         private readonly IConfiguration configuration;
+        private readonly List<BrightChainNode> trustedNodes;
+        private readonly List<BlockSize> supportedReadBlockSizes;
+        private readonly List<BlockSize> supportedWriteBlockSizes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BlockCacheManager"/> class.
@@ -23,6 +29,8 @@ namespace BrightChain.Engine.Services
         {
             this.logger = logger;
             this.configuration = configuration;
+            this.trustedNodes = new List<BrightChainNode>();
+            // TODO: load supported block sizes from configurations
         }
 
         /// <summary>
@@ -53,6 +61,11 @@ namespace BrightChain.Engine.Services
         /// Fired whenever a block is requested from the cache but is not present.
         /// </summary>
         public abstract event ICacheManager<BlockHash, TransactableBlock>.CacheMissEventHandler CacheMiss;
+
+        /// <summary>
+        /// Gets a value indicating whether to only accept blocks from trusted nodes.
+        /// </summary>
+        public bool OnlyAcceptBlocksFromTrustedNodes { get; }
 
         /// <summary>
         /// Gets a lower classed BlockCacheManager of this object.
@@ -86,5 +99,14 @@ namespace BrightChain.Engine.Services
         /// </summary>
         /// <param name="value">block to palce in the cache.</param>
         public abstract void Set(TransactableBlock value);
+
+        /// <summary>
+        /// Add a node that the cache manager should trust.
+        /// </summary>
+        /// <param name="node">Node submitting the block to the cache.</param>
+        public void Trust(BrightChainNode node)
+        {
+            this.trustedNodes.Add(node);
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BrightChain.Engine.Attributes;
 using BrightChain.Engine.Enumerations;
+using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Interfaces;
 using BrightChain.Engine.Models.Blocks.DataObjects;
 using BrightChain.Engine.Services;
@@ -15,97 +16,153 @@ namespace BrightChain.Engine.Models.Blocks.Chains
     /// TODO: Ensure that the hash of the source file
     /// TODO: Validate constituent blocks can recompose into that data (break up by tuple size), validate all blocks are same length
     /// </summary>
-    public class ConstituentBlockListBlock : SourceBlock, IBlock, IDisposable, IValidatable
+    public class ConstituentBlockListBlock : TransactableBlock, IBlock, IDisposable, IValidatable
     {
         /// <summary>
-        /// Hash of the sum bytes of the file when assembled in order
+        /// Initializes a new instance of the <see cref="ConstituentBlockListBlock"/> class.
         /// </summary>
-        [BrightChainMetadata]
-        public BlockHash SourceId { get; set; }
+        /// <param name="blockParams"></param>
+        public ConstituentBlockListBlock(ConstituentBlockListBlockParams blockParams)
+        : base(
+              blockParams: blockParams,
+              data: blockParams.ConstituentBlocks
+                        .SelectMany(b => b.HashBytes.ToArray())
+                         .ToArray())
+        {
+            // TODO : if finalBlockHash is null, reconstitute and compute- or accept the validation result's hash essentially?
+            this.SourceId = blockParams.SourceId;
+            this.TotalLength = blockParams.TotalLength;
+            this.PrivateEncrypted = blockParams.PrivateEncrypted;
+            this.ConstituentBlocks = blockParams.ConstituentBlocks;
+            this.Previous = blockParams.Previous;
+            this.Next = blockParams.Next;
+            this.TupleCount = BlockBrightener.TupleCount;
+        }
 
         /// <summary>
-        /// Total length of bytes in the user data section
+        /// Gets a CBLBlockParams object with the parameters of this block.
         /// </summary>
-        [BrightChainMetadata]
-        public ulong TotalLength { get; set; }
+        public override ConstituentBlockListBlockParams BlockParams
+        {
+            get =>
+                new ConstituentBlockListBlockParams(
+                    blockParams: new TransactableBlockParams(
+                        cacheManager: this.CacheManager,
+                        allowCommit: this.AllowCommit,
+                        blockParams: new BlockParams(
+                            blockSize: this.BlockSize,
+                            requestTime: this.StorageContract.RequestTime,
+                            keepUntilAtLeast: this.StorageContract.KeepUntilAtLeast,
+                            redundancy: this.StorageContract.RedundancyContractType,
+                            privateEncrypted: this.PrivateEncrypted)),
+                    sourceId: this.SourceId,
+                    segmentHash: this.SegmentId,
+                    totalLength: this.TotalLength,
+                    constituentBlocks: this.ConstituentBlocks,
+                    previous: this.Previous,
+                    next: this.Next);
+        }
 
         /// <summary>
-        /// TupleCount at the time
+        /// Gets or sets the hash of the sum bytes of the file when assembled in order.
         /// </summary>
         [BrightChainMetadata]
-        public int TupleCount { get; set; } = BlockWhitener.TupleCount;
+        public DataHash SourceId { get; set; }
 
         /// <summary>
-        /// Whether this "file" is encrypted or for public use
+        /// Gets or sets the total length of bytes in the user data section.
+        /// </summary>
+        [BrightChainMetadata]
+        public long TotalLength { get; set; }
+
+        /// <summary>
+        /// Gets or sets an int with the TupleCount at the time of creation.
+        /// </summary>
+        [BrightChainMetadata]
+        public int TupleCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this "file" is encrypted or for public use.
         /// </summary>
         [BrightChainMetadata]
         public bool PrivateEncrypted { get; set; }
 
+        /// <summary>
+        /// Gets or sets the hash of the sum bytes of the segment of the file contained in this CBL when assembled in order.
+        /// </summary>
+        [BrightChainMetadata]
+        public SegmentHash SegmentId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the BlockHash of the previous CBL in this CBL Chain.
+        /// </summary>
+        [BrightChainMetadata]
+
+        public BlockHash Previous { get; set; }
+
+        /// <summary>
+        /// Gets or sets the hash of the next CBL in this CBL Chain.
+        /// </summary>
+        [BrightChainMetadata]
+        public BlockHash Next { get; set; }
+
+        /// <summary>
+        /// Gets or sets the BrightChainID of the block's creator.
+        /// </summary>
         [BrightChainMetadata]
         public BrokeredAnonymityIdentifier CreatorId { get; set; }
 
-        public BlockChainFileMap BlockMap => new BlockChainFileMap(this);
-
-        public ConstituentBlockListBlock(ConstituentBlockListBlockParams blockParams)
-        : base(
-              blockParams: new TransactableBlockParams(
-                  cacheManager: blockParams.CacheManager,
-                  blockParams: new BlockParams(
-                      blockSize: blockParams.BlockSize,
-                      requestTime: blockParams.RequestTime,
-                      keepUntilAtLeast: blockParams.KeepUntilAtLeast,
-                      redundancy: blockParams.Redundancy,
-                      allowCommit: blockParams.AllowCommit,
-                      privateEncrypted: blockParams.PrivateEncrypted)
-            ),
-              data: Helpers.RandomDataHelper.DataFiller(
-                  inputData: new ReadOnlyMemory<byte>(
-                    blockParams.ConstituentBlocks
-                        .SelectMany(b =>
-                            b.Id.HashBytes.ToArray())
-                        .ToArray()),
-                  blockSize: blockParams.BlockSize)
-        )
-        {
-            // TODO : if finalDataHash is null, reconstitute and compute- or accept the validation result's hash essentially?
-            SourceId = blockParams.FinalDataHash;
-            TotalLength = blockParams.TotalLength;
-            PrivateEncrypted = blockParams.PrivateEncrypted;
-            ConstituentBlocks = blockParams.ConstituentBlocks;
-        }
-
+        /// <summary>
+        /// Gets an array of the bytes of the constituent block hashes for writing to disk.
+        /// </summary>
         public ReadOnlyMemory<byte> ConstituentBlockHashesBytes => new ReadOnlyMemory<byte>(
-                ConstituentBlocks
+                this.ConstituentBlocks
                     .SelectMany(b =>
-                        b.Id.HashBytes.ToArray())
+                        b.HashBytes.ToArray())
                     .ToArray());
 
-        public IEnumerable<BlockHash> ConstituentBlockHashes =>
-            ConstituentBlocks
-                .Select(b => b.Id)
-                    .ToArray();
+        /// <summary>
+        /// Gets a value indicating the computed cost of storing this contract.
+        /// </summary>
+        public double TotalCost { get; set; }
 
-        public double TotalCost =>
-            ConstituentBlocks.Sum(b => b.RedundancyContract.Cost);
+        /// <summary>
+        /// Gets an int representing the computed capacity of this block in terms of number of BlockHashes.
+        /// </summary>
+        public int MaximumHashesPerBlock =>
+            (int)Math.Floor((double)(BlockHash.HashSize / 8) / BlockSizeMap.BlockSize(this.BlockSize));
 
+        /// <summary>
+        /// Generate a BlockMap from the list of constituent blocks.
+        /// </summary>
+        /// <returns>BlockChainFileMap with TupleStripes of the chain.</returns>
+        public BlockChainFileMap GenerateBlockMap() =>
+            new BlockChainFileMap(this);
 
-        public static ConstituentBlockListBlock SplitHashList(IEnumerable<BlockHash> blockHashes, BlockSize blockSize)
-        {
-            throw new NotImplementedException();
-            var iBlockSize = BlockSizeMap.BlockSize(blockSize);
-            var hashesPerBlock = (int)Math.Floor((double)(iBlockSize / iBlockSize));
-            while (blockHashes.Any())
-            {
-                var newCBLHashes = blockHashes.Take(hashesPerBlock);
-                // do something
-                blockHashes = blockHashes.Skip(hashesPerBlock);
-            }
-        }
-
+        /// <summary>
+        /// Perform validation of this CBL and its underlying data.
+        /// </summary>
+        /// <returns>A boolean indicating whether validation succeeded.</returns>
         public new bool Validate()
         {
+            if (!base.Validate())
+            {
+                return false;
+            }
+
+            var validationExceptions = new List<BrightChainValidationException>(this.ValidationExceptions);
+
+            if (!(this.Previous is null))
+            {
+                if (!(this.Previous is ConstituentBlockListBlock))
+                {
+                    validationExceptions.Add(new BrightChainValidationException(
+                        element: nameof(this.Previous),
+                        message: "Previous object must be a CBL."));
+                }
+            }
             // TODO: perform additional validation as described above
-            return base.Validate();
+            return true;
         }
     }
 }

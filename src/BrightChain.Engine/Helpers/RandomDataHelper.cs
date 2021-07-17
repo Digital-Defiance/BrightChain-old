@@ -10,7 +10,7 @@ namespace BrightChain.Engine.Helpers
 {
     public static class RandomDataHelper
     {
-        private static IEnumerable<byte> RandomBytes(int length)
+        public static byte[] RandomBytes(int length)
         {
             using (var rng = RandomNumberGenerator.Create()) // TODO: guarantee is CSPRNG
             {
@@ -20,28 +20,26 @@ namespace BrightChain.Engine.Helpers
             }
         }
 
-        public static ReadOnlyMemory<byte> RandomReadOnlyBytes(int length)
-        {
-            return new ReadOnlyMemory<byte>(RandomBytes(length: length).ToArray());
-        }
+        public static ReadOnlyMemory<byte> RandomReadOnlyBytes(int length) =>
+            new ReadOnlyMemory<byte>(RandomBytes(length: length).ToArray());
 
         public static ReadOnlyMemory<byte> DataFiller(ReadOnlyMemory<byte> inputData, BlockSize blockSize)
         {
-            var length = BlockSizeMap.BlockSize(blockSize);
+            var iBlockSize = BlockSizeMap.BlockSize(blockSize);
 
-            if (inputData.Length > length)
+            if (inputData.Length > iBlockSize)
             {
                 throw new BrightChainException("data length too long");
             }
-            else if (inputData.Length == length)
+            else if (inputData.Length == iBlockSize)
             {
                 return inputData;
             }
 
             var bytes = new List<byte>(inputData.ToArray());
-            bytes.AddRange(RandomBytes(length - inputData.Length));
+            bytes.AddRange(RandomBytes(iBlockSize - inputData.Length));
 
-            if (bytes.Count != length)
+            if (bytes.Count != iBlockSize)
             {
                 throw new BrightChainException("math error");
             }

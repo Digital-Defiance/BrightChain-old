@@ -4,7 +4,7 @@ using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Helpers;
 using BrightChain.Engine.Interfaces;
 
-namespace BrightChain.Engine.Models.Contracts
+namespace BrightChain.Engine.Models.Hashes
 {
     /// <summary>
     /// Type box for the sha hashes of signatures

@@ -12,16 +12,14 @@ namespace BrightChain.Engine.Models.Blocks.DataObjects
         public readonly DateTime RequestTime;
         public readonly DateTime KeepUntilAtLeast;
         public readonly RedundancyContractType Redundancy;
-        public readonly bool AllowCommit;
         public readonly bool PrivateEncrypted;
 
-        public BlockParams(BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, bool allowCommit, bool privateEncrypted)
+        public BlockParams(BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, bool privateEncrypted)
         {
             BlockSize = blockSize;
             RequestTime = requestTime;
             KeepUntilAtLeast = keepUntilAtLeast;
             Redundancy = redundancy;
-            AllowCommit = allowCommit;
             PrivateEncrypted = privateEncrypted;
         }
     }

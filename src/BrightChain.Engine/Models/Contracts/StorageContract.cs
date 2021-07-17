@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.Json.Serialization;
+using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Models.Units;
 
 namespace BrightChain.Engine.Models.Contracts
@@ -7,7 +8,7 @@ namespace BrightChain.Engine.Models.Contracts
     /// <summary>
     /// Contract for the minimum amount of time required to store a given block
     /// </summary>
-    public struct StorageDurationContract
+    public struct StorageContract
     {
         /// <summary>
         /// Date/Time the block was received by the network
@@ -30,14 +31,27 @@ namespace BrightChain.Engine.Models.Contracts
         /// </summary>
         public bool PrivateEncrypted { get; internal set; }
 
+        public RedundancyContractType RedundancyContractType { get; set; }
+
+
         [JsonConstructor]
-        public StorageDurationContract(DateTime RequestTime, DateTime KeepUntilAtLeast, int ByteCount, bool PrivateEncrypted)
+        public StorageContract(DateTime RequestTime, DateTime KeepUntilAtLeast, int ByteCount, bool PrivateEncrypted, RedundancyContractType redundancyContractType)
         {
             this.RequestTime = RequestTime;
             this.KeepUntilAtLeast = KeepUntilAtLeast;
             this.ByteCount = ByteCount;
             this.PrivateEncrypted = PrivateEncrypted;
+            this.RedundancyContractType = redundancyContractType;
         }
+
+        public static bool operator ==(StorageContract a, StorageContract b) =>
+            a.RequestTime == b.RequestTime &&
+            a.KeepUntilAtLeast == b.KeepUntilAtLeast &&
+            a.ByteCount == b.ByteCount &&
+            a.PrivateEncrypted == b.PrivateEncrypted &&
+            a.RedundancyContractType == b.RedundancyContractType;
+
+        public static bool operator !=(StorageContract a, StorageContract b) => !(a == b);
 
         [JsonIgnore]
         public double Duration => KeepUntilAtLeast.Subtract(RequestTime).TotalSeconds;
@@ -53,29 +67,11 @@ namespace BrightChain.Engine.Models.Contracts
         [JsonIgnore]
         public readonly bool NonExpiring => KeepUntilAtLeast.Equals(DateTime.MaxValue);
 
-        public bool Equals(StorageDurationContract other)
-        {
-            return RequestTime.Equals(other.RequestTime) &&
-KeepUntilAtLeast.Equals(other.KeepUntilAtLeast) &&
-ByteCount.Equals(other.ByteCount);
-        }
+        public bool Equals(StorageContract other) =>
+            this == other;
 
-        public override bool Equals(object other)
-        {
-            return other is StorageDurationContract && (StorageDurationContract)other == this;
-        }
-
-        public static bool operator ==(StorageDurationContract a, StorageDurationContract b)
-        {
-            return a.RequestTime == b.RequestTime &&
-a.KeepUntilAtLeast == b.KeepUntilAtLeast &&
-a.ByteCount == b.ByteCount;
-        }
-
-        public static bool operator !=(StorageDurationContract a, StorageDurationContract b)
-        {
-            return !a.Equals(b);
-        }
+        public override bool Equals(object other) =>
+            other is StorageContract storageContract && storageContract == this;
 
         public override int GetHashCode()
         {

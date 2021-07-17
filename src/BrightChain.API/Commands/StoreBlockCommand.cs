@@ -1,12 +1,12 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using BrightChain.Engine.Models.Blocks;
-using BrightChain.EntityFrameworkCore.Data;
-using BrightChain.EntityFrameworkCore.Data.Entities;
-using MediatR;
-
-namespace BrightChain.API.Commands
+﻿namespace BrightChain.API.Commands
 {
+    using System.Threading;
+    using System.Threading.Tasks;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.EntityFrameworkCore.Data;
+    using BrightChain.EntityFrameworkCore.Data.Entities;
+    using MediatR;
+
     public class StoreBlockCommand : IRequest<BlockHash>
     {
         public Block Block { get; set; }

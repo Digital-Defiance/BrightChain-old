@@ -12,9 +12,15 @@
             Element = element;
         }
 
+        /// <summary>
+        /// TODO: Why is this here?
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="_"></param>
         public BrightChainValidationException(string element, object _) : base("BOGUS!")
         {
-            Element = element;
+            this.Element = element;
+            throw new System.Exception("WHY?");
         }
     }
 }

@@ -35,7 +35,6 @@ namespace BrightChain.Engine.Tests
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                allowCommit: true,
                 privateEncrypted: false));
 
             Assert.IsTrue(block.Validate());

@@ -6,16 +6,18 @@ namespace BrightChain.Engine.Models.Blocks.DataObjects
     {
         public ICacheManager<BlockHash, TransactableBlock> CacheManager;
 
-        public TransactableBlockParams(ICacheManager<BlockHash, TransactableBlock> cacheManager, BlockParams blockParams)
+        public bool AllowCommit { get; }
+
+        public TransactableBlockParams(ICacheManager<BlockHash, TransactableBlock> cacheManager, bool allowCommit, BlockParams blockParams)
             : base(
                   blockSize: blockParams.BlockSize,
                   requestTime: blockParams.RequestTime,
                   keepUntilAtLeast: blockParams.KeepUntilAtLeast,
                   redundancy: blockParams.Redundancy,
-                  allowCommit: blockParams.AllowCommit,
                   privateEncrypted: blockParams.PrivateEncrypted)
         {
-            CacheManager = cacheManager;
+            this.CacheManager = cacheManager;
+            this.AllowCommit = allowCommit;
         }
     }
 }

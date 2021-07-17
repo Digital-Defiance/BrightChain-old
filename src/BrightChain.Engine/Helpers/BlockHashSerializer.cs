@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Interfaces;
 using BrightChain.Engine.Models.Blocks;
@@ -7,36 +8,23 @@ using BrightChain.Engine.Models.Blocks;
 namespace BrightChain.Engine.Helpers
 {
     /// <summary>
-    /// Serializer class to help BTree
+    /// Serializer class to help BTree.
     /// </summary>
-    public class BlockHashSerializer : IBrightChainSerializer<BlockHash>
+    /// <typeparam name="T">Type of the block being serialized.</typeparam>
+    public class BlockHashSerializer<T> : IBrightChainSerializer<BlockHash>
     {
-
-        /// <summary>
-        /// Generate a hash of an empty array to determine the block hash byte length
-        /// Used during testing
-        /// </summary>
-        internal static void verifyHashLength(out BlockHash tmpHash)
-        {
-            var messageBytes = new byte[BlockSizeMap.BlockSize(Enumerations.BlockSize.Message)];
-            Array.Fill<byte>(messageBytes, 0);
-            tmpHash = new BlockHash(messageBytes);
-            if (tmpHash.HashBytes.Length != BlockHash.HashSize)
-            {
-                throw new BrightChainException("hash size mismatch");
-            }
-        }
-
         public BlockHash ReadFrom(Stream stream)
         {
-            var hashBytes = new byte[BlockHash.HashSize];
+            var hashBytes = new byte[BlockHash.HashSize / 8];
             stream.Read(
                 buffer: hashBytes,
                 offset: 0,
                 count: hashBytes.Length);
             return new BlockHash(
+                blockType: typeof(T),
                 originalBlockSize: Enumerations.BlockSize.Unknown,
-                providedHashBytes: hashBytes);
+                providedHashBytes: hashBytes,
+                computed: false);
         }
 
         public void WriteTo(BlockHash value, Stream stream)

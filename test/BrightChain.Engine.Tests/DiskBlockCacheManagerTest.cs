@@ -18,27 +18,27 @@ namespace BrightChain.Engine.Tests
     {
         public static new DiskBlockCacheManager CacheManager;
 
-        public DiskCacheTestBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data) :
-            base(
+        public DiskCacheTestBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data)
+            : base(
                 blockParams: blockParams,
                 data: data)
         {
-
         }
 
-        internal DiskCacheTestBlock() :
-            base(
+        internal DiskCacheTestBlock()
+            : base(
                 blockParams: new TransactableBlockParams(
                     cacheManager: DiskCacheTestBlock.CacheManager,
+                    allowCommit: true,
                     blockParams: new BlockParams(
                     blockSize: BlockSize.Message,
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.MaxValue,
                     redundancy: RedundancyContractType.HeapAuto,
-                    allowCommit: true,
                     privateEncrypted: false)),
                 data: NewRandomData())
-        { }
+        {
+        }
 
         public static ReadOnlyMemory<byte> NewRandomData()
         {
@@ -52,13 +52,14 @@ namespace BrightChain.Engine.Tests
             return new ReadOnlyMemory<byte>(data);
         }
 
-        public override Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
+        public override DiskCacheTestBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
             return new DiskCacheTestBlock(
-blockParams: new TransactableBlockParams(
-cacheManager: DiskCacheTestBlock.CacheManager,
-blockParams: blockParams),
-data: data);
+                blockParams: new TransactableBlockParams(
+                cacheManager: DiskCacheTestBlock.CacheManager,
+                allowCommit: this.AllowCommit,
+                blockParams: blockParams),
+                data: data);
         }
 
         public override void Dispose()
@@ -98,13 +99,13 @@ logger: logger, configuration: configuration);
 
             var block = new DiskCacheTestBlock(
                 blockParams: new TransactableBlockParams(
-                    cacheManager: cacheManager,
+                    cacheManager: this.cacheManager,
+                    allowCommit: true,
                     blockParams: new BlockParams(
                         blockSize: BlockSize.Message,
                         requestTime: DateTime.Now,
                         keepUntilAtLeast: DateTime.MaxValue,
                         redundancy: Enumerations.RedundancyContractType.LocalNone,
-                        allowCommit: true,
                         privateEncrypted: false)
                     ),
                 data: data);

@@ -9,9 +9,9 @@ using Xunit;
 // ReSharper disable InconsistentNaming
 namespace BrightChain.EntityFrameworkCore.Query
 {
-    public class QueryLoggingBrightChainTest : QueryLoggingBrightChainTestBase, IClassFixture<QueryLoggingBrightChainTest.NorthwindQueryBrightChainFixtureInsensitive<NoopModelCustomizer>>
+    public class QueryLoggingBrightChainTestInsensitive : QueryLoggingBrightChainTestBase, IClassFixture<QueryLoggingBrightChainTestInsensitive.NorthwindQueryBrightChainFixtureInsensitive<NoopModelCustomizer>>
     {
-        public QueryLoggingBrightChainTest(NorthwindQueryBrightChainFixtureInsensitive<NoopModelCustomizer> fixture)
+        public QueryLoggingBrightChainTestInsensitive(NorthwindQueryBrightChainFixtureInsensitive<NoopModelCustomizer> fixture)
             : base(fixture)
         {
         }

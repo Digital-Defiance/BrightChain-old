@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿// <copyright file="ShowRecoveryCodes.cshtml.cs" company="BrightChain">
+// Copyright (c) BrightChain. All rights reserved.
+// </copyright>
 
 namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
 {
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+
     public class ShowRecoveryCodesModel : PageModel
     {
         [TempData]

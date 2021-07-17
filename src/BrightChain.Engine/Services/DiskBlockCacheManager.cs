@@ -184,7 +184,6 @@ namespace BrightChain.Engine.Services
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.MinValue,
                     redundancy: Enumerations.RedundancyContractType.Unknown,
-                    allowCommit: true,
                     privateEncrypted: false),
                 data: blockBytes);
 

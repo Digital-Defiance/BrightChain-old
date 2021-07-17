@@ -53,7 +53,6 @@ namespace BrightChain.Engine.Helpers
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.MaxValue,
                     redundancy: RedundancyContractType.HeapAuto,
-                    allowCommit: true,
                     privateEncrypted: false),
                 data: blockData);
 

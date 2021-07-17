@@ -35,17 +35,17 @@ namespace BrightChain.Engine.Tests
         {
             var block = new RandomizerBlock(
                 new TransactableBlockParams(
-                cacheManager: cacheManager,
-                blockParams: new BlockParams(
-                    blockSize: BlockSize.Message,
-                    requestTime: DateTime.Now,
-                    keepUntilAtLeast: DateTime.Now.AddDays(1),
-                    redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                    cacheManager: cacheManager,
                     allowCommit: true,
-                    privateEncrypted: false)));
+                    blockParams: new BlockParams(
+                        blockSize: BlockSize.Message,
+                        requestTime: DateTime.Now,
+                        keepUntilAtLeast: DateTime.Now.AddDays(1),
+                        redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                        privateEncrypted: false)));
 
             Assert.IsTrue(block.Validate());
-            Assert.IsTrue(cacheManager.Contains(block.Id));
+            Assert.IsTrue(this.cacheManager.Contains(block.Id));
 
             // TODO verify not all zeros, some level of randomness
 

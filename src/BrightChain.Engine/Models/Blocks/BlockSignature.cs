@@ -1,12 +1,12 @@
 ﻿using System;
 using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Interfaces;
-using BrightChain.Engine.Models.Contracts;
+using BrightChain.Engine.Models.Hashes;
 
 namespace BrightChain.Engine.Models.Blocks
 {
     /// <summary>
-    /// Type box for the sha hashes
+    /// Type box for the sha hashes.
     /// </summary>
     public class BlockSignature : DataSignature, IDataSignature, IComparable<BlockSignature>
     {

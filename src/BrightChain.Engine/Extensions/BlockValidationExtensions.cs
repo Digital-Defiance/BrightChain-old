@@ -52,10 +52,10 @@ namespace BrightChain.Engine.Extensions
                     message: string.Format("{0} length {1} does not match data length of {2} bytes", nameof(block.StorageContract.ByteCount), block.StorageContract.ByteCount, block.Data.Length)));
             }
 
-            if (!block.RedundancyContract.StorageContract.Equals(block.StorageContract))
+            if (!block.StorageContract.Equals(block.StorageContract))
             {
                 exceptions.Add(new BrightChainValidationException(
-                    element: nameof(block.RedundancyContract.StorageContract),
+                    element: nameof(block.StorageContract),
                     message: string.Format("{0} on redundancy contract does not match StorageContract", nameof(block.StorageContract))));
             }
 
@@ -77,7 +77,7 @@ namespace BrightChain.Engine.Extensions
 
             var exceptions = new List<BrightChainValidationException>();
 
-            // TODO: validate all data against finalDataHash
+            // TODO: validate all data against SourceId
 
             // fill the "out" variable
             validationExceptions = exceptions.ToArray();

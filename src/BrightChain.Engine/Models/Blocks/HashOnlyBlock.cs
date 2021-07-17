@@ -19,21 +19,20 @@ namespace BrightChain.Engine.Models.Blocks
         public ReadOnlyMemory<byte> Data => throw new NotImplementedException();
 
         public BlockHash Id { get; }
-        [BrightChainMetadata]
-        public StorageDurationContract StorageContract => throw new NotImplementedException();
-        [BrightChainMetadata]
-        public RedundancyContract RedundancyContract => throw new NotImplementedException();
 
+        [BrightChainMetadata]
+        public StorageContract StorageContract { get; set; }
+
+        [BrightChainMetadata]
         public bool Committed { get; } = false;
+
         public bool AllowCommit { get; } = false;
 
         public BlockSize BlockSize { get; }
+
         public bool HashVerified { get; }
 
         public ReadOnlyMemory<byte> Metadata => throw new NotImplementedException();
-
-        StorageDurationContract IBlock.StorageContract { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        RedundancyContract IBlock.RedundancyContract { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public IEnumerable<BrightChainValidationException> ValidationExceptions => throw new NotImplementedException();
 
