@@ -24,9 +24,7 @@ namespace BrightChain.EntityFrameworkCore.Query
             => (TestSqlLoggerFactory)ServiceProvider.GetRequiredService<ILoggerFactory>();
 
         protected override bool ShouldLogCategory(string logCategory)
-        {
-            return logCategory == DbLoggerCategory.Query.Name;
-        }
+            => logCategory == DbLoggerCategory.Query.Name;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder, DbContext context)
         {

@@ -13,6 +13,14 @@ using BrightChain.Engine.Models.Contracts;
 
 namespace BrightChain.Engine.Extensions
 {
+    /// <summary>
+    /// Extension class that gives blocks ability to export and import their metadata from any attribute tagged with [BrightChainMetadata].
+    /// TODO: Right now we are generating really verbose JSON.
+    /// Suggest Bson, or otherwise using short keys or stripping keys after ordering by key.
+    /// Would then have to check the _t attribute on the block for the type of the original block to get the right attributes back for restore.
+    /// Otherwise have been thinking about just gzipping the JSON and using the short keys.
+    /// Also thinking about length encoding the metadata byte portion. {int-length}{metadata}{data} rather than {metadata}{0}{data}
+    /// </summary>
     public static class BlockMetadataExtensions
     {
         public static JsonSerializerOptions NewSerializerOptions()
