@@ -1,0 +1,1617 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class BrightChainUserStore
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class BrightChainUserStore
+   ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore">
+  
+  
+  <h1 id="BrightChain_API_Infrastructure_BrightChainUserStore" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore" class="text-break">Class BrightChainUserStore
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>, <span class="xref">System.String</span>, <span class="xref">Microsoft.AspNetCore.Identity.IdentityUserClaim</span>&lt;<span class="xref">System.String</span>&gt;, <span class="xref">Microsoft.AspNetCore.Identity.IdentityUserLogin</span>&lt;<span class="xref">System.String</span>&gt;, <span class="xref">Microsoft.AspNetCore.Identity.IdentityUserToken</span>&lt;<span class="xref">System.String</span>&gt;&gt;</div>
+    <div class="level2"><span class="xref">BrightChainUserStore</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">Microsoft.AspNetCore.Identity.IUserLoginStore</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</div>
+    <div><span class="xref">Microsoft.AspNetCore.Identity.IUserClaimStore</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</div>
+    <div><span class="xref">Microsoft.AspNetCore.Identity.IUserPasswordStore</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</div>
+    <div><span class="xref">Microsoft.AspNetCore.Identity.IUserSecurityStampStore</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</div>
+    <div><span class="xref">Microsoft.AspNetCore.Identity.IUserEmailStore</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</div>
+    <div><span class="xref">Microsoft.AspNetCore.Identity.IUserLockoutStore</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</div>
+    <div><span class="xref">Microsoft.AspNetCore.Identity.IUserPhoneNumberStore</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</div>
+    <div><span class="xref">Microsoft.AspNetCore.Identity.IQueryableUserStore</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</div>
+    <div><span class="xref">Microsoft.AspNetCore.Identity.IUserTwoFactorStore</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</div>
+    <div><span class="xref">Microsoft.AspNetCore.Identity.IUserAuthenticationTokenStore</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</div>
+    <div><span class="xref">Microsoft.AspNetCore.Identity.IUserAuthenticatorKeyStore</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</div>
+    <div><span class="xref">Microsoft.AspNetCore.Identity.IUserTwoFactorRecoveryCodeStore</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</div>
+    <div><span class="xref">Microsoft.AspNetCore.Identity.IUserStore</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</div>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.CreateUserClaim(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Security.Claims.Claim)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.CreateUserLogin(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, Microsoft.AspNetCore.Identity.UserLoginInfo)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.CreateUserToken(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.String, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetUserIdAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetUserNameAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.SetUserNameAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetNormalizedUserNameAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.SetNormalizedUserNameAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.CreateAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.UpdateAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.DeleteAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.FindByIdAsync(System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.ConvertIdFromString(System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.ConvertIdToString(System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.FindByNameAsync(System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.SetPasswordHashAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetPasswordHashAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.HasPasswordAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.FindUserAsync(System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.FindUserLoginAsync(System.String, System.String, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.FindUserLoginAsync(System.String, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.ThrowIfDisposed()</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.Dispose()</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetClaimsAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.AddClaimsAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Collections.Generic.IEnumerable&lt;System.Security.Claims.Claim&gt;, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.ReplaceClaimAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Security.Claims.Claim, System.Security.Claims.Claim, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.RemoveClaimsAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Collections.Generic.IEnumerable&lt;System.Security.Claims.Claim&gt;, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.AddLoginAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, Microsoft.AspNetCore.Identity.UserLoginInfo, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.RemoveLoginAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetLoginsAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.FindByLoginAsync(System.String, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetEmailConfirmedAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.SetEmailConfirmedAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Boolean, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.SetEmailAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetEmailAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetNormalizedEmailAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.SetNormalizedEmailAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.FindByEmailAsync(System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetLockoutEndDateAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.SetLockoutEndDateAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Nullable&lt;System.DateTimeOffset&gt;, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.IncrementAccessFailedCountAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.ResetAccessFailedCountAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetAccessFailedCountAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetLockoutEnabledAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.SetLockoutEnabledAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Boolean, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.SetPhoneNumberAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetPhoneNumberAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetPhoneNumberConfirmedAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.SetPhoneNumberConfirmedAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Boolean, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.SetSecurityStampAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetSecurityStampAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.SetTwoFactorEnabledAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Boolean, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetTwoFactorEnabledAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetUsersForClaimAsync(System.Security.Claims.Claim, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.FindTokenAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.AddUserTokenAsync(Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.RemoveUserTokenAsync(Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.SetTokenAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.String, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.RemoveTokenAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetTokenAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.SetAuthenticatorKeyAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetAuthenticatorKeyAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.CountCodesAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.ReplaceCodesAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Collections.Generic.IEnumerable&lt;System.String&gt;, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.RedeemCodeAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.ErrorDescriber</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.Users</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="BrightChain.API.Infrastructure.html">BrightChain.API.Infrastructure</a></h6>
+  <h6><strong>Assembly</strong>: BrightChain.API.dll</h6>
+  <h5 id="BrightChain_API_Infrastructure_BrightChainUserStore_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class BrightChainUserStore : UserStoreBase&lt;BrightChainEntityUser, string, IdentityUserClaim&lt;string&gt;, IdentityUserLogin&lt;string&gt;, IdentityUserToken&lt;string&gt;&gt;, IUserLoginStore&lt;BrightChainEntityUser&gt;, IUserClaimStore&lt;BrightChainEntityUser&gt;, IUserPasswordStore&lt;BrightChainEntityUser&gt;, IUserSecurityStampStore&lt;BrightChainEntityUser&gt;, IUserEmailStore&lt;BrightChainEntityUser&gt;, IUserLockoutStore&lt;BrightChainEntityUser&gt;, IUserPhoneNumberStore&lt;BrightChainEntityUser&gt;, IQueryableUserStore&lt;BrightChainEntityUser&gt;, IUserTwoFactorStore&lt;BrightChainEntityUser&gt;, IUserAuthenticationTokenStore&lt;BrightChainEntityUser&gt;, IUserAuthenticatorKeyStore&lt;BrightChainEntityUser&gt;, IUserTwoFactorRecoveryCodeStore&lt;BrightChainEntityUser&gt;, IUserStore&lt;BrightChainEntityUser&gt;, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore__ctor_Microsoft_AspNetCore_Identity_IdentityErrorDescriber_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.%23ctor(Microsoft.AspNetCore.Identity.IdentityErrorDescriber)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L15">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore__ctor_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.#ctor*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore__ctor_Microsoft_AspNetCore_Identity_IdentityErrorDescriber_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.#ctor(Microsoft.AspNetCore.Identity.IdentityErrorDescriber)">BrightChainUserStore(IdentityErrorDescriber)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BrightChainUserStore(IdentityErrorDescriber describer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Microsoft.AspNetCore.Identity.IdentityErrorDescriber</span></td>
+        <td><span class="parametername">describer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_Users.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.Users%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L19">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_Users_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.Users*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_Users" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.Users">Users</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IQueryable&lt;BrightChainEntityUser&gt; Users { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Linq.IQueryable</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.Users</span></div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_AddClaimsAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_Collections_Generic_IEnumerable_System_Security_Claims_Claim__System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.AddClaimsAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser%2CSystem.Collections.Generic.IEnumerable%7BSystem.Security.Claims.Claim%7D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L21">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_AddClaimsAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.AddClaimsAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_AddClaimsAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_Collections_Generic_IEnumerable_System_Security_Claims_Claim__System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.AddClaimsAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser,System.Collections.Generic.IEnumerable{System.Security.Claims.Claim},System.Threading.CancellationToken)">AddClaimsAsync(BrightChainEntityUser, IEnumerable&lt;Claim&gt;, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task AddClaimsAsync(BrightChainEntityUser user, IEnumerable&lt;Claim&gt; claims, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Security.Claims.Claim</span>&gt;</td>
+        <td><span class="parametername">claims</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.AddClaimsAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Collections.Generic.IEnumerable&lt;System.Security.Claims.Claim&gt;, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_AddLoginAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_Microsoft_AspNetCore_Identity_UserLoginInfo_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.AddLoginAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser%2CMicrosoft.AspNetCore.Identity.UserLoginInfo%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L26">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_AddLoginAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.AddLoginAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_AddLoginAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_Microsoft_AspNetCore_Identity_UserLoginInfo_System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.AddLoginAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser,Microsoft.AspNetCore.Identity.UserLoginInfo,System.Threading.CancellationToken)">AddLoginAsync(BrightChainEntityUser, UserLoginInfo, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task AddLoginAsync(BrightChainEntityUser user, UserLoginInfo login, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Microsoft.AspNetCore.Identity.UserLoginInfo</span></td>
+        <td><span class="parametername">login</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.AddLoginAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, Microsoft.AspNetCore.Identity.UserLoginInfo, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_AddUserTokenAsync_Microsoft_AspNetCore_Identity_IdentityUserToken_System_String__.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.AddUserTokenAsync(Microsoft.AspNetCore.Identity.IdentityUserToken%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L91">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_AddUserTokenAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.AddUserTokenAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_AddUserTokenAsync_Microsoft_AspNetCore_Identity_IdentityUserToken_System_String__" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.AddUserTokenAsync(Microsoft.AspNetCore.Identity.IdentityUserToken{System.String})">AddUserTokenAsync(IdentityUserToken&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override Task AddUserTokenAsync(IdentityUserToken&lt;string&gt; token)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Microsoft.AspNetCore.Identity.IdentityUserToken</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">token</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.AddUserTokenAsync(Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_CreateAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.CreateAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L31">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_CreateAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.CreateAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_CreateAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.CreateAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser,System.Threading.CancellationToken)">CreateAsync(BrightChainEntityUser, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task&lt;IdentityResult&gt; CreateAsync(BrightChainEntityUser user, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Identity.IdentityResult</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.CreateAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_DeleteAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.DeleteAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L36">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_DeleteAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.DeleteAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_DeleteAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.DeleteAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser,System.Threading.CancellationToken)">DeleteAsync(BrightChainEntityUser, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task&lt;IdentityResult&gt; DeleteAsync(BrightChainEntityUser user, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Identity.IdentityResult</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.DeleteAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_FindByEmailAsync_System_String_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.FindByEmailAsync(System.String%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L41">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_FindByEmailAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.FindByEmailAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_FindByEmailAsync_System_String_System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.FindByEmailAsync(System.String,System.Threading.CancellationToken)">FindByEmailAsync(String, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task&lt;BrightChainEntityUser&gt; FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">normalizedEmail</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.FindByEmailAsync(System.String, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_FindByIdAsync_System_String_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.FindByIdAsync(System.String%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L46">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_FindByIdAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.FindByIdAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_FindByIdAsync_System_String_System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.FindByIdAsync(System.String,System.Threading.CancellationToken)">FindByIdAsync(String, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task&lt;BrightChainEntityUser&gt; FindByIdAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.FindByIdAsync(System.String, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_FindByNameAsync_System_String_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.FindByNameAsync(System.String%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L51">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_FindByNameAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.FindByNameAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_FindByNameAsync_System_String_System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.FindByNameAsync(System.String,System.Threading.CancellationToken)">FindByNameAsync(String, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task&lt;BrightChainEntityUser&gt; FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">normalizedUserName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.FindByNameAsync(System.String, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_FindTokenAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_String_System_String_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.FindTokenAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser%2CSystem.String%2CSystem.String%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L96">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_FindTokenAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.FindTokenAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_FindTokenAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_String_System_String_System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.FindTokenAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser,System.String,System.String,System.Threading.CancellationToken)">FindTokenAsync(BrightChainEntityUser, String, String, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override Task&lt;IdentityUserToken&lt;string&gt;&gt; FindTokenAsync(BrightChainEntityUser user, string loginProvider, string name, CancellationToken cancellationToken)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">loginProvider</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Identity.IdentityUserToken</span>&lt;<span class="xref">System.String</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.FindTokenAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.String, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_FindUserAsync_System_String_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.FindUserAsync(System.String%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L101">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_FindUserAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.FindUserAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_FindUserAsync_System_String_System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.FindUserAsync(System.String,System.Threading.CancellationToken)">FindUserAsync(String, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override Task&lt;BrightChainEntityUser&gt; FindUserAsync(string userId, CancellationToken cancellationToken)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.FindUserAsync(System.String, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_FindUserLoginAsync_System_String_System_String_System_String_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.FindUserLoginAsync(System.String%2CSystem.String%2CSystem.String%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L106">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_FindUserLoginAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.FindUserLoginAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_FindUserLoginAsync_System_String_System_String_System_String_System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.FindUserLoginAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">FindUserLoginAsync(String, String, String, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override Task&lt;IdentityUserLogin&lt;string&gt;&gt; FindUserLoginAsync(string userId, string loginProvider, string providerKey, CancellationToken cancellationToken)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">userId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">loginProvider</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">providerKey</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Identity.IdentityUserLogin</span>&lt;<span class="xref">System.String</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.FindUserLoginAsync(System.String, System.String, System.String, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_FindUserLoginAsync_System_String_System_String_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.FindUserLoginAsync(System.String%2CSystem.String%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L111">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_FindUserLoginAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.FindUserLoginAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_FindUserLoginAsync_System_String_System_String_System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.FindUserLoginAsync(System.String,System.String,System.Threading.CancellationToken)">FindUserLoginAsync(String, String, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override Task&lt;IdentityUserLogin&lt;string&gt;&gt; FindUserLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">loginProvider</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">providerKey</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Identity.IdentityUserLogin</span>&lt;<span class="xref">System.String</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.FindUserLoginAsync(System.String, System.String, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_GetClaimsAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.GetClaimsAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L56">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_GetClaimsAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.GetClaimsAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_GetClaimsAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.GetClaimsAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser,System.Threading.CancellationToken)">GetClaimsAsync(BrightChainEntityUser, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task&lt;IList&lt;Claim&gt;&gt; GetClaimsAsync(BrightChainEntityUser user, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Security.Claims.Claim</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetClaimsAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_GetLoginsAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.GetLoginsAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L61">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_GetLoginsAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.GetLoginsAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_GetLoginsAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.GetLoginsAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser,System.Threading.CancellationToken)">GetLoginsAsync(BrightChainEntityUser, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task&lt;IList&lt;UserLoginInfo&gt;&gt; GetLoginsAsync(BrightChainEntityUser user, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">Microsoft.AspNetCore.Identity.UserLoginInfo</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetLoginsAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_GetUsersForClaimAsync_System_Security_Claims_Claim_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.GetUsersForClaimAsync(System.Security.Claims.Claim%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L66">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_GetUsersForClaimAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.GetUsersForClaimAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_GetUsersForClaimAsync_System_Security_Claims_Claim_System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.GetUsersForClaimAsync(System.Security.Claims.Claim,System.Threading.CancellationToken)">GetUsersForClaimAsync(Claim, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task&lt;IList&lt;BrightChainEntityUser&gt;&gt; GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Security.Claims.Claim</span></td>
+        <td><span class="parametername">claim</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.GetUsersForClaimAsync(System.Security.Claims.Claim, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_RemoveClaimsAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_Collections_Generic_IEnumerable_System_Security_Claims_Claim__System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.RemoveClaimsAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser%2CSystem.Collections.Generic.IEnumerable%7BSystem.Security.Claims.Claim%7D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L71">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_RemoveClaimsAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.RemoveClaimsAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_RemoveClaimsAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_Collections_Generic_IEnumerable_System_Security_Claims_Claim__System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.RemoveClaimsAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser,System.Collections.Generic.IEnumerable{System.Security.Claims.Claim},System.Threading.CancellationToken)">RemoveClaimsAsync(BrightChainEntityUser, IEnumerable&lt;Claim&gt;, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task RemoveClaimsAsync(BrightChainEntityUser user, IEnumerable&lt;Claim&gt; claims, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Security.Claims.Claim</span>&gt;</td>
+        <td><span class="parametername">claims</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.RemoveClaimsAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Collections.Generic.IEnumerable&lt;System.Security.Claims.Claim&gt;, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_RemoveLoginAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_String_System_String_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.RemoveLoginAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser%2CSystem.String%2CSystem.String%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L76">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_RemoveLoginAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.RemoveLoginAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_RemoveLoginAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_String_System_String_System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.RemoveLoginAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser,System.String,System.String,System.Threading.CancellationToken)">RemoveLoginAsync(BrightChainEntityUser, String, String, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task RemoveLoginAsync(BrightChainEntityUser user, string loginProvider, string providerKey, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">loginProvider</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">providerKey</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.RemoveLoginAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, System.String, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_RemoveUserTokenAsync_Microsoft_AspNetCore_Identity_IdentityUserToken_System_String__.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.RemoveUserTokenAsync(Microsoft.AspNetCore.Identity.IdentityUserToken%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L116">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_RemoveUserTokenAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.RemoveUserTokenAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_RemoveUserTokenAsync_Microsoft_AspNetCore_Identity_IdentityUserToken_System_String__" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.RemoveUserTokenAsync(Microsoft.AspNetCore.Identity.IdentityUserToken{System.String})">RemoveUserTokenAsync(IdentityUserToken&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override Task RemoveUserTokenAsync(IdentityUserToken&lt;string&gt; token)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Microsoft.AspNetCore.Identity.IdentityUserToken</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">token</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.RemoveUserTokenAsync(Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_ReplaceClaimAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_Security_Claims_Claim_System_Security_Claims_Claim_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.ReplaceClaimAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser%2CSystem.Security.Claims.Claim%2CSystem.Security.Claims.Claim%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L81">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_ReplaceClaimAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.ReplaceClaimAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_ReplaceClaimAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_Security_Claims_Claim_System_Security_Claims_Claim_System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.ReplaceClaimAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser,System.Security.Claims.Claim,System.Security.Claims.Claim,System.Threading.CancellationToken)">ReplaceClaimAsync(BrightChainEntityUser, Claim, Claim, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task ReplaceClaimAsync(BrightChainEntityUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Security.Claims.Claim</span></td>
+        <td><span class="parametername">claim</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Security.Claims.Claim</span></td>
+        <td><span class="parametername">newClaim</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.ReplaceClaimAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Security.Claims.Claim, System.Security.Claims.Claim, System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore_UpdateAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore.UpdateAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L86">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserStore_UpdateAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.UpdateAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserStore_UpdateAsync_BrightChain_EntityFrameworkCore_Data_Entities_BrightChainEntityUser_System_Threading_CancellationToken_" data-uid="BrightChain.API.Infrastructure.BrightChainUserStore.UpdateAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser,System.Threading.CancellationToken)">UpdateAsync(BrightChainEntityUser, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task&lt;IdentityResult&gt; UpdateAsync(BrightChainEntityUser user, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser</span></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Identity.IdentityResult</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserStoreBase&lt;BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.String, Microsoft.AspNetCore.Identity.IdentityUserClaim&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserLogin&lt;System.String&gt;, Microsoft.AspNetCore.Identity.IdentityUserToken&lt;System.String&gt;&gt;.UpdateAsync(BrightChain.EntityFrameworkCore.Data.Entities.BrightChainEntityUser, System.Threading.CancellationToken)</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.IUserLoginStore&lt;TUser&gt;</span>
+  </div>
+  <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.IUserClaimStore&lt;TUser&gt;</span>
+  </div>
+  <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.IUserPasswordStore&lt;TUser&gt;</span>
+  </div>
+  <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.IUserSecurityStampStore&lt;TUser&gt;</span>
+  </div>
+  <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.IUserEmailStore&lt;TUser&gt;</span>
+  </div>
+  <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.IUserLockoutStore&lt;TUser&gt;</span>
+  </div>
+  <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.IUserPhoneNumberStore&lt;TUser&gt;</span>
+  </div>
+  <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.IQueryableUserStore&lt;TUser&gt;</span>
+  </div>
+  <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.IUserTwoFactorStore&lt;TUser&gt;</span>
+  </div>
+  <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.IUserAuthenticationTokenStore&lt;TUser&gt;</span>
+  </div>
+  <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.IUserAuthenticatorKeyStore&lt;TUser&gt;</span>
+  </div>
+  <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.IUserTwoFactorRecoveryCodeStore&lt;TUser&gt;</span>
+  </div>
+  <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.IUserStore&lt;TUser&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/The-Revolution-Network/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserStore.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserStore%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/The-Revolution-Network/BrightChain/blob/main/src/BrightChain.API/Infrastructure/BrightChainUserStore.cs/#L12" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
