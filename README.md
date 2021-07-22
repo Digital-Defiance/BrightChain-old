@@ -1,4 +1,4 @@
-# BrightChain
+# BrightChain (pre-alpha work in progress. Limited alpha testing coming soon!) 
 A Lightweight BlockChain- LightChain based on a Brightnet Blockstore- BrightChain.
 All the benefits of blockchain dApps and contracts without the mining and waste.
 Unlimited storage for everyone, and a mathematically reinforced and moderated community that will last for the ages.
