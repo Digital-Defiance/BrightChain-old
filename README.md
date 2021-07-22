@@ -1,4 +1,5 @@
-# BrightChain (pre-alpha work in progress. Limited alpha testing coming soon!) 
+# BrightChain
+## (pre-alpha work in progress. Limited alpha testing coming soon!) 
 A Lightweight BlockChain- LightChain based on a Brightnet Blockstore- BrightChain.
 All the benefits of blockchain dApps and contracts without the mining and waste.
 Unlimited storage for everyone, and a mathematically reinforced and moderated community that will last for the ages.
@@ -36,4 +37,4 @@ Recent thoughts:
 * This software is open source, and offered as a "best-effort" thereoetical construct at this time and it may well lose all your data at this point in time.
 
 <!-- this timestamp is updated by a pre-commit hook in git-hooks/pre-commit then added to .git/hooks -->
-Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-07-13T10:08:55-0700</time>
+Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-07-22T01:35:19-0700</time>
