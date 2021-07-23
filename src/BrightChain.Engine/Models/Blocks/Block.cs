@@ -51,7 +51,7 @@ namespace BrightChain.Engine.Models.Blocks
         public IEnumerable<BlockHash> ConstituentBlocks { get; protected set; }
 
         /// <summary>
-        /// Emits the serialization of the block minus data and any ignored attributes (including itself).
+        /// Gets the serialization of the block minus data and any ignored attributes (including itself).
         /// </summary>
         public ReadOnlyMemory<byte> Metadata =>
             this.MetadataBytes();

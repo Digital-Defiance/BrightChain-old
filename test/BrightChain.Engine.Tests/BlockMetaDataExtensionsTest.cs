@@ -35,23 +35,35 @@ namespace BrightChain.Engine.Tests
         {
             var block = new EmptyDummyBlock(
                 blockParams: new BlockParams(
-                blockSize: RandomBlockSize(),
-                requestTime: DateTime.Now,
-                keepUntilAtLeast: DateTime.Now.AddDays(1),
-                redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                privateEncrypted: false));
+                    blockSize: RandomBlockSize(),
+                    requestTime: DateTime.Now,
+                    keepUntilAtLeast: DateTime.Now.AddDays(1),
+                    redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                    privateEncrypted: false));
             Assert.IsTrue(block.Validate());
             var metaData = block.Metadata;
             var metaDataString = new string(metaData.ToArray().Select(c => (char)c).ToArray());
             Dictionary<string, object> metaDataDictionary = (Dictionary<string, object>)JsonSerializer.Deserialize(metaDataString, typeof(Dictionary<string, object>));
             Assert.IsNotNull(metaDataDictionary);
-            Assert.IsTrue(metaDataDictionary.ContainsKey("_t"));
-            Assert.IsTrue(metaDataDictionary.ContainsKey("_v"));
-            Assert.IsTrue(metaDataDictionary.ContainsKey("RedundancyContract"));
-            Assert.IsTrue(metaDataDictionary.ContainsKey("Signature"));
-            Assert.IsTrue(metaDataDictionary.ContainsKey("RevocationCertificates"));
-            Assert.AreEqual(5, metaDataDictionary.Count); // Hash, Signature, RedundancyContract, _t, _v
-            var contractObj = (JsonElement)metaDataDictionary["RedundancyContract"];
+            var expectedKeys = new string[]
+            {
+                "_t",
+                "_v",
+                "StorageContract",
+                "Signature",
+                "RevocationCertificates",
+            };
+
+            Assert.AreEqual(
+                expected: expectedKeys.Length,
+                actual: metaDataDictionary.Count);
+
+            foreach (var expectedKey in expectedKeys)
+            {
+                Assert.IsTrue(metaDataDictionary.ContainsKey(expectedKey));
+            }
+
+            var contractObj = (JsonElement)metaDataDictionary["StorageContract"];
             var contract = contractObj.ToObject<StorageContract>(BlockMetadataExtensions.NewSerializerOptions());
 
             Assert.AreEqual(block.StorageContract, contract);
@@ -93,17 +105,35 @@ namespace BrightChain.Engine.Tests
             var metaDataString = new string(metaData.ToArray().Select(c => (char)c).ToArray());
             Dictionary<string, object> metaDataDictionary = (Dictionary<string, object>)JsonSerializer.Deserialize(metaDataString, typeof(Dictionary<string, object>), BlockMetadataExtensions.NewSerializerOptions());
             Assert.IsNotNull(metaDataDictionary);
-            Assert.IsTrue(metaDataDictionary.ContainsKey("_t"));
-            Assert.IsTrue(metaDataDictionary.ContainsKey("_v"));
-            Assert.IsTrue(metaDataDictionary.ContainsKey("RedundancyContract"));
-            Assert.IsTrue(metaDataDictionary.ContainsKey("Signature"));
-            Assert.IsTrue(metaDataDictionary.ContainsKey("PrivateEncrypted"));
-            Assert.IsTrue(metaDataDictionary.ContainsKey("TotalLength"));
-            Assert.IsTrue(metaDataDictionary.ContainsKey("SourceId"));
-            Assert.IsTrue(metaDataDictionary.ContainsKey("RevocationCertificates"));
-            var contractObj = (JsonElement)metaDataDictionary["RedundancyContract"];
+            var expectedKeys = new string[]
+            {
+                "_t",
+                "_v",
+                "StorageContract",
+                "Signature",
+                "PrivateEncrypted",
+                "TotalLength",
+                "TupleCount",
+                "SourceId",
+                "SegmentId",
+                "CreatorId",
+                "Previous",
+                "Next",
+                "RevocationCertificates",
+            };
+
+            Assert.AreEqual(
+                expected: expectedKeys.Length,
+                actual: metaDataDictionary.Count);
+
+            foreach (var expectedKey in expectedKeys)
+            {
+                Assert.IsTrue(metaDataDictionary.ContainsKey(expectedKey));
+            }
+
+            var contractObj = (JsonElement)metaDataDictionary["StorageContract"];
             var contract = contractObj.ToObject<StorageContract>(BlockMetadataExtensions.NewSerializerOptions());
-            Assert.AreEqual(10, metaDataDictionary.Count); // Hash, Signature, RedundancyContract, _t, _v
+            Assert.AreEqual(13, metaDataDictionary.Count); // Hash, Signature, RedundancyContract, _t, _v
             Assert.AreEqual(block.StorageContract, contract);
             var sourceIdObj = (JsonElement)metaDataDictionary["SourceId"];
             var sourceId = sourceIdObj.ToObject<BlockHash>(BlockMetadataExtensions.NewSerializerOptions());

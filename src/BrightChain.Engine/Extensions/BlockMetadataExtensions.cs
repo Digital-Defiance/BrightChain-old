@@ -29,9 +29,9 @@ namespace BrightChain.Engine.Extensions
             {
                 WriteIndented = false,
                 Converters =
-                    {
-                        new BlockHashJsonFactory()
-                    }
+                {
+                    new HashJsonFactory(),
+                },
             };
         }
 
@@ -61,9 +61,9 @@ namespace BrightChain.Engine.Extensions
 
             // add block type
             metadataDictionary.Add("_t", block.GetType().Name);
+
             // add assembly version
             metadataDictionary.Add("_v", assemblyVersion);
-
 
             string jsonData = JsonSerializer.Serialize(metadataDictionary, NewSerializerOptions());
             var readonlyChars = jsonData.AsMemory();

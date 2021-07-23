@@ -25,9 +25,11 @@ namespace BrightChain.Engine.Models.Blocks.Chains
         public ConstituentBlockListBlock(ConstituentBlockListBlockParams blockParams)
         : base(
               blockParams: blockParams,
-              data: blockParams.ConstituentBlocks
-                        .SelectMany(b => b.HashBytes.ToArray())
-                         .ToArray())
+              data: Helpers.RandomDataHelper.DataFiller(
+                  inputData: blockParams.ConstituentBlocks
+                            .SelectMany(b => b.HashBytes.ToArray())
+                             .ToArray(),
+                  blockSize: blockParams.BlockSize))
         {
             // TODO : if finalBlockHash is null, reconstitute and compute- or accept the validation result's hash essentially?
             this.SourceId = blockParams.SourceId;
