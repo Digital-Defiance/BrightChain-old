@@ -12,6 +12,8 @@ using BrightChain.Engine.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static BrightChain.Engine.Tests.Helpers.TestHelpers;
+using static BrightChain.Engine.Helpers.Utilities;
 using Moq;
 
 namespace BrightChain.Engine.Tests
@@ -33,7 +35,7 @@ namespace BrightChain.Engine.Tests
         {
             var block = new EmptyDummyBlock(
                 blockParams: new BlockParams(
-                blockSize: BlockSize.Message,
+                blockSize: RandomBlockSize(),
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
@@ -69,7 +71,7 @@ namespace BrightChain.Engine.Tests
         {
             var dummyBlock = new EmptyDummyBlock(
                 blockParams: new BlockParams(
-                blockSize: BlockSize.Message,
+                blockSize: RandomBlockSize(),
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
@@ -80,12 +82,7 @@ namespace BrightChain.Engine.Tests
                                 blockParams: new TransactableBlockParams(
                                     cacheManager: new MemoryBlockCacheManager(logger: logger, configuration: new Configuration()),
                                     allowCommit: true,
-                                    blockParams: new BlockParams(
-                                        blockSize: BlockSize.Message,
-                                        requestTime: DateTime.Now,
-                                        keepUntilAtLeast: DateTime.Now.AddDays(1),
-                                        redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                                        privateEncrypted: false)),
+                                    blockParams: dummyBlock.BlockParams),
                                 sourceId: new BlockHash(dummyBlock),
                                 segmentHash: new SegmentHash(dummyBlock.Data),
                                 totalLength: 0,
@@ -112,8 +109,8 @@ namespace BrightChain.Engine.Tests
             var sourceId = sourceIdObj.ToObject<BlockHash>(BlockMetadataExtensions.NewSerializerOptions());
             Assert.AreEqual(block.BlockSize, sourceId.BlockSize);
             Assert.AreEqual(
-                Helpers.Utilities.HashToFormattedString(Helpers.Utilities.GetZeroVector(sourceId.BlockSize).HashBytes.ToArray()),
-                Helpers.Utilities.HashToFormattedString(sourceId.HashBytes.ToArray()));
+                HashToFormattedString(GetZeroVector(sourceId.BlockSize).HashBytes.ToArray()),
+                HashToFormattedString(sourceId.HashBytes.ToArray()));
         }
 
         [TestMethod]
@@ -123,7 +120,7 @@ namespace BrightChain.Engine.Tests
 
             var block = new EmptyDummyBlock(
                 blockParams: new BlockParams(
-                blockSize: BlockSize.Message,
+                blockSize: RandomBlockSize(),
                 requestTime: testStart,
                 keepUntilAtLeast: testStart.AddDays(1),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
@@ -133,7 +130,7 @@ namespace BrightChain.Engine.Tests
 
             var block2 = new EmptyDummyBlock(
                 blockParams: new BlockParams(
-                blockSize: BlockSize.Message,
+                blockSize: block.BlockSize,
                 requestTime: testStart.AddSeconds(5),
                 keepUntilAtLeast: testStart.AddDays(1).AddSeconds(5),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
@@ -159,7 +156,7 @@ namespace BrightChain.Engine.Tests
 
             var dummyBlock = new EmptyDummyBlock(
                 blockParams: new BlockParams(
-                blockSize: BlockSize.Message,
+                blockSize: RandomBlockSize(),
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
@@ -172,12 +169,7 @@ namespace BrightChain.Engine.Tests
                                         logger: this.logger,
                                         configuration: new Configuration()),
                                     allowCommit: true,
-                                    blockParams: new BlockParams(
-                                        blockSize: BlockSize.Message,
-                                        requestTime: DateTime.Now,
-                                        keepUntilAtLeast: DateTime.Now.AddDays(1),
-                                        redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                                        privateEncrypted: false)),
+                                    blockParams: dummyBlock.BlockParams),
                                 sourceId: new BlockHash(dummyBlock),
                                 segmentHash: new SegmentHash(dummyBlock.Data),
                                 totalLength: 0,
@@ -193,7 +185,7 @@ namespace BrightChain.Engine.Tests
                         cacheManager: block.CacheManager,
                         allowCommit: true,
                         blockParams: new BlockParams(
-                            blockSize: BlockSize.Message, // match
+                            blockSize: dummyBlock.BlockSize, // match
                             requestTime: DateTime.MinValue, // bad
                             keepUntilAtLeast: DateTime.MinValue, // bad
                             redundancy: RedundancyContractType.LocalNone, // different
@@ -203,7 +195,7 @@ namespace BrightChain.Engine.Tests
                         sourceDataLength: dummyBlock.Data.Length,
                         computed: true), // known incorrect hash
                     segmentHash: new SegmentHash(dummyBlock.Data),
-                    totalLength: (long)BlockSizeMap.BlockSize(BlockSize.Message),
+                    totalLength: (long)BlockSizeMap.BlockSize(dummyBlock.BlockSize),
                     constituentBlocks: new BlockHash[] { dummyBlock.Id }));
             Assert.IsTrue(block2.TryRestoreMetadataFromBytes(metaData));
             Assert.AreEqual(block.StorageContract, block2.StorageContract);
