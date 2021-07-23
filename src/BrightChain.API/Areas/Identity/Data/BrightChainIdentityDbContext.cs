@@ -73,9 +73,9 @@
             var user = new BrightChainEntityUser();
             // TODO: fill in user details from params
             throw new NotImplementedException();
-            Database.EnsureCreated();
-            Users.Add(user);
-            await SaveChanges().ConfigureAwait(false);
+            this.Database.EnsureCreated();
+            this.Users.Add(user);
+            await this.SaveChanges().ConfigureAwait(false);
             return user;
         }
     }

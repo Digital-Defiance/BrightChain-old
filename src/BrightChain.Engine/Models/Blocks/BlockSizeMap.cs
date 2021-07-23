@@ -28,11 +28,11 @@ namespace BrightChain.Engine.Models.Blocks
         public static readonly Dictionary<BlockSize, int> HashesPerBlockMap = new Dictionary<BlockSize, int>
         {
             { Enumerations.BlockSize.Unknown,   -1 },
-            { Enumerations.BlockSize.Message,   (int)(BlockHash.HashSizeBytes / MessageSize) },
-            { Enumerations.BlockSize.Tiny,      (int)(BlockHash.HashSizeBytes / TinySize) },
-            { Enumerations.BlockSize.Small,     (int)(BlockHash.HashSizeBytes / SmallSize) },
-            { Enumerations.BlockSize.Medium,    (int)(BlockHash.HashSizeBytes / MediumSize) },
-            { Enumerations.BlockSize.Large,     (int)(BlockHash.HashSizeBytes / LargeSize) },
+            { Enumerations.BlockSize.Message,   (int)(MessageSize / BlockHash.HashSizeBytes) },
+            { Enumerations.BlockSize.Tiny,      (int)(TinySize / BlockHash.HashSizeBytes) },
+            { Enumerations.BlockSize.Small,     (int)(SmallSize / BlockHash.HashSizeBytes) },
+            { Enumerations.BlockSize.Medium,    (int)(MediumSize / BlockHash.HashSizeBytes) },
+            { Enumerations.BlockSize.Large,     (int)(LargeSize / BlockHash.HashSizeBytes) },
         };
 
         /// <summary>
@@ -55,14 +55,22 @@ namespace BrightChain.Engine.Models.Blocks
         /// </summary>
         /// <param name="blockSize"></param>
         /// <returns></returns>
-        public static int HashesPerSegment(BlockSize blockSize)
+        public static long HashesPerBlock(BlockSize blockSize, int exponent = 1)
         {
             if (!BlockSizeMap.HashesPerBlockMap.ContainsKey(blockSize))
             {
                 throw new KeyNotFoundException(message: nameof(blockSize));
             }
 
-            return BlockSizeMap.HashesPerBlockMap[blockSize];
+            var value = BlockSizeMap.HashesPerBlockMap[blockSize];
+            if (exponent <= 1)
+            {
+                return value;
+            }
+            else
+            {
+                return (long)Math.Pow(value, exponent);
+            }
         }
 
         /// <summary>

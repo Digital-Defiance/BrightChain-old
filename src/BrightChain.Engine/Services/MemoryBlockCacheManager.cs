@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace BrightChain.Engine.Services
 {
     /// <summary>
-    /// Block Cache Manager
+    /// Memory based Block Cache Manager.
     /// </summary>
     public class MemoryBlockCacheManager : BlockCacheManager
     {

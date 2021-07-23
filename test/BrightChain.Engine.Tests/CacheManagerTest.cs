@@ -59,13 +59,17 @@ namespace BrightChain.Engine.Tests
             this.logger = new Mock<ILogger<Tcache>>();
             this.configuration = new Mock<IConfiguration>();
 
-            Mock<IConfigurationSection> mockSection = new Mock<IConfigurationSection>();
-            mockSection.Setup(x => x.Value).Returns(Path.GetTempPath());
 
-            this.configuration.Setup(x => x.GetSection(It.Is<string>(k => k == "BasePath"))).Returns(mockSection.Object);
+            Mock<IConfigurationSection> mockPathSection = new Mock<IConfigurationSection>();
+            mockPathSection.Setup(x => x.Value).Returns(Path.GetTempPath());
+
+            var mockNodeSection = new Mock<IConfigurationSection>();
+            mockNodeSection.Setup(x => x.GetSection(It.Is<string>(k => k == "BasePath"))).Returns(mockPathSection.Object);
+
+            this.configuration.Setup(x => x.GetSection(It.Is<string>(k => k == "NodeOptions"))).Returns(mockNodeSection.Object);
 
             // the cache manager under test
-            cacheManager = NewCacheManager(logger: logger.Object, configuration: configuration.Object);
+            this.cacheManager = NewCacheManager(logger: logger.Object, configuration: this.configuration.Object);
 
             // a key to be used for each test
             this.testPair = this.NewKeyValue();

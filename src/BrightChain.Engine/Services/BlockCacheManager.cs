@@ -21,6 +21,31 @@ namespace BrightChain.Engine.Services
         private readonly List<BlockSize> supportedWriteBlockSizes;
 
         /// <summary>
+        /// Full to the config file.
+        /// </summary>
+        protected readonly string configFile;
+
+        /// <summary>
+        /// Database/directory name for this instance's tree root.
+        /// </summary>
+        protected readonly string databaseName;
+
+        /// <summary>
+        /// Returns the maximum number of bytes storable for a given block size.
+        /// </summary>
+        /// <param name="blockSize"></param>
+        /// <returns></returns>
+        public static long MaximumStorageLength(BlockSize blockSize)
+        {
+            var iBlockSize = BlockSizeMap.BlockSize(blockSize);
+            var hashesPerSegment = BlockSizeMap.HashesPerBlock(blockSize);
+
+            // right now, we can contain 1 SuperCBL with hashesPerSegment blocks, and up to hashesPerSegment blocks there.
+            // this means total size is hashes^2*size
+            return hashesPerSegment * hashesPerSegment * iBlockSize;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BlockCacheManager"/> class.
         /// </summary>
         /// <param name="logger">Logging provider</param>
@@ -31,6 +56,9 @@ namespace BrightChain.Engine.Services
             this.configuration = configuration;
             this.trustedNodes = new List<BrightChainNode>();
             // TODO: load supported block sizes from configurations
+            var section = this.configuration.GetSection("NodeOptions");
+
+
         }
 
         /// <summary>

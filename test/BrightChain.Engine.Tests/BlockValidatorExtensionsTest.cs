@@ -1,4 +1,5 @@
 ﻿using System;
+using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Blocks.DataObjects;
 using BrightChain.Engine.Services;
@@ -19,12 +20,17 @@ namespace BrightChain.Engine.Tests
             logger = new Mock<ILogger<BlockCacheManager>>().Object;
         }
 
-        [TestMethod]
-        public void ItValidatesValidBlocksTest()
+        [DataTestMethod]
+        [DataRow(BlockSize.Message)]
+        [DataRow(BlockSize.Tiny)]
+        [DataRow(BlockSize.Small)]
+        [DataRow(BlockSize.Medium)]
+        [DataRow(BlockSize.Large)]
+        public void ItValidatesValidBlocksTest(BlockSize blockSize)
         {
             Assert.IsTrue(new RandomDataBlock(
                 blockParams: new BlockParams(
-                    blockSize: Enumerations.BlockSize.Message,
+                    blockSize: blockSize,
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.MaxValue,
                     redundancy: Enumerations.RedundancyContractType.HeapAuto,

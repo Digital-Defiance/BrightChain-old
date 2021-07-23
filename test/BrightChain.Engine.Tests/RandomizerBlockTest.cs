@@ -30,15 +30,20 @@ namespace BrightChain.Engine.Tests
             cacheManager = new MemoryBlockCacheManager(logger: logger, configuration: new Configuration());
         }
 
-        [TestMethod]
-        public void ItCreatesValidRandomDataBlocksTest()
+        [DataTestMethod]
+        [DataRow(BlockSize.Message)]
+        [DataRow(BlockSize.Tiny)]
+        [DataRow(BlockSize.Small)]
+        [DataRow(BlockSize.Medium)]
+        [DataRow(BlockSize.Large)]
+        public void ItCreatesValidRandomDataBlocksTest(BlockSize blockSize)
         {
             var block = new RandomizerBlock(
                 new TransactableBlockParams(
-                    cacheManager: cacheManager,
+                    cacheManager: this.cacheManager,
                     allowCommit: true,
                     blockParams: new BlockParams(
-                        blockSize: BlockSize.Message,
+                        blockSize: blockSize,
                         requestTime: DateTime.Now,
                         keepUntilAtLeast: DateTime.Now.AddDays(1),
                         redundancy: Enumerations.RedundancyContractType.HeapAuto,

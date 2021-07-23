@@ -26,12 +26,17 @@ namespace BrightChain.Engine.Tests
             logger = new Moq.Mock<ILogger>().Object;
         }
 
-        [TestMethod]
-        public void ItCreatesValidRandomDataBlocksTest()
+        [DataTestMethod]
+        [DataRow(BlockSize.Message)]
+        [DataRow(BlockSize.Tiny)]
+        [DataRow(BlockSize.Small)]
+        [DataRow(BlockSize.Medium)]
+        [DataRow(BlockSize.Large)]
+        public void ItCreatesValidRandomDataBlocksTest(BlockSize blockSize)
         {
             var block = new RandomDataBlock(
                 blockParams: new BlockParams(
-                blockSize: BlockSize.Message,
+                blockSize: blockSize,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
