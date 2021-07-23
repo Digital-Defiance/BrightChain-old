@@ -57,7 +57,7 @@ namespace BrightChain.Engine.Services
             this.trustedNodes = new List<BrightChainNode>();
             // TODO: load supported block sizes from configurations
             var section = this.configuration.GetSection("NodeOptions");
-            
+
 
         }
 

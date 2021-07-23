@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Exceptions;
+using BrightChain.Engine.Helpers;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Blocks.Chains;
 using BrightChain.Engine.Models.Blocks.DataObjects;
@@ -13,10 +14,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using static BrightChain.Engine.Tests.Helpers.TestHelpers;
-using static BrightChain.Engine.Helpers.Utilities;
 using Moq;
-using BrightChain.Engine.Helpers;
+using static BrightChain.Engine.Helpers.Utilities;
+using static BrightChain.Engine.Tests.Helpers.TestHelpers;
 
 namespace BrightChain.Engine.Tests
 {
@@ -85,7 +85,7 @@ namespace BrightChain.Engine.Tests
             }
         }
 
-        
+
 
         private static long CreateRandomFile(string filePath, int sizeInMb, out byte[] randomFileHash, int sizeOffset = 0)
         {
@@ -211,6 +211,7 @@ namespace BrightChain.Engine.Tests
                     HashToFormattedString(sourceFileHash),
                     HashToFormattedString(cbl.SourceId.HashBytes.ToArray()));
             }
+
             // this is off- can't just give the last block.
             throw new NotImplementedException();
             var restoredFile = await brightChainService.RestoreFileFromCBLAsync(cblBlocks[cblBlocks.Length - 1]);

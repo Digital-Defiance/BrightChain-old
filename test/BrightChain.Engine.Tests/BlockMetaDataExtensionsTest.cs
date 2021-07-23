@@ -12,9 +12,9 @@ using BrightChain.Engine.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using static BrightChain.Engine.Tests.Helpers.TestHelpers;
-using static BrightChain.Engine.Helpers.Utilities;
 using Moq;
+using static BrightChain.Engine.Helpers.Utilities;
+using static BrightChain.Engine.Tests.Helpers.TestHelpers;
 
 namespace BrightChain.Engine.Tests
 {

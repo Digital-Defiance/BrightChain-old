@@ -64,12 +64,14 @@ namespace BrightChain.Engine.Services
                 var guid = Utilities.HashToFormattedString(Guid.NewGuid().ToByteArray());
                 BrightChain.Engine.Helpers.ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", guid);
                 this.databaseName = guid;
-            } else
+            }
+            else
             {
                 this.databaseName = configuredDbName.Value;
             }
 
-            foreach (var subDir in new string[] { "blocks", "indices" }) {
+            foreach (var subDir in new string[] { "blocks", "indices" })
+            {
                 var info = this.GetDiskCacheSubdirectory(subDir);
                 if (!info.Exists)
                 {

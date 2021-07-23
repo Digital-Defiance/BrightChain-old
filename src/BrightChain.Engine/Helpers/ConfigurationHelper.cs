@@ -55,7 +55,7 @@ namespace BrightChain.Engine.Helpers
                 dynamic configData = LoadConfigurationAs<dynamic>();
                 SetValueRecursively(sectionPathKey, configData, value);
                 SaveConfigurationFrom<dynamic>(configData);
-        }
+            }
             catch (Exception ex)
             {
                 throw new Exception($"Error writing app settings | {ex.Message}", ex);
