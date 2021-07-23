@@ -150,7 +150,7 @@ namespace BrightChain.Engine.Tests
             byte[] sourceFileHash;
             long expectedLength = CreateRandomFile(fileName, 10, out sourceFileHash, 3); // don't land on even block mark for data testing
 
-            ConstituentBlockListBlock[] cblBlocks = (ConstituentBlockListBlock[])await brightChainService.MakeCBLChainFromParamsAsync(
+            ConstituentBlockListBlock cblBlock = await brightChainService.MakeCblOrSuperCblFromFileAsync(
                 fileName: fileName,
                 blockParams: new BlockParams(
                     requestTime: DateTime.Now,
@@ -159,15 +159,31 @@ namespace BrightChain.Engine.Tests
                     privateEncrypted: false,
                     blockSize: RandomBlockSize()));
 
-            foreach (var cbl in cblBlocks)
+            Dictionary<BlockHash, Block> blocks = brightChainService.GetCBLBlocks(cblBlock);
+            if (cblBlock is SuperConstituentBlockListBlock)
             {
-                Assert.IsTrue(cbl.Validate());
-                Assert.AreEqual(expectedLength, cbl.TotalLength);
+                foreach (var blockHash in cblBlock.ConstituentBlocks)
+                {
+                    var cbl = (ConstituentBlockListBlock) blocks[blockHash];
+                    Assert.IsTrue(cbl.Validate());
+                    Assert.AreEqual(expectedLength, cbl.TotalLength);
+                    Assert.AreEqual(
+                        HashToFormattedString(sourceFileHash),
+                        HashToFormattedString(cbl.SourceId.HashBytes.ToArray()));
+
+                    var cblMap = cbl.GenerateBlockMap();
+                    Assert.IsTrue(cblMap is BlockChainFileMap);
+                }
+            }
+            else
+            {
+                Assert.IsTrue(cblBlock.Validate());
+                Assert.AreEqual(expectedLength, cblBlock.TotalLength);
                 Assert.AreEqual(
                     HashToFormattedString(sourceFileHash),
-                    HashToFormattedString(cbl.SourceId.HashBytes.ToArray()));
+                    HashToFormattedString(cblBlock.SourceId.HashBytes.ToArray()));
 
-                var cblMap = cbl.GenerateBlockMap();
+                var cblMap = cblBlock.GenerateBlockMap();
                 Assert.IsTrue(cblMap is BlockChainFileMap);
             }
 

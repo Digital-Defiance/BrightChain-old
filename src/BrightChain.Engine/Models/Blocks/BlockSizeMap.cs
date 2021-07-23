@@ -28,11 +28,11 @@ namespace BrightChain.Engine.Models.Blocks
         public static readonly Dictionary<BlockSize, int> HashesPerBlockMap = new Dictionary<BlockSize, int>
         {
             { Enumerations.BlockSize.Unknown,   -1 },
-            { Enumerations.BlockSize.Message,   (int)(BlockHash.HashSizeBytes / MessageSize) },
-            { Enumerations.BlockSize.Tiny,      (int)(BlockHash.HashSizeBytes / TinySize) },
-            { Enumerations.BlockSize.Small,     (int)(BlockHash.HashSizeBytes / SmallSize) },
-            { Enumerations.BlockSize.Medium,    (int)(BlockHash.HashSizeBytes / MediumSize) },
-            { Enumerations.BlockSize.Large,     (int)(BlockHash.HashSizeBytes / LargeSize) },
+            { Enumerations.BlockSize.Message,   (int)(MessageSize / BlockHash.HashSizeBytes) },
+            { Enumerations.BlockSize.Tiny,      (int)(TinySize / BlockHash.HashSizeBytes) },
+            { Enumerations.BlockSize.Small,     (int)(SmallSize / BlockHash.HashSizeBytes) },
+            { Enumerations.BlockSize.Medium,    (int)(MediumSize / BlockHash.HashSizeBytes) },
+            { Enumerations.BlockSize.Large,     (int)(LargeSize / BlockHash.HashSizeBytes) },
         };
 
         /// <summary>

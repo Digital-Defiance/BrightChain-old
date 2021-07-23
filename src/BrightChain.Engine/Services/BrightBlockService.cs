@@ -82,8 +82,12 @@ namespace BrightChain.Engine.Services
         {
             if (!blockSize.HasValue)
             {
-                // decide best block size if null
-                throw new NotImplementedException();
+                blockSize = blockParams.BlockSize;
+                if (blockSize.Value == BlockSize.Unknown)
+                {
+                    // decide best block size if null
+                    throw new NotImplementedException();
+                }
             }
 
             if (blockParams.PrivateEncrypted)
@@ -315,6 +319,17 @@ namespace BrightChain.Engine.Services
                     blockParams: blockParams,
                     chainedCbls: firstPass)
                         .ConfigureAwait(false);
+        }
+
+        public Dictionary<BlockHash, Block> GetCBLBlocks(ConstituentBlockListBlock block)
+        {
+            Dictionary<BlockHash, Block> blocks = new Dictionary<BlockHash, Block>();
+            foreach (var blockHash in block.ConstituentBlocks)
+            {
+                blocks.Add(blockHash, this.blockMemoryCache.Get(blockHash));
+            }
+
+            return blocks;
         }
 
         /// <summary>
