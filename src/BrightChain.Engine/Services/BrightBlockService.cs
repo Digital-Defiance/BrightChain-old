@@ -44,9 +44,15 @@ namespace BrightChain.Engine.Services
             }
 
             this.logger.LogInformation(string.Format("<{0}>: logging initialized", nameof(BrightBlockService)));
-            this.configuration = new ConfigurationBuilder()
+            var builder = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("brightChainSettings.json").Build();
+                .AddYamlFile(
+                    path: "brightChainSettings.yaml",
+                    optional: false,
+                    reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            this.configuration = builder.Build();
 
             this.blockMemoryCache = new MemoryBlockCacheManager(
                 logger: this.logger,

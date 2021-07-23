@@ -11,8 +11,8 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
     {
         public static IConfiguration Config { get; } = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("config.json", optional: true)
-            .AddJsonFile("config.test.json", optional: true)
+            .AddYamlFile("config.yaml", optional: true)
+            .AddYamlFile("config.test.yaml", optional: true)
             .AddEnvironmentVariables()
             .Build()
             .GetSection("Test:BrightChain");

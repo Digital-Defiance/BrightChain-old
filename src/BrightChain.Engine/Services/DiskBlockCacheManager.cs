@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using BrightChain.Engine.Exceptions;
+using BrightChain.Engine.Helpers;
 using BrightChain.Engine.Interfaces;
 using BrightChain.Engine.Models.Blocks;
+using BrightChain.Engine.Models.Blocks.Chains;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using static BrightChain.Engine.Extensions.BlockMetadataExtensions;
@@ -30,23 +33,49 @@ namespace BrightChain.Engine.Services
         /// <param name="logger">Instance of the logging provider.</param>
         /// <param name="configuration">Instance of the configuration provider.</param>
         /// <param name="databaseName">Database/directory name for the store.</param>
-        public DiskBlockCacheManager(ILogger logger, IConfiguration configuration, string databaseName = null)
+        public DiskBlockCacheManager(ILogger logger, IConfiguration configuration)
             : base(logger: logger, configuration: configuration)
         {
-            var configOption = configuration.GetSection("BasePath");
+            var nodeOptions = configuration.GetSection("NodeOptions");
+            if (nodeOptions is null)
+            {
+                throw new BrightChainException(string.Format(format: "'NodeOptions' config section must be defined, but is not"));
+            }
+
+            var configOption = nodeOptions.GetSection("BasePath");
             if (configOption is null)
             {
                 throw new BrightChainException(string.Format(format: "'BasePath' config option must be set, but is not"));
             }
 
-            var dir = configuration.GetSection("BasePath").Value;
+            var dir = configOption.Value;
             if (dir.Length == 0 || !Directory.Exists(dir))
             {
                 throw new BrightChainException(string.Format(format: "'BasePath' must exist, but does not: \"{0}\"", dir));
             }
 
-            baseDirectory = Path.GetFullPath(dir);
-            this.databaseName = databaseName is null ? Guid.NewGuid().ToString() : databaseName;
+            this.baseDirectory = Path.GetFullPath(dir);
+
+            var configuredDbName
+                = nodeOptions.GetSection("DatabaseName");
+
+            if (configuredDbName is null)
+            {
+                var guid = Utilities.HashToFormattedString(Guid.NewGuid().ToByteArray());
+                BrightChain.Engine.Helpers.ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", guid);
+                this.databaseName = guid;
+            } else
+            {
+                this.databaseName = configuredDbName.Value;
+            }
+
+            foreach (var subDir in new string[] { "blocks", "indices" }) {
+                var info = this.GetDiskCacheSubdirectory(subDir);
+                if (!info.Exists)
+                {
+                    throw new BrightChainException(String.Format("Failed to create blockstore directory '{0}'.", subDir));
+                }
+            }
         }
 
         /// <summary>
@@ -57,6 +86,40 @@ namespace BrightChain.Engine.Services
         {
             throw new NotImplementedException();
         }
+
+        protected DirectoryInfo GetDiskCacheDirectory() =>
+            Directory.CreateDirectory(
+                path: Path.Combine(
+                    path1: this.baseDirectory,
+                    path2: string.Format(provider: CultureInfo.InvariantCulture, format: "BrightChain-{0}", this.databaseName)));
+
+        protected DirectoryInfo GetDiskCacheSubdirectory(string path) =>
+            Directory.CreateDirectory(
+                path: Path.Combine(
+                    path1: this.GetDiskCacheDirectory().FullName,
+                    path2: path));
+
+        public DirectoryInfo GetBlocksDirectory() =>
+            this.GetDiskCacheSubdirectory("blocks");
+
+        public FileInfo GetBlockPath(BlockHash id) =>
+            new FileInfo(Path.Combine(
+                path1: this.GetBlocksDirectory().FullName,
+                path2: id.ToString()));
+
+        public DirectoryInfo GetIndicesPath() =>
+            this.GetDiskCacheSubdirectory("indices");
+
+        public FileInfo GetIndexPath(BlockHash id) =>
+            new FileInfo(Path.Combine(
+                path1: this.GetIndicesPath().FullName,
+                path2: id.ToString()));
+
+        /// <summary>
+        /// Full path to the configuration file.
+        /// </summary>
+        public string ConfigurationFilePath
+            => this.configFile;
 
         /// <summary>
         /// Fired whenever a block is added to the cache

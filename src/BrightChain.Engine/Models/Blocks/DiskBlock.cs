@@ -11,17 +11,15 @@ namespace BrightChain.Engine.Models.Blocks
     /// </summary>
     public class DiskBlock : TransactableBlock, IBlock
     {
+        public new DiskBlockCacheManager CacheManager { get; internal set; }
+
         public DiskBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data)
             : base(
                 blockParams: blockParams,
                 data: data)
         {
-            if (!(this.CacheManager is DiskBlockCacheManager))
-            {
-                throw new BrightChainException(this.CacheManager.GetType().Name);
-            }
-
             this.CacheManager.Set(this);
+            var blockpath = this.CacheManager.GetBlockPath(this.Id);
         }
 
         public override DiskBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
