@@ -410,7 +410,7 @@ namespace BrightChain.Engine.Services
             return restoredSourceInfo;
         }
 
-        public Block TryFindBlockByHash(BlockHash blockHash)
+        public async Task<Block> TryFindBlockByHashAsync(BlockHash blockHash)
         {
             if (this.blockMemoryCache.Contains(blockHash))
             {
@@ -426,15 +426,42 @@ namespace BrightChain.Engine.Services
             throw new KeyNotFoundException(blockHash.ToString());
         }
 
-        public void PersistMemoryCache(bool clearAfter)
+        public async IAsyncEnumerable<Block> TryFindBlocksByHashAsync(IAsyncEnumerable<BlockHash> blockHashes)
         {
-            this.blockMemoryCache.CopyContent(this.blockDiskCache);
+            await foreach (var blockHash in blockHashes)
+            {
+                if (this.blockMemoryCache.Contains(blockHash))
+                {
+                    yield return this.blockMemoryCache.Get(blockHash);
+                }
+
+                if (this.blockDiskCache.Contains(blockHash))
+                {
+                    yield return this.blockDiskCache.Get(blockHash);
+                }
+
+                // TODO: Dapr, NotFoundHash/0000 hash?
+                throw new KeyNotFoundException(blockHash.ToString());
+            }
+        }
+
+        public async Task ClearAsync()
+        {
+            await foreach (var blockHash in this.blockMemoryCache.KeysAsync())
+            {
+                this.blockMemoryCache.Drop(blockHash);
+            }
+        }
+
+        public async Task PersistMemoryCacheAsync(bool clearAfter)
+        {
+            await this.blockMemoryCache.CopyContentAsync(this.blockDiskCache)
+                .ConfigureAwait(false);
+
             if (clearAfter)
             {
-                foreach (var blockHash in this.blockMemoryCache.Keys)
-                {
-                    this.blockMemoryCache.Drop(blockHash);
-                }
+                await this.ClearAsync()
+                    .ConfigureAwait(false);
             }
         }
     }

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;
     using Microsoft.Extensions.Configuration;
@@ -20,7 +21,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MemoryDictionaryBlockCacheManager"/> class.
         /// </summary>
-        /// <param name="logger">Instance of the logging provider</param>
+        /// <param name="logger">Instance of the logging provider.</param>
+        /// <param name="configuration">Instance of the configuration provider.</param>
         public MemoryDictionaryBlockCacheManager(ILogger logger, IConfiguration configuration)
             : base(logger: logger, configuration: configuration)
         {
@@ -110,7 +112,7 @@
                 throw new BrightChain.Engine.Exceptions.BrightChainException("Can not store null block");
             }
 
-            if (Contains(block.Id))
+            if (this.Contains(block.Id))
             {
                 throw new BrightChain.Engine.Exceptions.BrightChainException("Key already exists");
             }
@@ -118,21 +120,19 @@
             this.blocks[block.Id] = block;
         }
 
-        public void CopyContent(BlockCacheManager destinationCache)
+        public async Task CopyContentAsync(BlockCacheManager destinationCache)
         {
-            foreach (BlockHash key in this.blocks.Keys)
+            await foreach (BlockHash key in this.KeysAsync())
             {
                 destinationCache.Set(this.blocks[key]);
             }
         }
 
-        public IEnumerable<BlockHash> Keys
+        public async IAsyncEnumerable<BlockHash> KeysAsync()
         {
-            get
+            foreach (var key in this.blocks.Keys)
             {
-                BlockHash[] hashArray = new BlockHash[this.blocks.Keys.Count];
-                this.blocks.Keys.CopyTo(hashArray, 0);
-                return hashArray;
+                yield return key;
             }
         }
     }

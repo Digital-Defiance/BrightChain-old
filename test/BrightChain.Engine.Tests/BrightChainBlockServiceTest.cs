@@ -114,7 +114,10 @@ namespace BrightChain.Engine.Tests
             {
                 foreach (var blockHash in cblBlock.ConstituentBlocks)
                 {
-                    var cbl = (ConstituentBlockListBlock)brightChainService.TryFindBlockByHash(blockHash);
+                    var cbl = (ConstituentBlockListBlock)await brightChainService
+                        .TryFindBlockByHashAsync(blockHash)
+                            .ConfigureAwait(false);
+
                     Assert.IsTrue(cbl.Validate());
                     Assert.AreEqual(sourceInfo.FileInfo.Length, cbl.TotalLength);
                     Assert.AreEqual(
@@ -145,8 +148,7 @@ namespace BrightChain.Engine.Tests
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(2));
             loggerMock.VerifyNoOtherCalls();
 
-            brightChainService.PersistMemoryCache(true);
-
+            await brightChainService.PersistMemoryCacheAsync(true);
         }
 
         [DataTestMethod]
@@ -190,7 +192,7 @@ namespace BrightChain.Engine.Tests
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(2));
             loggerMock.VerifyNoOtherCalls();
 
-            brightChainService.PersistMemoryCache(true);
+            await brightChainService.PersistMemoryCacheAsync(true);
         }
     }
 }
