@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using BrightChain.Engine.Models.Blocks;
+using BrightChain.Engine.Services;
 using BrightChain.EntityFrameworkCore.Data;
 using MediatR;
 
@@ -10,23 +11,20 @@ namespace BrightChain.API.Queries
     public class GetBlockByIdQuery : IRequest<Block>
     {
         public BlockHash Id { get; set; }
+
         public class GetBlockByIdQueryHandler : IRequestHandler<GetBlockByIdQuery, Block>
         {
-            private readonly BrightChainBlockDbContext _context;
-            public GetBlockByIdQueryHandler(BrightChainBlockDbContext context)
+            private readonly BrightBlockService _brightChain;
+
+            public GetBlockByIdQueryHandler(BrightBlockService brightChain)
             {
-                _context = context;
+                this._brightChain = brightChain;
             }
 
             public async Task<Block> Handle(GetBlockByIdQuery query, CancellationToken cancellationToken)
             {
-                var block = _context.Blocks.Where(a => a.Id == query.Id.ToString()).FirstOrDefault();
-                if (block == null)
-                {
-                    return null;
-                }
-
-                return block.ToBlock();
+                return await this._brightChain.TryFindBlockByIdAsync(query.Id)
+                    .ConfigureAwait(false);
             }
         }
     }

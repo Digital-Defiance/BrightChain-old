@@ -410,42 +410,37 @@ namespace BrightChain.Engine.Services
             return restoredSourceInfo;
         }
 
-        public async Task<Block> TryFindBlockByHashAsync(BlockHash blockHash)
+        public async Task<Block> TryFindBlockByIdAsync(BlockHash id)
         {
-            if (this.blockMemoryCache.Contains(blockHash))
+            if (this.blockMemoryCache.Contains(id))
             {
-                return this.blockMemoryCache.Get(blockHash);
+                return this.blockMemoryCache.Get(id);
             }
 
-            if (this.blockDiskCache.Contains(blockHash))
+            if (this.blockDiskCache.Contains(id))
             {
-                return this.blockDiskCache.Get(blockHash);
+                return this.blockDiskCache.Get(id);
             }
 
             // TODO: Dapr
-            throw new KeyNotFoundException(blockHash.ToString());
+            throw new KeyNotFoundException(id.ToString());
         }
 
-        public async IAsyncEnumerable<Block> TryFindBlocksByHashAsync(IAsyncEnumerable<BlockHash> blockHashes)
+        public async IAsyncEnumerable<Block> TryFindBlocksByIdAsync(IAsyncEnumerable<BlockHash> blockIdSource)
         {
-            await foreach (var blockHash in blockHashes)
+            await foreach (var id in blockIdSource)
             {
-                if (this.blockMemoryCache.Contains(blockHash))
-                {
-                    yield return this.blockMemoryCache.Get(blockHash);
-                }
+                var block = await this.TryFindBlockByIdAsync(id)
+                    .ConfigureAwait(false);
 
-                if (this.blockDiskCache.Contains(blockHash))
+                if (block is Block && block.Validate())
                 {
-                    yield return this.blockDiskCache.Get(blockHash);
+                    yield return block;
                 }
-
-                // TODO: Dapr, NotFoundHash/0000 hash?
-                throw new KeyNotFoundException(blockHash.ToString());
             }
         }
 
-        public async Task ClearAsync()
+        protected async Task ClearAllBlocks()
         {
             await foreach (var blockHash in this.blockMemoryCache.KeysAsync())
             {
@@ -460,8 +455,89 @@ namespace BrightChain.Engine.Services
 
             if (clearAfter)
             {
-                await this.ClearAsync()
+                await this.ClearAllBlocks()
                     .ConfigureAwait(false);
+            }
+        }
+
+        public async Task<Block> TryDropBlockAsync(BlockHash id, object? ownershipToken = null)
+        {
+            var block = await this.TryFindBlockByIdAsync(id: id)
+                .ConfigureAwait(false);
+
+            // verify pernmission/ownership/date, etc
+            // can't drop unless expired or invalid
+            if (block is Block && true)
+            {
+                throw new BrightChainException("Permission denied!");
+            }
+
+            if (this.blockDiskCache.Contains(id))
+            {
+                this.blockDiskCache.Drop(id);
+            }
+
+            if (this.blockMemoryCache.Contains(id))
+            {
+                this.blockMemoryCache.Drop(id);
+            }
+
+            // TODO: dapr broadcast
+            return block;
+        }
+
+        public async IAsyncEnumerable<Tuple<BlockHash, Block?>> TryDropBlocksAsync(IAsyncEnumerable<BlockHash> idSource, object ownershipToken = null)
+        {
+            await foreach (var id in idSource)
+            {
+                var dropped = await this.TryDropBlockAsync(id, ownershipToken)
+                    .ConfigureAwait(false);
+
+                yield return new Tuple<BlockHash, Block?>(id, dropped);
+            }
+        }
+
+        public async Task<Block> TryStoreBlockAsync(Block block)
+        {
+            if (!block.Validate())
+            {
+                throw new BrightChainValidationEnumerableException(
+                    exceptions: block.ValidationExceptions,
+                    message: "Can not store invalid block");
+            }
+
+            this.blockMemoryCache.Set(new TransactableBlock(
+                cacheManager: this.blockMemoryCache,
+                sourceBlock: block,
+                allowCommit: true));
+
+            this.blockDiskCache.Set(new TransactableBlock(
+                cacheManager: this.blockDiskCache,
+                sourceBlock: block,
+                allowCommit: true));
+
+            // TODO dapr
+            return block;
+        }
+
+        public async IAsyncEnumerable<Tuple<Block, IEnumerable<BrightChainValidationException>>> TryStoreBlocksAsync(IAsyncEnumerable<Block> blockSource)
+        {
+            await foreach (var block in blockSource)
+            {
+                Tuple<Block, IEnumerable<BrightChainValidationException>> response;
+                try
+                {
+                    var storedBlock = await this.TryStoreBlockAsync(block)
+                    .ConfigureAwait(false);
+
+                    response = new Tuple<Block, IEnumerable<BrightChainValidationException>>(block, new BrightChainValidationException[] { });
+                }
+                catch (BrightChainValidationEnumerableException brightChainValidation)
+                {
+                    response = new Tuple<Block, IEnumerable<BrightChainValidationException>>(block, brightChainValidation.Exceptions);
+                }
+
+                yield return response;
             }
         }
     }

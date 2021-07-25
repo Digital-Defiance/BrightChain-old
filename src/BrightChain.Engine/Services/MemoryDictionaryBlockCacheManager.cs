@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;
     using Microsoft.Extensions.Configuration;
@@ -97,6 +98,12 @@
             {
                 throw new IndexOutOfRangeException(nameof(key));
             }
+            else if (!block.Validate())
+            {
+                throw new BrightChainValidationEnumerableException(
+                    exceptions: block.ValidationExceptions,
+                    message: "Can not store invalid block");
+            }
 
             return block;
         }
@@ -110,6 +117,12 @@
             if (block is null)
             {
                 throw new BrightChain.Engine.Exceptions.BrightChainException("Can not store null block");
+            }
+            else if (!block.Validate())
+            {
+                throw new BrightChainValidationEnumerableException(
+                    exceptions: block.ValidationExceptions,
+                    message: "Can not store invalid block");
             }
 
             if (this.Contains(block.Id))

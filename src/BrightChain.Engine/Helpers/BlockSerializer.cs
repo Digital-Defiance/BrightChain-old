@@ -57,7 +57,7 @@ namespace BrightChain.Engine.Helpers
                 data: blockData);
 
             // fill in metadata
-            restoredBlock.TryRestoreMetadataFromBytes(metaData);
+            restoredBlock.TryRestoreMetadataFromBytesAndValidate(metaData);
 
             return restoredBlock;
         }

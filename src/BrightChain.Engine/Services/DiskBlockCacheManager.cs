@@ -239,9 +239,6 @@ namespace BrightChain.Engine.Services
                 destinationIndex: 0,
                 length: dataLength);
 
-            // free original copy
-            rawBlockData = null;
-
             var block = new RestoredBlock(
                 blockParams: new Models.Blocks.DataObjects.BlockParams(
                     blockSize: Enumerations.BlockSize.Unknown,
@@ -251,7 +248,7 @@ namespace BrightChain.Engine.Services
                     privateEncrypted: false),
                 data: blockBytes);
 
-            if (!block.TryRestoreMetadataFromBytes(metadataBytes))
+            if (!block.TryRestoreMetadataFromBytesAndValidate(metadataBytes))
             {
                 throw new BrightChainException("Invalid block metadata, restore failed");
             }
@@ -271,6 +268,12 @@ namespace BrightChain.Engine.Services
             if (block is null)
             {
                 throw new BrightChain.Engine.Exceptions.BrightChainException("Can not store null block");
+            }
+            else if (!block.Validate())
+            {
+                throw new BrightChainValidationEnumerableException(
+                    exceptions: block.ValidationExceptions,
+                    message: "Can not store invalid block");
             }
 
             var fileInfo = this.GetBlockPath(block.Id);

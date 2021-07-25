@@ -3,6 +3,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Services;
     using BrightChain.EntityFrameworkCore.Data;
     using BrightChain.EntityFrameworkCore.Data.Entities;
     using MediatR;
@@ -10,19 +11,22 @@
     public class StoreBlockCommand : IRequest<BlockHash>
     {
         public Block Block { get; set; }
+
         public class StoreBlockCommandHandler : IRequestHandler<StoreBlockCommand, BlockHash>
         {
-            private readonly BrightChainBlockDbContext _context;
-            public StoreBlockCommandHandler(BrightChainBlockDbContext context)
+            private readonly BrightBlockService _brightChain;
+
+            public StoreBlockCommandHandler(BrightBlockService brightChain)
             {
-                _context = context;
+                this._brightChain = brightChain;
             }
 
             public async Task<BlockHash> Handle(StoreBlockCommand command, CancellationToken cancellationToken)
             {
-                _context.Blocks.Add(BrightChainEntityBlock.FromBrightChainBlock(command.Block));
-                _context.SaveChanges();
-                return command.Block.Id;
+                var storedBlock = await this._brightChain.TryStoreBlockAsync(command.Block)
+                    .ConfigureAwait(false);
+
+                return storedBlock.Id;
             }
         }
     }

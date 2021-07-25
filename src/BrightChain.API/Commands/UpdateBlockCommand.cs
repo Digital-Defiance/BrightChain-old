@@ -1,9 +1,11 @@
 ﻿namespace BrightChain.API.Commands
 {
+    using System;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Services;
     using BrightChain.EntityFrameworkCore.Data;
     using MediatR;
 
@@ -12,25 +14,17 @@
         public Block Block { get; set; }
         public class UpdateBlockCommandHandler : IRequestHandler<UpdateBlockCommand, Block>
         {
-            private readonly BrightChainBlockDbContext _context;
-            public UpdateBlockCommandHandler(BrightChainBlockDbContext context)
+            private readonly BrightBlockService _brightChain;
+            public UpdateBlockCommandHandler(BrightBlockService brightChain)
             {
-                _context = context;
+                this._brightChain = brightChain;
             }
 
             public async Task<Block> Handle(UpdateBlockCommand command, CancellationToken cancellationToken)
             {
-                var block = _context.Blocks.Where(a => a.Id == command.Block.Id.ToString()).FirstOrDefault();
-                if (block == null)
-                {
-                    return default;
-                }
-                else
-                {
-                    // block.prop = value
-                    _context.SaveChanges();
-                    return block.ToBlock();
-                }
+                // there will be very limited contexts where we can update blocks-
+                // apart from some metadata updates perhaps?
+                throw new NotImplementedException();
             }
         }
     }

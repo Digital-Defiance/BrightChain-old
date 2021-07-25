@@ -180,7 +180,7 @@ namespace BrightChain.Engine.Tests
                 keepUntilAtLeast: testStart.AddDays(1).AddSeconds(5),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
                 privateEncrypted: false));
-            Assert.IsTrue(block2.TryRestoreMetadataFromBytes(metaData));
+            Assert.IsTrue(block2.TryRestoreMetadataFromBytesAndValidate(metaData));
             Assert.AreEqual(block.StorageContract, block2.StorageContract);
             Assert.AreEqual(block.Signature, block2.Signature);
 
@@ -247,7 +247,7 @@ namespace BrightChain.Engine.Tests
                     segmentId: new SegmentHash(dummyBlock.Data),
                     totalLength: (long)BlockSizeMap.BlockSize(dummyBlock.BlockSize),
                     constituentBlocks: new BlockHash[] { dummyBlock.Id }));
-            Assert.IsTrue(block2.TryRestoreMetadataFromBytes(metaData));
+            Assert.IsTrue(block2.TryRestoreMetadataFromBytesAndValidate(metaData));
             Assert.AreEqual(block.StorageContract, block2.StorageContract);
             Assert.AreEqual(block.Signature, block2.Signature);
             Assert.AreEqual(block.SourceId, block2.SourceId);

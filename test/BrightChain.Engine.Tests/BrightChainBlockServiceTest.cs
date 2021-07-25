@@ -115,7 +115,7 @@ namespace BrightChain.Engine.Tests
                 foreach (var blockHash in cblBlock.ConstituentBlocks)
                 {
                     var cbl = (ConstituentBlockListBlock)await brightChainService
-                        .TryFindBlockByHashAsync(blockHash)
+                        .TryFindBlockByIdAsync(blockHash)
                             .ConfigureAwait(false);
 
                     Assert.IsTrue(cbl.Validate());
