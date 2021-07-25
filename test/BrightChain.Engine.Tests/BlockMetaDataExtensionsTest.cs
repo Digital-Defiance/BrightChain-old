@@ -106,7 +106,7 @@ namespace BrightChain.Engine.Tests
                                     allowCommit: true,
                                     blockParams: dummyBlock.BlockParams),
                                 sourceId: new BlockHash(dummyBlock),
-                                segmentHash: new SegmentHash(dummyBlock.Data),
+                                segmentId: new SegmentHash(dummyBlock.Data),
                                 totalLength: 0,
                                 constituentBlocks: new BlockHash[] { dummyBlock.Id }));
 
@@ -221,7 +221,7 @@ namespace BrightChain.Engine.Tests
                                     allowCommit: true,
                                     blockParams: dummyBlock.BlockParams),
                                 sourceId: new BlockHash(dummyBlock),
-                                segmentHash: new SegmentHash(dummyBlock.Data),
+                                segmentId: new SegmentHash(dummyBlock.Data),
                                 totalLength: 0,
                                 constituentBlocks: new BlockHash[] { dummyBlock.Id }));
 
@@ -244,7 +244,7 @@ namespace BrightChain.Engine.Tests
                         providedHashBytes: dummyBlock.Id.HashBytes,
                         sourceDataLength: dummyBlock.Data.Length,
                         computed: true), // known incorrect hash
-                    segmentHash: new SegmentHash(dummyBlock.Data),
+                    segmentId: new SegmentHash(dummyBlock.Data),
                     totalLength: (long)BlockSizeMap.BlockSize(dummyBlock.BlockSize),
                     constituentBlocks: new BlockHash[] { dummyBlock.Id }));
             Assert.IsTrue(block2.TryRestoreMetadataFromBytes(metaData));

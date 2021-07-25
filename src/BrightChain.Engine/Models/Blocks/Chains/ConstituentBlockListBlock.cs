@@ -58,7 +58,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
                             redundancy: this.StorageContract.RedundancyContractType,
                             privateEncrypted: this.PrivateEncrypted)),
                     sourceId: this.SourceId,
-                    segmentHash: this.SegmentId,
+                    segmentId: this.SegmentId,
                     totalLength: this.TotalLength,
                     constituentBlocks: this.ConstituentBlocks,
                     previous: this.Previous,
@@ -91,6 +91,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
 
         /// <summary>
         /// Gets or sets the hash of the sum bytes of the segment of the file contained in this CBL when assembled in order.
+        /// If the segment does not fill the the final block, the hash does not include the remainder of the data.
         /// </summary>
         [BrightChainMetadata]
         public SegmentHash SegmentId { get; set; }

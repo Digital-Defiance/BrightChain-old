@@ -15,7 +15,7 @@ namespace BrightChain.Engine.Models.Blocks.DataObjects
         public readonly BlockHash Previous = null;
         public readonly BlockHash Next = null;
 
-        public ConstituentBlockListBlockParams(TransactableBlockParams blockParams, DataHash sourceId, SegmentHash segmentHash, long totalLength, IEnumerable<BlockHash> constituentBlocks, BlockHash previous = null, BlockHash next = null)
+        public ConstituentBlockListBlockParams(TransactableBlockParams blockParams, DataHash sourceId, SegmentHash segmentId, long totalLength, IEnumerable<BlockHash> constituentBlocks, BlockHash previous = null, BlockHash next = null)
        : base(
              cacheManager: blockParams.CacheManager,
              allowCommit: blockParams.AllowCommit,
@@ -24,7 +24,7 @@ namespace BrightChain.Engine.Models.Blocks.DataObjects
             this.SourceId = sourceId;
             this.TotalLength = totalLength;
             this.ConstituentBlocks = constituentBlocks;
-            this.SegmentId = segmentHash;
+            this.SegmentId = segmentId;
             this.Previous = previous;
             this.Next = next;
         }

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using BrightChain.Engine.Enumerations;
+using BrightChain.Engine.Models.Blocks.Chains;
+using BrightChain.Engine.Models.Blocks.DataObjects;
 
 namespace BrightChain.Engine.Models.Blocks
 {

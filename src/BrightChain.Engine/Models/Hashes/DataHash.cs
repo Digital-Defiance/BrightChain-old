@@ -2,7 +2,9 @@
 namespace BrightChain.Engine.Models.Blocks
 {
     using System;
+    using System.IO;
     using System.Security.Cryptography;
+    using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
 
@@ -35,6 +37,40 @@ namespace BrightChain.Engine.Models.Blocks
 
             this.Computed = true;
             this.SourceDataLength = dataBytes.Length;
+        }
+
+        public DataHash(Stream stream)
+        {
+            using (var sha = SHA256.Create())
+            {
+                var streamStart = stream.Position;
+                sha.ComputeHash(stream);
+                var streamLength = stream.Position - streamStart;
+                this.HashBytes = sha.Hash;
+                this.SourceDataLength = streamLength;
+                this.Computed = true;
+            }
+        }
+
+        public DataHash(FileInfo fileInfo)
+        {
+            using (Stream stream = File.OpenRead(fileInfo.FullName))
+            {
+                using (var sha = SHA256.Create())
+                {
+                    var streamStart = stream.Position;
+                    sha.ComputeHash(stream);
+                    var streamLength = stream.Position - streamStart;
+                    this.HashBytes = sha.Hash;
+                    this.SourceDataLength = streamLength;
+                    this.Computed = true;
+                }
+
+                if (this.SourceDataLength != fileInfo.Length)
+                {
+                    throw new BrightChainException(nameof(this.SourceDataLength));
+                }
+            }
         }
 
         /// <summary>
