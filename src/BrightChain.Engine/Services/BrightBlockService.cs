@@ -182,15 +182,18 @@ namespace BrightChain.Engine.Services
 
         public async Task<IEnumerable<ConstituentBlockListBlock>> MakeCBLChainFromParamsAsync(string fileName, BlockParams blockParams)
         {
-            var sourceInfo = new SourceFileInfo(fileName: fileName, blockSize: blockParams.BlockSize);
+            var sourceInfo = new SourceFileInfo(
+                fileName: fileName,
+                blockSize: blockParams.BlockSize);
             var blocksUsedThisSegment = new List<BlockHash>();
             var sourceBytesRemaining = sourceInfo.FileInfo.Length;
+            var totalBytesRemaining = sourceInfo.TotalBlockedBytes;
             var cblsExpected = sourceInfo.CblsExpected;
             var cblsEmitted = new ConstituentBlockListBlock[cblsExpected];
             var cblIdx = 0;
 
             var blocksThisSegment = 0;
-            var bytesThisSegment = 0;
+            var sourceBytesThisSegment = 0;
             var brightenedBlocksConsumed = 0;
 
             using (SHA256 segmentHasher = SHA256.Create())
@@ -198,28 +201,21 @@ namespace BrightChain.Engine.Services
                 // last block is always full of random data
                 await foreach (BrightenedBlock brightenedBlock in this.StreamCreatedBrightenedBlocksFromFileAsync(sourceInfo: sourceInfo, blockParams: blockParams))
                 {
-                    var lastBlockBytes = sourceBytesRemaining == sourceInfo.BytesPerBlock;
-                    if (sourceBytesRemaining < sourceInfo.BytesPerBlock)
-                    {
-                        throw new BrightChainException(nameof(sourceBytesRemaining));
-                    }
-
+                    var lastBlockBytes = totalBytesRemaining <= sourceInfo.BytesPerBlock;
+                    sourceBytesThisSegment += (int)(sourceBytesRemaining < sourceInfo.BytesPerBlock ? sourceBytesRemaining : brightenedBlock.Data.Length);
                     brightenedBlocksConsumed++;
-                    sourceBytesRemaining -= sourceInfo.BytesPerBlock;
-                    bytesThisSegment += sourceInfo.BytesPerBlock;
-                    blocksUsedThisSegment.Add(brightenedBlock.Id);
-                    blocksUsedThisSegment.AddRange(brightenedBlock.ConstituentBlocks);
                     var cblFullAfterThisBlock = ++blocksThisSegment == sourceInfo.HashesPerCbl;
 
                     if (cblFullAfterThisBlock || lastBlockBytes)
                     {
-                        segmentHasher.TransformFinalBlock(brightenedBlock.Data.ToArray(), 0, sourceInfo.BytesPerBlock);
+                        segmentHasher.TransformFinalBlock(brightenedBlock.Data.ToArray(), 0, (int)sourceBytesRemaining);
 
                         // we have room for one more block, it must either be another CBL or the final block
                         var lastCBL = brightenedBlocksConsumed == sourceInfo.TotalBlocksExpected;
 
                         // return cbl
-                        var cbl = new ConstituentBlockListBlock(blockParams: new ConstituentBlockListBlockParams(
+                        var cbl = new ConstituentBlockListBlock(
+                            blockParams: new ConstituentBlockListBlockParams(
                                 blockParams: new TransactableBlockParams(
                                     cacheManager: this.blockMemoryCache,
                                     allowCommit: true,
@@ -227,7 +223,7 @@ namespace BrightChain.Engine.Services
                                 sourceId: sourceInfo.SourceId,
                                 segmentId: new SegmentHash(
                                     providedHashBytes: segmentHasher.Hash,
-                                    sourceDataLength: bytesThisSegment,
+                                    sourceDataLength: sourceBytesThisSegment,
                                     computed: true),
                                 totalLength: sourceBytesRemaining > sourceInfo.BytesPerCbl ? sourceInfo.BytesPerCbl : sourceBytesRemaining,
                                 constituentBlocks: blocksUsedThisSegment,
@@ -243,7 +239,7 @@ namespace BrightChain.Engine.Services
                         segmentHasher.Initialize();
                         blocksUsedThisSegment.Clear();
                         blocksThisSegment = 0;
-                        bytesThisSegment = 0;
+                        sourceBytesThisSegment = 0;
                     }
                     else
                     {
