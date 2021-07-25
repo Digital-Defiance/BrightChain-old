@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using BrightChain.Engine.Interfaces;
-using BrightChain.Engine.Models.Blocks;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-
-namespace BrightChain.Engine.Services
+﻿namespace BrightChain.Engine.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using BrightChain.Engine.Interfaces;
+    using BrightChain.Engine.Models.Blocks;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
+
     /// <summary>
     /// Memory based Block Cache Manager.
     /// </summary>
-    public class MemoryBlockCacheManager : BlockCacheManager
+    public class MemoryDictionaryBlockCacheManager : BlockCacheManager
     {
         /// <summary>
         /// Hashtable collection for blocks stored in memory
@@ -18,18 +18,19 @@ namespace BrightChain.Engine.Services
         private readonly Dictionary<BlockHash, TransactableBlock> blocks = new Dictionary<BlockHash, TransactableBlock>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MemoryBlockCacheManager"/> class.
+        /// Initializes a new instance of the <see cref="MemoryDictionaryBlockCacheManager"/> class.
         /// </summary>
         /// <param name="logger">Instance of the logging provider</param>
-        public MemoryBlockCacheManager(ILogger logger, IConfiguration configuration)
+        public MemoryDictionaryBlockCacheManager(ILogger logger, IConfiguration configuration)
             : base(logger: logger, configuration: configuration)
-        { }
+        {
+        }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MemoryBlockCacheManager"/> class.
+        /// Initializes a new instance of the <see cref="MemoryDictionaryBlockCacheManager"/> class.
         /// Can not build a cache manager with no logger.
         /// </summary>
-        private MemoryBlockCacheManager()
+        private MemoryDictionaryBlockCacheManager()
         {
             throw new NotImplementedException();
         }
@@ -61,7 +62,7 @@ namespace BrightChain.Engine.Services
         /// <returns>boolean with whether key is present.</returns>
         public override bool Contains(BlockHash key)
         {
-            return blocks.ContainsKey(key);
+            return this.blocks.ContainsKey(key);
         }
 
         /// <summary>
@@ -72,12 +73,12 @@ namespace BrightChain.Engine.Services
         /// <returns>whether requested key was present and actually dropped.</returns>
         public override bool Drop(BlockHash key, bool noCheckContains = true)
         {
-            if (!noCheckContains && !Contains(key))
+            if (!noCheckContains && !this.Contains(key))
             {
                 return false;
             }
 
-            blocks.Remove(key);
+            this.blocks.Remove(key);
             return true;
         }
 
@@ -89,7 +90,7 @@ namespace BrightChain.Engine.Services
         public override TransactableBlock Get(BlockHash key)
         {
             TransactableBlock block;
-            bool found = blocks.TryGetValue(key, out block);
+            bool found = this.blocks.TryGetValue(key, out block);
             if (!found)
             {
                 throw new IndexOutOfRangeException(nameof(key));
@@ -114,7 +115,25 @@ namespace BrightChain.Engine.Services
                 throw new BrightChain.Engine.Exceptions.BrightChainException("Key already exists");
             }
 
-            blocks[block.Id] = block;
+            this.blocks[block.Id] = block;
+        }
+
+        public void CopyContent(BlockCacheManager destinationCache)
+        {
+            foreach (BlockHash key in this.blocks.Keys)
+            {
+                destinationCache.Set(this.blocks[key]);
+            }
+        }
+
+        public IEnumerable<BlockHash> Keys
+        {
+            get
+            {
+                BlockHash[] hashArray = new BlockHash[this.blocks.Keys.Count];
+                this.blocks.Keys.CopyTo(hashArray, 0);
+                return hashArray;
+            }
         }
     }
 }

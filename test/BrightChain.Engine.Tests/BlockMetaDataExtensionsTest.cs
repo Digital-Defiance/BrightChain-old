@@ -102,7 +102,7 @@ namespace BrightChain.Engine.Tests
             var block = new ConstituentBlockListBlock(
                             blockParams: new ConstituentBlockListBlockParams(
                                 blockParams: new TransactableBlockParams(
-                                    cacheManager: new MemoryBlockCacheManager(logger: logger, configuration: new Configuration()),
+                                    cacheManager: new MemoryDictionaryBlockCacheManager(logger: logger, configuration: new Configuration()),
                                     allowCommit: true,
                                     blockParams: dummyBlock.BlockParams),
                                 sourceId: new BlockHash(dummyBlock),
@@ -215,7 +215,7 @@ namespace BrightChain.Engine.Tests
             var block = new ConstituentBlockListBlock(
                             blockParams: new ConstituentBlockListBlockParams(
                                 blockParams: new TransactableBlockParams(
-                                    cacheManager: new MemoryBlockCacheManager(
+                                    cacheManager: new MemoryDictionaryBlockCacheManager(
                                         logger: this.logger,
                                         configuration: new Configuration()),
                                     allowCommit: true,

@@ -16,7 +16,7 @@ namespace BrightChain.Engine.Models.Blocks
                 blockParams: blockParams,
                 data: data)
         {
-            if (!(this.CacheManager is MemoryBlockCacheManager))
+            if (!(this.CacheManager is MemoryDictionaryBlockCacheManager))
             {
                 throw new BrightChainException(this.CacheManager.GetType().Name);
             }

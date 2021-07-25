@@ -19,7 +19,12 @@ namespace BrightChain.Engine.Helpers
 
         public byte[] ComputeChecksumBytes(byte[] bytes)
         {
-            return BitConverter.GetBytes(ComputeChecksum(bytes));
+            return BitConverter.GetBytes(this.ComputeChecksum(bytes));
+        }
+
+        public static uint ComputeNewChecksum(byte[] bytes)
+        {
+            return (new Crc32()).ComputeChecksum(bytes);
         }
 
         public Crc32()

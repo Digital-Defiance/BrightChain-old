@@ -16,7 +16,7 @@ namespace BrightChain.Engine.Tests
     [TestClass]
     public class RandomizerBlockTest
     {
-        private MemoryBlockCacheManager cacheManager;
+        private MemoryDictionaryBlockCacheManager cacheManager;
         private ILogger logger;
 
         public RandomizerBlockTest()
@@ -27,7 +27,7 @@ namespace BrightChain.Engine.Tests
         public void PreTestSetUp()
         {
             logger = new Moq.Mock<ILogger>().Object;
-            cacheManager = new MemoryBlockCacheManager(logger: logger, configuration: new Configuration());
+            cacheManager = new MemoryDictionaryBlockCacheManager(logger: logger, configuration: new Configuration());
         }
 
         [DataTestMethod]

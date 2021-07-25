@@ -14,9 +14,9 @@ namespace BrightChain.Engine.Services
     {
         public static byte TupleCount { get; } = 5;
 
-        private readonly MemoryBlockCacheManager pregeneratedRandomizerCache;
+        private readonly MemoryDictionaryBlockCacheManager pregeneratedRandomizerCache;
 
-        public BlockBrightener(MemoryBlockCacheManager pregeneratedRandomizerCache)
+        public BlockBrightener(MemoryDictionaryBlockCacheManager pregeneratedRandomizerCache)
         {
             this.pregeneratedRandomizerCache = pregeneratedRandomizerCache;
         }

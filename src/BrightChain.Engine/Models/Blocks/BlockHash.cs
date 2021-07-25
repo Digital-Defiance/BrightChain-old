@@ -88,13 +88,6 @@ namespace BrightChain.Engine.Models.Blocks
             obj is BlockHash blockHash ? blockHash.SourceDataLength == this.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, blockHash.HashBytes) == 0 : false;
 
         /// <summary>
-        /// Computes and returns the hash code for the HashBytes in this object.
-        /// </summary>
-        /// <returns>Returns the hash code for the HashBytes in this object.</returns>
-        public override int GetHashCode() =>
-            this.HashBytes.GetHashCode();
-
-        /// <summary>
         /// Compares the raw bytes of the hash.
         /// </summary>
         /// <param name="other">Other BlockHash to compare bytes with.</param>

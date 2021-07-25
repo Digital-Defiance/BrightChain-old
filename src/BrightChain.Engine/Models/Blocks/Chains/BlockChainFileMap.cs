@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Models.Blocks.DataObjects;
+using BrightChain.Engine.Services;
 
 namespace BrightChain.Engine.Models.Blocks.Chains
 {
@@ -24,12 +25,22 @@ namespace BrightChain.Engine.Models.Blocks.Chains
 
         public static async IAsyncEnumerable<IEnumerable<T>> TakeIntoGroupsOf<T>(IEnumerable<T> list, int parts)
         {
-            foreach (var item in list.Select((item, index) => new { index, item })
-                       .GroupBy(x => x.index % parts)
-                       .Select(x => x.Select(y => y.item)))
+            var i = 0;
+            T[] items = new T[parts];
+            foreach (var item in list)
             {
-                yield return item;
+                items[i++] = item;
+
+                if (i == parts)
+                {
+                    yield return items;
+                    i = 0;
+                    items = new T[parts];
+                }
             }
+
+            Array.Resize<T>(ref items, i);
+            yield return items;
         }
 
         public BlockChainFileMap(ConstituentBlockListBlock cblBlock, IAsyncEnumerable<TupleStripe> tupleStripes = null)
@@ -40,13 +51,18 @@ namespace BrightChain.Engine.Models.Blocks.Chains
 
         private BlockChainFileMap()
         {
-
         }
 
-        public async IAsyncEnumerable<TupleStripe> ReconstructTupleStripes()
+        public async IAsyncEnumerable<TupleStripe> ReconstructTupleStripes(BlockCacheManager blockCacheManager)
         {
             var sourceBlocks = this.ConstituentBlockListBlock.ConstituentBlocks;
-            if ((sourceBlocks.Count() % this.ConstituentBlockListBlock.TupleCount) != 0)
+            var sourceBlockCount = sourceBlocks.Count();
+            if (sourceBlockCount == 0)
+            {
+                throw new BrightChainException("No hashes in constituent block list");
+            }
+
+            if ((sourceBlockCount % this.ConstituentBlockListBlock.TupleCount) != 0)
             {
                 throw new BrightChainException("CBL length is not a multiple of the tuple count");
             }
@@ -54,16 +70,28 @@ namespace BrightChain.Engine.Models.Blocks.Chains
             var tupleGroups = TakeIntoGroupsOf(sourceBlocks, this.ConstituentBlockListBlock.TupleCount);
             await foreach (var tupleGroup in tupleGroups)
             {
-                throw new NotImplementedException();
-                //yield return new TupleStripe(this.ConstituentBlockListBlock.TupleCount, this.ConstituentBlockListBlock.BlockSize, tupleGroup);
-            }
+                Block[] blockList = new Block[this.ConstituentBlockListBlock.TupleCount];
+                var i = 0;
+                foreach (var blockHash in tupleGroup)
+                {
+                    blockList[i++] = blockCacheManager.Get(blockHash);
+                }
 
-            yield break;
+                if (i == 0)
+                {
+                    yield break;
+                }
+
+                yield return new TupleStripe(
+                    tupleCountMatch: this.ConstituentBlockListBlock.TupleCount,
+                    blockSizeMatch: this.ConstituentBlockListBlock.BlockSize,
+                    blocks: blockList);
+            }
         }
 
-        public async IAsyncEnumerable<Block> ConsolidateTuplesToChainAsync()
+        public async IAsyncEnumerable<Block> ConsolidateTuplesToChainAsync(BlockCacheManager blockCacheManager)
         {
-            await foreach (TupleStripe tupleStripe in (this.TupleStripes is null) ? this.ReconstructTupleStripes() : this.TupleStripes)
+            await foreach (TupleStripe tupleStripe in (this.TupleStripes is null) ? this.ReconstructTupleStripes(blockCacheManager) : this.TupleStripes)
             {
                 yield return tupleStripe.Consolidate();
             }

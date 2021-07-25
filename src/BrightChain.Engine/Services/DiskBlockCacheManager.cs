@@ -104,10 +104,23 @@ namespace BrightChain.Engine.Services
         public DirectoryInfo GetBlocksDirectory() =>
             this.GetDiskCacheSubdirectory("blocks");
 
-        public FileInfo GetBlockPath(BlockHash id) =>
-            new FileInfo(Path.Combine(
+        public FileInfo GetBlockPath(BlockHash id)
+        {
+            var keyString = id.ToString();
+            var keySub1 = keyString.Substring(0, 2);
+            var keySub2 = keyString.Substring(2, 2);
+
+            var blockSubDir = Path.Combine(
                 path1: this.GetBlocksDirectory().FullName,
+                path2: keySub1,
+                path3: keySub2);
+
+            Directory.CreateDirectory(blockSubDir);
+
+            return new FileInfo(Path.Combine(
+                path1: blockSubDir,
                 path2: id.ToString()));
+        }
 
         public DirectoryInfo GetIndicesPath() =>
             this.GetDiskCacheSubdirectory("indices");
@@ -144,27 +157,13 @@ namespace BrightChain.Engine.Services
         public override event ICacheManager<BlockHash, TransactableBlock>.CacheMissEventHandler CacheMiss;
 
         /// <summary>
-        /// Take in a BlockHash and yield a fully qualified directory name to place the blockfile in.
-        /// {baseDirectory}/aa/bb/{blockId}.
-        /// </summary>
-        /// <param name="blockHash">Block whose hash we are generating a pathname from</param>
-        /// <returns>Composed pathname for location of a given block</returns>
-        public string BlockHashToPath(BlockHash blockHash)
-        {
-            var key = blockHash.ToString();
-            var keySub1 = key.Substring(0, 2);
-            var keySub2 = key.Substring(2, 2);
-            return string.Format("{1}{0}{2}{0}{3}{0}{4}", Path.DirectorySeparatorChar, baseDirectory, keySub1, keySub2, databaseName);
-        }
-
-        /// <summary>
         /// Returns whether the cache manager has the given key and it is not expired.
         /// </summary>
         /// <param name="key">key to check the collection for.</param>
         /// <returns>boolean with whether key is present.</returns>
         public override bool Contains(BlockHash key)
         {
-            return File.Exists(BlockHashToPath(key));
+            return File.Exists(this.GetBlockPath(key).FullName);
         }
 
         /// <summary>
@@ -175,15 +174,15 @@ namespace BrightChain.Engine.Services
         /// <returns>whether requested key was present and actually dropped.</returns>
         public override bool Drop(BlockHash key, bool noCheckContains = true)
         {
-            var path = BlockHashToPath(key);
-            if (!noCheckContains && !File.Exists(path))
+            var fileInfo = this.GetBlockPath(key);
+            if (!noCheckContains && !fileInfo.Exists)
             {
                 return false;
             }
 
             try
             {
-                File.Delete(path);
+                File.Delete(fileInfo.FullName);
                 return true;
             }
             catch (Exception _)
@@ -199,13 +198,13 @@ namespace BrightChain.Engine.Services
         /// <returns>returns requested block or throws.</returns>
         public override TransactableBlock Get(BlockHash key)
         {
-            var path = BlockHashToPath(key);
-            if (!File.Exists(path))
+            var fileInfo = this.GetBlockPath(key);
+            if (!fileInfo.Exists)
             {
                 throw new IndexOutOfRangeException(nameof(key));
             }
 
-            var rawBlockData = File.ReadAllBytes(path);
+            var rawBlockData = File.ReadAllBytes(fileInfo.FullName);
             int metadataLength = -1;
             for (int i = 0; i < rawBlockData.Length; i++)
             {
@@ -274,15 +273,14 @@ namespace BrightChain.Engine.Services
                 throw new BrightChain.Engine.Exceptions.BrightChainException("Can not store null block");
             }
 
-            var path = BlockHashToPath(block.Id);
+            var fileInfo = this.GetBlockPath(block.Id);
 
-            if (File.Exists(path))
+            if (fileInfo.Exists)
             {
                 throw new BrightChain.Engine.Exceptions.BrightChainException("Key already exists");
             }
 
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
-            var file = File.OpenWrite(path);
+            var file = File.OpenWrite(fileInfo.FullName);
             file.Write(new ReadOnlySpan<byte>(block.Metadata.ToArray()));
             file.WriteByte(0);
             file.Write(new ReadOnlySpan<byte>(block.Data.ToArray()));

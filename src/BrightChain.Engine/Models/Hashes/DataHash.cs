@@ -142,7 +142,7 @@ namespace BrightChain.Engine.Models.Blocks
         /// </summary>
         /// <returns>Returns the hash code for the HashBytes in this object.</returns>
         public override int GetHashCode() =>
-            this.HashBytes.GetHashCode();
+            (int)Crc32.ComputeNewChecksum(this.HashBytes.ToArray());
 
         /// <summary>
         /// Compares the raw bytes of the hash.

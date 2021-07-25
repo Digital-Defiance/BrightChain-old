@@ -110,12 +110,11 @@ namespace BrightChain.Engine.Tests
                     privateEncrypted: false,
                     blockSize: blockSize));
 
-            Dictionary<BlockHash, Block> blocks = brightChainService.GetCBLBlocks(cblBlock);
             if (cblBlock is SuperConstituentBlockListBlock)
             {
                 foreach (var blockHash in cblBlock.ConstituentBlocks)
                 {
-                    var cbl = (ConstituentBlockListBlock)blocks[blockHash];
+                    var cbl = (ConstituentBlockListBlock)brightChainService.TryFindBlockByHash(blockHash);
                     Assert.IsTrue(cbl.Validate());
                     Assert.AreEqual(sourceInfo.FileInfo.Length, cbl.TotalLength);
                     Assert.AreEqual(
@@ -145,6 +144,9 @@ namespace BrightChain.Engine.Tests
                 It.IsAny<Exception>(),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(2));
             loggerMock.VerifyNoOtherCalls();
+
+            brightChainService.PersistMemoryCache(true);
+
         }
 
         [DataTestMethod]
@@ -187,6 +189,8 @@ namespace BrightChain.Engine.Tests
                 It.IsAny<Exception>(),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(2));
             loggerMock.VerifyNoOtherCalls();
+
+            brightChainService.PersistMemoryCache(true);
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Exceptions;
+using BrightChain.Engine.Helpers;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Blocks.Chains;
 using BrightChain.Engine.Models.Blocks.DataObjects;
@@ -26,8 +27,8 @@ namespace BrightChain.Engine.Services
         private readonly ILogger logger;
         private readonly IConfiguration configuration;
 
-        private readonly MemoryBlockCacheManager blockMemoryCache;
-        private readonly MemoryBlockCacheManager randomizerBlockMemoryCache;
+        private readonly MemoryDictionaryBlockCacheManager blockMemoryCache;
+        private readonly MemoryDictionaryBlockCacheManager randomizerBlockMemoryCache;
         private readonly DiskBlockCacheManager blockDiskCache;
         private readonly BlockBrightener blockBrightener;
         //private readonly BrightChainNode brightChainNodeAuthority;
@@ -55,13 +56,13 @@ namespace BrightChain.Engine.Services
 
             this.configuration = builder.Build();
 
-            this.blockMemoryCache = new MemoryBlockCacheManager(
+            this.blockMemoryCache = new MemoryDictionaryBlockCacheManager(
                 logger: this.logger,
                 configuration: this.configuration);
             this.blockDiskCache = new DiskBlockCacheManager(
                 logger: this.logger,
                 configuration: this.configuration);
-            this.randomizerBlockMemoryCache = new MemoryBlockCacheManager(
+            this.randomizerBlockMemoryCache = new MemoryDictionaryBlockCacheManager(
                 logger: this.logger,
                 configuration: this.configuration);
             this.logger.LogInformation(string.Format("<{0}>: caches initialized", nameof(BrightBlockService)));
@@ -70,7 +71,6 @@ namespace BrightChain.Engine.Services
             //this.brightChainNodeAuthority = default(BrightChainNode);
             //this.brightChainNodeAuthority = BrightChainKeyService.LoadPrivateKeyFromBlock(this.blockDiskCache.Get(_));
         }
-
 
         /// <summary>
         /// Creates a descriptor block for a given input file, found on disk.
@@ -158,6 +158,11 @@ namespace BrightChain.Engine.Services
                                 data: buffer),
                             randomizersUsed: out randomizersUsed);
 
+                        this.blockMemoryCache.Set(new TransactableBlock(
+                                cacheManager: this.blockMemoryCache,
+                                sourceBlock: brightenedBlock,
+                                allowCommit: true));
+
                         foreach (var block in randomizersUsed)
                         {
                             this.blockMemoryCache.Set(block: new TransactableBlock(
@@ -203,7 +208,8 @@ namespace BrightChain.Engine.Services
                 await foreach (BrightenedBlock brightenedBlock in this.StreamCreatedBrightenedBlocksFromFileAsync(sourceInfo: sourceInfo, blockParams: blockParams))
                 {
                     sourceBytesThisSegment += (int)(sourceBytesRemaining < sourceInfo.BytesPerBlock ? sourceBytesRemaining : brightenedBlock.Data.Length);
-
+                    blocksUsedThisSegment.Add(brightenedBlock.Id);
+                    blocksUsedThisSegment.AddRange(brightenedBlock.ConstituentBlocks);
                     var cblFullAfterThisBlock = ++blocksThisSegment == sourceInfo.HashesPerBlock;
                     var sourceConsumed = totalBytesRemaining <= sourceInfo.BytesPerBlock;
                     blocksRemaining--;
@@ -226,7 +232,7 @@ namespace BrightChain.Engine.Services
                                     sourceDataLength: sourceBytesThisSegment,
                                     computed: true),
                                 totalLength: sourceBytesRemaining > sourceInfo.BytesPerCbl ? sourceInfo.BytesPerCbl : sourceBytesRemaining,
-                                constituentBlocks: blocksUsedThisSegment,
+                                constituentBlocks: blocksUsedThisSegment.ToArray(),
                                 previous: cblIdx > 0 ? cblsEmitted[cblIdx - 1].Id : null,
                                 next: null));
 
@@ -296,7 +302,8 @@ namespace BrightChain.Engine.Services
             var count = firstPass.Count();
             if (count == 1)
             {
-                return firstPass.ElementAt(0);
+                var loneCbl = firstPass.ElementAt(0);
+                return loneCbl;
             }
             else if (count > BlockSizeMap.HashesPerBlock(blockParams.BlockSize))
             {
@@ -314,12 +321,12 @@ namespace BrightChain.Engine.Services
                         .ConfigureAwait(false);
         }
 
-        public Dictionary<BlockHash, Block> GetCBLBlocks(ConstituentBlockListBlock block)
+        public static Dictionary<BlockHash, Block> GetCBLBlocksFromCacheAsDictionary(BlockCacheManager blockCacheManager, ConstituentBlockListBlock block)
         {
             Dictionary<BlockHash, Block> blocks = new Dictionary<BlockHash, Block>();
             foreach (var blockHash in block.ConstituentBlocks)
             {
-                blocks.Add(blockHash, this.blockMemoryCache.Get(blockHash));
+                blocks.Add(blockHash, blockCacheManager.Get(blockHash));
             }
 
             return blocks;
@@ -337,6 +344,12 @@ namespace BrightChain.Engine.Services
                 throw new NotImplementedException();
             }
 
+            if (constituentBlockListBlock is SuperConstituentBlockListBlock superConstituentBlockListBlock)
+            {
+                throw new NotImplementedException();
+            }
+
+            long bytesWritten = 0;
             var iBlockSize = BlockSizeMap.BlockSize(constituentBlockListBlock.BlockSize);
             var blockMap = constituentBlockListBlock.GenerateBlockMap();
             string tempFilename = Path.GetTempFileName();
@@ -344,12 +357,11 @@ namespace BrightChain.Engine.Services
             {
                 using (SHA256 sha = SHA256.Create())
                 {
-                    long bytesWritten = 0;
                     StreamWriter streamWriter = new StreamWriter(stream);
-                    await foreach (Block block in blockMap.ConsolidateTuplesToChainAsync())
+                    await foreach (Block block in blockMap.ConsolidateTuplesToChainAsync(this.blockMemoryCache))
                     {
                         var bytesLeft = constituentBlockListBlock.TotalLength - bytesWritten;
-                        var lastBlock = bytesLeft < iBlockSize;
+                        var lastBlock = bytesLeft <= iBlockSize;
                         var length = lastBlock ? bytesLeft : iBlockSize;
                         if (lastBlock)
                         {
@@ -362,6 +374,7 @@ namespace BrightChain.Engine.Services
 
                         await stream.WriteAsync(buffer: block.Data.ToArray(), offset: 0, count: (int)length)
                             .ConfigureAwait(false);
+                        bytesWritten += length;
                     }
 
                     var finalHash = new BlockHash(
@@ -373,6 +386,11 @@ namespace BrightChain.Engine.Services
 
                 stream.Flush();
                 stream.Close();
+            }
+
+            if (bytesWritten == 0)
+            {
+                throw new BrightChainException(nameof(bytesWritten));
             }
 
             var restoredSourceInfo = new SourceFileInfo(
@@ -390,6 +408,34 @@ namespace BrightChain.Engine.Services
             }
 
             return restoredSourceInfo;
+        }
+
+        public Block TryFindBlockByHash(BlockHash blockHash)
+        {
+            if (this.blockMemoryCache.Contains(blockHash))
+            {
+                return this.blockMemoryCache.Get(blockHash);
+            }
+
+            if (this.blockDiskCache.Contains(blockHash))
+            {
+                return this.blockDiskCache.Get(blockHash);
+            }
+
+            // TODO: Dapr
+            throw new KeyNotFoundException(blockHash.ToString());
+        }
+
+        public void PersistMemoryCache(bool clearAfter)
+        {
+            this.blockMemoryCache.CopyContent(this.blockDiskCache);
+            if (clearAfter)
+            {
+                foreach (var blockHash in this.blockMemoryCache.Keys)
+                {
+                    this.blockMemoryCache.Drop(blockHash);
+                }
+            }
         }
     }
 }
