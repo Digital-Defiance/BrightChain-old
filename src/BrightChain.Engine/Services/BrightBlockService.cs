@@ -1,24 +1,28 @@
-﻿#nullable enable
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
-using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Exceptions;
-using BrightChain.Engine.Helpers;
-using BrightChain.Engine.Models.Blocks;
-using BrightChain.Engine.Models.Blocks.Chains;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-using BrightChain.Engine.Models.Nodes;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+﻿// <copyright file="BrightBlockService.cs" company="BrightChain">
+// Copyright (c) BrightChain. All rights reserved.
+// </copyright>
 
 namespace BrightChain.Engine.Services
 {
+#nullable enable
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.IO;
+    using System.Linq;
+    using System.Security.Cryptography;
+    using System.Threading.Tasks;
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Helpers;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.Chains;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
+    using BrightChain.Engine.Models.Nodes;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+
     /// <summary>
     /// Core service for BrightChain used by the webservice to retrieve and store blocks.
     /// </summary>
