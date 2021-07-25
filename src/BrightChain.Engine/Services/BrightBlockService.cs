@@ -330,7 +330,7 @@ namespace BrightChain.Engine.Services
         /// </summary>
         /// <param name="constituentBlockListBlock">The CBL Block containing the list/order of blocks needed to rebuild the file.</param>
         /// <returns>Returns a Restored file object containing the path and hash for the resulting file as written, for verification.</returns>
-        public async Task<RestoredFile> RestoreFileFromCBLAsync(ConstituentBlockListBlock constituentBlockListBlock)
+        public async Task<SourceFileInfo> RestoreFileFromCBLAsync(ConstituentBlockListBlock constituentBlockListBlock)
         {
             if (constituentBlockListBlock.TotalLength > long.MaxValue)
             {
@@ -338,16 +338,15 @@ namespace BrightChain.Engine.Services
             }
 
             var iBlockSize = BlockSizeMap.BlockSize(constituentBlockListBlock.BlockSize);
-            var restoredFile = default(RestoredFile);
             var blockMap = constituentBlockListBlock.GenerateBlockMap();
-            restoredFile.Path = Path.GetTempFileName();
-            using (var stream = File.OpenWrite(restoredFile.Path))
+            string tempFilename = Path.GetTempFileName();
+            using (var stream = File.OpenWrite(tempFilename))
             {
                 using (SHA256 sha = SHA256.Create())
                 {
                     long bytesWritten = 0;
                     StreamWriter streamWriter = new StreamWriter(stream);
-                    await foreach (Block block in blockMap.ConsolidateTuplesToChainAsyc())
+                    await foreach (Block block in blockMap.ConsolidateTuplesToChainAsync())
                     {
                         var bytesLeft = constituentBlockListBlock.TotalLength - bytesWritten;
                         var lastBlock = bytesLeft < iBlockSize;
@@ -365,7 +364,7 @@ namespace BrightChain.Engine.Services
                             .ConfigureAwait(false);
                     }
 
-                    restoredFile.SourceId = new BlockHash(
+                    var finalHash = new BlockHash(
                         blockType: typeof(ConstituentBlockListBlock),
                         originalBlockSize: constituentBlockListBlock.BlockSize,
                         providedHashBytes: sha.Hash,
@@ -374,15 +373,23 @@ namespace BrightChain.Engine.Services
 
                 stream.Flush();
                 stream.Close();
-                FileInfo fileInfo = new FileInfo(restoredFile.Path);
-
-                if (fileInfo.Length != constituentBlockListBlock.TotalLength)
-                {
-                    throw new BrightChainException(nameof(fileInfo.Length));
-                }
             }
 
-            return restoredFile;
+            var restoredSourceInfo = new SourceFileInfo(
+                fileName: tempFilename,
+                blockSize: constituentBlockListBlock.BlockSize);
+
+            if (restoredSourceInfo.FileInfo.Length != constituentBlockListBlock.TotalLength)
+            {
+                throw new BrightChainException(nameof(restoredSourceInfo.FileInfo.Length));
+            }
+
+            if (!restoredSourceInfo.SourceId.Equals(constituentBlockListBlock.SourceId))
+            {
+                throw new BrightChainException(nameof(restoredSourceInfo.SourceId));
+            }
+
+            return restoredSourceInfo;
         }
     }
 }

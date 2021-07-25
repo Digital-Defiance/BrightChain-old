@@ -36,10 +36,11 @@ namespace BrightChain.Engine.Models.Blocks
         public BlockHash(Type blockType, BlockSize originalBlockSize, ReadOnlyMemory<byte> providedHashBytes, bool computed)
             : base(providedHashBytes: providedHashBytes, sourceDataLength: BlockSizeMap.BlockSize(originalBlockSize), computed: computed)
         {
-            if (!blockType.Equals(typeof(Block)))
+            if (!typeof(Block).IsAssignableFrom(blockType))
             {
                 throw new BrightChainException("Block Type must be Block or descendant.");
             }
+
             this.BlockType = blockType;
             this.BlockSize = originalBlockSize;
         }

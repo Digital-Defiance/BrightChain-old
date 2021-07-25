@@ -165,7 +165,7 @@ namespace BrightChain.Engine.Tests
                 lengthFunc: (BlockSize blockSize) =>
                     (BlockSizeMap.BlockSize(blockSize) * 2) + 7); // don't land on even block mark for data testing
 
-            ConstituentBlockListBlock[] cblBlocks = (ConstituentBlockListBlock[])await brightChainService.MakeCBLChainFromParamsAsync(
+            ConstituentBlockListBlock cblBlock = await brightChainService.MakeCblOrSuperCblFromFileAsync(
                 fileName: sourceInfo.FileInfo.FullName,
                 blockParams: new BlockParams(
                     requestTime: DateTime.Now,
@@ -174,19 +174,7 @@ namespace BrightChain.Engine.Tests
                     privateEncrypted: false,
                     blockSize: blockSize));
 
-            foreach (var cbl in cblBlocks)
-            {
-                Assert.IsTrue(cbl.Validate());
-
-                Assert.AreEqual(sourceInfo.FileInfo.Length, cbl.TotalLength);
-                Assert.AreEqual(
-                    HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()),
-                    HashToFormattedString(cbl.SourceId.HashBytes.ToArray()));
-            }
-
-            // this is off- can't just give the last block.
-            throw new NotImplementedException();
-            var restoredFile = await brightChainService.RestoreFileFromCBLAsync(cblBlocks[cblBlocks.Length - 1]);
+            var restoredFile = await brightChainService.RestoreFileFromCBLAsync(cblBlock);
 
             Assert.AreEqual(
                 HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()),

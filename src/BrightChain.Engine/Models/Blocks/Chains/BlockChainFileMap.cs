@@ -24,11 +24,12 @@ namespace BrightChain.Engine.Models.Blocks.Chains
 
         public static async IAsyncEnumerable<IEnumerable<T>> TakeIntoGroupsOf<T>(IEnumerable<T> list, int parts)
         {
-            var result = list.Select((item, index) => new { index, item })
+            foreach (var item in list.Select((item, index) => new { index, item })
                        .GroupBy(x => x.index % parts)
-                       .Select(x => x.Select(y => y.item));
-            yield return (IEnumerable<T>)result;
-            yield break;
+                       .Select(x => x.Select(y => y.item)))
+            {
+                yield return item;
+            }
         }
 
         public BlockChainFileMap(ConstituentBlockListBlock cblBlock, IAsyncEnumerable<TupleStripe> tupleStripes = null)
@@ -44,13 +45,13 @@ namespace BrightChain.Engine.Models.Blocks.Chains
 
         public async IAsyncEnumerable<TupleStripe> ReconstructTupleStripes()
         {
-            BlockHash[] listBlocks = (BlockHash[])this.ConstituentBlockListBlock.ConstituentBlocks;
-            if ((listBlocks.Length % this.ConstituentBlockListBlock.TupleCount) != 0)
+            var sourceBlocks = this.ConstituentBlockListBlock.ConstituentBlocks;
+            if ((sourceBlocks.Count() % this.ConstituentBlockListBlock.TupleCount) != 0)
             {
                 throw new BrightChainException("CBL length is not a multiple of the tuple count");
             }
 
-            var tupleGroups = TakeIntoGroupsOf(listBlocks, this.ConstituentBlockListBlock.TupleCount);
+            var tupleGroups = TakeIntoGroupsOf(sourceBlocks, this.ConstituentBlockListBlock.TupleCount);
             await foreach (var tupleGroup in tupleGroups)
             {
                 throw new NotImplementedException();
@@ -60,7 +61,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
             yield break;
         }
 
-        public async IAsyncEnumerable<Block> ConsolidateTuplesToChainAsyc()
+        public async IAsyncEnumerable<Block> ConsolidateTuplesToChainAsync()
         {
             await foreach (TupleStripe tupleStripe in (this.TupleStripes is null) ? this.ReconstructTupleStripes() : this.TupleStripes)
             {
