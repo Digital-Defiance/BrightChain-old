@@ -82,50 +82,6 @@ namespace BrightChain.Engine.Tests
             Assert.AreEqual(expectedVector.ToString(), zeroVector.ToString());
         }
 
-        private static long CreateRandomFile(string filePath, long totalBytes, out byte[] randomFileHash)
-        {
-            const int writeBufferSize = 1024 * 8;
-
-            var bytesWritten = 0;
-            var bytesRemaining = totalBytes;
-            using (SHA256 sha = SHA256.Create())
-            {
-                using (FileStream fileStream = File.OpenWrite(filePath))
-                {
-                    while (bytesWritten < totalBytes)
-                    {
-                        var finalBlock = bytesRemaining <= writeBufferSize;
-                        var lengthToWrite = (int)(finalBlock ? bytesRemaining : writeBufferSize);
-                        var data = RandomDataHelper.RandomBytes(lengthToWrite);
-                        Assert.AreEqual(lengthToWrite, data.Length);
-                        fileStream.Write(data, 0, data.Length);
-                        bytesWritten += data.Length;
-                        bytesRemaining -= data.Length;
-                        if (finalBlock)
-                        {
-                            Assert.AreEqual(0, bytesRemaining);
-                            sha.TransformFinalBlock(data, 0, data.Length);
-                            randomFileHash = sha.Hash;
-                            fileStream.Flush();
-                            fileStream.Close();
-                            Assert.AreEqual(totalBytes, bytesWritten);
-                            FileInfo fileInfo = new FileInfo(filePath);
-                            Assert.AreEqual(bytesWritten, fileInfo.Length);
-
-                            return bytesWritten;
-                        }
-                        else
-                        {
-                            sha.TransformBlock(data, 0, lengthToWrite, null, 0);
-                        }
-                    }
-                }
-            }
-
-            randomFileHash = null;
-            return -1;
-        }
-
         [DataTestMethod]
         [DataRow(BlockSize.Message)]
         [DataRow(BlockSize.Tiny)]
@@ -140,13 +96,13 @@ namespace BrightChain.Engine.Tests
             var brightChainService = new BrightBlockService(
                 logger: this._loggerFactory);
 
-            var fileName = Path.GetTempFileName();
-            byte[] sourceFileHash;
-            var iBlockSize = BlockSizeMap.BlockSize(blockSize);
-            long expectedLength = CreateRandomFile(fileName, (iBlockSize * 2) + 7, out sourceFileHash); // don't land on even block mark for data testing
-            Assert.AreEqual((iBlockSize * 2) + 7, expectedLength);
+            var sourceInfo = RandomDataHelper.GenerateRandomFile(
+                blockSize: blockSize,
+                lengthFunc: (BlockSize blockSize) =>
+                    (BlockSizeMap.BlockSize(blockSize) * 2) + 7); // don't land on even block mark for data testing
+
             ConstituentBlockListBlock cblBlock = await brightChainService.MakeCblOrSuperCblFromFileAsync(
-                fileName: fileName,
+                fileName: sourceInfo.FileInfo.FullName,
                 blockParams: new BlockParams(
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.MaxValue,
@@ -161,9 +117,9 @@ namespace BrightChain.Engine.Tests
                 {
                     var cbl = (ConstituentBlockListBlock)blocks[blockHash];
                     Assert.IsTrue(cbl.Validate());
-                    Assert.AreEqual(expectedLength, cbl.TotalLength);
+                    Assert.AreEqual(sourceInfo.FileInfo.Length, cbl.TotalLength);
                     Assert.AreEqual(
-                        HashToFormattedString(sourceFileHash),
+                        HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()),
                         HashToFormattedString(cbl.SourceId.HashBytes.ToArray()));
 
                     var cblMap = cbl.GenerateBlockMap();
@@ -173,9 +129,9 @@ namespace BrightChain.Engine.Tests
             else
             {
                 Assert.IsTrue(cblBlock.Validate());
-                Assert.AreEqual(expectedLength, cblBlock.TotalLength);
+                Assert.AreEqual(sourceInfo.FileInfo.Length, cblBlock.TotalLength);
                 Assert.AreEqual(
-                    HashToFormattedString(sourceFileHash),
+                    HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()),
                     HashToFormattedString(cblBlock.SourceId.HashBytes.ToArray()));
 
                 var cblMap = cblBlock.GenerateBlockMap();
@@ -204,13 +160,13 @@ namespace BrightChain.Engine.Tests
             var brightChainService = new BrightBlockService(
                 logger: this._loggerFactory);
 
-            var fileName = Path.GetTempFileName();
-            byte[] sourceFileHash;
-            var iBlockSize = BlockSizeMap.BlockSize(blockSize);
-            long expectedLength = CreateRandomFile(fileName, (iBlockSize * 2) + 7, out sourceFileHash); // don't land on even block mark for data testing
+            var sourceInfo = RandomDataHelper.GenerateRandomFile(
+                blockSize: blockSize,
+                lengthFunc: (BlockSize blockSize) =>
+                    (BlockSizeMap.BlockSize(blockSize) * 2) + 7); // don't land on even block mark for data testing
 
             ConstituentBlockListBlock[] cblBlocks = (ConstituentBlockListBlock[])await brightChainService.MakeCBLChainFromParamsAsync(
-                fileName: fileName,
+                fileName: sourceInfo.FileInfo.FullName,
                 blockParams: new BlockParams(
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.MaxValue,
@@ -222,9 +178,9 @@ namespace BrightChain.Engine.Tests
             {
                 Assert.IsTrue(cbl.Validate());
 
-                Assert.AreEqual(expectedLength, cbl.TotalLength);
+                Assert.AreEqual(sourceInfo.FileInfo.Length, cbl.TotalLength);
                 Assert.AreEqual(
-                    HashToFormattedString(sourceFileHash),
+                    HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()),
                     HashToFormattedString(cbl.SourceId.HashBytes.ToArray()));
             }
 
@@ -233,7 +189,7 @@ namespace BrightChain.Engine.Tests
             var restoredFile = await brightChainService.RestoreFileFromCBLAsync(cblBlocks[cblBlocks.Length - 1]);
 
             Assert.AreEqual(
-                HashToFormattedString(sourceFileHash),
+                HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()),
                 HashToFormattedString(restoredFile.SourceId.HashBytes.ToArray()));
 
             loggerMock.Verify(l => l.Log(

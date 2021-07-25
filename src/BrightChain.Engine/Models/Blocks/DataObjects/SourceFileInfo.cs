@@ -26,5 +26,17 @@ namespace BrightChain.Engine.Models.Blocks.DataObjects
             this.CblsExpected = (int)Math.Ceiling((decimal)(this.TotalBlocksExpected / this.HashesPerCbl));
             this.BytesPerCbl = this.HashesPerCbl * this.BytesPerBlock;
         }
+
+        public SourceFileInfo(FileInfo fileInfo, BlockSize blockSize)
+        {
+            this.FileInfo = fileInfo;
+            this.SourceId = new DataHash(fileInfo: this.FileInfo);
+            this.BytesPerBlock = BlockSizeMap.BlockSize(blockSize);
+            this.TotalBlocksExpected = (int)(this.FileInfo.Length / this.BytesPerBlock) + ((this.FileInfo.Length % this.BytesPerBlock) > 0 ? 1 : 0);
+            this.TotalBlockedBytes = this.TotalBlocksExpected * this.BytesPerBlock;
+            this.HashesPerCbl = BlockSizeMap.HashesPerBlock(blockSize);
+            this.CblsExpected = (int)Math.Ceiling((decimal)(this.TotalBlocksExpected / this.HashesPerCbl));
+            this.BytesPerCbl = this.HashesPerCbl * this.BytesPerBlock;
+        }
     }
 }
