@@ -1,13 +1,17 @@
-﻿namespace BrightChain.API.Identity.Data
+﻿using BrightChain.EntityFrameworkCore;
+
+namespace BrightChain.API.Identity.Data
 {
     using System;
     using System.Data;
+using System.Reflection.Emit;
     using System.Threading.Tasks;
     using BrightChain.EntityFrameworkCore.Data.Entities;
     using BrightChain.EntityFrameworkCore.Interfaces;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
+    using static BrightChainEntityTypeBuilderExtensions;
 
     public class BrightChainIdentityDbContext : IdentityDbContext<BrightChainEntityUser>, IBrightChainDbContext
     {
@@ -66,6 +70,14 @@
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
             base.OnModelCreating(builder);
+            builder.Entity<BrightChainEntityUser>()
+                .UseETagConcurrency();
+
+            builder.Entity<BrightChainEntityUser>()
+                //.ToContainer("Orders")
+                .Property<string>("_etag")
+                .IsConcurrencyToken();
+
         }
 
         public async Task<BrightChainEntityUser> CreateUserAsync()
