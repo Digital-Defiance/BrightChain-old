@@ -191,6 +191,7 @@ namespace BrightChain.Engine.Services
             var cblsExpected = sourceInfo.CblsExpected;
             var cblsEmitted = new ConstituentBlockListBlock[cblsExpected];
             var cblIdx = 0;
+            var blocksRemaining = sourceInfo.TotalBlocksExpected;
 
             var blocksThisSegment = 0;
             var sourceBytesThisSegment = 0;
@@ -201,19 +202,18 @@ namespace BrightChain.Engine.Services
                 // last block is always full of random data
                 await foreach (BrightenedBlock brightenedBlock in this.StreamCreatedBrightenedBlocksFromFileAsync(sourceInfo: sourceInfo, blockParams: blockParams))
                 {
-                    var lastBlockBytes = totalBytesRemaining <= sourceInfo.BytesPerBlock;
                     sourceBytesThisSegment += (int)(sourceBytesRemaining < sourceInfo.BytesPerBlock ? sourceBytesRemaining : brightenedBlock.Data.Length);
+
+                    var cblFullAfterThisBlock = ++blocksThisSegment == sourceInfo.HashesPerBlock;
+                    var sourceConsumed = totalBytesRemaining <= sourceInfo.BytesPerBlock;
+                    blocksRemaining--;
                     brightenedBlocksConsumed++;
-                    var cblFullAfterThisBlock = ++blocksThisSegment == sourceInfo.HashesPerCbl;
-
-                    if (cblFullAfterThisBlock || lastBlockBytes)
+                    if (cblFullAfterThisBlock || sourceConsumed || (blocksRemaining == 0))
                     {
-                        segmentHasher.TransformFinalBlock(brightenedBlock.Data.ToArray(), 0, (int)sourceBytesRemaining);
+                        var sourceBytesThisBlock = sourceBytesRemaining > sourceInfo.BytesPerBlock ? sourceInfo.BytesPerBlock : sourceBytesRemaining;
 
-                        // we have room for one more block, it must either be another CBL or the final block
-                        var lastCBL = brightenedBlocksConsumed == sourceInfo.TotalBlocksExpected;
+                        segmentHasher.TransformFinalBlock(brightenedBlock.Data.ToArray(), 0, (int)sourceBytesThisBlock);
 
-                        // return cbl
                         var cbl = new ConstituentBlockListBlock(
                             blockParams: new ConstituentBlockListBlockParams(
                                 blockParams: new TransactableBlockParams(
@@ -229,6 +229,8 @@ namespace BrightChain.Engine.Services
                                 constituentBlocks: blocksUsedThisSegment,
                                 previous: cblIdx > 0 ? cblsEmitted[cblIdx - 1].Id : null,
                                 next: null));
+
+                        // update the next pointer of the previous block
                         if (cblIdx > 0)
                         {
                             cblsEmitted[cblIdx].Next = cbl.Id;
@@ -243,7 +245,12 @@ namespace BrightChain.Engine.Services
                     }
                     else
                     {
-                        segmentHasher.TransformBlock(brightenedBlock.Data.ToArray(), 0, sourceInfo.BytesPerBlock, null, 0);
+                        segmentHasher.TransformBlock(
+                            inputBuffer: brightenedBlock.Data.ToArray(),
+                            inputOffset: 0,
+                            inputCount: sourceInfo.BytesPerBlock,
+                            outputBuffer: null,
+                            outputOffset: 0);
                     }
                 }
             }
