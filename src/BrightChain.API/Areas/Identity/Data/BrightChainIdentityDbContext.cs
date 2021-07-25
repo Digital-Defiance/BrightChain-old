@@ -6,10 +6,15 @@ namespace BrightChain.API.Identity.Data
     using System.Data;
 using System.Reflection.Emit;
     using System.Threading.Tasks;
+using System.Xml.Linq;
     using BrightChain.EntityFrameworkCore.Data.Entities;
     using BrightChain.EntityFrameworkCore.Interfaces;
+    using BrightChain.EntityFrameworkCore.Metadata.Internal;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Metadata;
+    using Microsoft.EntityFrameworkCore.Metadata.Internal;
     using Microsoft.Extensions.Configuration;
     using static BrightChainEntityTypeBuilderExtensions;
 
@@ -70,14 +75,24 @@ using System.Reflection.Emit;
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
             base.OnModelCreating(builder);
-            builder.Entity<BrightChainEntityUser>()
-                .UseETagConcurrency();
+
+            //builder.Entity<BrightChainEntityUser>()
+            //    .UseETagConcurrency();
+
+            //builder.Entity<IdentityUser>()
+            //    .UseETagConcurrency();
 
             builder.Entity<BrightChainEntityUser>()
-                //.ToContainer("Orders")
+                .Property(c => c.ConcurrencyStamp)
+                .IsConcurrencyToken(false);
+
+            builder.Entity<BrightChainEntityUser>()
                 .Property<string>("_etag")
                 .IsConcurrencyToken();
 
+            builder.Entity<IdentityRole>()
+                .ToContainer("Roles")
+                .UseETagConcurrency();
         }
 
         public async Task<BrightChainEntityUser> CreateUserAsync()
