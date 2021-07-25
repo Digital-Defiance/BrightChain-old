@@ -1,7 +1,13 @@
 ﻿@page "/"
+@using BrightChain.Engine.Helpers;
 
-<h1>Hello, world!</h1>
+<h1>BrightChain: The Revolution(ary) Network</h1>
 
-Welcome to your new app.
+BrightChain is coming online soon.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code {
+    const Double brighchainBirthday = Stardate.BrightChainBirthDay;
+    Stardate currentStardate = new Stardate(DateTime.UtcNow);
+}
+<p>Birthday: Stardate @brighchainBirthday</p>
+<p>Stardate: @currentStardate</p>
