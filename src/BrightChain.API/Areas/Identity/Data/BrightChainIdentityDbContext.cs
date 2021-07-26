@@ -4,15 +4,15 @@ namespace BrightChain.API.Identity.Data
 {
     using System;
     using System.Data;
-using System.Reflection.Emit;
+    using System.Reflection.Emit;
     using System.Threading.Tasks;
-using System.Xml.Linq;
+    using System.Xml.Linq;
     using BrightChain.EntityFrameworkCore.Data.Entities;
     using BrightChain.EntityFrameworkCore.Interfaces;
     using BrightChain.EntityFrameworkCore.Metadata.Internal;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata;
     using Microsoft.EntityFrameworkCore.Metadata.Internal;
     using Microsoft.Extensions.Configuration;

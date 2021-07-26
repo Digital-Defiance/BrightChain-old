@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
-using BrightChain.EntityFrameworkCore.Data.Entities;
-using Microsoft.AspNetCore.Identity;
-
-namespace BrightChain.API.Infrastructure
+﻿namespace BrightChain.API.Infrastructure
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using BrightChain.EntityFrameworkCore.Data.Entities;
+    using Microsoft.AspNetCore.Identity;
+
     public class BrightChainUserStore : UserStoreBase<BrightChainEntityUser, string, IdentityUserClaim<string>,
         IdentityUserLogin<string>, IdentityUserToken<string>>
     {

@@ -11,7 +11,15 @@ namespace BrightChain.Engine.Models.Hashes
     /// </summary>
     public class DataSignature : IDataSignature, IComparable<DataSignature>
     {
-        public const int SignatureHashSize = 64;
+        /// <summary>
+        /// Size in bits of the hash.
+        /// </summary>
+        public const int SignatureHashSize = 256;
+
+        /// <summary>
+        /// Size in bytes of the hash.
+        /// </summary>
+        public const int SignatureHashSizeBytes = SignatureHashSize / 8;
 
         public ReadOnlyMemory<byte> SignatureHashBytes { get; protected set; }
 
@@ -23,7 +31,8 @@ namespace BrightChain.Engine.Models.Hashes
             {
                 throw new NotImplementedException();
             }
-            Computed = true;
+
+            this.Computed = true;
         }
 
         public DataSignature(BlockSize originalBlockSize, ReadOnlyMemory<byte> providedHashBytes)

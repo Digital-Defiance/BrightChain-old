@@ -60,15 +60,50 @@ namespace BrightChain.Engine.Services
 
             this.configuration = builder.Build();
 
+            var nodeOptions = configuration.GetSection("NodeOptions");
+            if (nodeOptions is null)
+            {
+                throw new BrightChainException(string.Format(format: "'NodeOptions' config section must be defined, but is not"));
+            }
+
+            var configuredDbName
+                = nodeOptions.GetSection("DatabaseName");
+
+            Guid serviceUnifiedStoreGuid;
+            if (configuredDbName is null)
+            {
+                serviceUnifiedStoreGuid = Guid.NewGuid();
+                BrightChain.Engine.Helpers.ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", Utilities.HashToFormattedString(serviceUnifiedStoreGuid.ToByteArray()));
+            }
+            else
+            {
+                serviceUnifiedStoreGuid = Guid.Parse(configuredDbName.Value);
+            }
+
             this.blockMemoryCache = new MemoryDictionaryBlockCacheManager(
                 logger: this.logger,
                 configuration: this.configuration);
+            this.blockMemoryCache.Set(new RootBlock(
+                databaseGuid: serviceUnifiedStoreGuid,
+                blockCacheManager: this.blockMemoryCache,
+                totalLength: 0));
+
             this.blockDiskCache = new DiskBlockCacheManager(
                 logger: this.logger,
                 configuration: this.configuration);
+            this.blockDiskCache.Set(new RootBlock(
+                databaseGuid: serviceUnifiedStoreGuid,
+                blockCacheManager: this.blockDiskCache,
+                totalLength: 0));
+
             this.randomizerBlockMemoryCache = new MemoryDictionaryBlockCacheManager(
                 logger: this.logger,
                 configuration: this.configuration);
+            this.randomizerBlockMemoryCache.Set(new RootBlock(
+                databaseGuid: serviceUnifiedStoreGuid,
+                blockCacheManager: this.randomizerBlockMemoryCache,
+                totalLength: 0));
+
             this.logger.LogInformation(string.Format("<{0}>: caches initialized", nameof(BrightBlockService)));
             this.blockBrightener = new BlockBrightener(
                 pregeneratedRandomizerCache: this.randomizerBlockMemoryCache);

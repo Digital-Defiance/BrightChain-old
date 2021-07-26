@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Blocks.Chains;
+using BrightChain.Engine.Models.Hashes;
 
 namespace BrightChain.Engine.Extensions
 {
@@ -82,7 +84,34 @@ namespace BrightChain.Engine.Extensions
             // fill the "out" variable
             validationExceptions = exceptions.ToArray();
 
-            return (exceptions.Count == 0);
+            return exceptions.Count == 0;
+        }
+
+        public static bool PerformValidation(this RootBlock rootBlock, out IEnumerable<BrightChainValidationException> validationExceptions)
+        {
+            // no base validation!
+            if (!(rootBlock.Id is RootHash))
+            {
+                throw new BrightChainException("RootBlock must have RootHash as id");
+            }
+
+            if (!(rootBlock.SourceId is GuidId guidId))
+            {
+                throw new BrightChainException("RootBlock SourceId is the GuidId");
+            }
+
+
+            if (!guidId.Equals(rootBlock.CacheManager.Guid))
+            {
+                throw new BrightChainException("RootBlock is not in the correct bright block store");
+            }
+
+            var exceptions = new List<BrightChainValidationException>();
+
+            // fill the "out" variable
+            validationExceptions = exceptions.ToArray();
+
+            return exceptions.Count == 0;
         }
     }
 }

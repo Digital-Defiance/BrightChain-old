@@ -1,20 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using BrightChain.Engine.Attributes;
-using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Exceptions;
-using BrightChain.Engine.Extensions;
-using BrightChain.Engine.Helpers;
-using BrightChain.Engine.Interfaces;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-using BrightChain.Engine.Models.Contracts;
-using BrightChain.Engine.Models.Entities;
-
 namespace BrightChain.Engine.Models.Blocks
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using BrightChain.Engine.Attributes;
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Extensions;
+    using BrightChain.Engine.Helpers;
+    using BrightChain.Engine.Interfaces;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
+    using BrightChain.Engine.Models.Contracts;
+    using BrightChain.Engine.Models.Entities;
+
     /// <summary>
-    /// The block is the base unit persisted to disk
+    /// The block is the base unit persisted to disk.
     /// </summary>
     public abstract class Block : IBlock, IComparable<IBlock>, IComparable<Block> //TODO: , IEquatable<Block>, IEquatable<IBlock>
     {
@@ -26,11 +26,14 @@ namespace BrightChain.Engine.Models.Blocks
         public ReadOnlyMemory<byte> Data { get; protected set; }
 
         public BlockSize BlockSize { get; }
+
         public bool HashVerified { get; private set; }
 
         [BrightChainMetadata]
         public BlockSignature Signature { get; internal set; }
+
         public bool Signed => (Signature != null);
+
         public bool SignatureVerified { get; internal set; }
 
         /// <summary>

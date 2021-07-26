@@ -61,13 +61,13 @@ namespace BrightChain.Engine.Services
 
             if (configuredDbName is null)
             {
-                var guid = Utilities.HashToFormattedString(Guid.NewGuid().ToByteArray());
-                BrightChain.Engine.Helpers.ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", guid);
-                this.databaseName = guid;
+                this.databaseName = Utilities.HashToFormattedString(this.Guid.ToByteArray());
+                BrightChain.Engine.Helpers.ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", this.databaseName);
             }
             else
             {
-                this.databaseName = configuredDbName.Value;
+                this.Guid = Guid.Parse(configuredDbName.Value);
+                this.databaseName = Utilities.HashToFormattedString(this.Guid.ToByteArray());
             }
 
             foreach (var subDir in new string[] { "blocks", "indices" })
@@ -93,7 +93,10 @@ namespace BrightChain.Engine.Services
             Directory.CreateDirectory(
                 path: Path.Combine(
                     path1: this.baseDirectory,
-                    path2: string.Format(provider: CultureInfo.InvariantCulture, format: "BrightChain-{0}", this.databaseName)));
+                    path2: string.Format(
+                        provider: CultureInfo.InvariantCulture,
+                        format: "BrightChain-{0}",
+                        arg0: this.databaseName)));
 
         protected DirectoryInfo GetDiskCacheSubdirectory(string path) =>
             Directory.CreateDirectory(

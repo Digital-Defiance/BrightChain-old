@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Interfaces;
-using BrightChain.Engine.Models.Blocks;
-using BrightChain.Engine.Models.Nodes;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-
-namespace BrightChain.Engine.Services
+﻿namespace BrightChain.Engine.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Interfaces;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Nodes;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
+
     /// <summary>
-    /// Block Cache Manager
+    /// Block Cache Manager.
     /// </summary>
     public abstract class BlockCacheManager : IBlockCacheManager
     {
@@ -19,6 +19,8 @@ namespace BrightChain.Engine.Services
         private readonly List<BrightChainNode> trustedNodes;
         private readonly List<BlockSize> supportedReadBlockSizes;
         private readonly List<BlockSize> supportedWriteBlockSizes;
+
+        public Guid Guid { get; internal set; }
 
         /// <summary>
         /// Full to the config file.
@@ -54,11 +56,10 @@ namespace BrightChain.Engine.Services
         {
             this.logger = logger;
             this.configuration = configuration;
+            this.Guid = Guid.NewGuid();
             this.trustedNodes = new List<BrightChainNode>();
             // TODO: load supported block sizes from configurations
             var section = this.configuration.GetSection("NodeOptions");
-
-
         }
 
         /// <summary>
