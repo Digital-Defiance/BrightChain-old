@@ -20,8 +20,8 @@
 
         public ForgotPasswordModel(UserManager<BrightChainEntityUser> userManager, IEmailSender emailSender)
         {
-            _userManager = userManager;
-            _emailSender = emailSender;
+            this._userManager = userManager;
+            this._emailSender = emailSender;
         }
 
         [BindProperty]
@@ -36,34 +36,34 @@
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(Input.Email).ConfigureAwait(false);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user).ConfigureAwait(false)))
+                var user = await this._userManager.FindByEmailAsync(this.Input.Email).ConfigureAwait(false);
+                if (user == null || !(await this._userManager.IsEmailConfirmedAsync(user).ConfigureAwait(false)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
-                    return RedirectToPage("./ForgotPasswordConfirmation");
+                    return this.RedirectToPage("./ForgotPasswordConfirmation");
                 }
 
                 // For more information on how to enable account confirmation and password reset please 
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
+                var code = await this._userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                var callbackUrl = Url.Page(
+                var callbackUrl = this.Url.Page(
                     "/Account/ResetPassword",
                     pageHandler: null,
                     values: new { area = "Identity", code },
-                    protocol: Request.Scheme);
+                    protocol: this.Request.Scheme);
 
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
+                await this._emailSender.SendEmailAsync(
+                    this.Input.Email,
                     "Reset Password",
                     $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.").ConfigureAwait(false);
 
-                return RedirectToPage("./ForgotPasswordConfirmation");
+                return this.RedirectToPage("./ForgotPasswordConfirmation");
             }
 
-            return Page();
+            return this.Page();
         }
     }
 }

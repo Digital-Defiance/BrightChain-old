@@ -78,8 +78,8 @@ namespace BrightChain.Engine.Tests
         public new void PreTestSetup()
         {
             base.PreTestSetup();
-            DiskCacheTestBlock.CacheManager = new DiskBlockCacheManager(logger.Object, configuration.Object);
-            cacheManager = DiskCacheTestBlock.CacheManager;
+            DiskCacheTestBlock.CacheManager = new DiskBlockCacheManager(this.logger.Object, this.configuration.Object);
+            this.cacheManager = DiskCacheTestBlock.CacheManager;
         }
 
         internal override DiskBlockCacheManager NewCacheManager(ILogger logger, IConfiguration configuration)
@@ -125,19 +125,19 @@ logger: logger, configuration: configuration);
         public override void ItPutsNullValuesTest()
         {
             // Arrange
-            var newData = NewNullData();
+            var newData = this.NewNullData();
 
             // Act/Expect
             Exceptions.BrightChainException brightChainException = Assert.ThrowsException<BrightChain.Engine.Exceptions.BrightChainException>(() =>
-                cacheManager.Set(newData));
+                this.cacheManager.Set(newData));
 
-            logger.Verify(l => l.Log(
+            this.logger.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
-            logger.VerifyNoOtherCalls();
+            this.logger.VerifyNoOtherCalls();
         }
     }
 }

@@ -26,8 +26,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public RootReferenceExpression(IEntityType entityType, string alias)
         {
-            EntityType = entityType;
-            Alias = alias;
+            this.EntityType = entityType;
+            this.Alias = alias;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public override Type Type
-            => EntityType.ClrType;
+            => this.EntityType.ClrType;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -71,7 +71,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         string IAccessExpression.Name
-            => Alias;
+            => this.Alias;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -94,7 +94,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override string ToString()
         {
-            return Alias;
+            return this.Alias;
         }
 
         /// <summary>
@@ -108,13 +108,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return obj != null
                            && (ReferenceEquals(this, obj)
                                || obj is RootReferenceExpression rootReferenceExpression
-                               && Equals(rootReferenceExpression));
+                               && this.Equals(rootReferenceExpression));
         }
 
         private bool Equals(RootReferenceExpression rootReferenceExpression)
         {
-            return Alias == rootReferenceExpression.Alias
-                           && EntityType.Equals(rootReferenceExpression.EntityType);
+            return this.Alias == rootReferenceExpression.Alias
+                           && this.EntityType.Equals(rootReferenceExpression.EntityType);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override int GetHashCode()
         {
-            return HashCode.Combine(Alias, EntityType);
+            return HashCode.Combine(this.Alias, this.EntityType);
         }
     }
 }

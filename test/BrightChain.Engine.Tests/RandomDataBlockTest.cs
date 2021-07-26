@@ -23,7 +23,7 @@ namespace BrightChain.Engine.Tests
         [TestInitialize]
         public void PreTestSetUp()
         {
-            logger = new Moq.Mock<ILogger>().Object;
+            this.logger = new Moq.Mock<ILogger>().Object;
         }
 
         [DataTestMethod]
@@ -46,7 +46,7 @@ namespace BrightChain.Engine.Tests
 
             // TODO verify not all zeros, some level of randomness
 
-            var mockLogger = Mock.Get(logger);
+            var mockLogger = Mock.Get(this.logger);
             mockLogger.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),

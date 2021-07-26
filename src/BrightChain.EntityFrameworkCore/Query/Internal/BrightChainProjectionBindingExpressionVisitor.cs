@@ -60,8 +60,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             IModel model,
             BrightChainSqlTranslatingExpressionVisitor sqlTranslator)
         {
-            _model = model;
-            _sqlTranslator = sqlTranslator;
+            this._model = model;
+            this._sqlTranslator = sqlTranslator;
         }
 
         /// <summary>
@@ -72,25 +72,25 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual Expression Translate(SelectExpression selectExpression, Expression expression)
         {
-            _selectExpression = selectExpression;
-            _clientEval = false;
+            this._selectExpression = selectExpression;
+            this._clientEval = false;
 
-            _projectionMembers.Push(new ProjectionMember());
+            this._projectionMembers.Push(new ProjectionMember());
 
-            var result = Visit(expression);
+            var result = this.Visit(expression);
             if (result == null)
             {
-                _clientEval = true;
+                this._clientEval = true;
 
-                result = Visit(expression);
+                result = this.Visit(expression);
 
-                _projectionMapping.Clear();
+                this._projectionMapping.Clear();
             }
 
-            _selectExpression.ReplaceProjectionMapping(_projectionMapping);
-            _selectExpression = null;
-            _projectionMembers.Clear();
-            _projectionMapping.Clear();
+            this._selectExpression.ReplaceProjectionMapping(this._projectionMapping);
+            this._selectExpression = null;
+            this._projectionMembers.Clear();
+            this._projectionMapping.Clear();
 
             result = MatchTypes(result, expression.Type);
 
@@ -125,7 +125,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 return parameter;
             }
 
-            if (_clientEval)
+            if (this._clientEval)
             {
                 switch (expression)
                 {
@@ -133,7 +133,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         return expression;
 
                     case ParameterExpression parameterExpression:
-                        if (_collectionShaperMapping.ContainsKey(parameterExpression))
+                        if (this._collectionShaperMapping.ContainsKey(parameterExpression))
                         {
                             return parameterExpression;
                         }
@@ -153,26 +153,26 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         return base.Visit(expression);
                 }
 
-                var translation = _sqlTranslator.Translate(expression);
+                var translation = this._sqlTranslator.Translate(expression);
                 if (translation == null)
                 {
                     return base.Visit(expression);
                 }
 
                 return new ProjectionBindingExpression(
-                    _selectExpression, _selectExpression.AddToProjection(translation), expression.Type.MakeNullable());
+                    this._selectExpression, this._selectExpression.AddToProjection(translation), expression.Type.MakeNullable());
             }
             else
             {
-                var translation = _sqlTranslator.Translate(expression);
+                var translation = this._sqlTranslator.Translate(expression);
                 if (translation == null)
                 {
                     return null;
                 }
 
-                _projectionMapping[_projectionMembers.Peek()] = translation;
+                this._projectionMapping[this._projectionMembers.Peek()] = translation;
 
-                return new ProjectionBindingExpression(_selectExpression, _projectionMembers.Peek(), expression.Type.MakeNullable());
+                return new ProjectionBindingExpression(this._selectExpression, this._projectionMembers.Peek(), expression.Type.MakeNullable());
             }
         }
 
@@ -184,10 +184,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         protected override Expression VisitBinary(BinaryExpression binaryExpression)
         {
-            var left = MatchTypes(Visit(binaryExpression.Left), binaryExpression.Left.Type);
-            var right = MatchTypes(Visit(binaryExpression.Right), binaryExpression.Right.Type);
+            var left = MatchTypes(this.Visit(binaryExpression.Left), binaryExpression.Left.Type);
+            var right = MatchTypes(this.Visit(binaryExpression.Right), binaryExpression.Right.Type);
 
-            return binaryExpression.Update(left, VisitAndConvert(binaryExpression.Conversion, "VisitBinary"), right);
+            return binaryExpression.Update(left, this.VisitAndConvert(binaryExpression.Conversion, "VisitBinary"), right);
         }
 
         /// <summary>
@@ -198,9 +198,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         protected override Expression VisitConditional(ConditionalExpression conditionalExpression)
         {
-            var test = Visit(conditionalExpression.Test);
-            var ifTrue = Visit(conditionalExpression.IfTrue);
-            var ifFalse = Visit(conditionalExpression.IfFalse);
+            var test = this.Visit(conditionalExpression.Test);
+            var ifTrue = this.Visit(conditionalExpression.IfTrue);
+            var ifFalse = this.Visit(conditionalExpression.IfFalse);
 
             if (test.Type == typeof(bool?))
             {
@@ -228,23 +228,23 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 case EntityShaperExpression entityShaperExpression:
                 {
                     var projectionBindingExpression = (ProjectionBindingExpression)entityShaperExpression.ValueBufferExpression;
-                    VerifySelectExpression(projectionBindingExpression);
+                    this.VerifySelectExpression(projectionBindingExpression);
 
-                    if (_clientEval)
+                    if (this._clientEval)
                     {
-                        var entityProjection = (EntityProjectionExpression)_selectExpression.GetMappedProjection(
+                        var entityProjection = (EntityProjectionExpression)this._selectExpression.GetMappedProjection(
                             projectionBindingExpression.ProjectionMember);
 
                         return entityShaperExpression.Update(
                             new ProjectionBindingExpression(
-                                _selectExpression, _selectExpression.AddToProjection(entityProjection), typeof(ValueBuffer)));
+                                this._selectExpression, this._selectExpression.AddToProjection(entityProjection), typeof(ValueBuffer)));
                     }
 
-                    _projectionMapping[_projectionMembers.Peek()]
-                        = _selectExpression.GetMappedProjection(projectionBindingExpression.ProjectionMember);
+                    this._projectionMapping[this._projectionMembers.Peek()]
+                        = this._selectExpression.GetMappedProjection(projectionBindingExpression.ProjectionMember);
 
                     return entityShaperExpression.Update(
-                        new ProjectionBindingExpression(_selectExpression, _projectionMembers.Peek(), typeof(ValueBuffer)));
+                        new ProjectionBindingExpression(this._selectExpression, this._projectionMembers.Peek(), typeof(ValueBuffer)));
                 }
 
                 case MaterializeCollectionNavigationExpression materializeCollectionNavigationExpression:
@@ -254,7 +254,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                             : base.VisitExtension(materializeCollectionNavigationExpression);
 
                 case IncludeExpression includeExpression:
-                    if (!_clientEval)
+                    if (!this._clientEval)
                     {
                         return null;
                     }
@@ -266,11 +266,11 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                             BrightChainStrings.NonEmbeddedIncludeNotSupported(includeExpression.Navigation));
                     }
 
-                    _includedNavigations.Push(includableNavigation);
+                    this._includedNavigations.Push(includableNavigation);
 
                     var newIncludeExpression = base.VisitExtension(includeExpression);
 
-                    _includedNavigations.Pop();
+                    this._includedNavigations.Pop();
 
                     return newIncludeExpression;
 
@@ -287,7 +287,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         protected override ElementInit VisitElementInit(ElementInit elementInit)
         {
-            return elementInit.Update(elementInit.Arguments.Select(e => MatchTypes(Visit(e), e.Type)));
+            return elementInit.Update(elementInit.Arguments.Select(e => MatchTypes(this.Visit(e), e.Type)));
         }
 
         /// <summary>
@@ -300,12 +300,12 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(memberExpression, nameof(memberExpression));
 
-            if (!_clientEval)
+            if (!this._clientEval)
             {
                 return null;
             }
 
-            var innerExpression = Visit(memberExpression.Expression);
+            var innerExpression = this.Visit(memberExpression.Expression);
 
             EntityShaperExpression shaperExpression;
             switch (innerExpression)
@@ -332,7 +332,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             switch (shaperExpression.ValueBufferExpression)
             {
                 case ProjectionBindingExpression innerProjectionBindingExpression:
-                    innerEntityProjection = (EntityProjectionExpression)_selectExpression.Projection[
+                    innerEntityProjection = (EntityProjectionExpression)this._selectExpression.Projection[
                         innerProjectionBindingExpression.Index.Value].Expression;
                     break;
 
@@ -416,22 +416,22 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             var expression = memberAssignment.Expression;
             Expression visitedExpression;
-            if (_clientEval)
+            if (this._clientEval)
             {
-                visitedExpression = Visit(memberAssignment.Expression);
+                visitedExpression = this.Visit(memberAssignment.Expression);
             }
             else
             {
-                var projectionMember = _projectionMembers.Peek().Append(memberAssignment.Member);
-                _projectionMembers.Push(projectionMember);
+                var projectionMember = this._projectionMembers.Peek().Append(memberAssignment.Member);
+                this._projectionMembers.Push(projectionMember);
 
-                visitedExpression = Visit(memberAssignment.Expression);
+                visitedExpression = this.Visit(memberAssignment.Expression);
                 if (visitedExpression == null)
                 {
                     return null;
                 }
 
-                _projectionMembers.Pop();
+                this._projectionMembers.Pop();
             }
 
             visitedExpression = MatchTypes(visitedExpression, expression.Type);
@@ -449,7 +449,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(memberInitExpression, nameof(memberInitExpression));
 
-            var newExpression = Visit(memberInitExpression.NewExpression);
+            var newExpression = this.Visit(memberInitExpression.NewExpression);
             if (newExpression == null)
             {
                 return null;
@@ -463,7 +463,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     return null;
                 }
 
-                newBindings[i] = VisitMemberBinding(memberInitExpression.Bindings[i]);
+                newBindings[i] = this.VisitMemberBinding(memberInitExpression.Bindings[i]);
 
                 if (newBindings[i] == null)
                 {
@@ -485,14 +485,14 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(methodCallExpression, nameof(methodCallExpression));
 
             if (methodCallExpression.TryGetEFPropertyArguments(out var source, out var memberName)
-                || methodCallExpression.TryGetIndexerArguments(_model, out source, out memberName))
+                || methodCallExpression.TryGetIndexerArguments(this._model, out source, out memberName))
             {
-                if (!_clientEval)
+                if (!this._clientEval)
                 {
                     return null;
                 }
 
-                var visitedSource = Visit(source);
+                var visitedSource = this.Visit(source);
 
                 EntityShaperExpression shaperExpression;
                 switch (visitedSource)
@@ -512,7 +512,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         break;
 
                     case ParameterExpression parameterExpression:
-                        if (!_collectionShaperMapping.TryGetValue(parameterExpression, out var collectionShaper))
+                        if (!this._collectionShaperMapping.TryGetValue(parameterExpression, out var collectionShaper))
                         {
                             return null;
                         }
@@ -528,7 +528,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 switch (shaperExpression.ValueBufferExpression)
                 {
                     case ProjectionBindingExpression innerProjectionBindingExpression:
-                        innerEntityProjection = (EntityProjectionExpression)_selectExpression.Projection[
+                        innerEntityProjection = (EntityProjectionExpression)this._selectExpression.Projection[
                             innerProjectionBindingExpression.Index.Value].Expression;
                         break;
 
@@ -541,7 +541,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 }
 
                 Expression navigationProjection;
-                var navigation = _includedNavigations.FirstOrDefault(n => n.Name == memberName);
+                var navigation = this._includedNavigations.FirstOrDefault(n => n.Name == memberName);
                 if (navigation == null)
                 {
                     navigationProjection = innerEntityProjection.BindMember(
@@ -590,13 +590,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 }
             }
 
-            if (_clientEval)
+            if (this._clientEval)
             {
                 var method = methodCallExpression.Method;
                 if (method.DeclaringType == typeof(Queryable))
                 {
                     var genericMethod = method.IsGenericMethod ? method.GetGenericMethodDefinition() : null;
-                    var visitedSource = Visit(methodCallExpression.Arguments[0]);
+                    var visitedSource = this.Visit(methodCallExpression.Arguments[0]);
 
                     switch (method.Name)
                     {
@@ -616,9 +616,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
                             var lambda = methodCallExpression.Arguments[1].UnwrapLambdaFromQuote();
 
-                            _collectionShaperMapping.Add(lambda.Parameters.Single(), shaper);
+                            this._collectionShaperMapping.Add(lambda.Parameters.Single(), shaper);
 
-                            lambda = Expression.Lambda(Visit(lambda.Body), lambda.Parameters);
+                            lambda = Expression.Lambda(this.Visit(lambda.Body), lambda.Parameters);
                             return Expression.Call(
                                 EnumerableMethods.Select.MakeGenericMethod(method.GetGenericArguments()),
                                 shaper,
@@ -627,12 +627,12 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 }
             }
 
-            var @object = Visit(methodCallExpression.Object);
+            var @object = this.Visit(methodCallExpression.Object);
             var arguments = new Expression[methodCallExpression.Arguments.Count];
             for (var i = 0; i < methodCallExpression.Arguments.Count; i++)
             {
                 var argument = methodCallExpression.Arguments[i];
-                arguments[i] = MatchTypes(Visit(argument), argument.Type);
+                arguments[i] = MatchTypes(this.Visit(argument), argument.Type);
             }
 
             Expression updatedMethodCallExpression = methodCallExpression.Update(
@@ -672,7 +672,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 return newExpression;
             }
 
-            if (!_clientEval
+            if (!this._clientEval
                 && newExpression.Members == null)
             {
                 return null;
@@ -683,21 +683,21 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             {
                 var argument = newExpression.Arguments[i];
                 Expression visitedArgument;
-                if (_clientEval)
+                if (this._clientEval)
                 {
-                    visitedArgument = Visit(argument);
+                    visitedArgument = this.Visit(argument);
                 }
                 else
                 {
-                    var projectionMember = _projectionMembers.Peek().Append(newExpression.Members[i]);
-                    _projectionMembers.Push(projectionMember);
-                    visitedArgument = Visit(argument);
+                    var projectionMember = this._projectionMembers.Peek().Append(newExpression.Members[i]);
+                    this._projectionMembers.Push(projectionMember);
+                    visitedArgument = this.Visit(argument);
                     if (visitedArgument == null)
                     {
                         return null;
                     }
 
-                    _projectionMembers.Pop();
+                    this._projectionMembers.Pop();
                 }
 
                 newArguments[i] = MatchTypes(visitedArgument, argument.Type);
@@ -714,7 +714,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         protected override Expression VisitNewArray(NewArrayExpression newArrayExpression)
         {
-            return newArrayExpression.Update(newArrayExpression.Expressions.Select(e => MatchTypes(Visit(e), e.Type)));
+            return newArrayExpression.Update(newArrayExpression.Expressions.Select(e => MatchTypes(this.Visit(e), e.Type)));
         }
 
         /// <summary>
@@ -725,7 +725,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         protected override Expression VisitUnary(UnaryExpression unaryExpression)
         {
-            var operand = Visit(unaryExpression.Operand);
+            var operand = this.Visit(unaryExpression.Operand);
 
             return (unaryExpression.NodeType == ExpressionType.Convert
                     || unaryExpression.NodeType == ExpressionType.ConvertChecked)
@@ -737,7 +737,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         // TODO: Debugging
         private void VerifySelectExpression(ProjectionBindingExpression projectionBindingExpression)
         {
-            if (projectionBindingExpression.QueryExpression != _selectExpression)
+            if (projectionBindingExpression.QueryExpression != this._selectExpression)
             {
                 throw new InvalidOperationException(CoreStrings.TranslationFailed(projectionBindingExpression.Print()));
             }

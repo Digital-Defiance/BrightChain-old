@@ -19,8 +19,8 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         public SqlParameter(string name, object? value)
         {
-            Name = name;
-            Value = value;
+            this.Name = name;
+            this.Value = value;
         }
 
         /// <summary>

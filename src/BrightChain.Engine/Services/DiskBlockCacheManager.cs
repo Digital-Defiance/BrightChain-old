@@ -5,7 +5,6 @@ using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Helpers;
 using BrightChain.Engine.Interfaces;
 using BrightChain.Engine.Models.Blocks;
-using BrightChain.Engine.Models.Blocks.Chains;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using static BrightChain.Engine.Extensions.BlockMetadataExtensions;
@@ -89,23 +88,29 @@ namespace BrightChain.Engine.Services
             throw new NotImplementedException();
         }
 
-        protected DirectoryInfo GetDiskCacheDirectory() =>
-            Directory.CreateDirectory(
+        protected DirectoryInfo GetDiskCacheDirectory()
+        {
+            return Directory.CreateDirectory(
                 path: Path.Combine(
-                    path1: this.baseDirectory,
-                    path2: string.Format(
-                        provider: CultureInfo.InvariantCulture,
-                        format: "BrightChain-{0}",
-                        arg0: this.databaseName)));
+                path1: this.baseDirectory,
+                path2: string.Format(
+                provider: CultureInfo.InvariantCulture,
+                format: "BrightChain-{0}",
+                arg0: this.databaseName)));
+        }
 
-        protected DirectoryInfo GetDiskCacheSubdirectory(string path) =>
-            Directory.CreateDirectory(
+        protected DirectoryInfo GetDiskCacheSubdirectory(string path)
+        {
+            return Directory.CreateDirectory(
                 path: Path.Combine(
-                    path1: this.GetDiskCacheDirectory().FullName,
-                    path2: path));
+                path1: this.GetDiskCacheDirectory().FullName,
+                path2: path));
+        }
 
-        public DirectoryInfo GetBlocksDirectory() =>
-            this.GetDiskCacheSubdirectory("blocks");
+        public DirectoryInfo GetBlocksDirectory()
+        {
+            return this.GetDiskCacheSubdirectory("blocks");
+        }
 
         public FileInfo GetBlockPath(BlockHash id)
         {
@@ -125,13 +130,17 @@ namespace BrightChain.Engine.Services
                 path2: id.ToString()));
         }
 
-        public DirectoryInfo GetIndicesPath() =>
-            this.GetDiskCacheSubdirectory("indices");
+        public DirectoryInfo GetIndicesPath()
+        {
+            return this.GetDiskCacheSubdirectory("indices");
+        }
 
-        public FileInfo GetIndexPath(BlockHash id) =>
-            new FileInfo(Path.Combine(
-                path1: this.GetIndicesPath().FullName,
-                path2: id.ToString()));
+        public FileInfo GetIndexPath(BlockHash id)
+        {
+            return new FileInfo(Path.Combine(
+path1: this.GetIndicesPath().FullName,
+path2: id.ToString()));
+        }
 
         /// <summary>
         /// Full path to the configuration file.

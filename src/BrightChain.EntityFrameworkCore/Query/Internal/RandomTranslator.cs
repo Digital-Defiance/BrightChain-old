@@ -31,7 +31,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public RandomTranslator(ISqlExpressionFactory sqlExpressionFactory)
         {
-            _sqlExpressionFactory = sqlExpressionFactory;
+            this._sqlExpressionFactory = sqlExpressionFactory;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(logger, nameof(logger));
 
             return _methodInfo.Equals(method)
-                ? _sqlExpressionFactory.Function(
+                ? this._sqlExpressionFactory.Function(
                     "RAND",
                     Array.Empty<SqlExpression>(),
                     method.ReturnType)

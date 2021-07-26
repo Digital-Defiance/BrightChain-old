@@ -9,7 +9,7 @@
 
         public BrightChainValidationException(string element, string message) : base(message)
         {
-            Element = element;
+            this.Element = element;
         }
 
         /// <summary>

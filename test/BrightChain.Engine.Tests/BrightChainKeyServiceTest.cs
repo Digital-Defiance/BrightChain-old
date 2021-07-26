@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BrightChain.Engine.Services;
+﻿using BrightChain.Engine.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,7 +11,7 @@ namespace BrightChain.Engine.Tests
     {
         //private BlockCacheManager blockCacheManager;
         private ILogger logger;
-        private IConfiguration configuration;
+        private readonly IConfiguration configuration;
 
         [TestInitialize]
         public void SetUp()

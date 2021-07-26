@@ -137,7 +137,7 @@ namespace BrightChain.EntityFrameworkCore.Metadata.Conventions
             if (discriminator != null)
             {
                 discriminator.HasValue(entityTypeBuilder.Metadata, entityTypeBuilder.Metadata.ShortName());
-                SetDefaultDiscriminatorValues(entityType.GetDerivedTypes(), discriminator);
+                this.SetDefaultDiscriminatorValues(entityType.GetDerivedTypes(), discriminator);
             }
         }
 

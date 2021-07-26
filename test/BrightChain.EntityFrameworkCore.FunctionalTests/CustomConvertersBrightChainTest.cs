@@ -18,7 +18,7 @@ namespace BrightChain.EntityFrameworkCore
         public CustomConvertersBrightChainTest(CustomConvertersBrightChainFixture fixture)
             : base(fixture)
         {
-            Fixture.TestSqlLoggerFactory.Clear();
+            this.Fixture.TestSqlLoggerFactory.Clear();
         }
 
         public override void Can_perform_query_with_max_length()
@@ -109,7 +109,7 @@ namespace BrightChain.EntityFrameworkCore
         {
             base.Where_bool_gets_converted_to_equality_when_value_conversion_is_used();
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] IN (""Blog"", ""RssBlog"") AND (c[""IsVisible""] = ""Y""))");
@@ -120,7 +120,7 @@ WHERE (c[""Discriminator""] IN (""Blog"", ""RssBlog"") AND (c[""IsVisible""] = "
         {
             base.Where_negated_bool_gets_converted_to_equality_when_value_conversion_is_used();
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] IN (""Blog"", ""RssBlog"") AND NOT((c[""IsVisible""] = ""Y"")))");
@@ -131,7 +131,7 @@ WHERE (c[""Discriminator""] IN (""Blog"", ""RssBlog"") AND NOT((c[""IsVisible""]
         {
             base.Where_bool_gets_converted_to_equality_when_value_conversion_is_used_using_EFProperty();
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] IN (""Blog"", ""RssBlog"") AND (c[""IsVisible""] = ""Y""))");
@@ -142,7 +142,7 @@ WHERE (c[""Discriminator""] IN (""Blog"", ""RssBlog"") AND (c[""IsVisible""] = "
         {
             base.Where_bool_gets_converted_to_equality_when_value_conversion_is_used_using_indexer();
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] IN (""Blog"", ""RssBlog"") AND NOT((c[""IndexerVisible""] = ""Aye"")))");
@@ -163,7 +163,7 @@ WHERE (c[""Discriminator""] IN (""Blog"", ""RssBlog"") AND NOT((c[""IndexerVisib
 
         private void AssertSql(params string[] expected)
         {
-            Fixture.TestSqlLoggerFactory.AssertBaseline(expected);
+            this.Fixture.TestSqlLoggerFactory.AssertBaseline(expected);
         }
 
         public class CustomConvertersBrightChainFixture : CustomConvertersFixtureBase
@@ -196,7 +196,7 @@ WHERE (c[""Discriminator""] IN (""Blog"", ""RssBlog"") AND NOT((c[""IndexerVisib
                 => new();
 
             public TestSqlLoggerFactory TestSqlLoggerFactory
-                => (TestSqlLoggerFactory)ListLoggerFactory;
+                => (TestSqlLoggerFactory)this.ListLoggerFactory;
 
             protected override void OnModelCreating(ModelBuilder modelBuilder, DbContext context)
             {

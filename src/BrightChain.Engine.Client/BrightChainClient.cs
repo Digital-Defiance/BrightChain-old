@@ -8,15 +8,15 @@ namespace BrightChain.Engine.Client
     {
         public BrightChainClient(string connectionString, BrightChainClientOptions options)
         {
-            ConnectionString = connectionString;
-            Options = options;
+            this.ConnectionString = connectionString;
+            this.Options = options;
         }
 
         public BrightChainClient(string endpoint, string key, BrightChainClientOptions options)
         {
-            Endpoint = endpoint;
-            Key = key;
-            Options = options;
+            this.Endpoint = endpoint;
+            this.Key = key;
+            this.Options = options;
         }
 
         public string Endpoint { get; }

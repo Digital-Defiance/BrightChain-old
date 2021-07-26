@@ -14,7 +14,7 @@ namespace BrightChain.EntityFrameworkCore.Metadata
         [ConditionalFact]
         public void Can_get_and_set_collection_name()
         {
-            var modelBuilder = CreateConventionModelBuilder();
+            var modelBuilder = this.CreateConventionModelBuilder();
 
             var entityType = modelBuilder
                 .Entity<Customer>();
@@ -34,7 +34,7 @@ namespace BrightChain.EntityFrameworkCore.Metadata
         [ConditionalFact]
         public void Can_get_and_set_partition_key_name()
         {
-            var modelBuilder = CreateConventionModelBuilder();
+            var modelBuilder = this.CreateConventionModelBuilder();
 
             var entityTypeBuilder = modelBuilder.Entity<Customer>();
             var entityType = entityTypeBuilder.Metadata;
@@ -61,7 +61,7 @@ namespace BrightChain.EntityFrameworkCore.Metadata
         [ConditionalFact]
         public void Default_container_name_is_used_if_not_set()
         {
-            var modelBuilder = CreateConventionModelBuilder();
+            var modelBuilder = this.CreateConventionModelBuilder();
 
             modelBuilder
                 .Entity<Customer>();
@@ -87,7 +87,7 @@ namespace BrightChain.EntityFrameworkCore.Metadata
         [ConditionalFact]
         public void Default_discriminator_can_be_removed()
         {
-            var modelBuilder = CreateConventionModelBuilder();
+            var modelBuilder = this.CreateConventionModelBuilder();
 
             modelBuilder.Entity<Customer>();
 
@@ -114,7 +114,7 @@ namespace BrightChain.EntityFrameworkCore.Metadata
         [ConditionalFact]
         public void Can_set_etag_concurrency_entity()
         {
-            var modelBuilder = CreateConventionModelBuilder();
+            var modelBuilder = this.CreateConventionModelBuilder();
             modelBuilder.Entity<Customer>().UseETagConcurrency();
             var model = modelBuilder.Model;
 
@@ -127,7 +127,7 @@ namespace BrightChain.EntityFrameworkCore.Metadata
         [ConditionalFact]
         public void Can_set_etag_concurrency_property()
         {
-            var modelBuilder = CreateConventionModelBuilder();
+            var modelBuilder = this.CreateConventionModelBuilder();
             modelBuilder.Entity<Customer>().Property(x => x.ETag).IsETagConcurrency();
             var model = modelBuilder.Model;
 

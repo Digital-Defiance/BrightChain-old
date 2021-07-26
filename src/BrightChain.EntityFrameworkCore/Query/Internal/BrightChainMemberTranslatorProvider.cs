@@ -32,7 +32,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             ISqlExpressionFactory sqlExpressionFactory,
             IEnumerable<IMemberTranslatorPlugin> plugins)
         {
-            _plugins.AddRange(plugins.SelectMany(p => p.Translators));
+            this._plugins.AddRange(plugins.SelectMany(p => p.Translators));
             //_translators
             //    .AddRange(
             //    new[]
@@ -57,7 +57,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(returnType, nameof(returnType));
             Check.NotNull(logger, nameof(logger));
 
-            return _plugins.Concat(_translators)
+            return this._plugins.Concat(this._translators)
                 .Select(t => t.Translate(instance, member, returnType, logger)).FirstOrDefault(t => t != null);
         }
 
@@ -69,7 +69,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         protected virtual void AddTranslators(IEnumerable<IMemberTranslator> translators)
         {
-            _translators.InsertRange(0, translators);
+            this._translators.InsertRange(0, translators);
         }
     }
 }

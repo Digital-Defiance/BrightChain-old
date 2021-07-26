@@ -22,8 +22,10 @@ namespace BrightChain.Engine.Helpers
             }
         }
 
-        public static ReadOnlyMemory<byte> RandomReadOnlyBytes(int length) =>
-            new ReadOnlyMemory<byte>(RandomBytes(length: length).ToArray());
+        public static ReadOnlyMemory<byte> RandomReadOnlyBytes(int length)
+        {
+            return new ReadOnlyMemory<byte>(RandomBytes(length: length).ToArray());
+        }
 
         public static ReadOnlyMemory<byte> DataFiller(ReadOnlyMemory<byte> inputData, BlockSize blockSize)
         {

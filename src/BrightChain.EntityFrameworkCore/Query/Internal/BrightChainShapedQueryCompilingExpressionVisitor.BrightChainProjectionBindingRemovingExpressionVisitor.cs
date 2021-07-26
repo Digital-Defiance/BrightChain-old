@@ -23,18 +23,18 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 bool trackQueryResults)
                 : base(jObjectParameter, trackQueryResults)
             {
-                _selectExpression = selectExpression;
+                this._selectExpression = selectExpression;
             }
 
             protected override ProjectionExpression GetProjection(ProjectionBindingExpression projectionBindingExpression)
             {
-                return _selectExpression.Projection[GetProjectionIndex(projectionBindingExpression)];
+                return this._selectExpression.Projection[this.GetProjectionIndex(projectionBindingExpression)];
             }
 
             private int GetProjectionIndex(ProjectionBindingExpression projectionBindingExpression)
             {
                 return projectionBindingExpression.ProjectionMember != null
-                                   ? _selectExpression.GetMappedProjection(projectionBindingExpression.ProjectionMember).GetConstantValue<int>()
+                                   ? this._selectExpression.GetMappedProjection(projectionBindingExpression.ProjectionMember).GetConstantValue<int>()
                                    : projectionBindingExpression.Index
                                    ?? throw new InvalidOperationException(CoreStrings.TranslationFailed(projectionBindingExpression.Print()));
             }

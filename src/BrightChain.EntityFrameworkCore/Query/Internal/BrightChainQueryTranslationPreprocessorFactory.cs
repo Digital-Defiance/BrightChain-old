@@ -34,7 +34,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             QueryTranslationPreprocessorDependencies dependencies)
         {
             Check.NotNull(dependencies, nameof(dependencies));
-            _dependencies = dependencies;
+            this._dependencies = dependencies;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual QueryTranslationPreprocessor Create(QueryCompilationContext queryCompilationContext)
         {
-            return new BrightChainQueryTranslationPreprocessor(_dependencies, (BrightChainQueryCompilationContext)queryCompilationContext);
+            return new BrightChainQueryTranslationPreprocessor(this._dependencies, (BrightChainQueryCompilationContext)queryCompilationContext);
         }
     }
 }

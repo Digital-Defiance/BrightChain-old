@@ -21,8 +21,8 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         public BrightChainSqlQuery(string query, IReadOnlyList<SqlParameter> parameters)
         {
-            Query = query;
-            Parameters = parameters;
+            this.Query = query;
+            this.Parameters = parameters;
         }
 
         /// <summary>

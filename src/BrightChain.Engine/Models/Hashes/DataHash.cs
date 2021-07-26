@@ -101,17 +101,25 @@ namespace BrightChain.Engine.Models.Blocks
         /// </summary>
         public bool Computed { get; }
 
-        public static bool operator ==(DataHash a, DataHash b) =>
-            a.SourceDataLength == b.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;
+        public static bool operator ==(DataHash a, DataHash b)
+        {
+            return a.SourceDataLength == b.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;
+        }
 
-        public static bool operator ==(ReadOnlyMemory<byte> b, DataHash a) =>
-            a.SourceDataLength == b.Length && ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b) == 0;
+        public static bool operator ==(ReadOnlyMemory<byte> b, DataHash a)
+        {
+            return a.SourceDataLength == b.Length && ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b) == 0;
+        }
 
-        public static bool operator !=(ReadOnlyMemory<byte> b, DataHash a) =>
-            !(b == a);
+        public static bool operator !=(ReadOnlyMemory<byte> b, DataHash a)
+        {
+            return !(b == a);
+        }
 
         public static bool operator !=(DataHash a, DataHash b)
-            => !(b == a);
+        {
+            return !(b == a);
+        }
 
         /// <summary>
         /// Returns a formatted hash string as a series of lowercase hexadecimal characters.
@@ -119,30 +127,38 @@ namespace BrightChain.Engine.Models.Blocks
         /// <param name="_">Ignored.</param>
         /// <param name="__">Ignored also.</param>
         /// <returns>Returns a formatted hash string.</returns>
-        public string ToString(string _, IFormatProvider __) =>
-            Helpers.Utilities.HashToFormattedString(this.HashBytes.ToArray());
+        public string ToString(string _, IFormatProvider __)
+        {
+            return Helpers.Utilities.HashToFormattedString(this.HashBytes.ToArray());
+        }
 
         /// <summary>
         /// Returns a formatted hash string as a series of lowercase hexadecimal characters.
         /// </summary>
         /// <returns>Returns a formatted hash string.</returns>
-        public new string ToString() =>
-            Helpers.Utilities.HashToFormattedString(this.HashBytes.ToArray());
+        public new string ToString()
+        {
+            return Helpers.Utilities.HashToFormattedString(this.HashBytes.ToArray());
+        }
 
         /// <summary>
         /// Compares the raw bytes of the hash with a DataHash classed as a plain object.
         /// </summary>
         /// <param name="obj">Should be of DataHash type.</param>
         /// <returns>Returns a boolean indicating whether the bytes are the same in both objects.</returns>
-        public override bool Equals(object obj) =>
-            obj is IDataHash iDataHash ? iDataHash.SourceDataLength == this.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, iDataHash.HashBytes) == 0 : false;
+        public override bool Equals(object obj)
+        {
+            return obj is IDataHash iDataHash ? iDataHash.SourceDataLength == this.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, iDataHash.HashBytes) == 0 : false;
+        }
 
         /// <summary>
         /// Computes and returns the hash code for the HashBytes in this object.
         /// </summary>
         /// <returns>Returns the hash code for the HashBytes in this object.</returns>
-        public override int GetHashCode() =>
-            (int)Crc32.ComputeNewChecksum(this.HashBytes.ToArray());
+        public override int GetHashCode()
+        {
+            return (int)Crc32.ComputeNewChecksum(this.HashBytes.ToArray());
+        }
 
         /// <summary>
         /// Compares the raw bytes of the hash.
@@ -150,15 +166,19 @@ namespace BrightChain.Engine.Models.Blocks
         /// <param name="other">Other DataHash to compare bytes with.</param>
         /// <returns>Returns a standard comparison result, -1, 0, 1 for less than, equal, greater than.</returns>
         /// TODO: verify -1/1 correctness
-        public int CompareTo(DataHash other) =>
-            other.SourceDataLength == this.SourceDataLength ? ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) : (other.SourceDataLength > this.SourceDataLength ? -1 : 1);
+        public int CompareTo(DataHash other)
+        {
+            return other.SourceDataLength == this.SourceDataLength ? ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) : (other.SourceDataLength > this.SourceDataLength ? -1 : 1);
+        }
 
         /// <summary>
         /// Returns a boolean whether the two objects contain the same series of bytes.
         /// </summary>
         /// <param name="other">Other DataHash to compare bytes with.</param>
         /// <returns>Returns the standard comparison result, -1, 0, 1 for less than, equal, greater than.</returns>
-        public bool Equals(DataHash other) =>
-            !(other is null) ? other.SourceDataLength == this.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) == 0 : false;
+        public bool Equals(DataHash other)
+        {
+            return !(other is null) ? other.SourceDataLength == this.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) == 0 : false;
+        }
     }
 }

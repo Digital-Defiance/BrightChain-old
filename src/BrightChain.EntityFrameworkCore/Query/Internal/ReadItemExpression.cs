@@ -84,17 +84,17 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(entityType, nameof(entityType));
             Check.NotNull(propertyParameters, nameof(propertyParameters));
 
-            Container = entityType.GetContainer();
+            this.Container = entityType.GetContainer();
 
-            ProjectionExpression = new ProjectionExpression(
+            this.ProjectionExpression = new ProjectionExpression(
                 new EntityProjectionExpression(
                     entityType,
                     new RootReferenceExpression(entityType, RootAlias)),
                 RootAlias);
 
-            EntityType = entityType;
+            this.EntityType = entityType;
 
-            PropertyParameters = propertyParameters;
+            this.PropertyParameters = propertyParameters;
         }
     }
 }

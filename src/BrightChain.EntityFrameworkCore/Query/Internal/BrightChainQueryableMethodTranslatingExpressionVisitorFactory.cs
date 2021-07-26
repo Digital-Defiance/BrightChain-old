@@ -39,10 +39,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             IMemberTranslatorProvider memberTranslatorProvider,
             IMethodCallTranslatorProvider methodCallTranslatorProvider)
         {
-            _dependencies = dependencies;
-            _sqlExpressionFactory = sqlExpressionFactory;
-            _memberTranslatorProvider = memberTranslatorProvider;
-            _methodCallTranslatorProvider = methodCallTranslatorProvider;
+            this._dependencies = dependencies;
+            this._sqlExpressionFactory = sqlExpressionFactory;
+            this._memberTranslatorProvider = memberTranslatorProvider;
+            this._methodCallTranslatorProvider = methodCallTranslatorProvider;
         }
 
         /// <summary>
@@ -56,11 +56,11 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(queryCompilationContext, nameof(queryCompilationContext));
 
             return new BrightChainQueryableMethodTranslatingExpressionVisitor(
-                _dependencies,
+                this._dependencies,
                 queryCompilationContext,
-                _sqlExpressionFactory,
-                _memberTranslatorProvider,
-                _methodCallTranslatorProvider);
+                this._sqlExpressionFactory,
+                this._memberTranslatorProvider,
+                this._methodCallTranslatorProvider);
         }
     }
 }

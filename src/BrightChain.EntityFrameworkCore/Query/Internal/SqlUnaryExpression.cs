@@ -50,8 +50,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             : base(type, typeMapping)
         {
             Check.NotNull(operand, nameof(operand));
-            OperatorType = VerifyOperator(operatorType);
-            Operand = operand;
+            this.OperatorType = VerifyOperator(operatorType);
+            this.Operand = operand;
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(visitor, nameof(visitor));
 
-            return Update((SqlExpression)visitor.Visit(Operand));
+            return this.Update((SqlExpression)visitor.Visit(this.Operand));
         }
 
         /// <summary>
@@ -91,8 +91,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlUnaryExpression Update(SqlExpression operand)
         {
-            return operand != Operand
-                           ? new SqlUnaryExpression(OperatorType, operand, Type, TypeMapping)
+            return operand != this.Operand
+                           ? new SqlUnaryExpression(this.OperatorType, operand, this.Type, this.TypeMapping)
                            : this;
         }
 
@@ -106,9 +106,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(expressionPrinter, nameof(expressionPrinter));
 
-            expressionPrinter.Append(OperatorType.ToString());
+            expressionPrinter.Append(this.OperatorType.ToString());
             expressionPrinter.Append("(");
-            expressionPrinter.Visit(Operand);
+            expressionPrinter.Visit(this.Operand);
             expressionPrinter.Append(")");
         }
 
@@ -123,14 +123,14 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return obj != null
                            && (ReferenceEquals(this, obj)
                                || obj is SqlUnaryExpression sqlUnaryExpression
-                               && Equals(sqlUnaryExpression));
+                               && this.Equals(sqlUnaryExpression));
         }
 
         private bool Equals(SqlUnaryExpression sqlUnaryExpression)
         {
             return base.Equals(sqlUnaryExpression)
-                           && OperatorType == sqlUnaryExpression.OperatorType
-                           && Operand.Equals(sqlUnaryExpression.Operand);
+                           && this.OperatorType == sqlUnaryExpression.OperatorType
+                           && this.Operand.Equals(sqlUnaryExpression.Operand);
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), OperatorType, Operand);
+            return HashCode.Combine(base.GetHashCode(), this.OperatorType, this.Operand);
         }
     }
 }

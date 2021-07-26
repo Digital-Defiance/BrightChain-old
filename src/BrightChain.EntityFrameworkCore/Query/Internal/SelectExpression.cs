@@ -41,9 +41,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public SelectExpression(IEntityType entityType)
         {
-            Container = entityType.GetContainer();
-            FromExpression = new RootReferenceExpression(entityType, RootAlias);
-            _projectionMapping[new ProjectionMember()] = new EntityProjectionExpression(entityType, FromExpression);
+            this.Container = entityType.GetContainer();
+            this.FromExpression = new RootReferenceExpression(entityType, RootAlias);
+            this._projectionMapping[new ProjectionMember()] = new EntityProjectionExpression(entityType, this.FromExpression);
         }
 
         /// <summary>
@@ -57,9 +57,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             RootReferenceExpression fromExpression,
             List<OrderingExpression> orderings)
         {
-            _projection = projections;
-            FromExpression = fromExpression;
-            _orderings = orderings;
+            this._projection = projections;
+            this.FromExpression = fromExpression;
+            this._orderings = orderings;
         }
 
         private SelectExpression(
@@ -69,7 +69,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             string container)
             : this(projections, fromExpression, orderings)
         {
-            Container = container;
+            this.Container = container;
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual IReadOnlyList<ProjectionExpression> Projection
-            => _projection;
+            => this._projection;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -104,7 +104,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual IReadOnlyList<OrderingExpression> Orderings
-            => _orderings;
+            => this._orderings;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -146,7 +146,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual Expression GetMappedProjection(ProjectionMember projectionMember)
         {
-            return _projectionMapping[projectionMember];
+            return this._projectionMapping[projectionMember];
         }
 
         /// <summary>
@@ -157,8 +157,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual void SetPartitionKey(IProperty partitionKeyProperty, Expression expression)
         {
-            _partitionKeyValueConverter = partitionKeyProperty.GetTypeMapping().Converter;
-            _partitionKeyValue = expression;
+            this._partitionKeyValueConverter = partitionKeyProperty.GetTypeMapping().Converter;
+            this._partitionKeyValue = expression;
         }
 
         /// <summary>
@@ -169,14 +169,14 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual string GetPartitionKey(IReadOnlyDictionary<string, object> parameterValues)
         {
-            switch (_partitionKeyValue)
+            switch (this._partitionKeyValue)
             {
                 case ConstantExpression constantExpression:
-                    return GetString(_partitionKeyValueConverter, constantExpression.Value);
+                    return GetString(this._partitionKeyValueConverter, constantExpression.Value);
 
                 case ParameterExpression parameterExpression
                     when parameterValues.TryGetValue(parameterExpression.Name, out var value):
-                    return GetString(_partitionKeyValueConverter, value);
+                    return GetString(this._partitionKeyValueConverter, value);
 
                 default:
                     return null;
@@ -198,21 +198,21 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual void ApplyProjection()
         {
-            if (Projection.Any())
+            if (this.Projection.Any())
             {
                 return;
             }
 
             var result = new Dictionary<ProjectionMember, Expression>();
-            foreach (var keyValuePair in _projectionMapping)
+            foreach (var keyValuePair in this._projectionMapping)
             {
                 result[keyValuePair.Key] = Constant(
-                    AddToProjection(
+                    this.AddToProjection(
                         keyValuePair.Value,
                         keyValuePair.Key.Last?.Name));
             }
 
-            _projectionMapping = result;
+            this._projectionMapping = result;
         }
 
         /// <summary>
@@ -223,10 +223,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual void ReplaceProjectionMapping(IDictionary<ProjectionMember, Expression> projectionMapping)
         {
-            _projectionMapping.Clear();
+            this._projectionMapping.Clear();
             foreach (var kvp in projectionMapping)
             {
-                _projectionMapping[kvp.Key] = kvp.Value;
+                this._projectionMapping[kvp.Key] = kvp.Value;
             }
         }
 
@@ -238,7 +238,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual int AddToProjection(SqlExpression sqlExpression)
         {
-            return AddToProjection(sqlExpression, null);
+            return this.AddToProjection(sqlExpression, null);
         }
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual int AddToProjection(EntityProjectionExpression entityProjection)
         {
-            return AddToProjection(entityProjection, null);
+            return this.AddToProjection(entityProjection, null);
         }
 
         /// <summary>
@@ -260,12 +260,12 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual int AddToProjection(ObjectArrayProjectionExpression objectArrayProjection)
         {
-            return AddToProjection(objectArrayProjection, null);
+            return this.AddToProjection(objectArrayProjection, null);
         }
 
         private int AddToProjection(Expression expression, string alias)
         {
-            var existingIndex = _projection.FindIndex(pe => pe.Expression.Equals(expression));
+            var existingIndex = this._projection.FindIndex(pe => pe.Expression.Equals(expression));
             if (existingIndex != -1)
             {
                 return existingIndex;
@@ -277,14 +277,14 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             var currentAlias = baseAlias;
             var counter = 0;
-            while (_projection.Any(pe => string.Equals(pe.Alias, currentAlias, StringComparison.OrdinalIgnoreCase)))
+            while (this._projection.Any(pe => string.Equals(pe.Alias, currentAlias, StringComparison.OrdinalIgnoreCase)))
             {
                 currentAlias = $"{baseAlias}{counter++}";
             }
 
-            _projection.Add(new ProjectionExpression(expression, currentAlias));
+            this._projection.Add(new ProjectionExpression(expression, currentAlias));
 
-            return _projection.Count - 1;
+            return this._projection.Count - 1;
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual void ApplyDistinct()
         {
-            IsDistinct = true;
+            this.IsDistinct = true;
         }
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual void ClearOrdering()
         {
-            _orderings.Clear();
+            this._orderings.Clear();
         }
 
         /// <summary>
@@ -324,11 +324,11 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 return;
             }
 
-            Predicate = Predicate == null
+            this.Predicate = this.Predicate == null
                 ? expression
                 : new SqlBinaryExpression(
                     ExpressionType.AndAlso,
-                    Predicate,
+                    this.Predicate,
                     expression,
                     typeof(bool),
                     expression.TypeMapping);
@@ -342,12 +342,12 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual void ApplyLimit(SqlExpression sqlExpression)
         {
-            if (Limit != null)
+            if (this.Limit != null)
             {
                 throw new InvalidOperationException("See issue#16156");
             }
 
-            Limit = sqlExpression;
+            this.Limit = sqlExpression;
         }
 
         /// <summary>
@@ -358,13 +358,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual void ApplyOffset(SqlExpression sqlExpression)
         {
-            if (Limit != null
-                || Offset != null)
+            if (this.Limit != null
+                || this.Offset != null)
             {
                 throw new InvalidOperationException("See issue#16156");
             }
 
-            Offset = sqlExpression;
+            this.Offset = sqlExpression;
         }
 
         /// <summary>
@@ -375,15 +375,15 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual void ApplyOrdering(OrderingExpression orderingExpression)
         {
-            if (IsDistinct
-                || Limit != null
-                || Offset != null)
+            if (this.IsDistinct
+                || this.Limit != null
+                || this.Offset != null)
             {
                 throw new InvalidOperationException("See issue#16156");
             }
 
-            _orderings.Clear();
-            _orderings.Add(orderingExpression);
+            this._orderings.Clear();
+            this._orderings.Add(orderingExpression);
         }
 
         /// <summary>
@@ -394,9 +394,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual void AppendOrdering(OrderingExpression orderingExpression)
         {
-            if (_orderings.FirstOrDefault(o => o.Expression.Equals(orderingExpression.Expression)) == null)
+            if (this._orderings.FirstOrDefault(o => o.Expression.Equals(orderingExpression.Expression)) == null)
             {
-                _orderings.Add(orderingExpression);
+                this._orderings.Add(orderingExpression);
             }
         }
 
@@ -408,19 +408,19 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual void ReverseOrderings()
         {
-            if (Limit != null
-                || Offset != null)
+            if (this.Limit != null
+                || this.Offset != null)
             {
                 throw new InvalidOperationException(BrightChainStrings.ReverseAfterSkipTakeNotSupported);
             }
 
-            var existingOrderings = _orderings.ToArray();
+            var existingOrderings = this._orderings.ToArray();
 
-            _orderings.Clear();
+            this._orderings.Clear();
 
             foreach (var existingOrdering in existingOrderings)
             {
-                _orderings.Add(
+                this._orderings.Add(
                     new OrderingExpression(
                         existingOrdering.Expression,
                         !existingOrdering.IsAscending));
@@ -459,10 +459,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             var projections = new List<ProjectionExpression>();
             IDictionary<ProjectionMember, Expression> projectionMapping;
-            if (Projection.Any())
+            if (this.Projection.Any())
             {
-                projectionMapping = _projectionMapping;
-                foreach (var item in Projection)
+                projectionMapping = this._projectionMapping;
+                foreach (var item in this.Projection)
                 {
                     var projection = (ProjectionExpression)visitor.Visit(item);
                     projections.Add(projection);
@@ -473,7 +473,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             else
             {
                 projectionMapping = new Dictionary<ProjectionMember, Expression>();
-                foreach (var mapping in _projectionMapping)
+                foreach (var mapping in this._projectionMapping)
                 {
                     var newProjection = visitor.Visit(mapping.Value);
                     changed |= newProjection != mapping.Value;
@@ -482,25 +482,25 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 }
             }
 
-            var fromExpression = (RootReferenceExpression)visitor.Visit(FromExpression);
-            changed |= fromExpression != FromExpression;
+            var fromExpression = (RootReferenceExpression)visitor.Visit(this.FromExpression);
+            changed |= fromExpression != this.FromExpression;
 
-            var predicate = (SqlExpression)visitor.Visit(Predicate);
-            changed |= predicate != Predicate;
+            var predicate = (SqlExpression)visitor.Visit(this.Predicate);
+            changed |= predicate != this.Predicate;
 
             var orderings = new List<OrderingExpression>();
-            foreach (var ordering in _orderings)
+            foreach (var ordering in this._orderings)
             {
                 var orderingExpression = (SqlExpression)visitor.Visit(ordering.Expression);
                 changed |= orderingExpression != ordering.Expression;
                 orderings.Add(ordering.Update(orderingExpression));
             }
 
-            var offset = (SqlExpression)visitor.Visit(Offset);
-            changed |= offset != Offset;
+            var offset = (SqlExpression)visitor.Visit(this.Offset);
+            changed |= offset != this.Offset;
 
-            var limit = (SqlExpression)visitor.Visit(Limit);
-            changed |= limit != Limit;
+            var limit = (SqlExpression)visitor.Visit(this.Limit);
+            changed |= limit != this.Limit;
 
             if (changed)
             {
@@ -537,12 +537,12 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(fromExpression, nameof(fromExpression));
 
             var projectionMapping = new Dictionary<ProjectionMember, Expression>();
-            foreach (var kvp in _projectionMapping)
+            foreach (var kvp in this._projectionMapping)
             {
                 projectionMapping[kvp.Key] = kvp.Value;
             }
 
-            return new SelectExpression(projections, fromExpression, orderings, Container)
+            return new SelectExpression(projections, fromExpression, orderings, this.Container)
             {
                 _projectionMapping = projectionMapping,
                 Predicate = predicate,

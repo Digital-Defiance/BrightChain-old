@@ -34,7 +34,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         public BrightChainQueryCompilationContextFactory(QueryCompilationContextDependencies dependencies)
         {
             Check.NotNull(dependencies, nameof(dependencies));
-            _dependencies = dependencies;
+            this._dependencies = dependencies;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual QueryCompilationContext Create(bool async)
         {
-            return new BrightChainQueryCompilationContext(_dependencies, async);
+            return new BrightChainQueryCompilationContext(this._dependencies, async);
         }
     }
 }

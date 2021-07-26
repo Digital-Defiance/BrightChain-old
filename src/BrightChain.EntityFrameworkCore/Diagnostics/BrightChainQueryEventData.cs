@@ -33,11 +33,11 @@ namespace BrightChain.EntityFrameworkCore.Diagnostics
             bool logSensitiveData)
             : base(eventDefinition, messageGenerator)
         {
-            ContainerId = containerId;
-            PartitionKey = partitionKey;
-            Parameters = parameters;
-            QuerySql = querySql;
-            LogSensitiveData = logSensitiveData;
+            this.ContainerId = containerId;
+            this.PartitionKey = partitionKey;
+            this.Parameters = parameters;
+            this.QuerySql = querySql;
+            this.LogSensitiveData = logSensitiveData;
         }
 
         /// <summary>

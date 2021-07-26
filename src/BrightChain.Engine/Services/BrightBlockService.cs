@@ -7,7 +7,6 @@ namespace BrightChain.Engine.Services
 #nullable enable
     using System;
     using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.IO;
     using System.Linq;
     using System.Security.Cryptography;
@@ -18,9 +17,7 @@ namespace BrightChain.Engine.Services
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Models.Nodes;
     using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
@@ -60,7 +57,7 @@ namespace BrightChain.Engine.Services
 
             this.configuration = builder.Build();
 
-            var nodeOptions = configuration.GetSection("NodeOptions");
+            var nodeOptions = this.configuration.GetSection("NodeOptions");
             if (nodeOptions is null)
             {
                 throw new BrightChainException(string.Format(format: "'NodeOptions' config section must be defined, but is not"));
@@ -85,24 +82,21 @@ namespace BrightChain.Engine.Services
                 configuration: this.configuration);
             this.blockMemoryCache.Set(new RootBlock(
                 databaseGuid: serviceUnifiedStoreGuid,
-                blockCacheManager: this.blockMemoryCache,
-                totalLength: 0));
+                blockCacheManager: this.blockMemoryCache));
 
             this.blockDiskCache = new DiskBlockCacheManager(
                 logger: this.logger,
                 configuration: this.configuration);
             this.blockDiskCache.Set(new RootBlock(
                 databaseGuid: serviceUnifiedStoreGuid,
-                blockCacheManager: this.blockDiskCache,
-                totalLength: 0));
+                blockCacheManager: this.blockDiskCache));
 
             this.randomizerBlockMemoryCache = new MemoryDictionaryBlockCacheManager(
                 logger: this.logger,
                 configuration: this.configuration);
             this.randomizerBlockMemoryCache.Set(new RootBlock(
                 databaseGuid: serviceUnifiedStoreGuid,
-                blockCacheManager: this.randomizerBlockMemoryCache,
-                totalLength: 0));
+                blockCacheManager: this.randomizerBlockMemoryCache));
 
             this.logger.LogInformation(string.Format("<{0}>: caches initialized", nameof(BrightBlockService)));
             this.blockBrightener = new BlockBrightener(
@@ -353,8 +347,8 @@ namespace BrightChain.Engine.Services
                 throw new BrightChainException("No blocks returned");
             }
 
-            return await this
-                .MakeSuperCBLFromCBLChain(
+            return await
+                this.MakeSuperCBLFromCBLChain(
                     blockParams: blockParams,
                     chainedCbls: firstPass)
                         .ConfigureAwait(false);

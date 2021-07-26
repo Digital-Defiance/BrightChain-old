@@ -21,8 +21,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 ISqlExpressionFactory sqlExpressionFactory,
                 IReadOnlyDictionary<string, object> parametersValues)
             {
-                _sqlExpressionFactory = sqlExpressionFactory;
-                _parametersValues = parametersValues;
+                this._sqlExpressionFactory = sqlExpressionFactory;
+                this._parametersValues = parametersValues;
             }
 
             public override Expression Visit(Expression expression)
@@ -55,7 +55,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         case SqlParameterExpression sqlParameter:
                         {
                             typeMapping = sqlParameter.TypeMapping;
-                            var values = (IEnumerable)_parametersValues[sqlParameter.Name];
+                            var values = (IEnumerable)this._parametersValues[sqlParameter.Name];
                             foreach (var value in values)
                             {
                                 if (value == null)
@@ -71,26 +71,26 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     }
 
                     var updatedInExpression = inValues.Count > 0
-                        ? _sqlExpressionFactory.In(
-                            (SqlExpression)Visit(inExpression.Item),
-                            _sqlExpressionFactory.Constant(inValues, typeMapping),
+                        ? this._sqlExpressionFactory.In(
+                            (SqlExpression)this.Visit(inExpression.Item),
+                            this._sqlExpressionFactory.Constant(inValues, typeMapping),
                             inExpression.IsNegated)
                         : null;
 
                     var nullCheckExpression = hasNullValue
-                        ? _sqlExpressionFactory.IsNull(inExpression.Item)
+                        ? this._sqlExpressionFactory.IsNull(inExpression.Item)
                         : null;
 
                     if (updatedInExpression != null
                         && nullCheckExpression != null)
                     {
-                        return _sqlExpressionFactory.OrElse(updatedInExpression, nullCheckExpression);
+                        return this._sqlExpressionFactory.OrElse(updatedInExpression, nullCheckExpression);
                     }
 
                     if (updatedInExpression == null
                         && nullCheckExpression == null)
                     {
-                        return _sqlExpressionFactory.Equal(_sqlExpressionFactory.Constant(true), _sqlExpressionFactory.Constant(false));
+                        return this._sqlExpressionFactory.Equal(this._sqlExpressionFactory.Constant(true), this._sqlExpressionFactory.Constant(false));
                     }
 
                     return (SqlExpression)updatedInExpression ?? nullCheckExpression;

@@ -24,8 +24,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public OrderingExpression(SqlExpression expression, bool ascending)
         {
-            Expression = expression;
-            IsAscending = ascending;
+            this.Expression = expression;
+            this.IsAscending = ascending;
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public override Type Type
-            => Expression.Type;
+            => this.Expression.Type;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -72,7 +72,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(visitor, nameof(visitor));
 
-            return Update((SqlExpression)visitor.Visit(Expression));
+            return this.Update((SqlExpression)visitor.Visit(this.Expression));
         }
 
         /// <summary>
@@ -83,8 +83,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual OrderingExpression Update(SqlExpression expression)
         {
-            return expression != Expression
-                           ? new OrderingExpression(expression, IsAscending)
+            return expression != this.Expression
+                           ? new OrderingExpression(expression, this.IsAscending)
                            : this;
         }
 
@@ -98,9 +98,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(expressionPrinter, nameof(expressionPrinter));
 
-            expressionPrinter.Visit(Expression);
+            expressionPrinter.Visit(this.Expression);
 
-            expressionPrinter.Append(IsAscending ? " ASC" : " DESC");
+            expressionPrinter.Append(this.IsAscending ? " ASC" : " DESC");
         }
 
         /// <summary>
@@ -114,13 +114,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return obj != null
                            && (ReferenceEquals(this, obj)
                                || obj is OrderingExpression orderingExpression
-                               && Equals(orderingExpression));
+                               && this.Equals(orderingExpression));
         }
 
         private bool Equals(OrderingExpression orderingExpression)
         {
-            return Expression.Equals(orderingExpression.Expression)
-                           && IsAscending == orderingExpression.IsAscending;
+            return this.Expression.Equals(orderingExpression.Expression)
+                           && this.IsAscending == orderingExpression.IsAscending;
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override int GetHashCode()
         {
-            return HashCode.Combine(Expression, IsAscending);
+            return HashCode.Combine(this.Expression, this.IsAscending);
         }
     }
 }

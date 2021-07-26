@@ -16,11 +16,11 @@ namespace BrightChain.Engine.Models.Blocks.DataObjects
 
         public BlockParams(BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, bool privateEncrypted)
         {
-            BlockSize = blockSize;
-            RequestTime = requestTime;
-            KeepUntilAtLeast = keepUntilAtLeast;
-            Redundancy = redundancy;
-            PrivateEncrypted = privateEncrypted;
+            this.BlockSize = blockSize;
+            this.RequestTime = requestTime;
+            this.KeepUntilAtLeast = keepUntilAtLeast;
+            this.Redundancy = redundancy;
+            this.PrivateEncrypted = privateEncrypted;
         }
     }
 }

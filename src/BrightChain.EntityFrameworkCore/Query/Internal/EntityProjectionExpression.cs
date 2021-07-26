@@ -35,9 +35,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public EntityProjectionExpression(IEntityType entityType, Expression accessExpression)
         {
-            EntityType = entityType;
-            AccessExpression = accessExpression;
-            Name = (accessExpression as IAccessExpression)?.Name;
+            this.EntityType = entityType;
+            this.AccessExpression = accessExpression;
+            this.Name = (accessExpression as IAccessExpression)?.Name;
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public override Type Type
-            => EntityType.ClrType;
+            => this.EntityType.ClrType;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -92,7 +92,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(visitor, nameof(visitor));
 
-            return Update(visitor.Visit(AccessExpression));
+            return this.Update(visitor.Visit(this.AccessExpression));
         }
 
         /// <summary>
@@ -103,8 +103,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual Expression Update(Expression accessExpression)
         {
-            return accessExpression != AccessExpression
-                           ? new EntityProjectionExpression(EntityType, accessExpression)
+            return accessExpression != this.AccessExpression
+                           ? new EntityProjectionExpression(this.EntityType, accessExpression)
                            : this;
         }
 
@@ -116,17 +116,17 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual Expression BindProperty(IProperty property, bool clientEval)
         {
-            if (!EntityType.IsAssignableFrom(property.DeclaringEntityType)
-                && !property.DeclaringEntityType.IsAssignableFrom(EntityType))
+            if (!this.EntityType.IsAssignableFrom(property.DeclaringEntityType)
+                && !property.DeclaringEntityType.IsAssignableFrom(this.EntityType))
             {
                 throw new InvalidOperationException(
-                    BrightChainStrings.UnableToBindMemberToEntityProjection("property", property.Name, EntityType.DisplayName()));
+                    BrightChainStrings.UnableToBindMemberToEntityProjection("property", property.Name, this.EntityType.DisplayName()));
             }
 
-            if (!_propertyExpressionsMap.TryGetValue(property, out var expression))
+            if (!this._propertyExpressionsMap.TryGetValue(property, out var expression))
             {
-                expression = new KeyAccessExpression(property, AccessExpression);
-                _propertyExpressionsMap[property] = expression;
+                expression = new KeyAccessExpression(property, this.AccessExpression);
+                this._propertyExpressionsMap[property] = expression;
             }
 
             if (!clientEval
@@ -150,22 +150,22 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual Expression BindNavigation(INavigation navigation, bool clientEval)
         {
-            if (!EntityType.IsAssignableFrom(navigation.DeclaringEntityType)
-                && !navigation.DeclaringEntityType.IsAssignableFrom(EntityType))
+            if (!this.EntityType.IsAssignableFrom(navigation.DeclaringEntityType)
+                && !navigation.DeclaringEntityType.IsAssignableFrom(this.EntityType))
             {
                 throw new InvalidOperationException(
-                    BrightChainStrings.UnableToBindMemberToEntityProjection("navigation", navigation.Name, EntityType.DisplayName()));
+                    BrightChainStrings.UnableToBindMemberToEntityProjection("navigation", navigation.Name, this.EntityType.DisplayName()));
             }
 
-            if (!_navigationExpressionsMap.TryGetValue(navigation, out var expression))
+            if (!this._navigationExpressionsMap.TryGetValue(navigation, out var expression))
             {
                 expression = navigation.IsCollection
-                    ? new ObjectArrayProjectionExpression(navigation, AccessExpression)
+                    ? new ObjectArrayProjectionExpression(navigation, this.AccessExpression)
                     : new EntityProjectionExpression(
                         navigation.TargetEntityType,
-                        new ObjectAccessExpression(navigation, AccessExpression));
+                        new ObjectAccessExpression(navigation, this.AccessExpression));
 
-                _navigationExpressionsMap[navigation] = expression;
+                this._navigationExpressionsMap[navigation] = expression;
             }
 
             if (!clientEval
@@ -190,7 +190,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             bool clientEval,
             out IPropertyBase propertyBase)
         {
-            return BindMember(MemberIdentity.Create(name), entityType, clientEval, out propertyBase);
+            return this.BindMember(MemberIdentity.Create(name), entityType, clientEval, out propertyBase);
         }
 
         /// <summary>
@@ -205,12 +205,12 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             bool clientEval,
             out IPropertyBase propertyBase)
         {
-            return BindMember(MemberIdentity.Create(memberInfo), entityType, clientEval, out propertyBase);
+            return this.BindMember(MemberIdentity.Create(memberInfo), entityType, clientEval, out propertyBase);
         }
 
         private Expression BindMember(MemberIdentity member, Type entityClrType, bool clientEval, out IPropertyBase propertyBase)
         {
-            var entityType = EntityType;
+            var entityType = this.EntityType;
             if (entityClrType != null
                 && !entityClrType.IsAssignableFrom(entityType.ClrType))
             {
@@ -223,7 +223,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             if (property != null)
             {
                 propertyBase = property;
-                return BindProperty(property, clientEval);
+                return this.BindProperty(property, clientEval);
             }
 
             var navigation = member.MemberInfo == null
@@ -232,7 +232,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             if (navigation != null)
             {
                 propertyBase = navigation;
-                return BindNavigation(navigation, clientEval);
+                return this.BindNavigation(navigation, clientEval);
             }
 
             // Entity member not found
@@ -250,14 +250,14 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(derivedType, nameof(derivedType));
 
-            if (!derivedType.GetAllBaseTypes().Contains(EntityType))
+            if (!derivedType.GetAllBaseTypes().Contains(this.EntityType))
             {
                 throw new InvalidOperationException(
                     BrightChainStrings.InvalidDerivedTypeInEntityProjection(
-                        derivedType.DisplayName(), EntityType.DisplayName()));
+                        derivedType.DisplayName(), this.EntityType.DisplayName()));
             }
 
-            return new EntityProjectionExpression(derivedType, AccessExpression);
+            return new EntityProjectionExpression(derivedType, this.AccessExpression);
         }
 
         /// <summary>
@@ -270,7 +270,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(expressionPrinter, nameof(expressionPrinter));
 
-            expressionPrinter.Visit(AccessExpression);
+            expressionPrinter.Visit(this.AccessExpression);
         }
 
         /// <summary>
@@ -284,13 +284,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return obj != null
                            && (ReferenceEquals(this, obj)
                                || obj is EntityProjectionExpression entityProjectionExpression
-                               && Equals(entityProjectionExpression));
+                               && this.Equals(entityProjectionExpression));
         }
 
         private bool Equals(EntityProjectionExpression entityProjectionExpression)
         {
-            return Equals(EntityType, entityProjectionExpression.EntityType)
-                           && AccessExpression.Equals(entityProjectionExpression.AccessExpression);
+            return Equals(this.EntityType, entityProjectionExpression.EntityType)
+                           && this.AccessExpression.Equals(entityProjectionExpression.AccessExpression);
         }
 
         /// <summary>
@@ -301,7 +301,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override int GetHashCode()
         {
-            return HashCode.Combine(EntityType, AccessExpression);
+            return HashCode.Combine(this.EntityType, this.AccessExpression);
         }
     }
 }

@@ -26,13 +26,13 @@ namespace BrightChain.EntityFrameworkCore
 
         public EndToEndBrightChainTest(BrightChainFixture fixture)
         {
-            Fixture = fixture;
+            this.Fixture = fixture;
         }
 
         [ConditionalFact]
         public void Can_add_update_delete_end_to_end()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
 
             var customer = new Customer { Id = 42, Name = "Theon" };
 
@@ -78,7 +78,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public async Task Can_add_update_delete_end_to_end_async()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
 
             var customer = new Customer { Id = 42, Name = "Theon" };
 
@@ -124,7 +124,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public async Task Can_add_update_delete_detached_entity_end_to_end_async()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
 
             var customer = new Customer { Id = 42, Name = "Theon" };
             string storeId = null;
@@ -189,7 +189,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public void Can_add_update_untracked_properties()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
 
             var customer = new Customer { Id = 42, Name = "Theon" };
 
@@ -273,7 +273,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public async Task Can_add_update_untracked_properties_async()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
 
             var customer = new Customer { Id = 42, Name = "Theon" };
 
@@ -357,7 +357,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public async Task Can_add_update_delete_end_to_end_with_Guid_async()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
 
             var customer = new CustomerGuid
             {
@@ -467,7 +467,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public async Task Can_read_with_find_with_resource_id_async()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
             const int pk1 = 1;
             const int pk2 = 2;
 
@@ -506,7 +506,7 @@ namespace BrightChain.EntityFrameworkCore
                 Assert.Equal("42", customerFromStore.id);
                 Assert.Equal("Theon", customerFromStore.Name);
                 Assert.Equal(pk1, customerFromStore.PartitionKey);
-                AssertSql(context, @"ReadItem(1, 42)");
+                this.AssertSql(context, @"ReadItem(1, 42)");
 
                 customerFromStore.Name = "Theon Greyjoy";
 
@@ -528,7 +528,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public void Can_read_with_find_with_resource_id()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
             const int pk1 = 1;
             const int pk2 = 2;
 
@@ -563,7 +563,7 @@ namespace BrightChain.EntityFrameworkCore
                 Assert.Equal("42", customerFromStore.id);
                 Assert.Equal("Theon", customerFromStore.Name);
                 Assert.Equal(pk1, customerFromStore.PartitionKey);
-                AssertSql(context, @"ReadItem(1, 42)");
+                this.AssertSql(context, @"ReadItem(1, 42)");
 
                 customerFromStore.Name = "Theon Greyjoy";
 
@@ -585,7 +585,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public void Find_with_empty_resource_id_throws()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
             using (var context = new PartitionKeyContextWithResourceId(options))
             {
                 context.Database.EnsureCreated();
@@ -599,7 +599,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public async Task Can_read_with_find_with_partition_key_and_value_generator_async()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
             const int pk1 = 1;
             const int pk2 = 2;
 
@@ -655,7 +655,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public void Can_read_with_find_with_partition_key_and_value_generator()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
             const int pk1 = 1;
             const int pk2 = 2;
 
@@ -690,7 +690,7 @@ namespace BrightChain.EntityFrameworkCore
                 Assert.Equal(42, customerFromStore.Id);
                 Assert.Equal("Theon", customerFromStore.Name);
                 Assert.Equal(pk1, customerFromStore.PartitionKey);
-                AssertSql(context, @"ReadItem(1, Customer-42)");
+                this.AssertSql(context, @"ReadItem(1, Customer-42)");
 
                 customerFromStore.Name = "Theon Greyjoy";
 
@@ -712,7 +712,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public void Can_read_with_find_with_partition_key_without_value_generator()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
             const int pk1 = 1;
 
             var customer = new Customer
@@ -741,7 +741,7 @@ namespace BrightChain.EntityFrameworkCore
                 Assert.Equal(42, customerFromStore.Id);
                 Assert.Equal("Theon", customerFromStore.Name);
                 Assert.Equal(pk1, customerFromStore.PartitionKey);
-                AssertSql(
+                this.AssertSql(
                     context, @"@__p_1='42'
 
 SELECT c
@@ -769,7 +769,7 @@ OFFSET 0 LIMIT 1");
         [ConditionalFact]
         public async Task Can_read_with_find_with_partition_key_not_part_of_primary_key()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
 
             var customer = new Customer
             {
@@ -793,14 +793,14 @@ OFFSET 0 LIMIT 1");
 
                 Assert.Equal(42, customerFromStore.Id);
                 Assert.Equal("Theon", customerFromStore.Name);
-                AssertSql(context, "ReadItem(, Customer|42)");
+                this.AssertSql(context, "ReadItem(, Customer|42)");
             }
         }
 
         [ConditionalFact]
         public async Task Can_read_with_find_without_partition_key()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
 
             var customer = new CustomerNoPartitionKey { Id = 42, Name = "Theon" };
 
@@ -819,14 +819,14 @@ OFFSET 0 LIMIT 1");
 
                 Assert.Equal(42, customerFromStore.Id);
                 Assert.Equal("Theon", customerFromStore.Name);
-                AssertSql(context, @"ReadItem(, CustomerNoPartitionKey|42)");
+                this.AssertSql(context, @"ReadItem(, CustomerNoPartitionKey|42)");
             }
         }
 
         [ConditionalFact]
         public async Task Can_read_with_find_with_PK_partition_key()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
 
             var customer = new Customer { Id = 42, Name = "Theon" };
 
@@ -845,14 +845,14 @@ OFFSET 0 LIMIT 1");
 
                 Assert.Equal(42, customerFromStore.Id);
                 Assert.Equal("Theon", customerFromStore.Name);
-                AssertSql(context, @"ReadItem(42, 42)");
+                this.AssertSql(context, @"ReadItem(42, 42)");
             }
         }
 
         [ConditionalFact]
         public async Task Can_read_with_find_with_PK_resource_id()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
 
             var customer = new CustomerWithResourceId { id = "42", Name = "Theon" };
 
@@ -871,7 +871,7 @@ OFFSET 0 LIMIT 1");
 
                 Assert.Equal("42", customerFromStore.id);
                 Assert.Equal("Theon", customerFromStore.Name);
-                AssertSql(
+                this.AssertSql(
                     context, @"@__p_0='42'
 
 SELECT c
@@ -1032,7 +1032,7 @@ OFFSET 0 LIMIT 1");
         [ConditionalFact]
         public async Task Can_use_detached_entities_without_discriminators()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
 
             var customer = new Customer { Id = 42, Name = "Theon" };
 
@@ -1088,7 +1088,7 @@ OFFSET 0 LIMIT 1");
         [ConditionalFact]
         public void Can_update_unmapped_properties()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
 
             var customer = new Customer { Id = 42, Name = "Theon" };
 
@@ -1155,7 +1155,7 @@ OFFSET 0 LIMIT 1");
         [ConditionalFact]
         public async Task Can_use_non_persisted_properties()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
 
             var customer = new Customer { Id = 42, Name = "Theon" };
 
@@ -1199,7 +1199,7 @@ OFFSET 0 LIMIT 1");
         public async Task Add_update_delete_query_throws_if_no_container()
         {
             await using var testDatabase = BrightChainTestStore.CreateInitialized(DatabaseName + "Empty");
-            var options = Fixture.CreateOptions(testDatabase);
+            var options = this.Fixture.CreateOptions(testDatabase);
 
             var customer = new Customer { Id = 42, Name = "Theon" };
             using (var context = new CustomerContext(options))
@@ -1240,7 +1240,7 @@ OFFSET 0 LIMIT 1");
         [ConditionalFact]
         public async Task Using_a_conflicting_incompatible_id_throws()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
 
             using var context = new ConflictingIncompatibleIdContext(options);
             await Assert.ThrowsAnyAsync<Exception>(
@@ -1277,7 +1277,7 @@ OFFSET 0 LIMIT 1");
         [ConditionalFact]
         public async Task Can_add_update_delete_end_to_end_with_conflicting_id()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
 
             var entity = new ConflictingId { id = "42", Name = "Theon" };
 
@@ -1350,7 +1350,7 @@ OFFSET 0 LIMIT 1");
         [ConditionalFact]
         public async Task Can_have_non_string_property_named_Discriminator()
         {
-            using var context = new NonStringDiscriminatorContext(Fixture.CreateOptions());
+            using var context = new NonStringDiscriminatorContext(this.Fixture.CreateOptions());
             context.Database.EnsureCreated();
 
             context.Add(new NonStringDiscriminator { Id = 1 });
@@ -1394,7 +1394,7 @@ OFFSET 0 LIMIT 1");
         {
             public BrightChainFixture()
             {
-                TestStore = BrightChainTestStore.Create(DatabaseName);
+                this.TestStore = BrightChainTestStore.Create(DatabaseName);
             }
 
             protected override ITestStoreFactory TestStoreFactory
@@ -1404,9 +1404,9 @@ OFFSET 0 LIMIT 1");
 
             public DbContextOptions CreateOptions()
             {
-                TestStore.Initialize(null, (Func<DbContext>)null);
-                ListLoggerFactory.Clear();
-                return CreateOptions(TestStore);
+                this.TestStore.Initialize(null, (Func<DbContext>)null);
+                this.ListLoggerFactory.Clear();
+                return this.CreateOptions(this.TestStore);
             }
 
             public Task InitializeAsync()
@@ -1416,7 +1416,7 @@ OFFSET 0 LIMIT 1");
 
             public Task DisposeAsync()
             {
-                return TestStore.DisposeAsync();
+                return this.TestStore.DisposeAsync();
             }
         }
     }

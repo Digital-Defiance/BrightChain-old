@@ -25,7 +25,7 @@ namespace BrightChain.EntityFrameworkCore
                 { typeof(string), () => "Fake" }
             };
 
-            TestEventLogging(
+            this.TestEventLogging(
                 typeof(BrightChainEventId),
                 typeof(BrightChainLoggerExtensions),
                 new BrightChainLoggingDefinitions(),

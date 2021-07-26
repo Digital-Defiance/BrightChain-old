@@ -19,13 +19,13 @@ namespace BrightChain.EntityFrameworkCore
 
         public BrightChainConcurrencyTest(BrightChainFixture fixture)
         {
-            Fixture = fixture;
+            this.Fixture = fixture;
         }
 
         [ConditionalFact]
         public virtual Task Adding_the_same_entity_twice_results_in_DbUpdateException()
         {
-            return ConcurrencyTestAsync<DbUpdateException>(
+            return this.ConcurrencyTestAsync<DbUpdateException>(
                 ctx => ctx.Customers.Add(
                     new Customer
                     {
@@ -37,7 +37,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public virtual Task Updating_then_deleting_the_same_entity_results_in_DbUpdateConcurrencyException()
         {
-            return ConcurrencyTestAsync<DbUpdateConcurrencyException>(
+            return this.ConcurrencyTestAsync<DbUpdateConcurrencyException>(
                 ctx => ctx.Customers.Add(
                     new Customer
                     {
@@ -51,7 +51,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public virtual Task Updating_then_updating_the_same_entity_results_in_DbUpdateConcurrencyException()
         {
-            return ConcurrencyTestAsync<DbUpdateConcurrencyException>(
+            return this.ConcurrencyTestAsync<DbUpdateConcurrencyException>(
                 ctx => ctx.Customers.Add(
                     new Customer
                     {
@@ -73,7 +73,7 @@ namespace BrightChain.EntityFrameworkCore
                 Name = "Theon",
             };
 
-            await using (var context = new ConcurrencyContext(CreateOptions(testDatabase, enableContentResponseOnWrite: false)))
+            await using (var context = new ConcurrencyContext(this.CreateOptions(testDatabase, enableContentResponseOnWrite: false)))
             {
                 await context.Database.EnsureCreatedAsync();
 
@@ -82,7 +82,7 @@ namespace BrightChain.EntityFrameworkCore
                 await context.SaveChangesAsync();
             }
 
-            await using (var context = new ConcurrencyContext(CreateOptions(testDatabase, enableContentResponseOnWrite: false)))
+            await using (var context = new ConcurrencyContext(this.CreateOptions(testDatabase, enableContentResponseOnWrite: false)))
             {
                 var customerFromStore = await context.Set<Customer>().SingleAsync();
 
@@ -107,7 +107,7 @@ namespace BrightChain.EntityFrameworkCore
                 Name = "Theon",
             };
 
-            await using (var context = new ConcurrencyContext(CreateOptions(testDatabase, enableContentResponseOnWrite: true)))
+            await using (var context = new ConcurrencyContext(this.CreateOptions(testDatabase, enableContentResponseOnWrite: true)))
             {
                 await context.Database.EnsureCreatedAsync();
 
@@ -116,7 +116,7 @@ namespace BrightChain.EntityFrameworkCore
                 await context.SaveChangesAsync();
             }
 
-            await using (var context = new ConcurrencyContext(CreateOptions(testDatabase, enableContentResponseOnWrite: true)))
+            await using (var context = new ConcurrencyContext(this.CreateOptions(testDatabase, enableContentResponseOnWrite: true)))
             {
                 var customerFromStore = await context.Set<Customer>().SingleAsync();
 
@@ -142,7 +142,7 @@ namespace BrightChain.EntityFrameworkCore
             Action<ConcurrencyContext> change)
             where TException : DbUpdateException
         {
-            return ConcurrencyTestAsync<TException>(
+            return this.ConcurrencyTestAsync<TException>(
                            null, change, change);
         }
 
@@ -160,14 +160,14 @@ namespace BrightChain.EntityFrameworkCore
             Action<ConcurrencyContext> clientChange)
             where TException : DbUpdateException
         {
-            using var outerContext = CreateContext();
+            using var outerContext = this.CreateContext();
             await outerContext.Database.EnsureCreatedAsync();
             seedAction?.Invoke(outerContext);
             await outerContext.SaveChangesAsync();
 
             clientChange?.Invoke(outerContext);
 
-            using (var innerContext = CreateContext())
+            using (var innerContext = this.CreateContext())
             {
                 storeChange?.Invoke(innerContext);
                 await innerContext.SaveChangesAsync();
@@ -182,7 +182,7 @@ namespace BrightChain.EntityFrameworkCore
 
         protected ConcurrencyContext CreateContext()
         {
-            return Fixture.CreateContext();
+            return this.Fixture.CreateContext();
         }
 
         public class BrightChainFixture : SharedStoreFixtureBase<ConcurrencyContext>

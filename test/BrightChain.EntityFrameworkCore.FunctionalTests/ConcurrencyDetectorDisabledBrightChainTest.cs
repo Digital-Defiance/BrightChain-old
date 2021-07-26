@@ -29,7 +29,7 @@ namespace BrightChain.EntityFrameworkCore
                 => BrightChainTestStoreFactory.Instance;
 
             public TestSqlLoggerFactory TestSqlLoggerFactory
-                => (TestSqlLoggerFactory)ListLoggerFactory;
+                => (TestSqlLoggerFactory)this.ListLoggerFactory;
 
             public override DbContextOptionsBuilder AddOptions(DbContextOptionsBuilder builder)
             {

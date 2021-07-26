@@ -29,7 +29,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         public BrightChainTypeMappingSource(TypeMappingSourceDependencies dependencies)
             : base(dependencies)
         {
-            _clrTypeMappings
+            this._clrTypeMappings
                 = new Dictionary<Type, BrightChainTypeMapping>
                 {
                     { typeof(byte[]), new BrightChainTypeMapping(typeof(byte[]), keyComparer: new ArrayStructuralComparer<byte>()) },
@@ -48,7 +48,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             var clrType = mappingInfo.ClrType;
             Check.DebugAssert(clrType != null, "ClrType is null");
 
-            if (_clrTypeMappings.TryGetValue(clrType, out var mapping))
+            if (this._clrTypeMappings.TryGetValue(clrType, out var mapping))
             {
                 return mapping;
             }

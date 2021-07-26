@@ -74,13 +74,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             SelectExpression selectExpression,
             IReadOnlyDictionary<string, object> parameterValues)
         {
-            _sqlBuilder.Clear();
-            _parameterValues = parameterValues;
-            _sqlParameters = new List<SqlParameter>();
+            this._sqlBuilder.Clear();
+            this._parameterValues = parameterValues;
+            this._sqlParameters = new List<SqlParameter>();
 
-            Visit(selectExpression);
+            this.Visit(selectExpression);
 
-            return new BrightChainSqlQuery(_sqlBuilder.ToString(), _sqlParameters);
+            return new BrightChainSqlQuery(this._sqlBuilder.ToString(), this._sqlParameters);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(entityProjectionExpression, nameof(entityProjectionExpression));
 
-            Visit(entityProjectionExpression.AccessExpression);
+            this.Visit(entityProjectionExpression.AccessExpression);
 
             return entityProjectionExpression;
         }
@@ -108,7 +108,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(objectArrayProjectionExpression, nameof(objectArrayProjectionExpression));
 
-            _sqlBuilder.Append(objectArrayProjectionExpression);
+            this._sqlBuilder.Append(objectArrayProjectionExpression);
 
             return objectArrayProjectionExpression;
         }
@@ -123,7 +123,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(keyAccessExpression, nameof(keyAccessExpression));
 
-            _sqlBuilder.Append(keyAccessExpression);
+            this._sqlBuilder.Append(keyAccessExpression);
 
             return keyAccessExpression;
         }
@@ -138,7 +138,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(objectAccessExpression, nameof(objectAccessExpression));
 
-            _sqlBuilder.Append(objectAccessExpression);
+            this._sqlBuilder.Append(objectAccessExpression);
 
             return objectAccessExpression;
         }
@@ -153,18 +153,18 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(projectionExpression, nameof(projectionExpression));
 
-            if (_useValueProjection)
+            if (this._useValueProjection)
             {
-                _sqlBuilder.Append('"').Append(projectionExpression.Alias).Append("\" : ");
+                this._sqlBuilder.Append('"').Append(projectionExpression.Alias).Append("\" : ");
             }
 
-            Visit(projectionExpression.Expression);
+            this.Visit(projectionExpression.Expression);
 
-            if (!_useValueProjection
+            if (!this._useValueProjection
                 && !string.IsNullOrEmpty(projectionExpression.Alias)
                 && projectionExpression.Alias != projectionExpression.Name)
             {
-                _sqlBuilder.Append(" AS " + projectionExpression.Alias);
+                this._sqlBuilder.Append(" AS " + projectionExpression.Alias);
             }
 
             return projectionExpression;
@@ -180,7 +180,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(rootReferenceExpression, nameof(rootReferenceExpression));
 
-            _sqlBuilder.Append(rootReferenceExpression);
+            this._sqlBuilder.Append(rootReferenceExpression);
 
             return rootReferenceExpression;
         }
@@ -195,11 +195,11 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(selectExpression, nameof(selectExpression));
 
-            _sqlBuilder.Append("SELECT ");
+            this._sqlBuilder.Append("SELECT ");
 
             if (selectExpression.IsDistinct)
             {
-                _sqlBuilder.Append("DISTINCT ");
+                this._sqlBuilder.Append("DISTINCT ");
             }
 
             if (selectExpression.Projection.Count > 0)
@@ -207,60 +207,60 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 if (selectExpression.Projection.Any(p => !string.IsNullOrEmpty(p.Alias) && p.Alias != p.Name)
                     && !selectExpression.Projection.Any(p => p.Expression is SqlFunctionExpression)) // Aggregates are not allowed
                 {
-                    _useValueProjection = true;
-                    _sqlBuilder.Append("VALUE {");
-                    GenerateList(selectExpression.Projection, e => Visit(e));
-                    _sqlBuilder.Append('}');
-                    _useValueProjection = false;
+                    this._useValueProjection = true;
+                    this._sqlBuilder.Append("VALUE {");
+                    this.GenerateList(selectExpression.Projection, e => this.Visit(e));
+                    this._sqlBuilder.Append('}');
+                    this._useValueProjection = false;
                 }
                 else
                 {
-                    GenerateList(selectExpression.Projection, e => Visit(e));
+                    this.GenerateList(selectExpression.Projection, e => this.Visit(e));
                 }
             }
             else
             {
-                _sqlBuilder.Append('1');
+                this._sqlBuilder.Append('1');
             }
 
-            _sqlBuilder.AppendLine();
+            this._sqlBuilder.AppendLine();
 
-            _sqlBuilder.Append("FROM root ");
-            Visit(selectExpression.FromExpression);
-            _sqlBuilder.AppendLine();
+            this._sqlBuilder.Append("FROM root ");
+            this.Visit(selectExpression.FromExpression);
+            this._sqlBuilder.AppendLine();
 
             if (selectExpression.Predicate != null)
             {
-                _sqlBuilder.Append("WHERE ");
-                Visit(selectExpression.Predicate);
+                this._sqlBuilder.Append("WHERE ");
+                this.Visit(selectExpression.Predicate);
             }
 
             if (selectExpression.Orderings.Any())
             {
-                _sqlBuilder.AppendLine().Append("ORDER BY ");
+                this._sqlBuilder.AppendLine().Append("ORDER BY ");
 
-                GenerateList(selectExpression.Orderings, e => Visit(e));
+                this.GenerateList(selectExpression.Orderings, e => this.Visit(e));
             }
 
             if (selectExpression.Offset != null
                 || selectExpression.Limit != null)
             {
-                _sqlBuilder.AppendLine().Append("OFFSET ");
+                this._sqlBuilder.AppendLine().Append("OFFSET ");
 
                 if (selectExpression.Offset != null)
                 {
-                    Visit(selectExpression.Offset);
+                    this.Visit(selectExpression.Offset);
                 }
                 else
                 {
-                    _sqlBuilder.Append('0');
+                    this._sqlBuilder.Append('0');
                 }
 
-                _sqlBuilder.Append(" LIMIT ");
+                this._sqlBuilder.Append(" LIMIT ");
 
                 if (selectExpression.Limit != null)
                 {
-                    Visit(selectExpression.Limit);
+                    this.Visit(selectExpression.Limit);
                 }
                 else
                 {
@@ -282,11 +282,11 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(orderingExpression, nameof(orderingExpression));
 
-            Visit(orderingExpression.Expression);
+            this.Visit(orderingExpression.Expression);
 
             if (!orderingExpression.IsAscending)
             {
-                _sqlBuilder.Append(" DESC");
+                this._sqlBuilder.Append(" DESC");
             }
 
             return orderingExpression;
@@ -302,9 +302,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(sqlBinaryExpression, nameof(sqlBinaryExpression));
 
-            var op = _operatorMap[sqlBinaryExpression.OperatorType];
-            _sqlBuilder.Append('(');
-            Visit(sqlBinaryExpression.Left);
+            var op = this._operatorMap[sqlBinaryExpression.OperatorType];
+            this._sqlBuilder.Append('(');
+            this.Visit(sqlBinaryExpression.Left);
 
             if (sqlBinaryExpression.OperatorType == ExpressionType.Add
                 && sqlBinaryExpression.Left.Type == typeof(string))
@@ -312,10 +312,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 op = " || ";
             }
 
-            _sqlBuilder.Append(op);
+            this._sqlBuilder.Append(op);
 
-            Visit(sqlBinaryExpression.Right);
-            _sqlBuilder.Append(')');
+            this.Visit(sqlBinaryExpression.Right);
+            this._sqlBuilder.Append(')');
 
             return sqlBinaryExpression;
         }
@@ -330,7 +330,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(sqlUnaryExpression, nameof(sqlUnaryExpression));
 
-            var op = _operatorMap[sqlUnaryExpression.OperatorType];
+            var op = this._operatorMap[sqlUnaryExpression.OperatorType];
 
             if (sqlUnaryExpression.OperatorType == ExpressionType.Not
                 && sqlUnaryExpression.Operand.Type == typeof(bool))
@@ -338,11 +338,11 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 op = "NOT";
             }
 
-            _sqlBuilder.Append(op);
+            this._sqlBuilder.Append(op);
 
-            _sqlBuilder.Append('(');
-            Visit(sqlUnaryExpression.Operand);
-            _sqlBuilder.Append(')');
+            this._sqlBuilder.Append('(');
+            this.Visit(sqlUnaryExpression.Operand);
+            this._sqlBuilder.Append(')');
 
             return sqlUnaryExpression;
         }
@@ -358,7 +358,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             {
                 if (i > 0)
                 {
-                    joinAction(_sqlBuilder);
+                    joinAction(this._sqlBuilder);
                 }
 
                 generationAction(items[i]);
@@ -375,9 +375,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(sqlConstantExpression, nameof(sqlConstantExpression));
 
-            var jToken = GenerateJToken(sqlConstantExpression.Value, sqlConstantExpression.TypeMapping);
+            var jToken = this.GenerateJToken(sqlConstantExpression.Value, sqlConstantExpression.TypeMapping);
 
-            _sqlBuilder.Append(jToken == null ? "null" : jToken.ToString());
+            this._sqlBuilder.Append(jToken == null ? "null" : jToken.ToString());
 
             return sqlConstantExpression;
         }
@@ -415,13 +415,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(sqlConditionalExpression, nameof(sqlConditionalExpression));
 
-            _sqlBuilder.Append('(');
-            Visit(sqlConditionalExpression.Test);
-            _sqlBuilder.Append(" ? ");
-            Visit(sqlConditionalExpression.IfTrue);
-            _sqlBuilder.Append(" : ");
-            Visit(sqlConditionalExpression.IfFalse);
-            _sqlBuilder.Append(')');
+            this._sqlBuilder.Append('(');
+            this.Visit(sqlConditionalExpression.Test);
+            this._sqlBuilder.Append(" ? ");
+            this.Visit(sqlConditionalExpression.IfTrue);
+            this._sqlBuilder.Append(" : ");
+            this.Visit(sqlConditionalExpression.IfFalse);
+            this._sqlBuilder.Append(')');
 
             return sqlConditionalExpression;
         }
@@ -438,13 +438,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             var parameterName = $"@{sqlParameterExpression.Name}";
 
-            if (_sqlParameters.All(sp => sp.Name != parameterName))
+            if (this._sqlParameters.All(sp => sp.Name != parameterName))
             {
-                var jToken = GenerateJToken(_parameterValues[sqlParameterExpression.Name], sqlParameterExpression.TypeMapping);
-                _sqlParameters.Add(new SqlParameter(parameterName, jToken));
+                var jToken = this.GenerateJToken(this._parameterValues[sqlParameterExpression.Name], sqlParameterExpression.TypeMapping);
+                this._sqlParameters.Add(new SqlParameter(parameterName, jToken));
             }
 
-            _sqlBuilder.Append(parameterName);
+            this._sqlBuilder.Append(parameterName);
 
             return sqlParameterExpression;
         }
@@ -459,14 +459,14 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(inExpression, nameof(inExpression));
 
-            Visit(inExpression.Item);
-            _sqlBuilder.Append(inExpression.IsNegated ? " NOT IN " : " IN ");
-            _sqlBuilder.Append('(');
+            this.Visit(inExpression.Item);
+            this._sqlBuilder.Append(inExpression.IsNegated ? " NOT IN " : " IN ");
+            this._sqlBuilder.Append('(');
             var valuesConstant = (SqlConstantExpression)inExpression.Values;
             var valuesList = ((IEnumerable<object>)valuesConstant.Value)
                 .Select(v => new SqlConstantExpression(Expression.Constant(v), valuesConstant.TypeMapping)).ToList();
-            GenerateList(valuesList, e => Visit(e));
-            _sqlBuilder.Append(')');
+            this.GenerateList(valuesList, e => this.Visit(e));
+            this._sqlBuilder.Append(')');
 
             return inExpression;
         }
@@ -481,10 +481,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(sqlFunctionExpression, nameof(sqlFunctionExpression));
 
-            _sqlBuilder.Append(sqlFunctionExpression.Name);
-            _sqlBuilder.Append('(');
-            GenerateList(sqlFunctionExpression.Arguments, e => Visit(e));
-            _sqlBuilder.Append(')');
+            this._sqlBuilder.Append(sqlFunctionExpression.Name);
+            this._sqlBuilder.Append('(');
+            this.GenerateList(sqlFunctionExpression.Arguments, e => this.Visit(e));
+            this._sqlBuilder.Append(')');
 
             return sqlFunctionExpression;
         }

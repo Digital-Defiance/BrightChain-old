@@ -38,11 +38,11 @@ namespace BrightChain.EntityFrameworkCore.Update.Internal
         /// </summary>
         public DocumentSource(IEntityType entityType, BrightChainDatabaseWrapper database)
         {
-            _containerId = entityType.GetContainer()!;
-            _database = database;
-            _entityType = entityType;
-            _idProperty = entityType.GetProperties().FirstOrDefault(p => p.GetJsonPropertyName() == StoreKeyConvention.IdPropertyJsonName);
-            _jObjectProperty = entityType.FindProperty(StoreKeyConvention.JObjectPropertyName);
+            this._containerId = entityType.GetContainer()!;
+            this._database = database;
+            this._entityType = entityType;
+            this._idProperty = entityType.GetProperties().FirstOrDefault(p => p.GetJsonPropertyName() == StoreKeyConvention.IdPropertyJsonName);
+            this._jObjectProperty = entityType.FindProperty(StoreKeyConvention.JObjectPropertyName);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace BrightChain.EntityFrameworkCore.Update.Internal
         /// </summary>
         public virtual string GetContainerId()
         {
-            return _containerId;
+            return this._containerId;
         }
 
         /// <summary>
@@ -64,9 +64,9 @@ namespace BrightChain.EntityFrameworkCore.Update.Internal
         /// </summary>
         public virtual string GetId(IUpdateEntry entry)
         {
-            return _idProperty is null
-                           ? throw new InvalidOperationException(BrightChainStrings.NoIdProperty(_entityType.DisplayName()))
-                           : (string)entry.GetCurrentProviderValue(_idProperty)!;
+            return this._idProperty is null
+                           ? throw new InvalidOperationException(BrightChainStrings.NoIdProperty(this._entityType.DisplayName()))
+                           : (string)entry.GetCurrentProviderValue(this._idProperty)!;
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace BrightChain.EntityFrameworkCore.Update.Internal
         /// </summary>
         public virtual JsonNode CreateDocument(IUpdateEntry entry)
         {
-            return CreateDocument(entry, null);
+            return this.CreateDocument(entry, null);
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace BrightChain.EntityFrameworkCore.Update.Internal
 #pragma warning disable EF1001 // Internal EF Core API usage.
                     // #16707
                     var dependentEntry = ((InternalEntityEntry)entry).StateManager.TryGetEntry(embeddedValue, fk.DeclaringEntityType)!;
-                    document[embeddedPropertyName] = _database.GetDocumentSource(dependentEntry.EntityType).CreateDocument(dependentEntry);
+                    document[embeddedPropertyName] = this._database.GetDocumentSource(dependentEntry.EntityType).CreateDocument(dependentEntry);
 #pragma warning restore EF1001 // Internal EF Core API usage.
                 }
                 else
@@ -139,7 +139,7 @@ namespace BrightChain.EntityFrameworkCore.Update.Internal
 #pragma warning disable EF1001 // Internal EF Core API usage.
                         // #16707
                         var dependentEntry = ((InternalEntityEntry)entry).StateManager.TryGetEntry(dependent, fk.DeclaringEntityType)!;
-                        array.Add(_database.GetDocumentSource(dependentEntry.EntityType).CreateDocument(dependentEntry, embeddedOrdinal));
+                        array.Add(this._database.GetDocumentSource(dependentEntry.EntityType).CreateDocument(dependentEntry, embeddedOrdinal));
 #pragma warning restore EF1001 // Internal EF Core API usage.
                         embeddedOrdinal++;
                     }
@@ -159,7 +159,7 @@ namespace BrightChain.EntityFrameworkCore.Update.Internal
         /// </summary>
         public virtual JsonNode? UpdateDocument(JsonNode document, IUpdateEntry entry)
         {
-            return UpdateDocument(document, entry, null);
+            return this.UpdateDocument(document, entry, null);
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace BrightChain.EntityFrameworkCore.Update.Internal
                     continue;
                 }
 
-                var embeddedDocumentSource = _database.GetDocumentSource(fk.DeclaringEntityType);
+                var embeddedDocumentSource = this._database.GetDocumentSource(fk.DeclaringEntityType);
                 var embeddedValue = entry.GetCurrentValue(ownedNavigation);
                 var embeddedPropertyName = fk.DeclaringEntityType.GetContainingPropertyName();
                 if (embeddedValue == null)
@@ -242,7 +242,7 @@ namespace BrightChain.EntityFrameworkCore.Update.Internal
                 else
                 {
                     var embeddedOrdinal = 1;
-                    var ordinalKeyProperty = FindOrdinalKeyProperty(fk.DeclaringEntityType);
+                    var ordinalKeyProperty = this.FindOrdinalKeyProperty(fk.DeclaringEntityType);
                     if (ordinalKeyProperty != null)
                     {
                         var shouldSetTemporaryKeys = false;

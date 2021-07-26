@@ -49,7 +49,7 @@ namespace BrightChain.EntityFrameworkCore.Metadata.Conventions
 
             if (name == BrightChainAnnotationNames.PartitionKeyName)
             {
-                TryConfigurePrimaryKey(entityTypeBuilder);
+                this.TryConfigurePrimaryKey(entityTypeBuilder);
             }
         }
 

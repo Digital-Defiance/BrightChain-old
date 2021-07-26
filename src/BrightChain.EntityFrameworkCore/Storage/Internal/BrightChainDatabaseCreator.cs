@@ -37,10 +37,10 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             IUpdateAdapterFactory updateAdapterFactory,
             IDatabase database)
         {
-            _brightChainClient = brightChainClient;
-            _designTimeModel = designTimeModel;
-            _updateAdapterFactory = updateAdapterFactory;
-            _database = database;
+            this._brightChainClient = brightChainClient;
+            this._designTimeModel = designTimeModel;
+            this._updateAdapterFactory = updateAdapterFactory;
+            this._database = database;
         }
 
         /// <summary>
@@ -51,13 +51,13 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         public virtual bool EnsureCreated()
         {
-            var created = _brightChainClient.CreateDatabaseIfNotExists();
-            foreach (var entityType in _designTimeModel.Model.GetEntityTypes())
+            var created = this._brightChainClient.CreateDatabaseIfNotExists();
+            foreach (var entityType in this._designTimeModel.Model.GetEntityTypes())
             {
                 var containerName = entityType.GetContainer();
                 if (containerName != null)
                 {
-                    created |= _brightChainClient.CreateContainerIfNotExists(
+                    created |= this._brightChainClient.CreateContainerIfNotExists(
                         containerName,
                         GetPartitionKeyStoreName(entityType));
                 }
@@ -65,7 +65,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
 
             if (created)
             {
-                Seed();
+                this.Seed();
             }
 
             return created;
@@ -79,14 +79,14 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         public virtual async Task<bool> EnsureCreatedAsync(CancellationToken cancellationToken = default)
         {
-            var created = await _brightChainClient.CreateDatabaseIfNotExistsAsync(cancellationToken)
+            var created = await this._brightChainClient.CreateDatabaseIfNotExistsAsync(cancellationToken)
                 .ConfigureAwait(false);
-            foreach (var entityType in _designTimeModel.Model.GetEntityTypes())
+            foreach (var entityType in this._designTimeModel.Model.GetEntityTypes())
             {
                 var containerName = entityType.GetContainer();
                 if (containerName != null)
                 {
-                    created |= await _brightChainClient.CreateContainerIfNotExistsAsync(
+                    created |= await this._brightChainClient.CreateContainerIfNotExistsAsync(
                             containerName,
                             GetPartitionKeyStoreName(entityType),
                             cancellationToken)
@@ -96,7 +96,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
 
             if (created)
             {
-                await SeedAsync(cancellationToken).ConfigureAwait(false);
+                await this.SeedAsync(cancellationToken).ConfigureAwait(false);
             }
 
             return created;
@@ -110,9 +110,9 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         public virtual void Seed()
         {
-            var updateAdapter = AddSeedData();
+            var updateAdapter = this.AddSeedData();
 
-            _database.SaveChanges(updateAdapter.GetEntriesToSave());
+            this._database.SaveChanges(updateAdapter.GetEntriesToSave());
         }
 
         /// <summary>
@@ -123,15 +123,15 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         public virtual Task SeedAsync(CancellationToken cancellationToken = default)
         {
-            var updateAdapter = AddSeedData();
+            var updateAdapter = this.AddSeedData();
 
-            return _database.SaveChangesAsync(updateAdapter.GetEntriesToSave(), cancellationToken);
+            return this._database.SaveChangesAsync(updateAdapter.GetEntriesToSave(), cancellationToken);
         }
 
         private IUpdateAdapter AddSeedData()
         {
-            var updateAdapter = _updateAdapterFactory.CreateStandalone();
-            foreach (var entityType in _designTimeModel.Model.GetEntityTypes())
+            var updateAdapter = this._updateAdapterFactory.CreateStandalone();
+            foreach (var entityType in this._designTimeModel.Model.GetEntityTypes())
             {
                 IEntityType? targetEntityType = null;
                 foreach (var targetSeed in entityType.GetSeedData())
@@ -153,7 +153,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         public virtual bool EnsureDeleted()
         {
-            return _brightChainClient.DeleteDatabase();
+            return this._brightChainClient.DeleteDatabase();
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         public virtual Task<bool> EnsureDeletedAsync(CancellationToken cancellationToken = default)
         {
-            return _brightChainClient.DeleteDatabaseAsync(cancellationToken);
+            return this._brightChainClient.DeleteDatabaseAsync(cancellationToken);
         }
 
         /// <summary>

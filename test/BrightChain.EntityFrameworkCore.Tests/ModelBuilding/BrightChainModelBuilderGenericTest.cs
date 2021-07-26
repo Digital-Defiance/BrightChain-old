@@ -36,7 +36,7 @@ namespace BrightChain.EntityFrameworkCore.ModelBuilding
             [ConditionalFact]
             public override void Properties_can_have_provider_type_set_for_type()
             {
-                var modelBuilder = CreateModelBuilder(c => c.Properties<string>().HaveConversion<byte[]>());
+                var modelBuilder = this.CreateModelBuilder(c => c.Properties<string>().HaveConversion<byte[]>());
 
                 modelBuilder.Entity<Quarks>(
                     b =>
@@ -60,7 +60,7 @@ namespace BrightChain.EntityFrameworkCore.ModelBuilding
             [ConditionalFact]
             public virtual void Partition_key_is_added_to_the_keys()
             {
-                var modelBuilder = CreateModelBuilder();
+                var modelBuilder = this.CreateModelBuilder();
 
                 modelBuilder.Entity<Customer>()
                     .Ignore(b => b.Details)
@@ -87,7 +87,7 @@ namespace BrightChain.EntityFrameworkCore.ModelBuilding
             [ConditionalFact]
             public virtual void Partition_key_is_added_to_the_alternate_key_if_primary_key_contains_id()
             {
-                var modelBuilder = CreateModelBuilder();
+                var modelBuilder = this.CreateModelBuilder();
 
                 modelBuilder.Entity<Customer>().HasKey(StoreKeyConvention.DefaultIdPropertyName);
                 modelBuilder.Entity<Customer>()
@@ -111,7 +111,7 @@ namespace BrightChain.EntityFrameworkCore.ModelBuilding
             [ConditionalFact]
             public virtual void No_id_property_created_if_another_property_mapped_to_id()
             {
-                var modelBuilder = CreateModelBuilder();
+                var modelBuilder = this.CreateModelBuilder();
 
                 modelBuilder.Entity<Customer>()
                     .Property(c => c.Name)
@@ -136,7 +136,7 @@ namespace BrightChain.EntityFrameworkCore.ModelBuilding
             [ConditionalFact]
             public virtual void No_id_property_created_if_another_property_mapped_to_id_in_pk()
             {
-                var modelBuilder = CreateModelBuilder();
+                var modelBuilder = this.CreateModelBuilder();
 
                 modelBuilder.Entity<Customer>()
                     .Property(c => c.Name)
@@ -162,7 +162,7 @@ namespace BrightChain.EntityFrameworkCore.ModelBuilding
             [ConditionalFact]
             public virtual void No_alternate_key_is_created_if_primary_key_contains_id()
             {
-                var modelBuilder = CreateModelBuilder();
+                var modelBuilder = this.CreateModelBuilder();
 
                 modelBuilder.Entity<Customer>().HasKey(StoreKeyConvention.DefaultIdPropertyName);
                 modelBuilder.Entity<Customer>()
@@ -186,7 +186,7 @@ namespace BrightChain.EntityFrameworkCore.ModelBuilding
             [ConditionalFact]
             public virtual void No_alternate_key_is_created_if_primary_key_contains_id_and_partition_key()
             {
-                var modelBuilder = CreateModelBuilder();
+                var modelBuilder = this.CreateModelBuilder();
 
                 modelBuilder.Entity<Customer>().HasKey(nameof(Customer.AlternateKey), StoreKeyConvention.DefaultIdPropertyName);
                 modelBuilder.Entity<Customer>()
@@ -208,7 +208,7 @@ namespace BrightChain.EntityFrameworkCore.ModelBuilding
             [ConditionalFact]
             public virtual void No_alternate_key_is_created_if_id_is_partition_key()
             {
-                var modelBuilder = CreateModelBuilder();
+                var modelBuilder = this.CreateModelBuilder();
 
                 modelBuilder.Entity<Customer>().HasKey(nameof(Customer.AlternateKey));
                 modelBuilder.Entity<Customer>()
@@ -229,7 +229,7 @@ namespace BrightChain.EntityFrameworkCore.ModelBuilding
 
             protected override TestModelBuilder CreateModelBuilder(Action<ModelConfigurationBuilder> configure = null)
             {
-                return CreateTestModelBuilder(BrightChainTestHelpers.Instance, configure);
+                return this.CreateTestModelBuilder(BrightChainTestHelpers.Instance, configure);
             }
         }
 
@@ -242,7 +242,7 @@ namespace BrightChain.EntityFrameworkCore.ModelBuilding
 
             protected override TestModelBuilder CreateModelBuilder(Action<ModelConfigurationBuilder> configure = null)
             {
-                return CreateTestModelBuilder(BrightChainTestHelpers.Instance, configure);
+                return this.CreateTestModelBuilder(BrightChainTestHelpers.Instance, configure);
             }
         }
 
@@ -250,7 +250,7 @@ namespace BrightChain.EntityFrameworkCore.ModelBuilding
         {
             protected override TestModelBuilder CreateModelBuilder(Action<ModelConfigurationBuilder> configure = null)
             {
-                return CreateTestModelBuilder(BrightChainTestHelpers.Instance, configure);
+                return this.CreateTestModelBuilder(BrightChainTestHelpers.Instance, configure);
             }
         }
 
@@ -258,7 +258,7 @@ namespace BrightChain.EntityFrameworkCore.ModelBuilding
         {
             protected override TestModelBuilder CreateModelBuilder(Action<ModelConfigurationBuilder> configure = null)
             {
-                return CreateTestModelBuilder(BrightChainTestHelpers.Instance, configure);
+                return this.CreateTestModelBuilder(BrightChainTestHelpers.Instance, configure);
             }
         }
 
@@ -266,7 +266,7 @@ namespace BrightChain.EntityFrameworkCore.ModelBuilding
         {
             protected override TestModelBuilder CreateModelBuilder(Action<ModelConfigurationBuilder> configure = null)
             {
-                return CreateTestModelBuilder(BrightChainTestHelpers.Instance, configure);
+                return this.CreateTestModelBuilder(BrightChainTestHelpers.Instance, configure);
             }
         }
 
@@ -275,7 +275,7 @@ namespace BrightChain.EntityFrameworkCore.ModelBuilding
             [ConditionalFact]
             public virtual void Can_use_shared_type_as_join_entity_with_partition_keys()
             {
-                var modelBuilder = CreateModelBuilder();
+                var modelBuilder = this.CreateModelBuilder();
 
                 modelBuilder.Ignore<OneToManyNavPrincipal>();
                 modelBuilder.Ignore<OneToOneNavPrincipal>();
@@ -317,7 +317,7 @@ namespace BrightChain.EntityFrameworkCore.ModelBuilding
 
             protected override TestModelBuilder CreateModelBuilder(Action<ModelConfigurationBuilder> configure = null)
             {
-                return CreateTestModelBuilder(BrightChainTestHelpers.Instance, configure);
+                return this.CreateTestModelBuilder(BrightChainTestHelpers.Instance, configure);
             }
         }
 
@@ -325,7 +325,7 @@ namespace BrightChain.EntityFrameworkCore.ModelBuilding
         {
             protected override TestModelBuilder CreateModelBuilder(Action<ModelConfigurationBuilder> configure = null)
             {
-                return CreateTestModelBuilder(BrightChainTestHelpers.Instance, configure);
+                return this.CreateTestModelBuilder(BrightChainTestHelpers.Instance, configure);
             }
         }
     }

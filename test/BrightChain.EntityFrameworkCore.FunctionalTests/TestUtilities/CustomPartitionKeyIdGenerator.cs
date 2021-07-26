@@ -17,7 +17,7 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
 
         public override T Next(EntityEntry entry)
         {
-            return (T)NextValue(entry);
+            return (T)this.NextValue(entry);
         }
 
         protected override object NextValue(EntityEntry entry)

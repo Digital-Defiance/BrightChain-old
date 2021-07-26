@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Models.Blocks.Chains;
-using BrightChain.Engine.Models.Blocks.DataObjects;
 
 namespace BrightChain.Engine.Models.Blocks
 {
@@ -31,11 +28,11 @@ namespace BrightChain.Engine.Models.Blocks
         public static readonly Dictionary<BlockSize, int> HashesPerBlockMap = new Dictionary<BlockSize, int>
         {
             { Enumerations.BlockSize.Unknown,   -1 },
-            { Enumerations.BlockSize.Message,   (int)(MessageSize / BlockHash.HashSizeBytes) },
-            { Enumerations.BlockSize.Tiny,      (int)(TinySize / BlockHash.HashSizeBytes) },
-            { Enumerations.BlockSize.Small,     (int)(SmallSize / BlockHash.HashSizeBytes) },
-            { Enumerations.BlockSize.Medium,    (int)(MediumSize / BlockHash.HashSizeBytes) },
-            { Enumerations.BlockSize.Large,     (int)(LargeSize / BlockHash.HashSizeBytes) },
+            { Enumerations.BlockSize.Message,   MessageSize / BlockHash.HashSizeBytes },
+            { Enumerations.BlockSize.Tiny,      TinySize / BlockHash.HashSizeBytes },
+            { Enumerations.BlockSize.Small,     SmallSize / BlockHash.HashSizeBytes },
+            { Enumerations.BlockSize.Medium,    MediumSize / BlockHash.HashSizeBytes },
+            { Enumerations.BlockSize.Large,     LargeSize / BlockHash.HashSizeBytes },
         };
 
         /// <summary>

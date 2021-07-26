@@ -33,8 +33,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             CoreTypeMapping? typeMapping)
             : base(type, typeMapping)
         {
-            Name = name;
-            Arguments = arguments.ToList();
+            this.Name = name;
+            this.Arguments = arguments.ToList();
         }
 
         /// <summary>
@@ -64,19 +64,19 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(visitor, nameof(visitor));
 
             var changed = false;
-            var arguments = new SqlExpression[Arguments.Count];
+            var arguments = new SqlExpression[this.Arguments.Count];
             for (var i = 0; i < arguments.Length; i++)
             {
-                arguments[i] = (SqlExpression)visitor.Visit(Arguments[i]);
-                changed |= arguments[i] != Arguments[i];
+                arguments[i] = (SqlExpression)visitor.Visit(this.Arguments[i]);
+                changed |= arguments[i] != this.Arguments[i];
             }
 
             return changed
                 ? new SqlFunctionExpression(
-                    Name,
+                    this.Name,
                     arguments,
-                    Type,
-                    TypeMapping)
+                    this.Type,
+                    this.TypeMapping)
                 : this;
         }
 
@@ -88,7 +88,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlFunctionExpression ApplyTypeMapping(CoreTypeMapping? typeMapping)
         {
-            return new(Name, Arguments, Type, typeMapping ?? TypeMapping);
+            return new(this.Name, this.Arguments, this.Type, typeMapping ?? this.TypeMapping);
         }
 
         /// <summary>
@@ -99,8 +99,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlFunctionExpression Update(IReadOnlyList<SqlExpression> arguments)
         {
-            return !arguments.SequenceEqual(Arguments)
-                           ? new SqlFunctionExpression(Name, arguments, Type, TypeMapping)
+            return !arguments.SequenceEqual(this.Arguments)
+                           ? new SqlFunctionExpression(this.Name, arguments, this.Type, this.TypeMapping)
                            : this;
         }
 
@@ -114,9 +114,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(expressionPrinter, nameof(expressionPrinter));
 
-            expressionPrinter.Append(Name);
+            expressionPrinter.Append(this.Name);
             expressionPrinter.Append("(");
-            expressionPrinter.VisitCollection(Arguments);
+            expressionPrinter.VisitCollection(this.Arguments);
             expressionPrinter.Append(")");
         }
 
@@ -131,14 +131,14 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return obj != null
                            && (ReferenceEquals(this, obj)
                                || obj is SqlFunctionExpression sqlFunctionExpression
-                               && Equals(sqlFunctionExpression));
+                               && this.Equals(sqlFunctionExpression));
         }
 
         private bool Equals(SqlFunctionExpression sqlFunctionExpression)
         {
             return base.Equals(sqlFunctionExpression)
-                           && Name == sqlFunctionExpression.Name
-                           && Arguments.SequenceEqual(sqlFunctionExpression.Arguments);
+                           && this.Name == sqlFunctionExpression.Name
+                           && this.Arguments.SequenceEqual(sqlFunctionExpression.Arguments);
         }
 
         /// <summary>
@@ -151,10 +151,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             var hash = new HashCode();
             hash.Add(base.GetHashCode());
-            hash.Add(Name);
-            for (var i = 0; i < Arguments.Count; i++)
+            hash.Add(this.Name);
+            for (var i = 0; i < this.Arguments.Count; i++)
             {
-                hash.Add(Arguments[i]);
+                hash.Add(this.Arguments[i]);
             }
 
             return hash.ToHashCode();

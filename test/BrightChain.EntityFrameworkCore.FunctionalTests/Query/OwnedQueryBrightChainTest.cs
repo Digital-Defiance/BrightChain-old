@@ -19,7 +19,7 @@ namespace BrightChain.EntityFrameworkCore.Query
         public OwnedQueryBrightChainTest(OwnedQueryBrightChainFixture fixture, ITestOutputHelper testOutputHelper)
             : base(fixture)
         {
-            ClearLog();
+            this.ClearLog();
             //TestLoggerFactory.TestOutputHelper = testOutputHelper;
         }
 
@@ -40,7 +40,7 @@ namespace BrightChain.EntityFrameworkCore.Query
         {
             await base.Navigation_rewrite_on_owned_collection(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""LeafB"") OR ((c[""Discriminator""] = ""LeafA"") OR ((c[""Discriminator""] = ""Branch"") OR (c[""Discriminator""] = ""OwnedPerson""))))");
@@ -51,7 +51,7 @@ WHERE ((c[""Discriminator""] = ""LeafB"") OR ((c[""Discriminator""] = ""LeafA"")
         {
             await base.Navigation_rewrite_on_owned_collection_with_composition(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         [ConditionalTheory(Skip = "Issue#16926")]
@@ -59,14 +59,14 @@ WHERE ((c[""Discriminator""] = ""LeafB"") OR ((c[""Discriminator""] = ""LeafA"")
         {
             await base.Navigation_rewrite_on_owned_collection_with_composition_complex(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         public override async Task Navigation_rewrite_on_owned_reference_projecting_entity(bool async)
         {
             await base.Navigation_rewrite_on_owned_reference_projecting_entity(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"") AND (c[""PersonAddress""][""Country""][""Name""] = ""USA""))");
@@ -76,7 +76,7 @@ WHERE (c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"
         {
             await base.Navigation_rewrite_on_owned_reference_projecting_scalar(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c[""PersonAddress""][""Country""][""Name""]
 FROM root c
 WHERE (c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"") AND (c[""PersonAddress""][""Country""][""Name""] = ""USA""))");
@@ -86,7 +86,7 @@ WHERE (c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"
         {
             await base.Query_for_base_type_loads_all_owned_navs(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"")");
@@ -96,7 +96,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Query_for_branch_type_loads_all_owned_navs(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE c[""Discriminator""] IN (""Branch"", ""LeafA"")");
@@ -106,7 +106,7 @@ WHERE c[""Discriminator""] IN (""Branch"", ""LeafA"")");
         {
             await base.Query_for_branch_type_loads_all_owned_navs_tracking(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE c[""Discriminator""] IN (""Branch"", ""LeafA"")");
@@ -116,7 +116,7 @@ WHERE c[""Discriminator""] IN (""Branch"", ""LeafA"")");
         {
             await base.Query_for_leaf_type_loads_all_owned_navs(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""LeafA"")");
@@ -224,7 +224,7 @@ WHERE (c[""Discriminator""] = ""LeafA"")");
         {
             await base.Query_with_OfType_eagerly_loads_correct_owned_navigations(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"") AND (c[""Discriminator""] = ""LeafA""))");
@@ -294,7 +294,7 @@ WHERE (c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"
         {
             await base.Can_query_on_indexer_properties(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"") AND (c[""Name""] = ""Mona Cy""))");
@@ -304,7 +304,7 @@ WHERE (c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"
         {
             await base.Can_query_on_owned_indexer_properties(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c[""Name""]
 FROM root c
 WHERE (c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"") AND (c[""PersonAddress""][""ZipCode""] = 38654))");
@@ -314,7 +314,7 @@ WHERE (c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"
         {
             await base.Can_query_on_indexer_property_when_property_name_from_closure(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c[""Name""]
 FROM root c
 WHERE (c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"") AND (c[""Name""] = ""Mona Cy""))");
@@ -324,7 +324,7 @@ WHERE (c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"
         {
             await base.Can_project_indexer_properties(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c[""Name""]
 FROM root c
 WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"")");
@@ -334,7 +334,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Can_project_owned_indexer_properties(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c[""PersonAddress""][""AddressLine""]
 FROM root c
 WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"")");
@@ -344,7 +344,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Can_project_indexer_properties_converted(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c[""Name""]
 FROM root c
 WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"")");
@@ -360,7 +360,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Can_OrderBy_indexer_properties(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         [ConditionalTheory(Skip = "OrderBy requires composite index #17246")]
@@ -368,7 +368,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Can_OrderBy_indexer_properties_converted(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         [ConditionalTheory(Skip = "OrderBy requires composite index #17246")]
@@ -376,7 +376,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Can_OrderBy_owned_indexer_properties(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         [ConditionalTheory(Skip = "OrderBy requires composite index #17246")]
@@ -384,7 +384,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Can_OrderBy_owened_indexer_properties_converted(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         [ConditionalTheory(Skip = "GroupBy #17246")]
@@ -392,7 +392,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Can_group_by_indexer_property(isAsync);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         [ConditionalTheory(Skip = "GroupBy #17246")]
@@ -400,7 +400,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Can_group_by_converted_indexer_property(isAsync);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         [ConditionalTheory(Skip = "GroupBy #17246")]
@@ -408,7 +408,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Can_group_by_owned_indexer_property(isAsync);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         [ConditionalTheory(Skip = "GroupBy #17246")]
@@ -416,7 +416,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Can_group_by_converted_owned_indexer_property(isAsync);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         [ConditionalTheory(Skip = "Join #17246")]
@@ -424,14 +424,14 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Can_join_on_indexer_property_on_query(isAsync);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         public override async Task Projecting_indexer_property_ignores_include(bool isAsync)
         {
             await base.Projecting_indexer_property_ignores_include(isAsync);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT VALUE {""Nation"" : c[""PersonAddress""][""ZipCode""]}
 FROM root c
 WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"")");
@@ -441,7 +441,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Projecting_indexer_property_ignores_include_converted(isAsync);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT VALUE {""Nation"" : c[""PersonAddress""][""ZipCode""]}
 FROM root c
 WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA"")");
@@ -452,7 +452,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Indexer_property_is_pushdown_into_subquery(isAsync);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         [ConditionalTheory(Skip = "Composition over owned collection #17246")]
@@ -460,7 +460,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Can_query_indexer_property_on_owned_collection(isAsync);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         [ConditionalTheory(Skip = "No SelectMany, No Ability to Include navigation back to owner #17246")]
@@ -474,7 +474,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Ordering_by_identifying_projection(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         [ConditionalTheory(Skip = "Composition over owned collection #17246")]
@@ -482,7 +482,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Query_on_collection_entry_works_for_owned_collection(isAsync);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         [ConditionalTheory(Skip = "issue #17246")]
@@ -490,17 +490,17 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
         {
             await base.Projecting_collection_correlated_with_keyless_entity_after_navigation_works_using_parent_identifiers(isAsync);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         private void AssertSql(params string[] expected)
         {
-            Fixture.TestSqlLoggerFactory.AssertBaseline(expected);
+            this.Fixture.TestSqlLoggerFactory.AssertBaseline(expected);
         }
 
         private void ClearLog()
         {
-            Fixture.TestSqlLoggerFactory.Clear();
+            this.Fixture.TestSqlLoggerFactory.Clear();
         }
 
         public class OwnedQueryBrightChainFixture : OwnedQueryFixtureBase
@@ -509,7 +509,7 @@ WHERE c[""Discriminator""] IN (""OwnedPerson"", ""Branch"", ""LeafB"", ""LeafA""
                 => BrightChainTestStoreFactory.Instance;
 
             public TestSqlLoggerFactory TestSqlLoggerFactory
-                => (TestSqlLoggerFactory)ServiceProvider.GetRequiredService<ILoggerFactory>();
+                => (TestSqlLoggerFactory)this.ServiceProvider.GetRequiredService<ILoggerFactory>();
 
             protected override void OnModelCreating(ModelBuilder modelBuilder, DbContext context)
             {

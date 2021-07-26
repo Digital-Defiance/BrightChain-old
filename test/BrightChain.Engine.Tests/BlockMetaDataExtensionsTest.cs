@@ -14,7 +14,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using static BrightChain.Engine.Helpers.Utilities;
-using static BrightChain.Engine.Tests.Helpers.TestHelpers;
 
 namespace BrightChain.Engine.Tests
 {
@@ -27,7 +26,7 @@ namespace BrightChain.Engine.Tests
         protected readonly ILogger logger;
         public BlockMetaDataExtensionsTest()
         {
-            logger = new Moq.Mock<ILogger>().Object;
+            this.logger = new Moq.Mock<ILogger>().Object;
         }
 
         [DataTestMethod]
@@ -73,7 +72,7 @@ namespace BrightChain.Engine.Tests
 
             Assert.AreEqual(block.StorageContract, contract);
 
-            var loggerMock = Mock.Get(logger);
+            var loggerMock = Mock.Get(this.logger);
             loggerMock.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
@@ -102,7 +101,7 @@ namespace BrightChain.Engine.Tests
             var block = new ConstituentBlockListBlock(
                             blockParams: new ConstituentBlockListBlockParams(
                                 blockParams: new TransactableBlockParams(
-                                    cacheManager: new MemoryDictionaryBlockCacheManager(logger: logger, configuration: new Configuration()),
+                                    cacheManager: new MemoryDictionaryBlockCacheManager(logger: this.logger, configuration: new Configuration()),
                                     allowCommit: true,
                                     blockParams: dummyBlock.BlockParams),
                                 sourceId: new BlockHash(dummyBlock),
@@ -184,7 +183,7 @@ namespace BrightChain.Engine.Tests
             Assert.AreEqual(block.StorageContract, block2.StorageContract);
             Assert.AreEqual(block.Signature, block2.Signature);
 
-            var loggerMock = Mock.Get(logger);
+            var loggerMock = Mock.Get(this.logger);
             loggerMock.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
@@ -245,7 +244,7 @@ namespace BrightChain.Engine.Tests
                         sourceDataLength: dummyBlock.Data.Length,
                         computed: true), // known incorrect hash
                     segmentId: new SegmentHash(dummyBlock.Data),
-                    totalLength: (long)BlockSizeMap.BlockSize(dummyBlock.BlockSize),
+                    totalLength: BlockSizeMap.BlockSize(dummyBlock.BlockSize),
                     constituentBlocks: new BlockHash[] { dummyBlock.Id }));
             Assert.IsTrue(block2.TryRestoreMetadataFromBytesAndValidate(metaData));
             Assert.AreEqual(block.StorageContract, block2.StorageContract);
@@ -254,7 +253,7 @@ namespace BrightChain.Engine.Tests
             Assert.AreEqual(block.TotalLength, block2.TotalLength);
             Assert.AreEqual(block.ConstituentBlocks.Count(), block2.ConstituentBlocks.Count()); // TODO: IMPROVE THIS TEST
 
-            var loggerMock = Mock.Get(logger);
+            var loggerMock = Mock.Get(this.logger);
             loggerMock.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),

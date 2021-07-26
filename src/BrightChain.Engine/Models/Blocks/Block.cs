@@ -32,7 +32,7 @@ namespace BrightChain.Engine.Models.Blocks
         [BrightChainMetadata]
         public BlockSignature Signature { get; internal set; }
 
-        public bool Signed => (Signature != null);
+        public bool Signed => (this.Signature != null);
 
         public bool SignatureVerified { get; internal set; }
 
@@ -45,7 +45,7 @@ namespace BrightChain.Engine.Models.Blocks
         /// <summary>
         /// Gets a boolean whether the revocation list contains possible revocation tokens.
         /// </summary>
-        public bool Revokable => RevocationCertificates.Count() > 0;
+        public bool Revokable => this.RevocationCertificates.Count() > 0;
 
         /// <summary>
         /// Gets or sets a list of the blocks, in order, required to complete this block. Not persisted to disk.
@@ -84,7 +84,7 @@ namespace BrightChain.Engine.Models.Blocks
             this.Data = data;
             this.Id = new BlockHash(this); // must happen after data is in place
             this.ConstituentBlocks = new BlockHash[] { };
-            this.HashVerified = Validate(); // also fills in any validation errors in the array
+            this.HashVerified = this.Validate(); // also fills in any validation errors in the array
             this.Signature = null;
             this.SignatureVerified = false;
             this.RevocationCertificates = new List<RevocationCertificate>();
@@ -191,7 +191,7 @@ namespace BrightChain.Engine.Models.Blocks
                 newList.Add(b.Id);
             }
 
-            var result = NewBlock(
+            var result = this.NewBlock(
                 new BlockParams(
                     blockSize: this.BlockSize,
                     requestTime: System.DateTime.Now,
@@ -226,7 +226,7 @@ namespace BrightChain.Engine.Models.Blocks
 
         public override int GetHashCode()
         {
-            return Data.GetHashCode();
+            return this.Data.GetHashCode();
         }
 
         public bool Validate()
@@ -249,14 +249,11 @@ namespace BrightChain.Engine.Models.Blocks
             return other is null ? -1 : ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
         }
 
-        public virtual BlockParams BlockParams
-        {
-            get => new BlockParams(
+        public virtual BlockParams BlockParams => new BlockParams(
                 blockSize: this.BlockSize,
                 requestTime: this.StorageContract.RequestTime,
                 keepUntilAtLeast: this.StorageContract.KeepUntilAtLeast,
                 redundancy: this.StorageContract.RedundancyContractType,
                 privateEncrypted: false);
-        }
     }
 }

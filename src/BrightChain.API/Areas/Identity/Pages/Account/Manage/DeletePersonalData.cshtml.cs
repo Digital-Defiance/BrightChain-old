@@ -20,9 +20,9 @@
             SignInManager<BrightChainEntityUser> signInManager,
             ILogger<DeletePersonalDataModel> logger)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _logger = logger;
+            this._userManager = userManager;
+            this._signInManager = signInManager;
+            this._logger = logger;
         }
 
         [BindProperty]
@@ -39,46 +39,46 @@
 
         public async Task<IActionResult> OnGet()
         {
-            var user = await _userManager.GetUserAsync(User).ConfigureAwait(false);
+            var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return this.NotFound($"Unable to load user with ID '{this._userManager.GetUserId(this.User)}'.");
             }
 
-            RequirePassword = await _userManager.HasPasswordAsync(user).ConfigureAwait(false);
-            return Page();
+            this.RequirePassword = await this._userManager.HasPasswordAsync(user).ConfigureAwait(false);
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await _userManager.GetUserAsync(User).ConfigureAwait(false);
+            var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return this.NotFound($"Unable to load user with ID '{this._userManager.GetUserId(this.User)}'.");
             }
 
-            RequirePassword = await _userManager.HasPasswordAsync(user).ConfigureAwait(false);
-            if (RequirePassword)
+            this.RequirePassword = await this._userManager.HasPasswordAsync(user).ConfigureAwait(false);
+            if (this.RequirePassword)
             {
-                if (!await _userManager.CheckPasswordAsync(user, Input.Password).ConfigureAwait(false))
+                if (!await this._userManager.CheckPasswordAsync(user, this.Input.Password).ConfigureAwait(false))
                 {
-                    ModelState.AddModelError(string.Empty, "Incorrect password.");
-                    return Page();
+                    this.ModelState.AddModelError(string.Empty, "Incorrect password.");
+                    return this.Page();
                 }
             }
 
-            var result = await _userManager.DeleteAsync(user).ConfigureAwait(false);
-            var userId = await _userManager.GetUserIdAsync(user).ConfigureAwait(false);
+            var result = await this._userManager.DeleteAsync(user).ConfigureAwait(false);
+            var userId = await this._userManager.GetUserIdAsync(user).ConfigureAwait(false);
             if (!result.Succeeded)
             {
                 throw new InvalidOperationException($"Unexpected error occurred deleting user with ID '{userId}'.");
             }
 
-            await _signInManager.SignOutAsync().ConfigureAwait(false);
+            await this._signInManager.SignOutAsync().ConfigureAwait(false);
 
-            _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
+            this._logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
 
-            return Redirect("~/");
+            return this.Redirect("~/");
         }
     }
 }

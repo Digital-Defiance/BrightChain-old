@@ -1,14 +1,11 @@
 ﻿namespace BrightChain.API.Commands
 {
-    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Services;
     using BrightChain.EntityFrameworkCore.Data;
-    using BrightChain.EntityFrameworkCore.Data.Entities;
     using MediatR;
-    using Microsoft.EntityFrameworkCore;
 
     public class DropBlockByIdCommand : IRequest<BlockHash>
     {

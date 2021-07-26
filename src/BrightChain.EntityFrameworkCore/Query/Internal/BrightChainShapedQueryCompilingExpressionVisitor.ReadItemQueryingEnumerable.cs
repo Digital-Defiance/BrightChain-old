@@ -48,13 +48,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 bool standAloneStateManager,
                 bool threadSafetyChecksEnabled)
             {
-                _brightChainQueryContext = brightChainQueryContext;
-                _readItemExpression = readItemExpression;
-                _shaper = shaper;
-                _contextType = contextType;
-                _queryLogger = _brightChainQueryContext.QueryLogger;
-                _standAloneStateManager = standAloneStateManager;
-                _threadSafetyChecksEnabled = threadSafetyChecksEnabled;
+                this._brightChainQueryContext = brightChainQueryContext;
+                this._readItemExpression = readItemExpression;
+                this._shaper = shaper;
+                this._contextType = contextType;
+                this._queryLogger = this._brightChainQueryContext.QueryLogger;
+                this._standAloneStateManager = standAloneStateManager;
+                this._threadSafetyChecksEnabled = threadSafetyChecksEnabled;
             }
 
             public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
@@ -69,13 +69,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return GetEnumerator();
+                return this.GetEnumerator();
             }
 
             public string ToQueryString()
             {
-                TryGetResourceId(out var resourceId);
-                TryGetPartitionId(out var partitionKey);
+                this.TryGetResourceId(out var resourceId);
+                this.TryGetPartitionId(out var partitionKey);
                 return BrightChainStrings.NoReadItemQueryString(resourceId, partitionKey);
             }
 
@@ -83,15 +83,15 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             {
                 partitionKey = null;
 
-                var partitionKeyPropertyName = _readItemExpression.EntityType.GetPartitionKeyPropertyName();
+                var partitionKeyPropertyName = this._readItemExpression.EntityType.GetPartitionKeyPropertyName();
                 if (partitionKeyPropertyName == null)
                 {
                     return true;
                 }
 
-                var partitionKeyProperty = _readItemExpression.EntityType.FindProperty(partitionKeyPropertyName);
+                var partitionKeyProperty = this._readItemExpression.EntityType.FindProperty(partitionKeyPropertyName);
 
-                if (TryGetParameterValue(partitionKeyProperty, out var value))
+                if (this.TryGetParameterValue(partitionKeyProperty, out var value))
                 {
                     partitionKey = GetString(partitionKeyProperty, value);
 
@@ -103,10 +103,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             private bool TryGetResourceId(out string resourceId)
             {
-                var idProperty = _readItemExpression.EntityType.GetProperties()
+                var idProperty = this._readItemExpression.EntityType.GetProperties()
                     .FirstOrDefault(p => p.GetJsonPropertyName() == StoreKeyConvention.IdPropertyJsonName);
 
-                if (TryGetParameterValue(idProperty, out var value))
+                if (this.TryGetParameterValue(idProperty, out var value))
                 {
                     resourceId = GetString(idProperty, value);
 
@@ -118,7 +118,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     return true;
                 }
 
-                if (TryGenerateIdFromKeys(idProperty, out var generatedValue))
+                if (this.TryGenerateIdFromKeys(idProperty, out var generatedValue))
                 {
                     resourceId = GetString(idProperty, generatedValue);
 
@@ -132,8 +132,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             private bool TryGetParameterValue(IProperty property, out object value)
             {
                 value = null;
-                return _readItemExpression.PropertyParameters.TryGetValue(property, out var parameterName)
-                    && _brightChainQueryContext.ParameterValues.TryGetValue(parameterName, out value);
+                return this._readItemExpression.PropertyParameters.TryGetValue(property, out var parameterName)
+                    && this._brightChainQueryContext.ParameterValues.TryGetValue(parameterName, out value);
             }
 
             private static string GetString(IProperty property, object value)
@@ -147,18 +147,18 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             private bool TryGenerateIdFromKeys(IProperty idProperty, out object value)
             {
-                var entityEntry = Activator.CreateInstance(_readItemExpression.EntityType.ClrType);
+                var entityEntry = Activator.CreateInstance(this._readItemExpression.EntityType.ClrType);
 
 #pragma warning disable EF1001 // Internal EF Core API usage.
                 var internalEntityEntry = new InternalEntityEntry(
-                    _brightChainQueryContext.Context.GetDependencies().StateManager, _readItemExpression.EntityType, entityEntry);
+                    this._brightChainQueryContext.Context.GetDependencies().StateManager, this._readItemExpression.EntityType, entityEntry);
 #pragma warning restore EF1001 // Internal EF Core API usage.
 
-                foreach (var keyProperty in _readItemExpression.EntityType.FindPrimaryKey().Properties)
+                foreach (var keyProperty in this._readItemExpression.EntityType.FindPrimaryKey().Properties)
                 {
-                    var property = _readItemExpression.EntityType.FindProperty(keyProperty.Name);
+                    var property = this._readItemExpression.EntityType.FindProperty(keyProperty.Name);
 
-                    if (TryGetParameterValue(property, out var parameterValue))
+                    if (this.TryGetParameterValue(property, out var parameterValue))
                     {
 #pragma warning disable EF1001 // Internal EF Core API usage.
                         internalEntityEntry[property] = parameterValue;
@@ -194,22 +194,22 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
                 public Enumerator(ReadItemQueryingEnumerable<T> readItemEnumerable, CancellationToken cancellationToken = default)
                 {
-                    _brightChainQueryContext = readItemEnumerable._brightChainQueryContext;
-                    _readItemExpression = readItemEnumerable._readItemExpression;
-                    _shaper = readItemEnumerable._shaper;
-                    _contextType = readItemEnumerable._contextType;
-                    _queryLogger = readItemEnumerable._queryLogger;
-                    _standAloneStateManager = readItemEnumerable._standAloneStateManager;
-                    _readItemEnumerable = readItemEnumerable;
-                    _cancellationToken = cancellationToken;
+                    this._brightChainQueryContext = readItemEnumerable._brightChainQueryContext;
+                    this._readItemExpression = readItemEnumerable._readItemExpression;
+                    this._shaper = readItemEnumerable._shaper;
+                    this._contextType = readItemEnumerable._contextType;
+                    this._queryLogger = readItemEnumerable._queryLogger;
+                    this._standAloneStateManager = readItemEnumerable._standAloneStateManager;
+                    this._readItemEnumerable = readItemEnumerable;
+                    this._cancellationToken = cancellationToken;
 
-                    _concurrencyDetector = readItemEnumerable._threadSafetyChecksEnabled
-                        ? _brightChainQueryContext.ConcurrencyDetector
+                    this._concurrencyDetector = readItemEnumerable._threadSafetyChecksEnabled
+                        ? this._brightChainQueryContext.ConcurrencyDetector
                         : null;
                 }
 
                 object IEnumerator.Current
-                    => Current;
+                    => this.Current;
 
                 public T Current { get; private set; }
 
@@ -217,42 +217,42 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 {
                     try
                     {
-                        _concurrencyDetector?.EnterCriticalSection();
+                        this._concurrencyDetector?.EnterCriticalSection();
 
                         try
                         {
-                            if (!_hasExecuted)
+                            if (!this._hasExecuted)
                             {
-                                if (!_readItemEnumerable.TryGetResourceId(out var resourceId))
+                                if (!this._readItemEnumerable.TryGetResourceId(out var resourceId))
                                 {
                                     throw new InvalidOperationException(BrightChainStrings.ResourceIdMissing);
                                 }
 
-                                if (!_readItemEnumerable.TryGetPartitionId(out var partitionKey))
+                                if (!this._readItemEnumerable.TryGetPartitionId(out var partitionKey))
                                 {
                                     throw new InvalidOperationException(BrightChainStrings.PartitionKeyMissing);
                                 }
 
                                 EntityFrameworkEventSource.Log.QueryExecuting();
 
-                                _item = _brightChainQueryContext.BrightChainClient.ExecuteReadItem(
-                                    _readItemExpression.Container,
+                                this._item = this._brightChainQueryContext.BrightChainClient.ExecuteReadItem(
+                                    this._readItemExpression.Container,
                                     partitionKey,
                                     resourceId);
 
-                                return ShapeResult();
+                                return this.ShapeResult();
                             }
 
                             return false;
                         }
                         finally
                         {
-                            _concurrencyDetector?.ExitCriticalSection();
+                            this._concurrencyDetector?.ExitCriticalSection();
                         }
                     }
                     catch (Exception exception)
                     {
-                        _queryLogger.QueryIterationFailed(_contextType, exception);
+                        this._queryLogger.QueryIterationFailed(this._contextType, exception);
 
                         throw;
                     }
@@ -262,44 +262,44 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 {
                     try
                     {
-                        _concurrencyDetector?.EnterCriticalSection();
+                        this._concurrencyDetector?.EnterCriticalSection();
 
                         try
                         {
-                            if (!_hasExecuted)
+                            if (!this._hasExecuted)
                             {
-                                if (!_readItemEnumerable.TryGetResourceId(out var resourceId))
+                                if (!this._readItemEnumerable.TryGetResourceId(out var resourceId))
                                 {
                                     throw new InvalidOperationException(BrightChainStrings.ResourceIdMissing);
                                 }
 
-                                if (!_readItemEnumerable.TryGetPartitionId(out var partitionKey))
+                                if (!this._readItemEnumerable.TryGetPartitionId(out var partitionKey))
                                 {
                                     throw new InvalidOperationException(BrightChainStrings.PartitionKeyMissing);
                                 }
 
                                 EntityFrameworkEventSource.Log.QueryExecuting();
 
-                                _item = await _brightChainQueryContext.BrightChainClient.ExecuteReadItemAsync(
-                                        _readItemExpression.Container,
+                                this._item = await this._brightChainQueryContext.BrightChainClient.ExecuteReadItemAsync(
+                                        this._readItemExpression.Container,
                                         partitionKey,
                                         resourceId,
-                                        _cancellationToken)
+                                        this._cancellationToken)
                                     .ConfigureAwait(false);
 
-                                return ShapeResult();
+                                return this.ShapeResult();
                             }
 
                             return false;
                         }
                         finally
                         {
-                            _concurrencyDetector?.ExitCriticalSection();
+                            this._concurrencyDetector?.ExitCriticalSection();
                         }
                     }
                     catch (Exception exception)
                     {
-                        _queryLogger.QueryIterationFailed(_contextType, exception);
+                        this._queryLogger.QueryIterationFailed(this._contextType, exception);
 
                         throw;
                     }
@@ -307,13 +307,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
                 public void Dispose()
                 {
-                    _item = null;
-                    _hasExecuted = false;
+                    this._item = null;
+                    this._hasExecuted = false;
                 }
 
                 public ValueTask DisposeAsync()
                 {
-                    Dispose();
+                    this.Dispose();
 
                     return default;
                 }
@@ -325,16 +325,16 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
                 private bool ShapeResult()
                 {
-                    var hasNext = !(_item is null);
+                    var hasNext = !(this._item is null);
 
-                    _brightChainQueryContext.InitializeStateManager(_standAloneStateManager);
+                    this._brightChainQueryContext.InitializeStateManager(this._standAloneStateManager);
 
-                    Current
+                    this.Current
                         = hasNext
-                            ? _shaper(_brightChainQueryContext, _item)
+                            ? this._shaper(this._brightChainQueryContext, this._item)
                             : default;
 
-                    _hasExecuted = true;
+                    this._hasExecuted = true;
 
                     return hasNext;
                 }

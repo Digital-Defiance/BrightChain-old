@@ -31,13 +31,13 @@ namespace BrightChain.EntityFrameworkCore
 
             public BloggingContext(BrightChainTestStore testStore)
             {
-                _connectionString = testStore.ConnectionString;
-                _name = testStore.Name;
+                this._connectionString = testStore.ConnectionString;
+                this._name = testStore.Name;
             }
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
-                optionsBuilder.UseBrightChain(_connectionString, _name, b => b.ApplyConfiguration());
+                optionsBuilder.UseBrightChain(this._connectionString, this._name, b => b.ApplyConfiguration());
             }
 
             protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -68,19 +68,19 @@ namespace BrightChain.EntityFrameworkCore
 
             public BloggingContextWithConnectionConflict(BrightChainTestStore testStore)
             {
-                _connectionString = testStore.ConnectionString;
-                _connectionUri = testStore.ConnectionUri;
-                _authToken = testStore.AuthToken;
-                _name = testStore.Name;
+                this._connectionString = testStore.ConnectionString;
+                this._connectionUri = testStore.ConnectionUri;
+                this._authToken = testStore.AuthToken;
+                this._name = testStore.Name;
             }
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
-                optionsBuilder.UseBrightChain(_connectionString, _name, b => b.ApplyConfiguration())
+                optionsBuilder.UseBrightChain(this._connectionString, this._name, b => b.ApplyConfiguration())
                     .UseBrightChain(
-                        _connectionUri,
-                        _authToken,
-                        _name,
+                        this._connectionUri,
+                        this._authToken,
+                        this._name,
                         b => b.ApplyConfiguration());
             }
 

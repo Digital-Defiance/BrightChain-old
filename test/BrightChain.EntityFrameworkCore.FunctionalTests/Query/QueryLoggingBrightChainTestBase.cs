@@ -20,8 +20,8 @@ namespace BrightChain.EntityFrameworkCore.Query
     {
         protected QueryLoggingBrightChainTestBase(NorthwindQueryBrightChainFixture<NoopModelCustomizer> fixture)
         {
-            Fixture = fixture;
-            Fixture.TestSqlLoggerFactory.Clear();
+            this.Fixture = fixture;
+            this.Fixture.TestSqlLoggerFactory.Clear();
         }
 
         protected NorthwindQueryBrightChainFixture<NoopModelCustomizer> Fixture { get; }
@@ -32,7 +32,7 @@ namespace BrightChain.EntityFrameworkCore.Query
         [ConditionalFact]
         public virtual void Queryable_simple()
         {
-            using var context = CreateContext();
+            using var context = this.CreateContext();
             var customers
                 = context.Set<Customer>()
                     .ToList();
@@ -41,13 +41,13 @@ namespace BrightChain.EntityFrameworkCore.Query
 
             Assert.StartsWith(
                 "Compiling query expression: ",
-                Fixture.TestSqlLoggerFactory.Log[0].Message);
+                this.Fixture.TestSqlLoggerFactory.Log[0].Message);
 
             Assert.StartsWith(
                 "Generated query execution expression: " + Environment.NewLine + "'queryContext => new QueryingEnumerable<Customer>(",
-                Fixture.TestSqlLoggerFactory.Log[1].Message);
+                this.Fixture.TestSqlLoggerFactory.Log[1].Message);
 
-            if (ExpectSensitiveData)
+            if (this.ExpectSensitiveData)
             {
                 Assert.Equal(
                     BrightChainResources.LogExecutingSqlQuery(new TestLogger<BrightChainLoggingDefinitions>()).GenerateMessage(
@@ -55,7 +55,7 @@ namespace BrightChain.EntityFrameworkCore.Query
                     @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")"),
-                    Fixture.TestSqlLoggerFactory.Log[2].Message);
+                    this.Fixture.TestSqlLoggerFactory.Log[2].Message);
             }
             else
             {
@@ -65,14 +65,14 @@ WHERE (c[""Discriminator""] = ""Customer"")"),
                         @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")"),
-                    Fixture.TestSqlLoggerFactory.Log[2].Message);
+                    this.Fixture.TestSqlLoggerFactory.Log[2].Message);
             }
         }
 
         [ConditionalFact]
         public virtual void Queryable_with_parameter_outputs_parameter_value_logging_warning()
         {
-            using var context = CreateContext();
+            using var context = this.CreateContext();
             context.GetInfrastructure().GetRequiredService<IDiagnosticsLogger<DbLoggerCategory.Query>>()
                 .Options.IsSensitiveDataLoggingWarned = false;
             // ReSharper disable once ConvertToConstant.Local
@@ -85,14 +85,14 @@ WHERE (c[""Discriminator""] = ""Customer"")"),
 
             Assert.NotNull(customers);
 
-            if (ExpectSensitiveData)
+            if (this.ExpectSensitiveData)
             {
                 Assert.Contains(
                     CoreResources.LogSensitiveDataLoggingEnabled(new TestLogger<BrightChainLoggingDefinitions>()).GenerateMessage(),
-                    Fixture.TestSqlLoggerFactory.Log.Select(l => l.Message));
+                    this.Fixture.TestSqlLoggerFactory.Log.Select(l => l.Message));
             }
 
-            if (ExpectSensitiveData)
+            if (this.ExpectSensitiveData)
             {
                 Assert.Equal(
                     BrightChainResources.LogExecutingSqlQuery(new TestLogger<BrightChainLoggingDefinitions>()).GenerateMessage(
@@ -100,7 +100,7 @@ WHERE (c[""Discriminator""] = ""Customer"")"),
                         @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__city_0))"),
-                    Fixture.TestSqlLoggerFactory.Log[3].Message);
+                    this.Fixture.TestSqlLoggerFactory.Log[3].Message);
             }
             else
             {
@@ -110,39 +110,39 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__city_0))"),
                     @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__city_0))"),
-                    Fixture.TestSqlLoggerFactory.Log[2].Message);
+                    this.Fixture.TestSqlLoggerFactory.Log[2].Message);
             }
         }
 
         [ConditionalFact]
         public virtual void Skip_without_order_by()
         {
-            using var context = CreateContext();
+            using var context = this.CreateContext();
             var customers = context.Set<Customer>().Skip(85).Take(5).ToList();
 
             Assert.NotNull(customers);
 
             Assert.Equal(
                 CoreResources.LogRowLimitingOperationWithoutOrderBy(new TestLogger<BrightChainLoggingDefinitions>()).GenerateMessage(),
-                Fixture.TestSqlLoggerFactory.Log[1].Message);
+                this.Fixture.TestSqlLoggerFactory.Log[1].Message);
         }
 
         [ConditionalFact]
         public virtual void Take_without_order_by()
         {
-            using var context = CreateContext();
+            using var context = this.CreateContext();
             var customers = context.Set<Customer>().Take(5).ToList();
 
             Assert.NotNull(customers);
 
             Assert.Equal(
                 CoreResources.LogRowLimitingOperationWithoutOrderBy(new TestLogger<BrightChainLoggingDefinitions>()).GenerateMessage(),
-                Fixture.TestSqlLoggerFactory.Log[1].Message);
+                this.Fixture.TestSqlLoggerFactory.Log[1].Message);
         }
 
         protected NorthwindContext CreateContext()
         {
-            return Fixture.CreateContext();
+            return this.Fixture.CreateContext();
         }
     }
 }

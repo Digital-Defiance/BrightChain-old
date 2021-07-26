@@ -17,7 +17,7 @@
 
         public ResetPasswordModel(UserManager<BrightChainEntityUser> userManager)
         {
-            _userManager = userManager;
+            this._userManager = userManager;
         }
 
         [BindProperty]
@@ -46,43 +46,43 @@
         {
             if (code == null)
             {
-                return BadRequest("A code must be supplied for password reset.");
+                return this.BadRequest("A code must be supplied for password reset.");
             }
             else
             {
-                Input = new InputModel
+                this.Input = new InputModel
                 {
                     Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
                 };
-                return Page();
+                return this.Page();
             }
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return Page();
+                return this.Page();
             }
 
-            var user = await _userManager.FindByEmailAsync(Input.Email).ConfigureAwait(false);
+            var user = await this._userManager.FindByEmailAsync(this.Input.Email).ConfigureAwait(false);
             if (user == null)
             {
                 // Don't reveal that the user does not exist
-                return RedirectToPage("./ResetPasswordConfirmation");
+                return this.RedirectToPage("./ResetPasswordConfirmation");
             }
 
-            var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password).ConfigureAwait(false);
+            var result = await this._userManager.ResetPasswordAsync(user, this.Input.Code, this.Input.Password).ConfigureAwait(false);
             if (result.Succeeded)
             {
-                return RedirectToPage("./ResetPasswordConfirmation");
+                return this.RedirectToPage("./ResetPasswordConfirmation");
             }
 
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError(string.Empty, error.Description);
+                this.ModelState.AddModelError(string.Empty, error.Description);
             }
-            return Page();
+            return this.Page();
         }
     }
 }

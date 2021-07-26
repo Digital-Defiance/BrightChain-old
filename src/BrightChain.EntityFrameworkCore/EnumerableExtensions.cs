@@ -39,12 +39,12 @@ namespace BrightChain.EntityFrameworkCore.Utilities
 
             public DynamicEqualityComparer(Func<T?, T?, bool> func)
             {
-                _func = func;
+                this._func = func;
             }
 
             public bool Equals(T? x, T? y)
             {
-                return _func(x, y);
+                return this._func(x, y);
             }
 
             public int GetHashCode(T obj)

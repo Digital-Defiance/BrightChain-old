@@ -35,8 +35,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             QueryTranslationPostprocessorDependencies dependencies,
             ISqlExpressionFactory sqlExpressionFactory)
         {
-            _dependencies = dependencies;
-            _sqlExpressionFactory = sqlExpressionFactory;
+            this._dependencies = dependencies;
+            this._sqlExpressionFactory = sqlExpressionFactory;
         }
 
         /// <summary>
@@ -50,8 +50,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(queryCompilationContext, nameof(queryCompilationContext));
 
             return new BrightChainQueryTranslationPostprocessor(
-                _dependencies,
-                _sqlExpressionFactory,
+                this._dependencies,
+                this._sqlExpressionFactory,
                 queryCompilationContext);
         }
     }

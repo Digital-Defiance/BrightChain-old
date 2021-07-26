@@ -36,8 +36,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public SqlExpressionFactory(ITypeMappingSource typeMappingSource)
         {
-            _typeMappingSource = typeMappingSource;
-            _boolTypeMapping = typeMappingSource.FindMapping(typeof(bool));
+            this._typeMappingSource = typeMappingSource;
+            this._boolTypeMapping = typeMappingSource.FindMapping(typeof(bool));
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return sqlExpression == null
                 || sqlExpression.TypeMapping != null
                     ? sqlExpression
-                    : ApplyTypeMapping(sqlExpression, _typeMappingSource.FindMapping(sqlExpression.Type));
+                    : this.ApplyTypeMapping(sqlExpression, this._typeMappingSource.FindMapping(sqlExpression.Type));
         }
 
         /// <summary>
@@ -73,13 +73,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 #pragma warning restore IDE0066 // Convert switch statement to expression
             {
                 case SqlConditionalExpression sqlConditionalExpression:
-                    return ApplyTypeMappingOnSqlConditional(sqlConditionalExpression, typeMapping);
+                    return this.ApplyTypeMappingOnSqlConditional(sqlConditionalExpression, typeMapping);
 
                 case SqlBinaryExpression sqlBinaryExpression:
-                    return ApplyTypeMappingOnSqlBinary(sqlBinaryExpression, typeMapping);
+                    return this.ApplyTypeMappingOnSqlBinary(sqlBinaryExpression, typeMapping);
 
                 case SqlUnaryExpression sqlUnaryExpression:
-                    return ApplyTypeMappingOnSqlUnary(sqlUnaryExpression, typeMapping);
+                    return this.ApplyTypeMappingOnSqlUnary(sqlUnaryExpression, typeMapping);
 
                 case SqlConstantExpression sqlConstantExpression:
                     return sqlConstantExpression.ApplyTypeMapping(typeMapping);
@@ -101,8 +101,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             return sqlConditionalExpression.Update(
                 sqlConditionalExpression.Test,
-                ApplyTypeMapping(sqlConditionalExpression.IfTrue, typeMapping),
-                ApplyTypeMapping(sqlConditionalExpression.IfFalse, typeMapping));
+                this.ApplyTypeMapping(sqlConditionalExpression.IfTrue, typeMapping),
+                this.ApplyTypeMapping(sqlConditionalExpression.IfFalse, typeMapping));
         }
 
         private SqlExpression ApplyTypeMappingOnSqlUnary(
@@ -119,9 +119,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 case ExpressionType.Not
                     when sqlUnaryExpression.IsLogicalNot():
                 {
-                    resultTypeMapping = _boolTypeMapping;
+                    resultTypeMapping = this._boolTypeMapping;
                     resultType = typeof(bool);
-                    operand = ApplyDefaultTypeMapping(sqlUnaryExpression.Operand);
+                    operand = this.ApplyDefaultTypeMapping(sqlUnaryExpression.Operand);
                     break;
                 }
 
@@ -129,7 +129,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     resultTypeMapping = typeMapping;
                     // Since we are applying convert, resultTypeMapping decides the clrType
                     resultType = resultTypeMapping?.ClrType ?? sqlUnaryExpression.Type;
-                    operand = ApplyDefaultTypeMapping(sqlUnaryExpression.Operand);
+                    operand = this.ApplyDefaultTypeMapping(sqlUnaryExpression.Operand);
                     break;
 
                 case ExpressionType.Not:
@@ -137,7 +137,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     resultTypeMapping = typeMapping;
                     // While Not is logical, negate is numeric hence we use clrType from TypeMapping
                     resultType = resultTypeMapping?.ClrType ?? sqlUnaryExpression.Type;
-                    operand = ApplyTypeMapping(sqlUnaryExpression.Operand, typeMapping);
+                    operand = this.ApplyTypeMapping(sqlUnaryExpression.Operand, typeMapping);
                     break;
 
                 default:
@@ -171,19 +171,19 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     inferredTypeMapping = ExpressionExtensions.InferTypeMapping(left, right)
                         // We avoid object here since the result does not get typeMapping from outside.
                         ?? (left.Type != typeof(object)
-                            ? _typeMappingSource.FindMapping(left.Type)
-                            : _typeMappingSource.FindMapping(right.Type));
+                            ? this._typeMappingSource.FindMapping(left.Type)
+                            : this._typeMappingSource.FindMapping(right.Type));
                     resultType = typeof(bool);
-                    resultTypeMapping = _boolTypeMapping;
+                    resultTypeMapping = this._boolTypeMapping;
                 }
                 break;
 
                 case ExpressionType.AndAlso:
                 case ExpressionType.OrElse:
                 {
-                    inferredTypeMapping = _boolTypeMapping;
+                    inferredTypeMapping = this._boolTypeMapping;
                     resultType = typeof(bool);
-                    resultTypeMapping = _boolTypeMapping;
+                    resultTypeMapping = this._boolTypeMapping;
                 }
                 break;
 
@@ -211,8 +211,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             return new SqlBinaryExpression(
                 sqlBinaryExpression.OperatorType,
-                ApplyTypeMapping(left, inferredTypeMapping),
-                ApplyTypeMapping(right, inferredTypeMapping),
+                this.ApplyTypeMapping(left, inferredTypeMapping),
+                this.ApplyTypeMapping(right, inferredTypeMapping),
                 resultType,
                 resultTypeMapping);
         }
@@ -225,7 +225,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual CoreTypeMapping FindMapping(Type type)
         {
-            return _typeMappingSource.FindMapping(type);
+            return this._typeMappingSource.FindMapping(type);
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     break;
             }
 
-            return (SqlBinaryExpression)ApplyTypeMapping(
+            return (SqlBinaryExpression)this.ApplyTypeMapping(
                 new SqlBinaryExpression(operatorType, left, right, returnType, null), typeMapping);
         }
 
@@ -267,7 +267,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression Equal(SqlExpression left, SqlExpression right)
         {
-            return MakeBinary(ExpressionType.Equal, left, right, null);
+            return this.MakeBinary(ExpressionType.Equal, left, right, null);
         }
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression NotEqual(SqlExpression left, SqlExpression right)
         {
-            return MakeBinary(ExpressionType.NotEqual, left, right, null);
+            return this.MakeBinary(ExpressionType.NotEqual, left, right, null);
         }
 
         /// <summary>
@@ -289,7 +289,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression GreaterThan(SqlExpression left, SqlExpression right)
         {
-            return MakeBinary(ExpressionType.GreaterThan, left, right, null);
+            return this.MakeBinary(ExpressionType.GreaterThan, left, right, null);
         }
 
         /// <summary>
@@ -300,7 +300,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression GreaterThanOrEqual(SqlExpression left, SqlExpression right)
         {
-            return MakeBinary(ExpressionType.GreaterThanOrEqual, left, right, null);
+            return this.MakeBinary(ExpressionType.GreaterThanOrEqual, left, right, null);
         }
 
         /// <summary>
@@ -311,7 +311,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression LessThan(SqlExpression left, SqlExpression right)
         {
-            return MakeBinary(ExpressionType.LessThan, left, right, null);
+            return this.MakeBinary(ExpressionType.LessThan, left, right, null);
         }
 
         /// <summary>
@@ -322,7 +322,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression LessThanOrEqual(SqlExpression left, SqlExpression right)
         {
-            return MakeBinary(ExpressionType.LessThanOrEqual, left, right, null);
+            return this.MakeBinary(ExpressionType.LessThanOrEqual, left, right, null);
         }
 
         /// <summary>
@@ -333,7 +333,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression AndAlso(SqlExpression left, SqlExpression right)
         {
-            return MakeBinary(ExpressionType.AndAlso, left, right, null);
+            return this.MakeBinary(ExpressionType.AndAlso, left, right, null);
         }
 
         /// <summary>
@@ -344,7 +344,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression OrElse(SqlExpression left, SqlExpression right)
         {
-            return MakeBinary(ExpressionType.OrElse, left, right, null);
+            return this.MakeBinary(ExpressionType.OrElse, left, right, null);
         }
 
         /// <summary>
@@ -355,7 +355,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression Add(SqlExpression left, SqlExpression right, CoreTypeMapping typeMapping = null)
         {
-            return MakeBinary(ExpressionType.Add, left, right, typeMapping);
+            return this.MakeBinary(ExpressionType.Add, left, right, typeMapping);
         }
 
         /// <summary>
@@ -366,7 +366,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression Subtract(SqlExpression left, SqlExpression right, CoreTypeMapping typeMapping = null)
         {
-            return MakeBinary(ExpressionType.Subtract, left, right, typeMapping);
+            return this.MakeBinary(ExpressionType.Subtract, left, right, typeMapping);
         }
 
         /// <summary>
@@ -377,7 +377,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression Multiply(SqlExpression left, SqlExpression right, CoreTypeMapping typeMapping = null)
         {
-            return MakeBinary(ExpressionType.Multiply, left, right, typeMapping);
+            return this.MakeBinary(ExpressionType.Multiply, left, right, typeMapping);
         }
 
         /// <summary>
@@ -388,7 +388,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression Divide(SqlExpression left, SqlExpression right, CoreTypeMapping typeMapping = null)
         {
-            return MakeBinary(ExpressionType.Divide, left, right, typeMapping);
+            return this.MakeBinary(ExpressionType.Divide, left, right, typeMapping);
         }
 
         /// <summary>
@@ -399,7 +399,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression Modulo(SqlExpression left, SqlExpression right, CoreTypeMapping typeMapping = null)
         {
-            return MakeBinary(ExpressionType.Modulo, left, right, typeMapping);
+            return this.MakeBinary(ExpressionType.Modulo, left, right, typeMapping);
         }
 
         /// <summary>
@@ -410,7 +410,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression And(SqlExpression left, SqlExpression right, CoreTypeMapping typeMapping = null)
         {
-            return MakeBinary(ExpressionType.And, left, right, typeMapping);
+            return this.MakeBinary(ExpressionType.And, left, right, typeMapping);
         }
 
         /// <summary>
@@ -421,7 +421,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression Or(SqlExpression left, SqlExpression right, CoreTypeMapping typeMapping = null)
         {
-            return MakeBinary(ExpressionType.Or, left, right, typeMapping);
+            return this.MakeBinary(ExpressionType.Or, left, right, typeMapping);
         }
 
         private SqlUnaryExpression MakeUnary(
@@ -430,7 +430,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Type type,
             CoreTypeMapping typeMapping = null)
         {
-            return (SqlUnaryExpression)ApplyTypeMapping(new SqlUnaryExpression(operatorType, operand, type, null), typeMapping);
+            return (SqlUnaryExpression)this.ApplyTypeMapping(new SqlUnaryExpression(operatorType, operand, type, null), typeMapping);
         }
 
         /// <summary>
@@ -441,7 +441,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression IsNull(SqlExpression operand)
         {
-            return Equal(operand, Constant(null));
+            return this.Equal(operand, this.Constant(null));
         }
 
         /// <summary>
@@ -452,7 +452,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression IsNotNull(SqlExpression operand)
         {
-            return NotEqual(operand, Constant(null));
+            return this.NotEqual(operand, this.Constant(null));
         }
 
         /// <summary>
@@ -463,7 +463,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlUnaryExpression Convert(SqlExpression operand, Type type, CoreTypeMapping typeMapping = null)
         {
-            return MakeUnary(ExpressionType.Convert, operand, type, typeMapping);
+            return this.MakeUnary(ExpressionType.Convert, operand, type, typeMapping);
         }
 
         /// <summary>
@@ -474,7 +474,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlUnaryExpression Not(SqlExpression operand)
         {
-            return MakeUnary(ExpressionType.Not, operand, operand.Type, operand.TypeMapping);
+            return this.MakeUnary(ExpressionType.Not, operand, operand.Type, operand.TypeMapping);
         }
 
         /// <summary>
@@ -485,7 +485,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlUnaryExpression Negate(SqlExpression operand)
         {
-            return MakeUnary(ExpressionType.Negate, operand, operand.Type, operand.TypeMapping);
+            return this.MakeUnary(ExpressionType.Negate, operand, operand.Type, operand.TypeMapping);
         }
 
         /// <summary>
@@ -504,7 +504,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             foreach (var argument in arguments)
             {
-                typeMappedArguments.Add(ApplyDefaultTypeMapping(argument));
+                typeMappedArguments.Add(this.ApplyDefaultTypeMapping(argument));
             }
 
             return new SqlFunctionExpression(
@@ -525,9 +525,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             var typeMapping = ExpressionExtensions.InferTypeMapping(ifTrue, ifFalse);
 
             return new SqlConditionalExpression(
-                ApplyTypeMapping(test, _boolTypeMapping),
-                ApplyTypeMapping(ifTrue, typeMapping),
-                ApplyTypeMapping(ifFalse, typeMapping));
+                this.ApplyTypeMapping(test, this._boolTypeMapping),
+                this.ApplyTypeMapping(ifTrue, typeMapping),
+                this.ApplyTypeMapping(ifFalse, typeMapping));
         }
 
         /// <summary>
@@ -538,12 +538,12 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual InExpression In(SqlExpression item, SqlExpression values, bool negated)
         {
-            var typeMapping = item.TypeMapping ?? _typeMappingSource.FindMapping(item.Type);
+            var typeMapping = item.TypeMapping ?? this._typeMappingSource.FindMapping(item.Type);
 
-            item = ApplyTypeMapping(item, typeMapping);
-            values = ApplyTypeMapping(values, typeMapping);
+            item = this.ApplyTypeMapping(item, typeMapping);
+            values = this.ApplyTypeMapping(values, typeMapping);
 
-            return new InExpression(item, negated, values, _boolTypeMapping);
+            return new InExpression(item, negated, values, this._boolTypeMapping);
         }
 
         /// <summary>
@@ -566,7 +566,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         public virtual SelectExpression Select(IEntityType entityType)
         {
             var selectExpression = new SelectExpression(entityType);
-            AddDiscriminator(selectExpression, entityType);
+            this.AddDiscriminator(selectExpression, entityType);
 
             return selectExpression;
         }
@@ -585,7 +585,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         .BindProperty(discriminatorProperty, clientEval: false);
 
                     selectExpression.ApplyPredicate(
-                        Equal((SqlExpression)discriminatorColumn, Constant(concreteEntityType.GetDiscriminatorValue())));
+                        this.Equal((SqlExpression)discriminatorColumn, this.Constant(concreteEntityType.GetDiscriminatorValue())));
                 }
             }
             else
@@ -594,8 +594,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     .BindProperty(concreteEntityTypes[0].FindDiscriminatorProperty(), clientEval: false);
 
                 selectExpression.ApplyPredicate(
-                    In(
-                        (SqlExpression)discriminatorColumn, Constant(concreteEntityTypes.Select(et => et.GetDiscriminatorValue()).ToList()),
+                    this.In(
+                        (SqlExpression)discriminatorColumn, this.Constant(concreteEntityTypes.Select(et => et.GetDiscriminatorValue()).ToList()),
                         negated: false));
             }
         }

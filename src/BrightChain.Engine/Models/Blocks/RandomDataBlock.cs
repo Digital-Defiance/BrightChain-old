@@ -30,7 +30,7 @@ namespace BrightChain.Engine.Models.Blocks
 
         public int CompareTo(EmptyDummyBlock other)
         {
-            return ReadOnlyMemoryComparer<byte>.Compare(Data, other.Data);
+            return ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
         }
 
         public override void Dispose()

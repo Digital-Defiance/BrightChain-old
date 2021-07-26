@@ -58,20 +58,20 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         /// </summary>
         protected BrightChainOptionsExtension(BrightChainOptionsExtension copyFrom)
         {
-            _accountEndpoint = copyFrom._accountEndpoint;
-            _accountKey = copyFrom._accountKey;
-            _databaseName = copyFrom._databaseName;
-            _connectionString = copyFrom._connectionString;
-            _region = copyFrom._region;
-            _limitToEndpoint = copyFrom._limitToEndpoint;
-            _executionStrategyFactory = copyFrom._executionStrategyFactory;
-            _webProxy = copyFrom._webProxy;
-            _requestTimeout = copyFrom._requestTimeout;
-            _openTcpConnectionTimeout = copyFrom._openTcpConnectionTimeout;
-            _idleTcpConnectionTimeout = copyFrom._idleTcpConnectionTimeout;
-            _gatewayModeMaxConnectionLimit = copyFrom._gatewayModeMaxConnectionLimit;
-            _maxTcpConnectionsPerEndpoint = copyFrom._maxTcpConnectionsPerEndpoint;
-            _maxRequestsPerTcpConnection = copyFrom._maxRequestsPerTcpConnection;
+            this._accountEndpoint = copyFrom._accountEndpoint;
+            this._accountKey = copyFrom._accountKey;
+            this._databaseName = copyFrom._databaseName;
+            this._connectionString = copyFrom._connectionString;
+            this._region = copyFrom._region;
+            this._limitToEndpoint = copyFrom._limitToEndpoint;
+            this._executionStrategyFactory = copyFrom._executionStrategyFactory;
+            this._webProxy = copyFrom._webProxy;
+            this._requestTimeout = copyFrom._requestTimeout;
+            this._openTcpConnectionTimeout = copyFrom._openTcpConnectionTimeout;
+            this._idleTcpConnectionTimeout = copyFrom._idleTcpConnectionTimeout;
+            this._gatewayModeMaxConnectionLimit = copyFrom._gatewayModeMaxConnectionLimit;
+            this._maxTcpConnectionsPerEndpoint = copyFrom._maxTcpConnectionsPerEndpoint;
+            this._maxRequestsPerTcpConnection = copyFrom._maxRequestsPerTcpConnection;
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual DbContextOptionsExtensionInfo Info
-            => _info ??= new ExtensionInfo(this);
+            => this._info ??= new ExtensionInfo(this);
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -90,7 +90,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual string? AccountEndpoint
-            => _accountEndpoint;
+            => this._accountEndpoint;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -100,12 +100,12 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         /// </summary>
         public virtual BrightChainOptionsExtension WithAccountEndpoint(string? accountEndpoint)
         {
-            if (_connectionString != null)
+            if (this._connectionString != null)
             {
                 throw new InvalidOperationException(BrightChainStrings.ConnectionStringConflictingConfiguration);
             }
 
-            var clone = Clone();
+            var clone = this.Clone();
 
             clone._accountEndpoint = accountEndpoint;
 
@@ -119,7 +119,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual string? AccountKey
-            => _accountKey;
+            => this._accountKey;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -129,12 +129,12 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         /// </summary>
         public virtual BrightChainOptionsExtension WithAccountKey(string? accountKey)
         {
-            if (accountKey is not null && _connectionString is not null)
+            if (accountKey is not null && this._connectionString is not null)
             {
                 throw new InvalidOperationException(BrightChainStrings.ConnectionStringConflictingConfiguration);
             }
 
-            var clone = Clone();
+            var clone = this.Clone();
 
             clone._accountKey = accountKey;
 
@@ -148,7 +148,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual string? ConnectionString
-            => _connectionString;
+            => this._connectionString;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -158,12 +158,12 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         /// </summary>
         public virtual BrightChainOptionsExtension WithConnectionString(string? connectionString)
         {
-            if (connectionString is not null && (_accountEndpoint != null || _accountKey != null))
+            if (connectionString is not null && (this._accountEndpoint != null || this._accountKey != null))
             {
                 throw new InvalidOperationException(BrightChainStrings.ConnectionStringConflictingConfiguration);
             }
 
-            var clone = Clone();
+            var clone = this.Clone();
 
             clone._connectionString = connectionString;
 
@@ -177,7 +177,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual string DatabaseName
-            => _databaseName!;
+            => this._databaseName!;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -187,7 +187,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         /// </summary>
         public virtual BrightChainOptionsExtension WithDatabaseName(string database)
         {
-            var clone = Clone();
+            var clone = this.Clone();
 
             clone._databaseName = database;
 
@@ -201,7 +201,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual string? Region
-            => _region;
+            => this._region;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -211,7 +211,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         /// </summary>
         public virtual BrightChainOptionsExtension WithRegion(string? region)
         {
-            var clone = Clone();
+            var clone = this.Clone();
 
             clone._region = region;
 
@@ -225,7 +225,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual bool? LimitToEndpoint
-            => _limitToEndpoint;
+            => this._limitToEndpoint;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -235,7 +235,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         /// </summary>
         public virtual BrightChainOptionsExtension WithLimitToEndpoint(bool enable)
         {
-            var clone = Clone();
+            var clone = this.Clone();
 
             clone._limitToEndpoint = enable;
 
@@ -249,7 +249,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual IWebProxy? WebProxy
-            => _webProxy;
+            => this._webProxy;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -259,7 +259,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         /// </summary>
         public virtual BrightChainOptionsExtension WithWebProxy(IWebProxy? proxy)
         {
-            var clone = Clone();
+            var clone = this.Clone();
 
             clone._webProxy = proxy;
 
@@ -273,7 +273,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual TimeSpan? RequestTimeout
-            => _requestTimeout;
+            => this._requestTimeout;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -283,7 +283,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         /// </summary>
         public virtual BrightChainOptionsExtension WithRequestTimeout(TimeSpan? timeout)
         {
-            var clone = Clone();
+            var clone = this.Clone();
 
             clone._requestTimeout = timeout;
 
@@ -297,7 +297,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual TimeSpan? OpenTcpConnectionTimeout
-            => _openTcpConnectionTimeout;
+            => this._openTcpConnectionTimeout;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -307,7 +307,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         /// </summary>
         public virtual BrightChainOptionsExtension WithOpenTcpConnectionTimeout(TimeSpan? timeout)
         {
-            var clone = Clone();
+            var clone = this.Clone();
 
             clone._openTcpConnectionTimeout = timeout;
 
@@ -321,7 +321,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual TimeSpan? IdleTcpConnectionTimeout
-            => _idleTcpConnectionTimeout;
+            => this._idleTcpConnectionTimeout;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -331,7 +331,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         /// </summary>
         public virtual BrightChainOptionsExtension WithIdleTcpConnectionTimeout(TimeSpan? timeout)
         {
-            var clone = Clone();
+            var clone = this.Clone();
 
             clone._idleTcpConnectionTimeout = timeout;
 
@@ -345,7 +345,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual int? GatewayModeMaxConnectionLimit
-            => _gatewayModeMaxConnectionLimit;
+            => this._gatewayModeMaxConnectionLimit;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -355,7 +355,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         /// </summary>
         public virtual BrightChainOptionsExtension WithGatewayModeMaxConnectionLimit(int? connectionLimit)
         {
-            var clone = Clone();
+            var clone = this.Clone();
 
             clone._gatewayModeMaxConnectionLimit = connectionLimit;
 
@@ -369,7 +369,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual int? MaxTcpConnectionsPerEndpoint
-            => _maxTcpConnectionsPerEndpoint;
+            => this._maxTcpConnectionsPerEndpoint;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -379,7 +379,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         /// </summary>
         public virtual BrightChainOptionsExtension WithMaxTcpConnectionsPerEndpoint(int? connectionLimit)
         {
-            var clone = Clone();
+            var clone = this.Clone();
 
             clone._maxTcpConnectionsPerEndpoint = connectionLimit;
 
@@ -393,7 +393,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual int? MaxRequestsPerTcpConnection
-            => _maxRequestsPerTcpConnection;
+            => this._maxRequestsPerTcpConnection;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -403,7 +403,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         /// </summary>
         public virtual BrightChainOptionsExtension WithMaxRequestsPerTcpConnection(int? requestLimit)
         {
-            var clone = Clone();
+            var clone = this.Clone();
 
             clone._maxRequestsPerTcpConnection = requestLimit;
 
@@ -417,7 +417,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual bool? EnableContentResponseOnWrite
-            => _enableContentResponseOnWrite;
+            => this._enableContentResponseOnWrite;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -427,7 +427,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         /// </summary>
         public virtual BrightChainOptionsExtension ContentResponseOnWriteEnabled(bool enabled)
         {
-            var clone = Clone();
+            var clone = this.Clone();
 
             clone._enableContentResponseOnWrite = enabled;
 
@@ -439,7 +439,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         ///     configured.
         /// </summary>
         public virtual Func<ExecutionStrategyDependencies, IExecutionStrategy>? ExecutionStrategyFactory
-            => _executionStrategyFactory;
+            => this._executionStrategyFactory;
 
         /// <summary>
         ///     Creates a new instance with all options the same as for this instance, but with the given option changed.
@@ -450,7 +450,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         public virtual BrightChainOptionsExtension WithExecutionStrategyFactory(
             Func<ExecutionStrategyDependencies, IExecutionStrategy>? executionStrategyFactory)
         {
-            var clone = Clone();
+            var clone = this.Clone();
 
             clone._executionStrategyFactory = executionStrategyFactory;
 
@@ -507,71 +507,71 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
 
             public override long GetServiceProviderHashCode()
             {
-                if (_serviceProviderHash == null)
+                if (this._serviceProviderHash == null)
                 {
                     long hashCode;
-                    if (!string.IsNullOrEmpty(Extension._connectionString))
+                    if (!string.IsNullOrEmpty(this.Extension._connectionString))
                     {
-                        hashCode = Extension._connectionString.GetHashCode();
+                        hashCode = this.Extension._connectionString.GetHashCode();
                     }
                     else
                     {
-                        hashCode = (Extension._accountEndpoint?.GetHashCode() ?? 0);
-                        hashCode = (hashCode * 397) ^ (Extension._accountKey?.GetHashCode() ?? 0);
+                        hashCode = (this.Extension._accountEndpoint?.GetHashCode() ?? 0);
+                        hashCode = (hashCode * 397) ^ (this.Extension._accountKey?.GetHashCode() ?? 0);
                     }
 
-                    hashCode = (hashCode * 397) ^ (Extension._region?.GetHashCode() ?? 0);
+                    hashCode = (hashCode * 397) ^ (this.Extension._region?.GetHashCode() ?? 0);
                     //hashCode = (hashCode * 3) ^ (Extension._connectionMode?.GetHashCode() ?? 0);
-                    hashCode = (hashCode * 3) ^ (Extension._limitToEndpoint?.GetHashCode() ?? 0);
-                    hashCode = (hashCode * 397) ^ (Extension._webProxy?.GetHashCode() ?? 0);
-                    hashCode = (hashCode * 397) ^ (Extension._requestTimeout?.GetHashCode() ?? 0);
-                    hashCode = (hashCode * 397) ^ (Extension._openTcpConnectionTimeout?.GetHashCode() ?? 0);
-                    hashCode = (hashCode * 397) ^ (Extension._idleTcpConnectionTimeout?.GetHashCode() ?? 0);
-                    hashCode = (hashCode * 131) ^ (Extension._gatewayModeMaxConnectionLimit?.GetHashCode() ?? 0);
-                    hashCode = (hashCode * 397) ^ (Extension._maxTcpConnectionsPerEndpoint?.GetHashCode() ?? 0);
-                    hashCode = (hashCode * 131) ^ (Extension._maxRequestsPerTcpConnection?.GetHashCode() ?? 0);
-                    _serviceProviderHash = hashCode;
+                    hashCode = (hashCode * 3) ^ (this.Extension._limitToEndpoint?.GetHashCode() ?? 0);
+                    hashCode = (hashCode * 397) ^ (this.Extension._webProxy?.GetHashCode() ?? 0);
+                    hashCode = (hashCode * 397) ^ (this.Extension._requestTimeout?.GetHashCode() ?? 0);
+                    hashCode = (hashCode * 397) ^ (this.Extension._openTcpConnectionTimeout?.GetHashCode() ?? 0);
+                    hashCode = (hashCode * 397) ^ (this.Extension._idleTcpConnectionTimeout?.GetHashCode() ?? 0);
+                    hashCode = (hashCode * 131) ^ (this.Extension._gatewayModeMaxConnectionLimit?.GetHashCode() ?? 0);
+                    hashCode = (hashCode * 397) ^ (this.Extension._maxTcpConnectionsPerEndpoint?.GetHashCode() ?? 0);
+                    hashCode = (hashCode * 131) ^ (this.Extension._maxRequestsPerTcpConnection?.GetHashCode() ?? 0);
+                    this._serviceProviderHash = hashCode;
                 }
 
-                return _serviceProviderHash.Value;
+                return this._serviceProviderHash.Value;
             }
 
             public override void PopulateDebugInfo(IDictionary<string, string> debugInfo)
             {
                 Check.NotNull(debugInfo, nameof(debugInfo));
 
-                if (!string.IsNullOrEmpty(Extension._connectionString))
+                if (!string.IsNullOrEmpty(this.Extension._connectionString))
                 {
                     debugInfo["BrightChain:" + nameof(ConnectionString)] =
-                        Extension._connectionString.GetHashCode().ToString(CultureInfo.InvariantCulture);
+                        this.Extension._connectionString.GetHashCode().ToString(CultureInfo.InvariantCulture);
                 }
                 else
                 {
                     debugInfo["BrightChain:" + nameof(AccountEndpoint)] =
-                        (Extension._accountEndpoint?.GetHashCode() ?? 0L).ToString(CultureInfo.InvariantCulture);
-                    debugInfo["BrightChain:" + nameof(AccountKey)] = (Extension._accountKey?.GetHashCode() ?? 0L).ToString(CultureInfo.InvariantCulture);
+                        (this.Extension._accountEndpoint?.GetHashCode() ?? 0L).ToString(CultureInfo.InvariantCulture);
+                    debugInfo["BrightChain:" + nameof(AccountKey)] = (this.Extension._accountKey?.GetHashCode() ?? 0L).ToString(CultureInfo.InvariantCulture);
                 }
 
                 debugInfo["BrightChain:" + nameof(BrightChainDbContextOptionsBuilder.Region)] =
-                    (Extension._region?.GetHashCode() ?? 0).ToString(CultureInfo.InvariantCulture);
+                    (this.Extension._region?.GetHashCode() ?? 0).ToString(CultureInfo.InvariantCulture);
             }
 
             public override string LogFragment
             {
                 get
                 {
-                    if (_logFragment == null)
+                    if (this._logFragment == null)
                     {
                         var builder = new StringBuilder();
 
-                        builder.Append("ServiceEndPoint=").Append(Extension._accountEndpoint).Append(' ');
+                        builder.Append("ServiceEndPoint=").Append(this.Extension._accountEndpoint).Append(' ');
 
-                        builder.Append("Database=").Append(Extension._databaseName).Append(' ');
+                        builder.Append("Database=").Append(this.Extension._databaseName).Append(' ');
 
-                        _logFragment = builder.ToString();
+                        this._logFragment = builder.ToString();
                     }
 
-                    return _logFragment;
+                    return this._logFragment;
                 }
             }
         }

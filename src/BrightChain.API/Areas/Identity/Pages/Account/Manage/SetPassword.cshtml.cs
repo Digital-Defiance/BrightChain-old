@@ -16,8 +16,8 @@
             UserManager<BrightChainEntityUser> userManager,
             SignInManager<BrightChainEntityUser> signInManager)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            this._userManager = userManager;
+            this._signInManager = signInManager;
         }
 
         [BindProperty]
@@ -42,49 +42,49 @@
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await _userManager.GetUserAsync(User).ConfigureAwait(false);
+            var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return this.NotFound($"Unable to load user with ID '{this._userManager.GetUserId(this.User)}'.");
             }
 
-            var hasPassword = await _userManager.HasPasswordAsync(user).ConfigureAwait(false);
+            var hasPassword = await this._userManager.HasPasswordAsync(user).ConfigureAwait(false);
 
             if (hasPassword)
             {
-                return RedirectToPage("./ChangePassword");
+                return this.RedirectToPage("./ChangePassword");
             }
 
-            return Page();
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return Page();
+                return this.Page();
             }
 
-            var user = await _userManager.GetUserAsync(User).ConfigureAwait(false);
+            var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return this.NotFound($"Unable to load user with ID '{this._userManager.GetUserId(this.User)}'.");
             }
 
-            var addPasswordResult = await _userManager.AddPasswordAsync(user, Input.NewPassword).ConfigureAwait(false);
+            var addPasswordResult = await this._userManager.AddPasswordAsync(user, this.Input.NewPassword).ConfigureAwait(false);
             if (!addPasswordResult.Succeeded)
             {
                 foreach (var error in addPasswordResult.Errors)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    this.ModelState.AddModelError(string.Empty, error.Description);
                 }
-                return Page();
+                return this.Page();
             }
 
-            await _signInManager.RefreshSignInAsync(user).ConfigureAwait(false);
-            StatusMessage = "Your password has been set.";
+            await this._signInManager.RefreshSignInAsync(user).ConfigureAwait(false);
+            this.StatusMessage = "Your password has been set.";
 
-            return RedirectToPage();
+            return this.RedirectToPage();
         }
     }
 }

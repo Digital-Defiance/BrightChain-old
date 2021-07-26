@@ -8,7 +8,7 @@ namespace BrightChain.EntityFrameworkCore.Data.Entities
         public BrightChainEntityBase()
         {
             //Id = Guid.NewGuid();
-            CreatedOn = DateTime.UtcNow;
+            this.CreatedOn = DateTime.UtcNow;
         }
 
         [Key]

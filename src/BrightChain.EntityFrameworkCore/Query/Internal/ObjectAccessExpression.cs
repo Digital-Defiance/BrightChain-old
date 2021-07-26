@@ -28,16 +28,16 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public ObjectAccessExpression(INavigation navigation, Expression accessExpression)
         {
-            Name = navigation.TargetEntityType.GetContainingPropertyName();
-            if (Name == null)
+            this.Name = navigation.TargetEntityType.GetContainingPropertyName();
+            if (this.Name == null)
             {
                 throw new InvalidOperationException(
                     BrightChainStrings.NavigationPropertyIsNotAnEmbeddedEntity(
                         navigation.DeclaringEntityType.DisplayName(), navigation.Name));
             }
 
-            Navigation = navigation;
-            AccessExpression = accessExpression;
+            this.Navigation = navigation;
+            this.AccessExpression = accessExpression;
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public override Type Type
-            => Navigation.ClrType;
+            => this.Navigation.ClrType;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -92,7 +92,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(visitor, nameof(visitor));
 
-            return Update(visitor.Visit(AccessExpression));
+            return this.Update(visitor.Visit(this.AccessExpression));
         }
 
         /// <summary>
@@ -103,8 +103,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual ObjectAccessExpression Update(Expression outerExpression)
         {
-            return outerExpression != AccessExpression
-                           ? new ObjectAccessExpression(Navigation, outerExpression)
+            return outerExpression != this.AccessExpression
+                           ? new ObjectAccessExpression(this.Navigation, outerExpression)
                            : this;
         }
 
@@ -118,7 +118,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(expressionPrinter, nameof(expressionPrinter));
 
-            expressionPrinter.Append(ToString());
+            expressionPrinter.Append(this.ToString());
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override string ToString()
         {
-            return $"{AccessExpression}[\"{Name}\"]";
+            return $"{this.AccessExpression}[\"{this.Name}\"]";
         }
 
         /// <summary>
@@ -143,13 +143,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return obj != null
                            && (ReferenceEquals(this, obj)
                                || obj is ObjectAccessExpression objectAccessExpression
-                               && Equals(objectAccessExpression));
+                               && this.Equals(objectAccessExpression));
         }
 
         private bool Equals(ObjectAccessExpression objectAccessExpression)
         {
-            return Navigation == objectAccessExpression.Navigation
-                           && AccessExpression.Equals(objectAccessExpression.AccessExpression);
+            return this.Navigation == objectAccessExpression.Navigation
+                           && this.AccessExpression.Equals(objectAccessExpression.AccessExpression);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override int GetHashCode()
         {
-            return HashCode.Combine(Navigation, AccessExpression);
+            return HashCode.Combine(this.Navigation, this.AccessExpression);
         }
     }
 }

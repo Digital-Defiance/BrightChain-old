@@ -34,12 +34,12 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         {
             Check.NotNull(optionsBuilder, nameof(optionsBuilder));
 
-            _optionsBuilder = optionsBuilder;
+            this._optionsBuilder = optionsBuilder;
         }
 
         /// <inheritdoc />
         public DbContextOptionsBuilder OptionsBuilder
-            => _optionsBuilder;
+            => this._optionsBuilder;
 
         /// <summary>
         ///     Configures the context to use the provided <see cref="IExecutionStrategy" />.
@@ -48,7 +48,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         public virtual BrightChainDbContextOptionsBuilder ExecutionStrategy(
             Func<ExecutionStrategyDependencies, IExecutionStrategy> getExecutionStrategy)
         {
-            return WithOption(e => e.WithExecutionStrategyFactory(Check.NotNull(getExecutionStrategy, nameof(getExecutionStrategy))));
+            return this.WithOption(e => e.WithExecutionStrategyFactory(Check.NotNull(getExecutionStrategy, nameof(getExecutionStrategy))));
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         /// <param name="region"> Azure BrightChain DB region name. </param>
         public virtual BrightChainDbContextOptionsBuilder Region(string region)
         {
-            return WithOption(e => e.WithRegion(Check.NotNull(region, nameof(region))));
+            return this.WithOption(e => e.WithRegion(Check.NotNull(region, nameof(region))));
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         /// <param name="enable"> <see langword="true" /> to limit the operations to the provided endpoint. </param>
         public virtual BrightChainDbContextOptionsBuilder LimitToEndpoint(bool enable = true)
         {
-            return WithOption(e => e.WithLimitToEndpoint(Check.NotNull(enable, nameof(enable))));
+            return this.WithOption(e => e.WithLimitToEndpoint(Check.NotNull(enable, nameof(enable))));
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         /// <param name="proxy"> The proxy information used for web requests. </param>
         public virtual BrightChainDbContextOptionsBuilder WebProxy(IWebProxy proxy)
         {
-            return WithOption(e => e.WithWebProxy(Check.NotNull(proxy, nameof(proxy))));
+            return this.WithOption(e => e.WithWebProxy(Check.NotNull(proxy, nameof(proxy))));
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         /// <param name="timeout"> Request timeout. </param>
         public virtual BrightChainDbContextOptionsBuilder RequestTimeout(TimeSpan timeout)
         {
-            return WithOption(e => e.WithRequestTimeout(Check.NotNull(timeout, nameof(timeout))));
+            return this.WithOption(e => e.WithRequestTimeout(Check.NotNull(timeout, nameof(timeout))));
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         /// <param name="timeout"> Open TCP connection timeout. </param>
         public virtual BrightChainDbContextOptionsBuilder OpenTcpConnectionTimeout(TimeSpan timeout)
         {
-            return WithOption(e => e.WithOpenTcpConnectionTimeout(Check.NotNull(timeout, nameof(timeout))));
+            return this.WithOption(e => e.WithOpenTcpConnectionTimeout(Check.NotNull(timeout, nameof(timeout))));
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         /// <param name="timeout"> Idle connection timeout. </param>
         public virtual BrightChainDbContextOptionsBuilder IdleTcpConnectionTimeout(TimeSpan timeout)
         {
-            return WithOption(e => e.WithIdleTcpConnectionTimeout(Check.NotNull(timeout, nameof(timeout))));
+            return this.WithOption(e => e.WithIdleTcpConnectionTimeout(Check.NotNull(timeout, nameof(timeout))));
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         /// <param name="connectionLimit"> The maximum number of concurrent connections allowed. </param>
         public virtual BrightChainDbContextOptionsBuilder GatewayModeMaxConnectionLimit(int connectionLimit)
         {
-            return WithOption(e => e.WithGatewayModeMaxConnectionLimit(Check.NotNull(connectionLimit, nameof(connectionLimit))));
+            return this.WithOption(e => e.WithGatewayModeMaxConnectionLimit(Check.NotNull(connectionLimit, nameof(connectionLimit))));
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         /// <param name="connectionLimit"> The maximum number of TCP connections that may be opened to each BrightChain DB back-end. </param>
         public virtual BrightChainDbContextOptionsBuilder MaxTcpConnectionsPerEndpoint(int connectionLimit)
         {
-            return WithOption(e => e.WithMaxTcpConnectionsPerEndpoint(Check.NotNull(connectionLimit, nameof(connectionLimit))));
+            return this.WithOption(e => e.WithMaxTcpConnectionsPerEndpoint(Check.NotNull(connectionLimit, nameof(connectionLimit))));
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         /// <param name="requestLimit"> The number of requests allowed simultaneously over a single TCP connection. </param>
         public virtual BrightChainDbContextOptionsBuilder MaxRequestsPerTcpConnection(int requestLimit)
         {
-            return WithOption(e => e.WithMaxRequestsPerTcpConnection(Check.NotNull(requestLimit, nameof(requestLimit))));
+            return this.WithOption(e => e.WithMaxRequestsPerTcpConnection(Check.NotNull(requestLimit, nameof(requestLimit))));
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         /// <param name="enabled"><see langword="false" /> to have null resource</param>
         public virtual BrightChainDbContextOptionsBuilder ContentResponseOnWriteEnabled(bool enabled = true)
         {
-            return WithOption(e => e.ContentResponseOnWriteEnabled(Check.NotNull(enabled, nameof(enabled))));
+            return this.WithOption(e => e.ContentResponseOnWriteEnabled(Check.NotNull(enabled, nameof(enabled))));
         }
 
         /// <summary>
@@ -156,8 +156,8 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         /// <returns> The same builder instance so that multiple calls can be chained. </returns>
         protected virtual BrightChainDbContextOptionsBuilder WithOption(Func<BrightChainOptionsExtension, BrightChainOptionsExtension> setAction)
         {
-            ((IDbContextOptionsBuilderInfrastructure)_optionsBuilder).AddOrUpdateExtension(
-                setAction(_optionsBuilder.Options.FindExtension<BrightChainOptionsExtension>() ?? new BrightChainOptionsExtension()));
+            ((IDbContextOptionsBuilderInfrastructure)this._optionsBuilder).AddOrUpdateExtension(
+                setAction(this._optionsBuilder.Options.FindExtension<BrightChainOptionsExtension>() ?? new BrightChainOptionsExtension()));
 
             return this;
         }

@@ -28,9 +28,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         public KeyAccessExpression(IProperty property, Expression accessExpression)
             : base(property.ClrType, property.GetTypeMapping())
         {
-            Name = property.GetJsonPropertyName();
-            Property = property;
-            AccessExpression = accessExpression;
+            this.Name = property.GetJsonPropertyName();
+            this.Property = property;
+            this.AccessExpression = accessExpression;
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(visitor, nameof(visitor));
 
-            return Update(visitor.Visit(AccessExpression));
+            return this.Update(visitor.Visit(this.AccessExpression));
         }
 
         /// <summary>
@@ -80,8 +80,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual KeyAccessExpression Update(Expression outerExpression)
         {
-            return outerExpression != AccessExpression
-                           ? new KeyAccessExpression(Property, outerExpression)
+            return outerExpression != this.AccessExpression
+                           ? new KeyAccessExpression(this.Property, outerExpression)
                            : this;
         }
 
@@ -95,7 +95,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(expressionPrinter, nameof(expressionPrinter));
 
-            expressionPrinter.Append(ToString());
+            expressionPrinter.Append(this.ToString());
         }
 
         /// <summary>
@@ -106,11 +106,11 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override string ToString()
         {
-            return Name?.Length > 0
-                           ? $"{AccessExpression}[\"{Name}\"]"
+            return this.Name?.Length > 0
+                           ? $"{this.AccessExpression}[\"{this.Name}\"]"
                            // TODO: Remove once __jObject is translated to the access root in a better fashion.
                            // See issue #17670 and related issue #14121.
-                           : $"{AccessExpression}";
+                           : $"{this.AccessExpression}";
         }
 
         /// <summary>
@@ -124,14 +124,14 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return obj != null
                            && (ReferenceEquals(this, obj)
                                || obj is KeyAccessExpression keyAccessExpression
-                               && Equals(keyAccessExpression));
+                               && this.Equals(keyAccessExpression));
         }
 
         private bool Equals(KeyAccessExpression keyAccessExpression)
         {
             return base.Equals(keyAccessExpression)
-                           && Name == keyAccessExpression.Name
-                           && AccessExpression.Equals(keyAccessExpression.AccessExpression);
+                           && this.Name == keyAccessExpression.Name
+                           && this.AccessExpression.Equals(keyAccessExpression.AccessExpression);
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Name, AccessExpression);
+            return HashCode.Combine(base.GetHashCode(), this.Name, this.AccessExpression);
         }
     }
 }

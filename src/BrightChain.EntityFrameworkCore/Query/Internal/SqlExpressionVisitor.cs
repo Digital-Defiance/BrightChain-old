@@ -29,55 +29,55 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             {
                 case ShapedQueryExpression shapedQueryExpression:
                     return shapedQueryExpression.Update(
-                        Visit(shapedQueryExpression.QueryExpression), shapedQueryExpression.ShaperExpression);
+                        this.Visit(shapedQueryExpression.QueryExpression), shapedQueryExpression.ShaperExpression);
 
                 case ReadItemExpression readItemExpression:
                     return readItemExpression;
 
                 case SelectExpression selectExpression:
-                    return VisitSelect(selectExpression);
+                    return this.VisitSelect(selectExpression);
 
                 case ProjectionExpression projectionExpression:
-                    return VisitProjection(projectionExpression);
+                    return this.VisitProjection(projectionExpression);
 
                 case EntityProjectionExpression entityProjectionExpression:
-                    return VisitEntityProjection(entityProjectionExpression);
+                    return this.VisitEntityProjection(entityProjectionExpression);
 
                 case ObjectArrayProjectionExpression arrayProjectionExpression:
-                    return VisitObjectArrayProjection(arrayProjectionExpression);
+                    return this.VisitObjectArrayProjection(arrayProjectionExpression);
 
                 case RootReferenceExpression rootReferenceExpression:
-                    return VisitRootReference(rootReferenceExpression);
+                    return this.VisitRootReference(rootReferenceExpression);
 
                 case KeyAccessExpression keyAccessExpression:
-                    return VisitKeyAccess(keyAccessExpression);
+                    return this.VisitKeyAccess(keyAccessExpression);
 
                 case ObjectAccessExpression objectAccessExpression:
-                    return VisitObjectAccess(objectAccessExpression);
+                    return this.VisitObjectAccess(objectAccessExpression);
 
                 case SqlBinaryExpression sqlBinaryExpression:
-                    return VisitSqlBinary(sqlBinaryExpression);
+                    return this.VisitSqlBinary(sqlBinaryExpression);
 
                 case SqlConstantExpression sqlConstantExpression:
-                    return VisitSqlConstant(sqlConstantExpression);
+                    return this.VisitSqlConstant(sqlConstantExpression);
 
                 case SqlUnaryExpression sqlUnaryExpression:
-                    return VisitSqlUnary(sqlUnaryExpression);
+                    return this.VisitSqlUnary(sqlUnaryExpression);
 
                 case SqlConditionalExpression sqlConditionalExpression:
-                    return VisitSqlConditional(sqlConditionalExpression);
+                    return this.VisitSqlConditional(sqlConditionalExpression);
 
                 case SqlParameterExpression sqlParameterExpression:
-                    return VisitSqlParameter(sqlParameterExpression);
+                    return this.VisitSqlParameter(sqlParameterExpression);
 
                 case InExpression inExpression:
-                    return VisitIn(inExpression);
+                    return this.VisitIn(inExpression);
 
                 case SqlFunctionExpression sqlFunctionExpression:
-                    return VisitSqlFunction(sqlFunctionExpression);
+                    return this.VisitSqlFunction(sqlFunctionExpression);
 
                 case OrderingExpression orderingExpression:
-                    return VisitOrdering(orderingExpression);
+                    return this.VisitOrdering(orderingExpression);
             }
 
             return base.VisitExtension(extensionExpression);

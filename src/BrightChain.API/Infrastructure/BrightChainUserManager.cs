@@ -25,7 +25,7 @@ namespace BrightChain.API.Infrastructure
             : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators,
                 keyNormalizer, errors, services, logger)
         {
-            _configuration = configuration;
+            this._configuration = configuration;
         }
 
         #region Authenticator App key
@@ -37,7 +37,7 @@ namespace BrightChain.API.Infrastructure
             throw new NotImplementedException();
             // var aesKey = EncryptProvider.CreateAesKey();
 
-            bool.TryParse(_configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
+            bool.TryParse(this._configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
 
             //var encryptedKey = encryptionEnabled
             //    ? EncryptProvider.AESEncrypt(originalAuthenticatorKey, _configuration["TwoFactorAuthentication:EncryptionKey"])
@@ -57,7 +57,7 @@ namespace BrightChain.API.Infrastructure
             throw new NotImplementedException();
 
             // Decryption
-            bool.TryParse(_configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
+            bool.TryParse(this._configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
 
             //var originalAuthenticatorKey = encryptionEnabled
             //    ? EncryptProvider.AESDecrypt(databaseKey, _configuration["TwoFactorAuthentication:EncryptionKey"])
@@ -75,7 +75,7 @@ namespace BrightChain.API.Infrastructure
             var originalRecoveryCode = base.CreateTwoFactorRecoveryCode();
 
             throw new NotImplementedException();
-            bool.TryParse(_configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
+            bool.TryParse(this._configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
 
             //var encryptedRecoveryCode = encryptionEnabled
             //    ? EncryptProvider.AESEncrypt(originalRecoveryCode, _configuration["TwoFactorAuthentication:EncryptionKey"])
@@ -95,7 +95,7 @@ namespace BrightChain.API.Infrastructure
             }
 
             throw new NotImplementedException();
-            bool.TryParse(_configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
+            bool.TryParse(this._configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
 
             //return encryptionEnabled
             //    ? generatedTokens
@@ -107,7 +107,7 @@ namespace BrightChain.API.Infrastructure
 
         public override Task<IdentityResult> RedeemTwoFactorRecoveryCodeAsync(BrightChainEntityUser user, string code)
         {
-            bool.TryParse(_configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
+            bool.TryParse(this._configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
 
             if (encryptionEnabled && !string.IsNullOrEmpty(code))
             {

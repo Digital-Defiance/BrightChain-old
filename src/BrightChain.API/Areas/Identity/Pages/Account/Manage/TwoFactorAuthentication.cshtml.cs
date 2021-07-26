@@ -20,9 +20,9 @@
             SignInManager<BrightChainEntityUser> signInManager,
             ILogger<TwoFactorAuthenticationModel> logger)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _logger = logger;
+            this._userManager = userManager;
+            this._signInManager = signInManager;
+            this._logger = logger;
         }
 
         public bool HasAuthenticator { get; set; }
@@ -39,31 +39,31 @@
 
         public async Task<IActionResult> OnGet()
         {
-            var user = await _userManager.GetUserAsync(User).ConfigureAwait(false);
+            var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return this.NotFound($"Unable to load user with ID '{this._userManager.GetUserId(this.User)}'.");
             }
 
-            HasAuthenticator = await _userManager.GetAuthenticatorKeyAsync(user).ConfigureAwait(false) != null;
-            Is2faEnabled = await _userManager.GetTwoFactorEnabledAsync(user).ConfigureAwait(false);
-            IsMachineRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user).ConfigureAwait(false);
-            RecoveryCodesLeft = await _userManager.CountRecoveryCodesAsync(user).ConfigureAwait(false);
+            this.HasAuthenticator = await this._userManager.GetAuthenticatorKeyAsync(user).ConfigureAwait(false) != null;
+            this.Is2faEnabled = await this._userManager.GetTwoFactorEnabledAsync(user).ConfigureAwait(false);
+            this.IsMachineRemembered = await this._signInManager.IsTwoFactorClientRememberedAsync(user).ConfigureAwait(false);
+            this.RecoveryCodesLeft = await this._userManager.CountRecoveryCodesAsync(user).ConfigureAwait(false);
 
-            return Page();
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPost()
         {
-            var user = await _userManager.GetUserAsync(User).ConfigureAwait(false);
+            var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return this.NotFound($"Unable to load user with ID '{this._userManager.GetUserId(this.User)}'.");
             }
 
-            await _signInManager.ForgetTwoFactorClientAsync().ConfigureAwait(false);
-            StatusMessage = "The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code.";
-            return RedirectToPage();
+            await this._signInManager.ForgetTwoFactorClientAsync().ConfigureAwait(false);
+            this.StatusMessage = "The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code.";
+            return this.RedirectToPage();
         }
     }
 }

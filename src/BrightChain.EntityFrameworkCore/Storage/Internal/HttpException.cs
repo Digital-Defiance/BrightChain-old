@@ -24,7 +24,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             : base(response.ReasonPhrase)
         {
             // An error occurred while sending the request.
-            Response = response;
+            this.Response = response;
         }
 
         /// <summary>

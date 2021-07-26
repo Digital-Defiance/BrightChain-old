@@ -30,7 +30,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         public SqlConstantExpression(ConstantExpression constantExpression, CoreTypeMapping? typeMapping)
             : base(constantExpression.Type, typeMapping)
         {
-            _constantExpression = constantExpression;
+            this._constantExpression = constantExpression;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual object? Value
-            => _constantExpression.Value;
+            => this._constantExpression.Value;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -50,7 +50,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlExpression ApplyTypeMapping(CoreTypeMapping? typeMapping)
         {
-            return new SqlConstantExpression(_constantExpression, typeMapping ?? TypeMapping);
+            return new SqlConstantExpression(this._constantExpression, typeMapping ?? this.TypeMapping);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(expressionPrinter, nameof(expressionPrinter));
 
-            Print(Value, expressionPrinter);
+            this.Print(this.Value, expressionPrinter);
         }
 
         private void Print(
@@ -96,12 +96,12 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     }
 
                     first = false;
-                    Print(item, expressionPrinter);
+                    this.Print(item, expressionPrinter);
                 }
             }
             else
             {
-                var jToken = GenerateJToken(Value, TypeMapping);
+                var jToken = this.GenerateJToken(this.Value, this.TypeMapping);
 
                 expressionPrinter.Append(jToken == null ? "null" : jToken.ToString());
             }
@@ -109,7 +109,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
         private JsonNode? GenerateJToken(object? value, CoreTypeMapping? typeMapping)
         {
-            var mappingClrType = typeMapping?.ClrType.UnwrapNullableType() ?? Type;
+            var mappingClrType = typeMapping?.ClrType.UnwrapNullableType() ?? this.Type;
             if (value?.GetType().IsInteger() == true
                 && mappingClrType.IsEnum)
             {
@@ -141,15 +141,15 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return obj != null
                            && (ReferenceEquals(this, obj)
                                || obj is SqlConstantExpression sqlConstantExpression
-                               && Equals(sqlConstantExpression));
+                               && this.Equals(sqlConstantExpression));
         }
 
         private bool Equals(SqlConstantExpression sqlConstantExpression)
         {
             return base.Equals(sqlConstantExpression)
-                           && (Value == null
+                           && (this.Value == null
                                ? sqlConstantExpression.Value == null
-                               : Value.Equals(sqlConstantExpression.Value));
+                               : this.Value.Equals(sqlConstantExpression.Value));
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Value);
+            return HashCode.Combine(base.GetHashCode(), this.Value);
         }
     }
 }

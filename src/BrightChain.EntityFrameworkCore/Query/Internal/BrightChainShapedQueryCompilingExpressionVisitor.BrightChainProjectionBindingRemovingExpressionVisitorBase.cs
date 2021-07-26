@@ -73,8 +73,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 ParameterExpression jObjectParameter,
                 bool trackQueryResults)
             {
-                _jObjectParameter = jObjectParameter;
-                _trackQueryResults = trackQueryResults;
+                this._jObjectParameter = jObjectParameter;
+                this._trackQueryResults = trackQueryResults;
             }
 
             protected override Expression VisitBinary(BinaryExpression binaryExpression)
@@ -94,7 +94,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                             var projectionExpression = ((UnaryExpression)binaryExpression.Right).Operand;
                             if (projectionExpression is ProjectionBindingExpression projectionBindingExpression)
                             {
-                                var projection = GetProjection(projectionBindingExpression);
+                                var projection = this.GetProjection(projectionBindingExpression);
                                 projectionExpression = projection.Expression;
                                 storeName = projection.Alias;
                             }
@@ -109,25 +109,25 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                             if (projectionExpression is ObjectArrayProjectionExpression objectArrayProjectionExpression)
                             {
                                 innerAccessExpression = objectArrayProjectionExpression.AccessExpression;
-                                _projectionBindings[objectArrayProjectionExpression] = parameterExpression;
+                                this._projectionBindings[objectArrayProjectionExpression] = parameterExpression;
                                 storeName ??= objectArrayProjectionExpression.Name;
                             }
                             else
                             {
                                 var entityProjectionExpression = (EntityProjectionExpression)projectionExpression;
                                 var accessExpression = entityProjectionExpression.AccessExpression;
-                                _projectionBindings[accessExpression] = parameterExpression;
+                                this._projectionBindings[accessExpression] = parameterExpression;
                                 storeName ??= entityProjectionExpression.Name;
 
                                 switch (accessExpression)
                                 {
                                     case ObjectAccessExpression innerObjectAccessExpression:
                                         innerAccessExpression = innerObjectAccessExpression.AccessExpression;
-                                        _ownerMappings[accessExpression] =
+                                        this._ownerMappings[accessExpression] =
                                             (innerObjectAccessExpression.Navigation.DeclaringEntityType, innerAccessExpression);
                                         break;
                                     case RootReferenceExpression _:
-                                        innerAccessExpression = _jObjectParameter;
+                                        innerAccessExpression = this._jObjectParameter;
                                         break;
                                     default:
                                         throw new InvalidOperationException(
@@ -135,7 +135,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                                 }
                             }
 
-                            var valueExpression = CreateGetValueExpression(innerAccessExpression, storeName, parameterExpression.Type);
+                            var valueExpression = this.CreateGetValueExpression(innerAccessExpression, storeName, parameterExpression.Type);
 
                             return Expression.MakeBinary(ExpressionType.Assign, binaryExpression.Left, valueExpression);
                         }
@@ -147,7 +147,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                             EntityProjectionExpression entityProjectionExpression;
                             if (newExpression.Arguments[0] is ProjectionBindingExpression projectionBindingExpression)
                             {
-                                var projection = GetProjection(projectionBindingExpression);
+                                var projection = this.GetProjection(projectionBindingExpression);
                                 entityProjectionExpression = (EntityProjectionExpression)projection.Expression;
                             }
                             else
@@ -156,7 +156,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                                 entityProjectionExpression = (EntityProjectionExpression)projection;
                             }
 
-                            _materializationContextBindings[parameterExpression] = entityProjectionExpression.AccessExpression;
+                            this._materializationContextBindings[parameterExpression] = entityProjectionExpression.AccessExpression;
 
                             var updatedExpression = Expression.New(
                                 newExpression.Constructor,
@@ -171,7 +171,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         && memberExpression.Member is FieldInfo fieldInfo
                         && fieldInfo.IsInitOnly)
                     {
-                        return memberExpression.Assign(Visit(binaryExpression.Right));
+                        return memberExpression.Assign(this.Visit(binaryExpression.Right));
                     }
                 }
 
@@ -190,19 +190,19 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     Expression innerExpression;
                     if (methodCallExpression.Arguments[0] is ProjectionBindingExpression projectionBindingExpression)
                     {
-                        var projection = GetProjection(projectionBindingExpression);
+                        var projection = this.GetProjection(projectionBindingExpression);
 
                         innerExpression = Expression.Convert(
-                            CreateReadJTokenExpression(_jObjectParameter, projection.Alias),
+                            CreateReadJTokenExpression(this._jObjectParameter, projection.Alias),
                             typeof(JsonNode));
                     }
                     else
                     {
-                        innerExpression = _materializationContextBindings[
+                        innerExpression = this._materializationContextBindings[
                             (ParameterExpression)((MethodCallExpression)methodCallExpression.Arguments[0]).Object];
                     }
 
-                    return CreateGetValueExpression(innerExpression, property, methodCallExpression.Type);
+                    return this.CreateGetValueExpression(innerExpression, property, methodCallExpression.Type);
                 }
 
                 if (method.DeclaringType == typeof(Enumerable)
@@ -220,12 +220,12 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                                 BrightChainStrings.NonEmbeddedIncludeNotSupported(includeExpression.Navigation));
                         }
 
-                        _pendingIncludes.Add(includeExpression);
+                        this._pendingIncludes.Add(includeExpression);
 
-                        Visit(includeExpression.EntityExpression);
+                        this.Visit(includeExpression.EntityExpression);
 
                         // Includes on collections are processed when visiting CollectionShaperExpression
-                        return Visit(methodCallExpression.Arguments[0]);
+                        return this.Visit(methodCallExpression.Arguments[0]);
                     }
                 }
 
@@ -240,10 +240,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 {
                     case ProjectionBindingExpression projectionBindingExpression:
                     {
-                        var projection = GetProjection(projectionBindingExpression);
+                        var projection = this.GetProjection(projectionBindingExpression);
 
-                        return CreateGetValueExpression(
-                            _jObjectParameter,
+                        return this.CreateGetValueExpression(
+                            this._jObjectParameter,
                             projection.Alias,
                             projectionBindingExpression.Type, (projection.Expression as SqlExpression)?.TypeMapping);
                     }
@@ -256,7 +256,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         switch (collectionShaperExpression.Projection)
                         {
                             case ProjectionBindingExpression projectionBindingExpression:
-                                var projection = GetProjection(projectionBindingExpression);
+                                var projection = this.GetProjection(projectionBindingExpression);
                                 objectArrayProjection = (ObjectArrayProjectionExpression)projection.Expression;
                                 break;
                             case ObjectArrayProjectionExpression objectArrayProjectionExpression:
@@ -266,20 +266,20 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                                 throw new InvalidOperationException(CoreStrings.TranslationFailed(extensionExpression.Print()));
                         }
 
-                        var jArray = _projectionBindings[objectArrayProjection];
+                        var jArray = this._projectionBindings[objectArrayProjection];
                         var jObjectParameter = Expression.Parameter(typeof(JsonNode), jArray.Name + "Object");
                         var ordinalParameter = Expression.Parameter(typeof(int), jArray.Name + "Ordinal");
 
                         var accessExpression = objectArrayProjection.InnerProjection.AccessExpression;
-                        _projectionBindings[accessExpression] = jObjectParameter;
-                        _ownerMappings[accessExpression] =
+                        this._projectionBindings[accessExpression] = jObjectParameter;
+                        this._ownerMappings[accessExpression] =
                             (objectArrayProjection.Navigation.DeclaringEntityType, objectArrayProjection.AccessExpression);
-                        _ordinalParameterBindings[accessExpression] = Expression.Add(
+                        this._ordinalParameterBindings[accessExpression] = Expression.Add(
                             ordinalParameter, Expression.Constant(1, typeof(int)));
 
-                        var innerShaper = (BlockExpression)Visit(collectionShaperExpression.InnerShaper);
+                        var innerShaper = (BlockExpression)this.Visit(collectionShaperExpression.InnerShaper);
 
-                        innerShaper = AddIncludes(innerShaper);
+                        innerShaper = this.AddIncludes(innerShaper);
 
                         var entities = Expression.Call(
                             EnumerableMethods.SelectWithOrdinal.MakeGenericMethod(typeof(JsonNode), innerShaper.Type),
@@ -305,10 +305,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                                 BrightChainStrings.NonEmbeddedIncludeNotSupported(includeExpression.Navigation));
                         }
 
-                        var isFirstInclude = _pendingIncludes.Count == 0;
-                        _pendingIncludes.Add(includeExpression);
+                        var isFirstInclude = this._pendingIncludes.Count == 0;
+                        this._pendingIncludes.Add(includeExpression);
 
-                        var jObjectBlock = Visit(includeExpression.EntityExpression) as BlockExpression;
+                        var jObjectBlock = this.Visit(includeExpression.EntityExpression) as BlockExpression;
 
                         if (!isFirstInclude)
                         {
@@ -321,7 +321,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         var jObjectCondition = (ConditionalExpression)jObjectBlock.Expressions[^1];
 
                         var shaperBlock = (BlockExpression)jObjectCondition.IfFalse;
-                        shaperBlock = AddIncludes(shaperBlock);
+                        shaperBlock = this.AddIncludes(shaperBlock);
 
                         var jObjectExpressions = new List<Expression>(jObjectBlock.Expressions);
                         jObjectExpressions.RemoveAt(jObjectExpressions.Count - 1);
@@ -338,7 +338,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             private BlockExpression AddIncludes(BlockExpression shaperBlock)
             {
-                if (_pendingIncludes.Count == 0)
+                if (this._pendingIncludes.Count == 0)
                 {
                     return shaperBlock;
                 }
@@ -347,12 +347,12 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 var instanceVariable = shaperExpressions[^1];
                 shaperExpressions.RemoveAt(shaperExpressions.Count - 1);
 
-                var includesToProcess = _pendingIncludes;
-                _pendingIncludes = new List<IncludeExpression>();
+                var includesToProcess = this._pendingIncludes;
+                this._pendingIncludes = new List<IncludeExpression>();
 
                 foreach (var include in includesToProcess)
                 {
-                    AddInclude(shaperExpressions, include, shaperBlock, instanceVariable);
+                    this.AddInclude(shaperExpressions, include, shaperBlock, instanceVariable);
                 }
 
                 shaperExpressions.Add(instanceVariable);
@@ -372,7 +372,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 var includingClrType = navigation.DeclaringEntityType.ClrType;
                 var relatedEntityClrType = navigation.TargetEntityType.ClrType;
 #pragma warning disable EF1001 // Internal EF Core API usage.
-                var entityEntryVariable = _trackQueryResults
+                var entityEntryVariable = this._trackQueryResults
                     ? shaperBlock.Variables.Single(v => v.Type == typeof(InternalEntityEntry))
                     : (Expression)Expression.Constant(null, typeof(InternalEntityEntry));
 #pragma warning restore EF1001 // Internal EF Core API usage.
@@ -383,7 +383,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     includingClrType, relatedEntityClrType, navigation, inverseNavigation);
                 var initialize = GenerateInitialize(includingClrType, navigation);
 
-                var navigationExpression = Visit(includeExpression.NavigationExpression);
+                var navigationExpression = this.Visit(includeExpression.NavigationExpression);
 
                 shaperExpressions.Add(
                     Expression.Call(
@@ -615,7 +615,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             {
                 if (property.Name == StoreKeyConvention.JObjectPropertyName)
                 {
-                    return _projectionBindings[jObjectExpression];
+                    return this._projectionBindings[jObjectExpression];
                 }
 
                 var storeName = property.GetJsonPropertyName();
@@ -628,7 +628,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         if (!ownership.IsUnique
                             && property.IsOrdinalKeyProperty())
                         {
-                            Expression readExpression = _ordinalParameterBindings[jObjectExpression];
+                            Expression readExpression = this._ordinalParameterBindings[jObjectExpression];
                             if (readExpression.Type != type)
                             {
                                 readExpression = Expression.Convert(readExpression, type);
@@ -641,7 +641,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         if (principalProperty != null)
                         {
                             Expression ownerJObjectExpression = null;
-                            if (_ownerMappings.TryGetValue(jObjectExpression, out var ownerInfo))
+                            if (this._ownerMappings.TryGetValue(jObjectExpression, out var ownerInfo))
                             {
                                 Check.DebugAssert(
                                     principalProperty.DeclaringEntityType.IsAssignableFrom(ownerInfo.EntityType),
@@ -660,7 +660,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
                             if (ownerJObjectExpression != null)
                             {
-                                return CreateGetValueExpression(ownerJObjectExpression, principalProperty, type);
+                                return this.CreateGetValueExpression(ownerJObjectExpression, principalProperty, type);
                             }
                         }
                     }
@@ -669,7 +669,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 }
 
                 return Expression.Convert(
-                    CreateGetValueExpression(jObjectExpression, storeName, type.MakeNullable(), property.GetTypeMapping()),
+                    this.CreateGetValueExpression(jObjectExpression, storeName, type.MakeNullable(), property.GetTypeMapping()),
                     type);
             }
 
@@ -682,20 +682,20 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 Check.DebugAssert(type.IsNullableType(), "Must read nullable type from JObject.");
 
                 var innerExpression = jObjectExpression;
-                if (_projectionBindings.TryGetValue(jObjectExpression, out var innerVariable))
+                if (this._projectionBindings.TryGetValue(jObjectExpression, out var innerVariable))
                 {
                     innerExpression = innerVariable;
                 }
                 else if (jObjectExpression is RootReferenceExpression rootReferenceExpression)
                 {
-                    innerExpression = CreateGetValueExpression(
-                        _jObjectParameter, rootReferenceExpression.Alias, typeof(JsonNode));
+                    innerExpression = this.CreateGetValueExpression(
+                        this._jObjectParameter, rootReferenceExpression.Alias, typeof(JsonNode));
                 }
                 else if (jObjectExpression is ObjectAccessExpression objectAccessExpression)
                 {
                     var innerAccessExpression = objectAccessExpression.AccessExpression;
 
-                    innerExpression = CreateGetValueExpression(
+                    innerExpression = this.CreateGetValueExpression(
                         innerAccessExpression, ((IAccessExpression)innerAccessExpression).Name, typeof(JsonNode));
                 }
 
@@ -755,7 +755,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 }
                 else
                 {
-                    valueExpression = ConvertJTokenToType(jTokenExpression, typeMapping?.ClrType.MakeNullable() ?? type);
+                    valueExpression = this.ConvertJTokenToType(jTokenExpression, typeMapping?.ClrType.MakeNullable() ?? type);
 
                     if (valueExpression.Type != type)
                     {

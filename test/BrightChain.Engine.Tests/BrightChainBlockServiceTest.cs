@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Helpers;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Blocks.Chains;
@@ -16,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using static BrightChain.Engine.Helpers.Utilities;
-using static BrightChain.Engine.Tests.Helpers.TestHelpers;
 
 namespace BrightChain.Engine.Tests
 {
@@ -44,7 +39,7 @@ namespace BrightChain.Engine.Tests
                 .SetupAllProperties()
                 .Setup(f => f.CreateLogger(It.IsAny<string>())).Returns(this._logger);
 
-            _loggerFactory = factoryMock.Object;
+            this._loggerFactory = factoryMock.Object;
         }
 
         [TestMethod]

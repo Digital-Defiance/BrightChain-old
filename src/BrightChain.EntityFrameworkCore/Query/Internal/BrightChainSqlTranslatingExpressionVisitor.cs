@@ -64,12 +64,12 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             IMemberTranslatorProvider memberTranslatorProvider,
             IMethodCallTranslatorProvider methodCallTranslatorProvider)
         {
-            _queryCompilationContext = queryCompilationContext;
-            _model = queryCompilationContext.Model;
-            _sqlExpressionFactory = sqlExpressionFactory;
-            _memberTranslatorProvider = memberTranslatorProvider;
-            _methodCallTranslatorProvider = methodCallTranslatorProvider;
-            _sqlVerifyingExpressionVisitor = new SqlTypeMappingVerifyingExpressionVisitor();
+            this._queryCompilationContext = queryCompilationContext;
+            this._model = queryCompilationContext.Model;
+            this._sqlExpressionFactory = sqlExpressionFactory;
+            this._memberTranslatorProvider = memberTranslatorProvider;
+            this._methodCallTranslatorProvider = methodCallTranslatorProvider;
+            this._sqlVerifyingExpressionVisitor = new SqlTypeMappingVerifyingExpressionVisitor();
         }
 
         /// <summary>
@@ -90,13 +90,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(details, nameof(details));
 
-            if (TranslationErrorDetails == null)
+            if (this.TranslationErrorDetails == null)
             {
-                TranslationErrorDetails = details;
+                this.TranslationErrorDetails = details;
             }
             else
             {
-                TranslationErrorDetails += Environment.NewLine + details;
+                this.TranslationErrorDetails += Environment.NewLine + details;
             }
         }
 
@@ -110,18 +110,18 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(expression, nameof(expression));
 
-            TranslationErrorDetails = null;
+            this.TranslationErrorDetails = null;
 
-            return TranslateInternal(expression);
+            return this.TranslateInternal(expression);
         }
 
         private SqlExpression TranslateInternal(Expression expression)
         {
-            var result = Visit(expression);
+            var result = this.Visit(expression);
 
             if (result is SqlExpression translation)
             {
-                translation = _sqlExpressionFactory.ApplyDefaultTypeMapping(translation);
+                translation = this._sqlExpressionFactory.ApplyDefaultTypeMapping(translation);
 
                 if (translation.TypeMapping == null)
                 {
@@ -129,7 +129,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     return null;
                 }
 
-                _sqlVerifyingExpressionVisitor.Visit(translation);
+                this._sqlVerifyingExpressionVisitor.Visit(translation);
 
                 return translation;
             }
@@ -156,7 +156,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     ifFalse = Expression.Convert(ifFalse, ifTrue.Type);
                 }
 
-                return Visit(
+                return this.Visit(
                     Expression.Condition(
                         Expression.NotEqual(ifTrue, Expression.Constant(null, ifTrue.Type)),
                         ifTrue,
@@ -183,13 +183,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 right = rightOperand;
             }
 
-            var visitedLeft = Visit(left);
-            var visitedRight = Visit(right);
+            var visitedLeft = this.Visit(left);
+            var visitedRight = this.Visit(right);
 
             if ((binaryExpression.NodeType == ExpressionType.Equal
                     || binaryExpression.NodeType == ExpressionType.NotEqual)
                 // Visited expression could be null, We need to pass MemberInitExpression
-                && TryRewriteEntityEquality(
+                && this.TryRewriteEntityEquality(
                     binaryExpression.NodeType, visitedLeft ?? left, visitedRight ?? right, equalsMethod: false, out var result))
             {
                 return result;
@@ -208,10 +208,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 _ => binaryExpression.NodeType
             };
 
-            return TranslationFailed(binaryExpression.Left, visitedLeft, out var sqlLeft)
-                || TranslationFailed(binaryExpression.Right, visitedRight, out var sqlRight)
+            return this.TranslationFailed(binaryExpression.Left, visitedLeft, out var sqlLeft)
+                || this.TranslationFailed(binaryExpression.Right, visitedRight, out var sqlRight)
                     ? null
-                    : _sqlExpressionFactory.MakeBinary(
+                    : this._sqlExpressionFactory.MakeBinary(
                         uncheckedNodeTypeVariant,
                         sqlLeft,
                         sqlRight,
@@ -243,15 +243,15 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(conditionalExpression, nameof(conditionalExpression));
 
-            var test = Visit(conditionalExpression.Test);
-            var ifTrue = Visit(conditionalExpression.IfTrue);
-            var ifFalse = Visit(conditionalExpression.IfFalse);
+            var test = this.Visit(conditionalExpression.Test);
+            var ifTrue = this.Visit(conditionalExpression.IfTrue);
+            var ifFalse = this.Visit(conditionalExpression.IfFalse);
 
-            return TranslationFailed(conditionalExpression.Test, test, out var sqlTest)
-                || TranslationFailed(conditionalExpression.IfTrue, ifTrue, out var sqlIfTrue)
-                || TranslationFailed(conditionalExpression.IfFalse, ifFalse, out var sqlIfFalse)
+            return this.TranslationFailed(conditionalExpression.Test, test, out var sqlTest)
+                || this.TranslationFailed(conditionalExpression.IfTrue, ifTrue, out var sqlIfTrue)
+                || this.TranslationFailed(conditionalExpression.IfFalse, ifFalse, out var sqlIfFalse)
                     ? null
-                    : _sqlExpressionFactory.Condition(sqlTest, sqlIfTrue, sqlIfFalse);
+                    : this._sqlExpressionFactory.Condition(sqlTest, sqlIfTrue, sqlIfFalse);
         }
 
         /// <summary>
@@ -283,7 +283,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     return extensionExpression;
 
                 case EntityShaperExpression entityShaperExpression:
-                    var result = Visit(entityShaperExpression.ValueBufferExpression);
+                    var result = this.Visit(entityShaperExpression.ValueBufferExpression);
 
                     if (result.NodeType == ExpressionType.Convert
                         && result.Type == typeof(ValueBuffer)
@@ -355,13 +355,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(memberExpression, nameof(memberExpression));
 
-            var innerExpression = Visit(memberExpression.Expression);
+            var innerExpression = this.Visit(memberExpression.Expression);
 
-            return TryBindMember(innerExpression, MemberIdentity.Create(memberExpression.Member))
-                ?? (TranslationFailed(memberExpression.Expression, innerExpression, out var sqlInnerExpression)
+            return this.TryBindMember(innerExpression, MemberIdentity.Create(memberExpression.Member))
+                ?? (this.TranslationFailed(memberExpression.Expression, innerExpression, out var sqlInnerExpression)
                     ? null
-                    : _memberTranslatorProvider.Translate(
-                        sqlInnerExpression, memberExpression.Member, memberExpression.Type, _queryCompilationContext.Logger));
+                    : this._memberTranslatorProvider.Translate(
+                        sqlInnerExpression, memberExpression.Member, memberExpression.Type, this._queryCompilationContext.Logger));
         }
 
         /// <summary>
@@ -372,7 +372,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         protected override Expression VisitMemberInit(MemberInitExpression memberInitExpression)
         {
-            return GetConstantOrNull(Check.NotNull(memberInitExpression, nameof(memberInitExpression)));
+            return this.GetConstantOrNull(Check.NotNull(memberInitExpression, nameof(memberInitExpression)));
         }
 
         /// <summary>
@@ -386,9 +386,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(methodCallExpression, nameof(methodCallExpression));
 
             if (methodCallExpression.TryGetEFPropertyArguments(out var source, out var propertyName)
-                || methodCallExpression.TryGetIndexerArguments(_model, out source, out propertyName))
+                || methodCallExpression.TryGetIndexerArguments(this._model, out source, out propertyName))
             {
-                return TryBindMember(Visit(source), MemberIdentity.Create(propertyName));
+                return this.TryBindMember(this.Visit(source), MemberIdentity.Create(propertyName));
             }
 
             SqlExpression sqlObject = null;
@@ -399,10 +399,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 && methodCallExpression.Object != null
                 && methodCallExpression.Arguments.Count == 1)
             {
-                var left = Visit(methodCallExpression.Object);
-                var right = Visit(RemoveObjectConvert(methodCallExpression.Arguments[0]));
+                var left = this.Visit(methodCallExpression.Object);
+                var right = this.Visit(RemoveObjectConvert(methodCallExpression.Arguments[0]));
 
-                if (TryRewriteEntityEquality(
+                if (this.TryRewriteEntityEquality(
                     ExpressionType.Equal,
                     left ?? methodCallExpression.Object,
                     right ?? methodCallExpression.Arguments[0],
@@ -427,10 +427,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 && methodCallExpression.Object == null
                 && methodCallExpression.Arguments.Count == 2)
             {
-                var left = Visit(RemoveObjectConvert(methodCallExpression.Arguments[0]));
-                var right = Visit(RemoveObjectConvert(methodCallExpression.Arguments[1]));
+                var left = this.Visit(RemoveObjectConvert(methodCallExpression.Arguments[0]));
+                var right = this.Visit(RemoveObjectConvert(methodCallExpression.Arguments[1]));
 
-                if (TryRewriteEntityEquality(
+                if (this.TryRewriteEntityEquality(
                     ExpressionType.Equal,
                     left ?? methodCallExpression.Arguments[0],
                     right ?? methodCallExpression.Arguments[1],
@@ -453,10 +453,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             else if (method.IsGenericMethod
                 && method.GetGenericMethodDefinition().Equals(EnumerableMethods.Contains))
             {
-                var enumerable = Visit(methodCallExpression.Arguments[0]);
-                var item = Visit(methodCallExpression.Arguments[1]);
+                var enumerable = this.Visit(methodCallExpression.Arguments[0]);
+                var item = this.Visit(methodCallExpression.Arguments[1]);
 
-                if (TryRewriteContainsEntity(enumerable, item ?? methodCallExpression.Arguments[1], out var result))
+                if (this.TryRewriteContainsEntity(enumerable, item ?? methodCallExpression.Arguments[1], out var result))
                 {
                     return result;
                 }
@@ -474,10 +474,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             else if (methodCallExpression.Arguments.Count == 1
                 && method.IsContainsMethod())
             {
-                var enumerable = Visit(methodCallExpression.Object);
-                var item = Visit(methodCallExpression.Arguments[0]);
+                var enumerable = this.Visit(methodCallExpression.Object);
+                var item = this.Visit(methodCallExpression.Arguments[0]);
 
-                if (TryRewriteContainsEntity(enumerable, item ?? methodCallExpression.Arguments[0], out var result))
+                if (this.TryRewriteContainsEntity(enumerable, item ?? methodCallExpression.Arguments[0], out var result))
                 {
                     return result;
                 }
@@ -495,7 +495,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             }
             else
             {
-                if (TranslationFailed(methodCallExpression.Object, Visit(methodCallExpression.Object), out sqlObject))
+                if (this.TranslationFailed(methodCallExpression.Object, this.Visit(methodCallExpression.Object), out sqlObject))
                 {
                     return null;
                 }
@@ -504,7 +504,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 for (var i = 0; i < arguments.Length; i++)
                 {
                     var argument = methodCallExpression.Arguments[i];
-                    if (TranslationFailed(argument, Visit(argument), out var sqlArgument))
+                    if (this.TranslationFailed(argument, this.Visit(argument), out var sqlArgument))
                     {
                         return null;
                     }
@@ -513,19 +513,19 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 }
             }
 
-            var translation = _methodCallTranslatorProvider.Translate(
-                _model, sqlObject, methodCallExpression.Method, arguments, _queryCompilationContext.Logger);
+            var translation = this._methodCallTranslatorProvider.Translate(
+                this._model, sqlObject, methodCallExpression.Method, arguments, this._queryCompilationContext.Logger);
 
             if (translation == null)
             {
                 if (methodCallExpression.Method == _stringEqualsWithStringComparison
                     || methodCallExpression.Method == _stringEqualsWithStringComparisonStatic)
                 {
-                    AddTranslationErrorDetails(CoreStrings.QueryUnableToTranslateStringEqualsWithStringComparison);
+                    this.AddTranslationErrorDetails(CoreStrings.QueryUnableToTranslateStringEqualsWithStringComparison);
                 }
                 else
                 {
-                    AddTranslationErrorDetails(
+                    this.AddTranslationErrorDetails(
                         CoreStrings.QueryUnableToTranslateMethod(
                             methodCallExpression.Method.DeclaringType?.DisplayName(),
                             methodCallExpression.Method.Name));
@@ -552,7 +552,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         protected override Expression VisitNew(NewExpression newExpression)
         {
-            return GetConstantOrNull(Check.NotNull(newExpression, nameof(newExpression)));
+            return this.GetConstantOrNull(Check.NotNull(newExpression, nameof(newExpression)));
         }
 
         /// <summary>
@@ -589,7 +589,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(unaryExpression, nameof(unaryExpression));
 
-            var operand = Visit(unaryExpression.Operand);
+            var operand = this.Visit(unaryExpression.Operand);
 
             if (operand is EntityReferenceExpression entityReferenceExpression
                 && (unaryExpression.NodeType == ExpressionType.Convert
@@ -599,7 +599,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 return entityReferenceExpression.Convert(unaryExpression.Type);
             }
 
-            if (TranslationFailed(unaryExpression.Operand, operand, out var sqlOperand))
+            if (this.TranslationFailed(unaryExpression.Operand, operand, out var sqlOperand))
             {
                 return null;
             }
@@ -607,11 +607,11 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             switch (unaryExpression.NodeType)
             {
                 case ExpressionType.Not:
-                    return _sqlExpressionFactory.Not(sqlOperand);
+                    return this._sqlExpressionFactory.Not(sqlOperand);
 
                 case ExpressionType.Negate:
                 case ExpressionType.NegateChecked:
-                    return _sqlExpressionFactory.Negate(sqlOperand);
+                    return this._sqlExpressionFactory.Negate(sqlOperand);
 
                 case ExpressionType.Convert:
                 case ExpressionType.ConvertChecked:
@@ -637,7 +637,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(typeBinaryExpression, nameof(typeBinaryExpression));
 
-            var innerExpression = Visit(typeBinaryExpression.Expression);
+            var innerExpression = this.Visit(typeBinaryExpression.Expression);
 
             if (typeBinaryExpression.NodeType == ExpressionType.TypeIs
                 && innerExpression is EntityReferenceExpression entityReferenceExpression)
@@ -645,24 +645,24 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 var entityType = entityReferenceExpression.EntityType;
                 if (entityType.GetAllBaseTypesInclusive().Any(et => et.ClrType == typeBinaryExpression.TypeOperand))
                 {
-                    return _sqlExpressionFactory.Constant(true);
+                    return this._sqlExpressionFactory.Constant(true);
                 }
 
                 var derivedType = entityType.GetDerivedTypes().SingleOrDefault(et => et.ClrType == typeBinaryExpression.TypeOperand);
                 if (derivedType != null
-                    && TryBindMember(
+                    && this.TryBindMember(
                         entityReferenceExpression,
                         MemberIdentity.Create(entityType.GetDiscriminatorPropertyName())) is SqlExpression discriminatorColumn)
                 {
                     var concreteEntityTypes = derivedType.GetConcreteDerivedTypesInclusive().ToList();
 
                     return concreteEntityTypes.Count == 1
-                        ? _sqlExpressionFactory.Equal(
+                        ? this._sqlExpressionFactory.Equal(
                             discriminatorColumn,
-                            _sqlExpressionFactory.Constant(concreteEntityTypes[0].GetDiscriminatorValue()))
-                        : _sqlExpressionFactory.In(
+                            this._sqlExpressionFactory.Constant(concreteEntityTypes[0].GetDiscriminatorValue()))
+                        : this._sqlExpressionFactory.In(
                             discriminatorColumn,
-                            _sqlExpressionFactory.Constant(concreteEntityTypes.Select(et => et.GetDiscriminatorValue()).ToList()),
+                            this._sqlExpressionFactory.Constant(concreteEntityTypes.Select(et => et.GetDiscriminatorValue()).ToList()),
                             negated: false);
                 }
             }
@@ -685,7 +685,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             if (result == null)
             {
-                AddTranslationErrorDetails(
+                this.AddTranslationErrorDetails(
                     CoreStrings.QueryUnableToTranslateMember(
                         member.Name,
                         entityReferenceExpression.EntityType.DisplayName()));
@@ -786,18 +786,18 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         $"{_runtimeParameterPrefix}"
                         + $"{sqlParameterExpression.Name.Substring(QueryCompilationContext.QueryParameterPrefix.Length)}_{property.Name}";
 
-                    rewrittenSource = _queryCompilationContext.RegisterRuntimeParameter(newParameterName, lambda);
+                    rewrittenSource = this._queryCompilationContext.RegisterRuntimeParameter(newParameterName, lambda);
                     break;
 
                 default:
                     return false;
             }
 
-            result = Visit(
+            result = this.Visit(
                 Expression.Call(
                     EnumerableMethods.Contains.MakeGenericMethod(property.ClrType.MakeNullable()),
                     rewrittenSource,
-                    CreatePropertyAccessExpression(item, property)));
+                    this.CreatePropertyAccessExpression(item, property)));
 
             return true;
         }
@@ -829,11 +829,11 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         entityType1.DisplayName()));
                 }
 
-                result = Visit(
+                result = this.Visit(
                     primaryKeyProperties1.Select(
                             p =>
                                 Expression.MakeBinary(
-                                    nodeType, CreatePropertyAccessExpression(nonNullEntityReference, p),
+                                    nodeType, this.CreatePropertyAccessExpression(nonNullEntityReference, p),
                                     Expression.Constant(null, p.ClrType.MakeNullable())))
                         .Aggregate((l, r) => nodeType == ExpressionType.Equal ? Expression.OrElse(l, r) : Expression.AndAlso(l, r)));
 
@@ -850,7 +850,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 && rightEntityType != null
                 && leftEntityType.GetRootType() != rightEntityType.GetRootType())
             {
-                result = _sqlExpressionFactory.Constant(false);
+                result = this._sqlExpressionFactory.Constant(false);
                 return true;
             }
 
@@ -864,13 +864,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     entityType.DisplayName()));
             }
 
-            result = Visit(
+            result = this.Visit(
                 primaryKeyProperties.Select(
                         p =>
                             Expression.MakeBinary(
                                 nodeType,
-                                CreatePropertyAccessExpression(left, p),
-                                CreatePropertyAccessExpression(right, p)))
+                                this.CreatePropertyAccessExpression(left, p),
+                                this.CreatePropertyAccessExpression(right, p)))
                     .Aggregate((l, r) => nodeType == ExpressionType.Equal
                         ? Expression.AndAlso(l, r)
                         : Expression.OrElse(l, r)));
@@ -900,7 +900,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         $"{_runtimeParameterPrefix}"
                         + $"{sqlParameterExpression.Name.Substring(QueryCompilationContext.QueryParameterPrefix.Length)}_{property.Name}";
 
-                    return _queryCompilationContext.RegisterRuntimeParameter(newParameterName, lambda);
+                    return this._queryCompilationContext.RegisterRuntimeParameter(newParameterName, lambda);
 
                 case MemberInitExpression memberInitExpression
                     when memberInitExpression.Bindings.SingleOrDefault(
@@ -988,16 +988,16 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             public EntityReferenceExpression(EntityProjectionExpression parameter)
             {
-                ParameterEntity = parameter;
-                EntityType = parameter.EntityType;
-                Type = EntityType.ClrType;
+                this.ParameterEntity = parameter;
+                this.EntityType = parameter.EntityType;
+                this.Type = this.EntityType.ClrType;
             }
 
             private EntityReferenceExpression(EntityProjectionExpression parameter, Type type)
             {
-                ParameterEntity = parameter;
-                EntityType = parameter.EntityType;
-                Type = type;
+                this.ParameterEntity = parameter;
+                this.EntityType = parameter.EntityType;
+                this.Type = type;
             }
 
             public EntityProjectionExpression ParameterEntity { get; }
@@ -1011,9 +1011,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             public Expression Convert(Type type)
             {
                 return type == typeof(object) // Ignore object conversion
-                    || type.IsAssignableFrom(Type) // Ignore conversion to base/interface
+                    || type.IsAssignableFrom(this.Type) // Ignore conversion to base/interface
                         ? this
-                        : new EntityReferenceExpression(ParameterEntity, type);
+                        : new EntityReferenceExpression(this.ParameterEntity, type);
             }
         }
 

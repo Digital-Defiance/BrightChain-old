@@ -16,7 +16,7 @@
 
         public ConfirmEmailModel(UserManager<BrightChainEntityUser> userManager)
         {
-            _userManager = userManager;
+            this._userManager = userManager;
         }
 
         [TempData]
@@ -26,19 +26,19 @@
         {
             if (userId == null || code == null)
             {
-                return RedirectToPage("/Index");
+                return this.RedirectToPage("/Index");
             }
 
-            var user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
+            var user = await this._userManager.FindByIdAsync(userId).ConfigureAwait(false);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{userId}'.");
+                return this.NotFound($"Unable to load user with ID '{userId}'.");
             }
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-            var result = await _userManager.ConfirmEmailAsync(user, code).ConfigureAwait(false);
-            StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
-            return Page();
+            var result = await this._userManager.ConfirmEmailAsync(user, code).ConfigureAwait(false);
+            this.StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+            return this.Page();
         }
     }
 }

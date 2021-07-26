@@ -74,15 +74,15 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         {
             var options = dbContextOptions.FindExtension<BrightChainOptionsExtension>();
 
-            _singletonWrapper = singletonWrapper;
-            _databaseId = options!.DatabaseName;
-            _executionStrategyFactory = executionStrategyFactory;
-            _commandLogger = commandLogger;
-            _enableContentResponseOnWrite = options.EnableContentResponseOnWrite;
+            this._singletonWrapper = singletonWrapper;
+            this._databaseId = options!.DatabaseName;
+            this._executionStrategyFactory = executionStrategyFactory;
+            this._commandLogger = commandLogger;
+            this._enableContentResponseOnWrite = options.EnableContentResponseOnWrite;
         }
 
         private BrightChainClient Client
-            => _singletonWrapper.Client;
+            => this._singletonWrapper.Client;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -92,8 +92,8 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         public virtual bool CreateDatabaseIfNotExists()
         {
-            return _executionStrategyFactory.Create().Execute(
-                           (object?)null, CreateDatabaseIfNotExistsOnce, null);
+            return this._executionStrategyFactory.Create().Execute(
+                           (object?)null, this.CreateDatabaseIfNotExistsOnce, null);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             DbContext? context,
             object? state)
         {
-            return CreateDatabaseIfNotExistsOnceAsync(context, state).GetAwaiter().GetResult();
+            return this.CreateDatabaseIfNotExistsOnceAsync(context, state).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -118,8 +118,8 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         public virtual Task<bool> CreateDatabaseIfNotExistsAsync(
             CancellationToken cancellationToken = default)
         {
-            return _executionStrategyFactory.Create().ExecuteAsync(
-                           (object?)null, CreateDatabaseIfNotExistsOnceAsync, null, cancellationToken);
+            return this._executionStrategyFactory.Create().ExecuteAsync(
+                           (object?)null, this.CreateDatabaseIfNotExistsOnceAsync, null, cancellationToken);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         public virtual bool DeleteDatabase()
         {
-            return _executionStrategyFactory.Create().Execute((object?)null, DeleteDatabaseOnce, null);
+            return this._executionStrategyFactory.Create().Execute((object?)null, this.DeleteDatabaseOnce, null);
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             DbContext? context,
             object? state)
         {
-            return DeleteDatabaseOnceAsync(context, state).GetAwaiter().GetResult();
+            return this.DeleteDatabaseOnceAsync(context, state).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -173,8 +173,8 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         public virtual Task<bool> DeleteDatabaseAsync(
             CancellationToken cancellationToken = default)
         {
-            return _executionStrategyFactory.Create().ExecuteAsync(
-                           (object?)null, DeleteDatabaseOnceAsync, null, cancellationToken);
+            return this._executionStrategyFactory.Create().ExecuteAsync(
+                           (object?)null, this.DeleteDatabaseOnceAsync, null, cancellationToken);
         }
 
         /// <summary>
@@ -210,15 +210,15 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             string containerId,
             string partitionKey)
         {
-            return _executionStrategyFactory.Create().Execute(
-                           (containerId, partitionKey), CreateContainerIfNotExistsOnce, null);
+            return this._executionStrategyFactory.Create().Execute(
+                           (containerId, partitionKey), this.CreateContainerIfNotExistsOnce, null);
         }
 
         private bool CreateContainerIfNotExistsOnce(
             DbContext context,
             (string ContainerId, string PartitionKey) parameters)
         {
-            return CreateContainerIfNotExistsOnceAsync(context, parameters).GetAwaiter().GetResult();
+            return this.CreateContainerIfNotExistsOnceAsync(context, parameters).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -232,8 +232,8 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             string partitionKey,
             CancellationToken cancellationToken = default)
         {
-            return _executionStrategyFactory.Create().ExecuteAsync(
-                           (containerId, partitionKey), CreateContainerIfNotExistsOnceAsync, null, cancellationToken);
+            return this._executionStrategyFactory.Create().ExecuteAsync(
+                           (containerId, partitionKey), this.CreateContainerIfNotExistsOnceAsync, null, cancellationToken);
         }
 
         private async Task<bool> CreateContainerIfNotExistsOnceAsync(
@@ -255,15 +255,15 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             JsonDocument document,
             IUpdateEntry entry)
         {
-            return _executionStrategyFactory.Create().Execute(
-                           (containerId, document, entry), CreateItemOnce, null);
+            return this._executionStrategyFactory.Create().Execute(
+                           (containerId, document, entry), this.CreateItemOnce, null);
         }
 
         private bool CreateItemOnce(
             DbContext context,
             (string ContainerId, JsonDocument Document, IUpdateEntry Entry) parameters)
         {
-            return CreateItemOnceAsync(context, parameters).GetAwaiter().GetResult();
+            return this.CreateItemOnceAsync(context, parameters).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -278,8 +278,8 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             IUpdateEntry updateEntry,
             CancellationToken cancellationToken = default)
         {
-            return _executionStrategyFactory.Create().ExecuteAsync(
-                           (containerId, document, updateEntry), CreateItemOnceAsync, null, cancellationToken);
+            return this._executionStrategyFactory.Create().ExecuteAsync(
+                           (containerId, document, updateEntry), this.CreateItemOnceAsync, null, cancellationToken);
         }
 
         private async Task<bool> CreateItemOnceAsync(
@@ -315,9 +315,9 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             JsonDocument document,
             IUpdateEntry entry)
         {
-            return _executionStrategyFactory.Create().Execute(
+            return this._executionStrategyFactory.Create().Execute(
                            (collectionId, documentId, document, entry),
-                           ReplaceItemOnce,
+                           this.ReplaceItemOnce,
                            null);
         }
 
@@ -325,7 +325,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             DbContext context,
             (string ContainerId, string ItemId, JsonDocument Document, IUpdateEntry Entry) parameters)
         {
-            return ReplaceItemOnceAsync(context, parameters).GetAwaiter().GetResult();
+            return this.ReplaceItemOnceAsync(context, parameters).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -341,9 +341,9 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             IUpdateEntry updateEntry,
             CancellationToken cancellationToken = default)
         {
-            return _executionStrategyFactory.Create().ExecuteAsync(
+            return this._executionStrategyFactory.Create().ExecuteAsync(
                            (collectionId, documentId, document, updateEntry),
-                           ReplaceItemOnceAsync,
+                           this.ReplaceItemOnceAsync,
                            null,
                            cancellationToken);
         }
@@ -379,8 +379,8 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             string documentId,
             IUpdateEntry entry)
         {
-            return _executionStrategyFactory.Create().Execute(
-                           (containerId, documentId, entry), DeleteItemOnce, null);
+            return this._executionStrategyFactory.Create().Execute(
+                           (containerId, documentId, entry), this.DeleteItemOnce, null);
         }
 
         /// <summary>
@@ -393,7 +393,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             DbContext context,
             (string ContainerId, string DocumentId, IUpdateEntry Entry) parameters)
         {
-            return DeleteItemOnceAsync(context, parameters).GetAwaiter().GetResult();
+            return this.DeleteItemOnceAsync(context, parameters).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -408,8 +408,8 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             IUpdateEntry entry,
             CancellationToken cancellationToken = default)
         {
-            return _executionStrategyFactory.Create().ExecuteAsync(
-                           (containerId, documentId, entry), DeleteItemOnceAsync, null, cancellationToken);
+            return this._executionStrategyFactory.Create().ExecuteAsync(
+                           (containerId, documentId, entry), this.DeleteItemOnceAsync, null, cancellationToken);
         }
 
         /// <summary>
@@ -468,7 +468,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             string? partitionKey,
             BrightChainSqlQuery query)
         {
-            _commandLogger.ExecutingSqlQuery(containerId, partitionKey, query);
+            this._commandLogger.ExecutingSqlQuery(containerId, partitionKey, query);
 
             return new DocumentEnumerable(this, containerId, partitionKey, query);
         }
@@ -484,7 +484,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             string? partitionKey,
             BrightChainSqlQuery query)
         {
-            _commandLogger.ExecutingSqlQuery(containerId, partitionKey, query);
+            this._commandLogger.ExecutingSqlQuery(containerId, partitionKey, query);
 
             return new DocumentAsyncEnumerable(this, containerId, partitionKey, query);
         }
@@ -500,9 +500,9 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             string? partitionKey,
             string resourceId)
         {
-            _commandLogger.ExecutingReadItem(containerId, partitionKey, resourceId);
+            this._commandLogger.ExecutingReadItem(containerId, partitionKey, resourceId);
 
-            var responseMessage = CreateSingleItemQuery(
+            var responseMessage = this.CreateSingleItemQuery(
                 containerId, partitionKey, resourceId).GetAwaiter().GetResult();
 
             return JObjectFromReadItemResponseMessage(responseMessage);
@@ -520,9 +520,9 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             string resourceId,
             CancellationToken cancellationToken = default)
         {
-            _commandLogger.ExecutingReadItem(containerId, partitionKey, resourceId);
+            this._commandLogger.ExecutingReadItem(containerId, partitionKey, resourceId);
 
-            var responseMessage = await CreateSingleItemQuery(
+            var responseMessage = await this.CreateSingleItemQuery(
                     containerId, partitionKey, resourceId, cancellationToken)
                 .ConfigureAwait(false);
 
@@ -612,10 +612,10 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
                 string? partitionKey,
                 BrightChainSqlQuery brightChainSqlQuery)
             {
-                _brightChainClient = brightChainClient;
-                _containerId = containerId;
-                _partitionKey = partitionKey;
-                _brightChainSqlQuery = brightChainSqlQuery;
+                this._brightChainClient = brightChainClient;
+                this._containerId = containerId;
+                this._partitionKey = partitionKey;
+                this._brightChainSqlQuery = brightChainSqlQuery;
             }
 
             public IEnumerator<JsonDocument> GetEnumerator()
@@ -625,7 +625,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return GetEnumerator();
+                return this.GetEnumerator();
             }
 
             private sealed class Enumerator : IEnumerator<JsonDocument>
@@ -642,31 +642,31 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
 
                 public Enumerator(DocumentEnumerable documentEnumerable)
                 {
-                    _brightChainClientWrapper = documentEnumerable._brightChainClient;
-                    _containerId = documentEnumerable._containerId;
-                    _partitionKey = documentEnumerable._partitionKey;
-                    _brightChainSqlQuery = documentEnumerable._brightChainSqlQuery;
+                    this._brightChainClientWrapper = documentEnumerable._brightChainClient;
+                    this._containerId = documentEnumerable._containerId;
+                    this._partitionKey = documentEnumerable._partitionKey;
+                    this._brightChainSqlQuery = documentEnumerable._brightChainSqlQuery;
                 }
 
-                public JsonDocument Current => _current ?? throw new InvalidOperationException();
+                public JsonDocument Current => this._current ?? throw new InvalidOperationException();
 
                 object IEnumerator.Current
-                    => Current;
+                    => this.Current;
 
                 private void ResetRead()
                 {
-                    _reader?.Dispose();
-                    _reader = null;
-                    _responseStream?.Dispose();
-                    _responseStream = null;
+                    this._reader?.Dispose();
+                    this._reader = null;
+                    this._responseStream?.Dispose();
+                    this._responseStream = null;
                 }
 
                 public void Dispose()
                 {
-                    ResetRead();
+                    this.ResetRead();
 
-                    _responseMessage?.Dispose();
-                    _responseMessage = null;
+                    this._responseMessage?.Dispose();
+                    this._responseMessage = null;
                 }
 
                 public void Reset()
@@ -694,10 +694,10 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
                 string? partitionKey,
                 BrightChainSqlQuery brightChainSqlQuery)
             {
-                _brightChainClient = brightChainClient;
-                _containerId = containerId;
-                _partitionKey = partitionKey;
-                _brightChainSqlQuery = brightChainSqlQuery;
+                this._brightChainClient = brightChainClient;
+                this._containerId = containerId;
+                this._partitionKey = partitionKey;
+                this._brightChainSqlQuery = brightChainSqlQuery;
             }
 
             public IAsyncEnumerator<JsonDocument> GetAsyncEnumerator(CancellationToken cancellationToken = default)
@@ -718,31 +718,31 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
                 private Stream? _responseStream;
                 private StreamReader? _reader;
 
-                public JsonDocument Current => _current ?? throw new InvalidOperationException();
+                public JsonDocument Current => this._current ?? throw new InvalidOperationException();
 
                 public AsyncEnumerator(DocumentAsyncEnumerable documentEnumerable, CancellationToken cancellationToken)
                 {
-                    _brightChainClientWrapper = documentEnumerable._brightChainClient;
-                    _containerId = documentEnumerable._containerId;
-                    _partitionKey = documentEnumerable._partitionKey;
-                    _brightChainSqlQuery = documentEnumerable._brightChainSqlQuery;
-                    _cancellationToken = cancellationToken;
+                    this._brightChainClientWrapper = documentEnumerable._brightChainClient;
+                    this._containerId = documentEnumerable._containerId;
+                    this._partitionKey = documentEnumerable._partitionKey;
+                    this._brightChainSqlQuery = documentEnumerable._brightChainSqlQuery;
+                    this._cancellationToken = cancellationToken;
                 }
 
                 private async Task ResetReadAsync()
                 {
-                    await _reader.DisposeAsyncIfAvailable().ConfigureAwait(false);
-                    _reader = null;
-                    await _responseStream.DisposeAsyncIfAvailable().ConfigureAwait(false);
-                    _responseStream = null;
+                    await this._reader.DisposeAsyncIfAvailable().ConfigureAwait(false);
+                    this._reader = null;
+                    await this._responseStream.DisposeAsyncIfAvailable().ConfigureAwait(false);
+                    this._responseStream = null;
                 }
 
                 public async ValueTask DisposeAsync()
                 {
-                    await ResetReadAsync().ConfigureAwait(false);
+                    await this.ResetReadAsync().ConfigureAwait(false);
 
-                    await _responseMessage.DisposeAsyncIfAvailable().ConfigureAwait(false);
-                    _responseMessage = null;
+                    await this._responseMessage.DisposeAsyncIfAvailable().ConfigureAwait(false);
+                    this._responseMessage = null;
                 }
 
                 public ValueTask<bool> MoveNextAsync()

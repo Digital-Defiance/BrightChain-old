@@ -1,10 +1,8 @@
 ﻿using System;
-using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Extensions;
 using BrightChain.Engine.Helpers;
 using BrightChain.Engine.Interfaces;
 using BrightChain.Engine.Models.Blocks.DataObjects;
-using BrightChain.Engine.Services;
 
 namespace BrightChain.Engine.Models.Blocks
 {
@@ -34,7 +32,7 @@ namespace BrightChain.Engine.Models.Blocks
 
         public int CompareTo(SourceBlock other)
         {
-            return ReadOnlyMemoryComparer<byte>.Compare(Data, other.Data);
+            return ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
         }
 
         public override void Dispose()

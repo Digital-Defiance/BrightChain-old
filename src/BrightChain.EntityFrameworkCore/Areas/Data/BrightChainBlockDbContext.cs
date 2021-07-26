@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using BrightChain.EntityFrameworkCore.Data.Entities;
 using BrightChain.EntityFrameworkCore.Interfaces;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 

@@ -19,7 +19,7 @@ namespace BrightChain.EntityFrameworkCore.Metadata.Conventions
         /// <param name="dependencies"> Parameter object containing dependencies for this convention. </param>
         public ContextContainerConvention(ProviderConventionSetBuilderDependencies dependencies)
         {
-            Dependencies = dependencies;
+            this.Dependencies = dependencies;
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace BrightChain.EntityFrameworkCore.Metadata.Conventions
             Check.NotNull(modelBuilder, nameof(modelBuilder));
             Check.NotNull(context, nameof(context));
 
-            modelBuilder.HasDefaultContainer(Dependencies.ContextType.Name);
+            modelBuilder.HasDefaultContainer(this.Dependencies.ContextType.Name);
         }
     }
 }

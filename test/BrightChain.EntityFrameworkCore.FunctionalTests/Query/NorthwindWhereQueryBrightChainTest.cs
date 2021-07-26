@@ -20,7 +20,7 @@ namespace BrightChain.EntityFrameworkCore.Query
             ITestOutputHelper testOutputHelper)
             : base(fixture)
         {
-            ClearLog();
+            this.ClearLog();
             //Fixture.TestSqlLoggerFactory.SetTestOutputHelper(testOutputHelper);
         }
 
@@ -28,12 +28,12 @@ namespace BrightChain.EntityFrameworkCore.Query
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_add(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Order>().Where(o => o.OrderID + 10 == 10258),
                 entryCount: 1);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Order"") AND ((c[""OrderID""] + 10) = 10258))");
@@ -43,12 +43,12 @@ WHERE ((c[""Discriminator""] = ""Order"") AND ((c[""OrderID""] + 10) = 10258))")
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_subtract(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Order>().Where(o => o.OrderID - 10 == 10238),
                 entryCount: 1);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Order"") AND ((c[""OrderID""] - 10) = 10238))");
@@ -58,12 +58,12 @@ WHERE ((c[""Discriminator""] = ""Order"") AND ((c[""OrderID""] - 10) = 10238))")
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_multiply(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Order>().Where(o => o.OrderID * 1 == 10248),
                 entryCount: 1);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Order"") AND ((c[""OrderID""] * 1) = 10248))");
@@ -73,12 +73,12 @@ WHERE ((c[""Discriminator""] = ""Order"") AND ((c[""OrderID""] * 1) = 10248))");
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_divide(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Order>().Where(o => o.OrderID / 1 == 10248),
                 entryCount: 1);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Order"") AND ((c[""OrderID""] / 1) = 10248))");
@@ -88,12 +88,12 @@ WHERE ((c[""Discriminator""] = ""Order"") AND ((c[""OrderID""] / 1) = 10248))");
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_modulo(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Order>().Where(o => o.OrderID % 10248 == 0),
                 entryCount: 1);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Order"") AND ((c[""OrderID""] % 10248) = 0))");
@@ -104,14 +104,14 @@ WHERE ((c[""Discriminator""] = ""Order"") AND ((c[""OrderID""] % 10248) = 0))");
         {
             await base.Where_bitwise_or(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         public override async Task Where_bitwise_and(bool async)
         {
             await base.Where_bitwise_and(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND ((c[""CustomerID""] = ""ALFKI"") & (c[""CustomerID""] = ""ANATR"")))");
@@ -122,19 +122,19 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND ((c[""CustomerID""] = ""ALFKI""
         {
             await base.Where_bitwise_xor(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         [ConditionalTheory]
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_bitwise_leftshift(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Order>().Where(o => (o.OrderID << 1) == 20496),
                 entryCount: 1);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Order"") AND ((c[""OrderID""] << 1) = 20496))");
@@ -144,12 +144,12 @@ WHERE ((c[""Discriminator""] = ""Order"") AND ((c[""OrderID""] << 1) = 20496))")
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_bitwise_rightshift(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Order>().Where(o => (o.OrderID >> 1) == 5124),
                 entryCount: 2);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Order"") AND ((c[""OrderID""] >> 1) = 5124))");
@@ -159,12 +159,12 @@ WHERE ((c[""Discriminator""] = ""Order"") AND ((c[""OrderID""] >> 1) = 5124))");
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_logical_and(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Customer>().Where(c => c.City == "Seattle" && c.ContactTitle == "Owner"),
                 entryCount: 1);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND ((c[""City""] = ""Seattle"") AND (c[""ContactTitle""] = ""Owner"")))");
@@ -174,12 +174,12 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND ((c[""City""] = ""Seattle"") AN
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_logical_or(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Customer>().Where(c => c.CustomerID == "ALFKI" || c.CustomerID == "ANATR"),
                 entryCount: 2);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND ((c[""CustomerID""] = ""ALFKI"") OR (c[""CustomerID""] = ""ANATR"")))");
@@ -189,12 +189,12 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND ((c[""CustomerID""] = ""ALFKI""
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_logical_not(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Customer>().Where(c => !(c.City != "Seattle")),
                 entryCount: 1);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND NOT((c[""City""] != ""Seattle"")))");
@@ -204,12 +204,12 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND NOT((c[""City""] != ""Seattle""
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_equality(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Employee>().Where(e => e.ReportsTo == 2),
                 entryCount: 5);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] = 2))");
@@ -219,12 +219,12 @@ WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] = 2))");
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_inequality(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Employee>().Where(e => e.ReportsTo != 2),
                 entryCount: 4);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] != 2))");
@@ -234,12 +234,12 @@ WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] != 2))");
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_greaterthan(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Employee>().Where(e => e.ReportsTo > 2),
                 entryCount: 3);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] > 2))");
@@ -249,12 +249,12 @@ WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] > 2))");
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_greaterthanorequal(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Employee>().Where(e => e.ReportsTo >= 2),
                 entryCount: 8);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] >= 2))");
@@ -264,11 +264,11 @@ WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] >= 2))");
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_lessthan(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Employee>().Where(e => e.ReportsTo < 2));
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] < 2))");
@@ -278,12 +278,12 @@ WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] < 2))");
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_lessthanorequal(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Employee>().Where(e => e.ReportsTo <= 2),
                 entryCount: 5);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] <= 2))");
@@ -293,12 +293,12 @@ WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] <= 2))");
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_string_concat(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Customer>().Where(c => c.CustomerID + "END" == "ALFKIEND"),
                 entryCount: 1);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND ((c[""CustomerID""] || ""END"") = ""ALFKIEND""))");
@@ -308,12 +308,12 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND ((c[""CustomerID""] || ""END"")
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_unary_minus(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Order>().Where(o => -o.OrderID == -10248),
                 entryCount: 1);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Order"") AND (-(c[""OrderID""]) = -10248))");
@@ -323,12 +323,12 @@ WHERE ((c[""Discriminator""] = ""Order"") AND (-(c[""OrderID""]) = -10248))");
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_bitwise_not(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Order>().Where(o => ~o.OrderID == -10249),
                 entryCount: 1);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Order"") AND (~(c[""OrderID""]) = -10249))");
@@ -338,14 +338,14 @@ WHERE ((c[""Discriminator""] = ""Order"") AND (~(c[""OrderID""]) = -10249))");
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_ternary(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
 #pragma warning disable IDE0029 // Use coalesce expression
                 ss => ss.Set<Customer>().Where(c => (c.Region != null ? c.Region : "SP") == "BC"),
 #pragma warning restore IDE0029 // Use coalesce expression
                 entryCount: 2);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (((c[""Region""] != null) ? c[""Region""] : ""SP"") = ""BC""))");
@@ -355,12 +355,12 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (((c[""Region""] != null) ? c["
         [MemberData(nameof(IsAsyncData))]
         public virtual async Task Where_coalesce(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Customer>().Where(c => (c.Region ?? "SP") == "BC"),
                 entryCount: 2);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (((c[""Region""] != null) ? c[""Region""] : ""SP"") = ""BC""))");
@@ -370,7 +370,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (((c[""Region""] != null) ? c["
         {
             await base.Where_simple(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = ""London""))");
@@ -381,12 +381,12 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = ""London""))");
         [ConditionalTheory(Skip = "Issue #17246")]
         public override async Task Where_as_queryable_expression(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Customer>().Where(c => c.CustomerID == "ALFKI").Where(c => c.Orders.AsQueryable().Any(_filter)),
                 entryCount: 1);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""CustomerID""] = ""ALFKI""))");
@@ -396,7 +396,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""CustomerID""] = ""ALFKI"")
         {
             var queryString = await base.Where_simple_closure(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__city_0='London'
 
 SELECT c
@@ -417,7 +417,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__city_0))", qu
         {
             await base.Where_indexer_closure(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__p_0='London'
 
 SELECT c
@@ -429,7 +429,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__p_0))");
         {
             await base.Where_dictionary_key_access_closure(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__get_Item_0='London'
 
 SELECT c
@@ -441,7 +441,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__get_Item_0))"
         {
             await base.Where_tuple_item_closure(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__predicateTuple_Item2_0='London'
 
 SELECT c
@@ -453,7 +453,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__predicateTupl
         {
             await base.Where_named_tuple_item_closure(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__predicateTuple_Item2_0='London'
 
 SELECT c
@@ -465,7 +465,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__predicateTupl
         {
             await base.Where_simple_closure_constant(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__predicate_0='true'
 
 SELECT c
@@ -477,7 +477,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND @__predicate_0)");
         {
             await base.Where_simple_closure_via_query_cache(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__city_0='London'
 
 SELECT c
@@ -496,7 +496,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__city_0))");
         {
             await base.Where_method_call_nullable_type_closure_via_query_cache(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__p_0='2'
 
 SELECT c
@@ -515,7 +515,7 @@ WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] = @__p_0))");
         {
             await base.Where_method_call_nullable_type_reverse_closure_via_query_cache(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__p_0='1'
 
 SELECT c
@@ -533,7 +533,7 @@ WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""EmployeeID""] > @__p_0))")
         {
             await base.Where_method_call_closure_via_query_cache(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__GetCity_0='London'
 
 SELECT c
@@ -551,7 +551,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__GetCity_0))")
         {
             await base.Where_field_access_closure_via_query_cache(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__city_InstanceFieldValue_0='London'
 
 SELECT c
@@ -569,7 +569,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__city_Instance
         {
             await base.Where_property_access_closure_via_query_cache(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__city_InstancePropertyValue_0='London'
 
 SELECT c
@@ -587,7 +587,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__city_Instance
         {
             await base.Where_static_field_access_closure_via_query_cache(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__StaticFieldValue_0='London'
 
 SELECT c
@@ -605,7 +605,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__StaticFieldVa
         {
             await base.Where_static_property_access_closure_via_query_cache(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__StaticPropertyValue_0='London'
 
 SELECT c
@@ -623,7 +623,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__StaticPropert
         {
             await base.Where_nested_field_access_closure_via_query_cache(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__city_Nested_InstanceFieldValue_0='London'
 
 SELECT c
@@ -641,7 +641,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__city_Nested_I
         {
             await base.Where_nested_property_access_closure_via_query_cache(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__city_Nested_InstancePropertyValue_0='London'
 
 SELECT c
@@ -659,7 +659,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__city_Nested_I
         {
             await base.Where_new_instance_field_access_query_cache(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__InstanceFieldValue_0='London'
 
 SELECT c
@@ -677,7 +677,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__InstanceField
         {
             await base.Where_new_instance_field_access_closure_via_query_cache(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__InstanceFieldValue_0='London'
 
 SELECT c
@@ -696,7 +696,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = @__InstanceField
         {
             await base.Where_simple_closure_via_query_cache_nullable_type(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__p_0='2'
 
 SELECT c
@@ -721,7 +721,7 @@ WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] = @__p_0))");
         {
             await base.Where_simple_closure_via_query_cache_nullable_type_reverse(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__p_0=null
 
 SELECT c
@@ -746,7 +746,7 @@ WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] = @__p_0))");
         {
             base.Where_subquery_closure_via_query_cache();
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -756,7 +756,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_simple_shadow(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""Title""] = ""Sales Representative""))");
@@ -766,7 +766,7 @@ WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""Title""] = ""Sales Represe
         {
             await base.Where_simple_shadow_projection(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c[""Title""]
 FROM root c
 WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""Title""] = ""Sales Representative""))");
@@ -783,7 +783,7 @@ WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""Title""] = ""Sales Represe
         {
             await base.Where_shadow_subquery_FirstOrDefault(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Employee"")");
@@ -794,7 +794,7 @@ WHERE (c[""Discriminator""] = ""Employee"")");
         {
             await base.Where_client(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -805,7 +805,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_subquery_correlated(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -816,7 +816,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_subquery_correlated_client_eval(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -827,7 +827,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_client_and_server_top_level(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -838,7 +838,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_client_or_server_top_level(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -849,7 +849,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_client_and_server_non_top_level(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -860,7 +860,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_client_deep_inside_predicate_and_server_top_level(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -870,7 +870,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_equals_method_string(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = ""London""))");
@@ -880,7 +880,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = ""London""))");
         {
             await base.Where_equals_method_int(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""EmployeeID""] = 1))");
@@ -891,7 +891,7 @@ WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""EmployeeID""] = 1))");
         {
             await base.Where_equals_using_object_overload_on_mismatched_types(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Employee"")");
@@ -901,7 +901,7 @@ WHERE (c[""Discriminator""] = ""Employee"")");
         {
             await base.Where_equals_using_int_overload_on_mismatched_types(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__p_0='1'
 
 SELECT c
@@ -914,7 +914,7 @@ WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""EmployeeID""] = @__p_0))")
         {
             await base.Where_equals_on_mismatched_types_nullable_int_long(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Employee"")");
@@ -925,7 +925,7 @@ WHERE (c[""Discriminator""] = ""Employee"")");
         {
             await base.Where_equals_on_mismatched_types_nullable_long_nullable_int(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Employee"")");
@@ -936,7 +936,7 @@ WHERE (c[""Discriminator""] = ""Employee"")");
         {
             await base.Where_equals_on_mismatched_types_int_nullable_int(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Employee"")");
@@ -947,7 +947,7 @@ WHERE (c[""Discriminator""] = ""Employee"")");
         {
             await base.Where_equals_on_matched_nullable_int_types(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Employee"")");
@@ -958,7 +958,7 @@ WHERE (c[""Discriminator""] = ""Employee"")");
         {
             await base.Where_equals_on_null_nullable_int_types(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Employee"")");
@@ -968,7 +968,7 @@ WHERE (c[""Discriminator""] = ""Employee"")");
         {
             await base.Where_comparison_nullable_type_not_null(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] = 2))");
@@ -978,7 +978,7 @@ WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] = 2))");
         {
             await base.Where_comparison_nullable_type_null(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] = null))");
@@ -989,7 +989,7 @@ WHERE ((c[""Discriminator""] = ""Employee"") AND (c[""ReportsTo""] = null))");
         {
             await base.Where_string_length(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1000,7 +1000,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_string_indexof(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1011,7 +1011,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_string_replace(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1021,7 +1021,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_string_substring(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (SUBSTRING(c[""City""], 1, 2) = ""ea""))");
@@ -1032,7 +1032,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (SUBSTRING(c[""City""], 1, 2) =
         {
             await base.Where_datetime_now(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1043,7 +1043,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_datetime_utcnow(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1054,7 +1054,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_datetime_today(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Employee"")");
@@ -1065,7 +1065,7 @@ WHERE (c[""Discriminator""] = ""Employee"")");
         {
             await base.Where_datetime_date_component(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Order"")");
@@ -1076,7 +1076,7 @@ WHERE (c[""Discriminator""] = ""Order"")");
         {
             await base.Where_date_add_year_constant_component(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Order"")");
@@ -1087,7 +1087,7 @@ WHERE (c[""Discriminator""] = ""Order"")");
         {
             await base.Where_datetime_year_component(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Order"")");
@@ -1098,7 +1098,7 @@ WHERE (c[""Discriminator""] = ""Order"")");
         {
             await base.Where_datetime_month_component(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Order"")");
@@ -1109,7 +1109,7 @@ WHERE (c[""Discriminator""] = ""Order"")");
         {
             await base.Where_datetime_dayOfYear_component(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Order"")");
@@ -1120,7 +1120,7 @@ WHERE (c[""Discriminator""] = ""Order"")");
         {
             await base.Where_datetime_day_component(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Order"")");
@@ -1131,7 +1131,7 @@ WHERE (c[""Discriminator""] = ""Order"")");
         {
             await base.Where_datetime_hour_component(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Order"")");
@@ -1142,7 +1142,7 @@ WHERE (c[""Discriminator""] = ""Order"")");
         {
             await base.Where_datetime_minute_component(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Order"")");
@@ -1153,7 +1153,7 @@ WHERE (c[""Discriminator""] = ""Order"")");
         {
             await base.Where_datetime_second_component(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Order"")");
@@ -1164,7 +1164,7 @@ WHERE (c[""Discriminator""] = ""Order"")");
         {
             await base.Where_datetime_millisecond_component(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Order"")");
@@ -1174,7 +1174,7 @@ WHERE (c[""Discriminator""] = ""Order"")");
         public override async Task Where_datetimeoffset_now_component(bool async)
         {
             await base.Where_datetimeoffset_now_component(async);
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Order"")");
@@ -1184,7 +1184,7 @@ WHERE (c[""Discriminator""] = ""Order"")");
         public override async Task Where_datetimeoffset_utcnow_component(bool async)
         {
             await base.Where_datetimeoffset_utcnow_component(async);
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Order"")");
@@ -1194,7 +1194,7 @@ WHERE (c[""Discriminator""] = ""Order"")");
         {
             await base.Where_simple_reversed(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (""London"" = c[""City""]))");
@@ -1204,7 +1204,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (""London"" = c[""City""]))");
         {
             await base.Where_is_null(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = null))");
@@ -1214,7 +1214,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = null))");
         {
             await base.Where_null_is_null(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1224,7 +1224,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_constant_is_null(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND false)");
@@ -1234,7 +1234,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND false)");
         {
             await base.Where_is_not_null(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] != null))");
@@ -1244,7 +1244,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] != null))");
         {
             await base.Where_null_is_not_null(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND false)");
@@ -1254,7 +1254,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND false)");
         {
             await base.Where_constant_is_not_null(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1264,7 +1264,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_identity_comparison(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = c[""City""]))");
@@ -1275,7 +1275,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = c[""City""]))");
         {
             await base.Where_in_optimization_multiple(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1286,7 +1286,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_not_in_optimization1(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1297,7 +1297,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_not_in_optimization2(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1308,7 +1308,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_not_in_optimization3(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1319,7 +1319,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_not_in_optimization4(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1330,7 +1330,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_select_many_and(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1341,7 +1341,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_primitive(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Employee"")");
@@ -1351,7 +1351,7 @@ WHERE (c[""Discriminator""] = ""Employee"")");
         {
             await base.Where_bool_member(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND c[""Discontinued""])");
@@ -1361,7 +1361,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND c[""Discontinued""])");
         {
             await base.Where_bool_member_false(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND NOT(c[""Discontinued""]))");
@@ -1372,7 +1372,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND NOT(c[""Discontinued""]))");
         {
             await base.Where_bool_client_side_negated(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Product"")");
@@ -1382,7 +1382,7 @@ WHERE (c[""Discriminator""] = ""Product"")");
         {
             await base.Where_bool_member_negated_twice(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND NOT(NOT((c[""Discontinued""] = true))))");
@@ -1392,7 +1392,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND NOT(NOT((c[""Discontinued""] = t
         {
             await base.Where_bool_member_shadow(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND c[""Discontinued""])");
@@ -1402,7 +1402,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND c[""Discontinued""])");
         {
             await base.Where_bool_member_false_shadow(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND NOT(c[""Discontinued""]))");
@@ -1412,7 +1412,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND NOT(c[""Discontinued""]))");
         {
             await base.Where_bool_member_equals_constant(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND (c[""Discontinued""] = true))");
@@ -1422,7 +1422,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND (c[""Discontinued""] = true))");
         {
             await base.Where_bool_member_in_complex_predicate(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND (((c[""ProductID""] > 100) AND c[""Discontinued""]) OR (c[""Discontinued""] = true)))");
@@ -1432,7 +1432,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND (((c[""ProductID""] > 100) AND c
         {
             await base.Where_bool_member_compared_to_binary_expression(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND (c[""Discontinued""] = (c[""ProductID""] > 50)))");
@@ -1442,7 +1442,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND (c[""Discontinued""] = (c[""Prod
         {
             await base.Where_not_bool_member_compared_to_not_bool_member(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND (NOT(c[""Discontinued""]) = NOT(c[""Discontinued""])))");
@@ -1452,7 +1452,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND (NOT(c[""Discontinued""]) = NOT(
         {
             await base.Where_negated_boolean_expression_compared_to_another_negated_boolean_expression(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND (NOT((c[""ProductID""] > 50)) = NOT((c[""ProductID""] > 20))))");
@@ -1462,7 +1462,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND (NOT((c[""ProductID""] > 50)) = 
         {
             await base.Where_not_bool_member_compared_to_binary_expression(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND (NOT(c[""Discontinued""]) = (c[""ProductID""] > 50)))");
@@ -1472,7 +1472,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND (NOT(c[""Discontinued""]) = (c["
         {
             await base.Where_bool_parameter(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__prm_0='true'
 
 SELECT c
@@ -1484,7 +1484,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND @__prm_0)");
         {
             await base.Where_bool_parameter_compared_to_binary_expression(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__prm_0='true'
 
 SELECT c
@@ -1496,7 +1496,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND ((c[""ProductID""] > 50) != @__p
         {
             await base.Where_bool_member_and_parameter_compared_to_binary_expression_nested(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__prm_0='true'
 
 SELECT c
@@ -1508,7 +1508,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND (c[""Discontinued""] = ((c[""Pro
         {
             await base.Where_de_morgan_or_optimized(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND NOT((c[""Discontinued""] OR (c[""ProductID""] < 20))))");
@@ -1518,7 +1518,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND NOT((c[""Discontinued""] OR (c["
         {
             await base.Where_de_morgan_and_optimized(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND NOT((c[""Discontinued""] AND (c[""ProductID""] < 20))))");
@@ -1528,7 +1528,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND NOT((c[""Discontinued""] AND (c[
         {
             await base.Where_complex_negated_expression_optimized(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND NOT((NOT((NOT(c[""Discontinued""]) AND (c[""ProductID""] < 60))) OR NOT((c[""ProductID""] > 30)))))");
@@ -1538,7 +1538,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND NOT((NOT((NOT(c[""Discontinued""
         {
             await base.Where_short_member_comparison(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND (c[""UnitsInStock""] > 10))");
@@ -1549,7 +1549,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND (c[""UnitsInStock""] > 10))");
         {
             await base.Where_comparison_to_nullable_bool(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1559,7 +1559,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_true(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1569,7 +1569,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_false(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND false)");
@@ -1579,7 +1579,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND false)");
         {
             await base.Where_bool_closure(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND false)",
@@ -1593,7 +1593,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND ((c[""CustomerID""] = ""ALFKI""
         {
             await base.Where_default(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""Fax""] = null))");
@@ -1603,7 +1603,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""Fax""] = null))");
         {
             await base.Where_expression_invoke_1(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""CustomerID""] = ""ALFKI""))");
@@ -1614,7 +1614,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""CustomerID""] = ""ALFKI"")
         {
             await base.Where_expression_invoke_2(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""CustomerID""] = ""ALFKI""))");
@@ -1624,7 +1624,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""CustomerID""] = ""ALFKI"")
         {
             await base.Where_expression_invoke_3(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""CustomerID""] = ""ALFKI""))");
@@ -1635,7 +1635,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""CustomerID""] = ""ALFKI"")
         {
             await base.Where_concat_string_int_comparison1(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__i_0='10'
 
 SELECT c
@@ -1648,7 +1648,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND ((c[""CustomerID""] || @__i_0) 
         {
             await base.Where_concat_string_int_comparison2(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__i_0='10'
 
 SELECT c
@@ -1661,7 +1661,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND ((@__i_0 + c[""CustomerID""]) =
         {
             await base.Where_concat_string_int_comparison3(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__p_0='30'
 @__j_1='21'
 
@@ -1680,7 +1680,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND ((((@__p_0 + c[""CustomerID""])
         {
             await base.Where_string_concat_method_comparison(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__i_0='A'
 
 SELECT c[""CustomerID""]
@@ -1692,7 +1692,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND ((@__i_0 || c[""CustomerID""]) 
         {
             await base.Where_string_concat_method_comparison_2(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__i_0='A'
 @__j_1='B'
 
@@ -1705,7 +1705,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND ((@__i_0 || (@__j_1 || c[""Cust
         {
             await base.Where_string_concat_method_comparison_3(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__i_0='A'
 @__j_1='B'
 @__k_2='C'
@@ -1719,7 +1719,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND ((@__i_0 || (@__j_1 || (@__k_2 
         {
             await base.Where_ternary_boolean_condition_true(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND (c[""UnitsInStock""] >= 20))");
@@ -1729,7 +1729,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND (c[""UnitsInStock""] >= 20))");
         {
             await base.Where_ternary_boolean_condition_false(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND (c[""UnitsInStock""] < 20))");
@@ -1739,7 +1739,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND (c[""UnitsInStock""] < 20))");
         {
             await base.Where_ternary_boolean_condition_with_another_condition(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__productId_0='15'
 
 SELECT c
@@ -1751,7 +1751,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND ((c[""ProductID""] < @__productI
         {
             await base.Where_ternary_boolean_condition_with_false_as_result_true(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND (c[""UnitsInStock""] >= 20))");
@@ -1761,7 +1761,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND (c[""UnitsInStock""] >= 20))");
         {
             await base.Where_ternary_boolean_condition_with_false_as_result_false(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND false)");
@@ -1771,7 +1771,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND false)");
         {
             await base.Where_compare_constructed_equal(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1781,7 +1781,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_compare_constructed_multi_value_equal(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1791,7 +1791,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_compare_constructed_multi_value_not_equal(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1801,7 +1801,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_compare_tuple_constructed_equal(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1811,7 +1811,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_compare_tuple_constructed_multi_value_equal(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1821,7 +1821,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_compare_tuple_constructed_multi_value_not_equal(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1831,7 +1831,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_compare_tuple_create_constructed_equal(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1841,7 +1841,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_compare_tuple_create_constructed_multi_value_equal(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1851,7 +1851,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_compare_tuple_create_constructed_multi_value_not_equal(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1861,7 +1861,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_compare_null(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND ((c[""City""] = null) AND (c[""Country""] = ""UK"")))");
@@ -1871,7 +1871,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND ((c[""City""] = null) AND (c[""
         {
             await base.Where_Is_on_same_type(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -1881,7 +1881,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Where_chain(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (((c[""Discriminator""] = ""Order"") AND (c[""CustomerID""] = ""QUICK"")) AND (c[""OrderDate""] > ""1998-01-01T00:00:00""))");
@@ -1892,7 +1892,7 @@ WHERE (((c[""Discriminator""] = ""Order"") AND (c[""CustomerID""] = ""QUICK"")) 
         {
             base.Where_navigation_contains();
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""CustomerID""] = ""ALFKI""))");
@@ -1902,7 +1902,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""CustomerID""] = ""ALFKI"")
         {
             await base.Where_array_index(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__p_0='ALFKI'
 
 SELECT c
@@ -1913,14 +1913,14 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""CustomerID""] = @__p_0))")
         [ConditionalTheory(Skip = "Issue #17246")]
         public override async Task Where_multiple_contains_in_subquery_with_or(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<OrderDetail>().Where(od => od.OrderID < 10250).Where(
                     od => ss.Set<Product>().OrderBy(p => p.ProductID).Take(1).Select(p => p.ProductID).Contains(od.ProductID)
                         || ss.Set<Order>().OrderBy(o => o.OrderID).Take(1).Select(o => o.OrderID).Contains(od.OrderID)),
                 entryCount: 3);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""OrderDetail"") AND (c[""OrderID""] < 10250))");
@@ -1929,14 +1929,14 @@ WHERE ((c[""Discriminator""] = ""OrderDetail"") AND (c[""OrderID""] < 10250))");
         [ConditionalTheory(Skip = "Issue #17246")]
         public override async Task Where_multiple_contains_in_subquery_with_and(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<OrderDetail>().Where(od => od.OrderID < 10260).Where(
                     od => ss.Set<Product>().OrderBy(p => p.ProductID).Take(20).Select(p => p.ProductID).Contains(od.ProductID)
                         && ss.Set<Order>().OrderBy(o => o.OrderID).Take(10).Select(o => o.OrderID).Contains(od.OrderID)),
                 entryCount: 5);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""OrderDetail"") AND (c[""OrderID""] < 10260))");
@@ -1945,7 +1945,7 @@ WHERE ((c[""Discriminator""] = ""OrderDetail"") AND (c[""OrderID""] < 10260))");
         [ConditionalTheory(Skip = "Issue #17246")]
         public override async Task Where_contains_on_navigation(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Order>().Where(o => o.OrderID > 10354 && o.OrderID < 10360)
                     .Where(
@@ -1953,7 +1953,7 @@ WHERE ((c[""Discriminator""] = ""OrderDetail"") AND (c[""OrderID""] < 10260))");
                             .Any(c => c.Orders.Contains(o))),
                 entryCount: 2);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Order"") AND ((c[""OrderID""] > 10354) AND (c[""OrderID""] < 10360)))");
@@ -1962,13 +1962,13 @@ WHERE ((c[""Discriminator""] = ""Order"") AND ((c[""OrderID""] > 10354) AND (c["
         [ConditionalTheory(Skip = "Issue #17246")]
         public override async Task Where_subquery_FirstOrDefault_is_null(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Customer>().Where(c => c.CustomerID == "PARIS")
                     .Where(c => c.Orders.OrderBy(o => o.OrderID).FirstOrDefault() == null),
                 entryCount: 1);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""CustomerID""] = ""PARIS""))");
@@ -1977,12 +1977,12 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""CustomerID""] = ""PARIS"")
         [ConditionalTheory(Skip = "Issue #17246")]
         public override async Task Where_subquery_FirstOrDefault_compared_to_entity(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => ss.Set<Customer>().Where(c => c.CustomerID == "ALFKI").Where(
                     c => c.Orders.OrderBy(o => o.OrderID).FirstOrDefault() == new Order { OrderID = 10243 }));
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""CustomerID""] = ""ALFKI""))");
@@ -1992,7 +1992,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""CustomerID""] = ""ALFKI"")
         {
             await base.Time_of_day_datetime(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c[""OrderDate""]
 FROM root c
 WHERE (c[""Discriminator""] = ""Order"")");
@@ -2002,7 +2002,7 @@ WHERE (c[""Discriminator""] = ""Order"")");
         {
             await base.TypeBinary_short_circuit(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__p_0='false'
 
 SELECT c
@@ -2020,7 +2020,7 @@ WHERE ((c[""Discriminator""] = ""Order"") AND @__p_0)");
         {
             await base.Where_is_conditional(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Product"") AND (true ? false : true))");
@@ -2049,7 +2049,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND (true ? false : true))");
         {
             await base.Using_same_parameter_twice_in_query_generates_one_sql_parameter(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         [ConditionalTheory(Skip = "Issue #17246")]
@@ -2158,7 +2158,7 @@ WHERE ((c[""Discriminator""] = ""Product"") AND (true ? false : true))");
         {
             await base.Where_list_object_contains_over_value_type(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Order"") AND c[""OrderID""] IN (10248, 10249))");
@@ -2168,7 +2168,7 @@ WHERE ((c[""Discriminator""] = ""Order"") AND c[""OrderID""] IN (10248, 10249))"
         {
             await base.Where_array_of_object_contains_over_value_type(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Order"") AND c[""OrderID""] IN (10248, 10249))");
@@ -2181,12 +2181,12 @@ WHERE ((c[""Discriminator""] = ""Order"") AND c[""OrderID""] IN (10248, 10249))"
 
         private void AssertSql(params string[] expected)
         {
-            Fixture.TestSqlLoggerFactory.AssertBaseline(expected);
+            this.Fixture.TestSqlLoggerFactory.AssertBaseline(expected);
         }
 
         protected override void ClearLog()
         {
-            Fixture.TestSqlLoggerFactory.Clear();
+            this.Fixture.TestSqlLoggerFactory.Clear();
         }
     }
 }

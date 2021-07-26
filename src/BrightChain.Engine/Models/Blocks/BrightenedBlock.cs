@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using BrightChain.Engine.Extensions;
 using BrightChain.Engine.Helpers;
 using BrightChain.Engine.Models.Blocks.DataObjects;

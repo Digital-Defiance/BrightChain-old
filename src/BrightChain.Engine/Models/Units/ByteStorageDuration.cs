@@ -11,9 +11,9 @@
 
         public ByteStorageDuration(int byteCount, ulong durationSeconds)
         {
-            ByteCount = byteCount;
-            DurationSeconds = durationSeconds;
-            TotalCost = ((ulong)byteCount) * durationSeconds;
+            this.ByteCount = byteCount;
+            this.DurationSeconds = durationSeconds;
+            this.TotalCost = ((ulong)byteCount) * durationSeconds;
         }
     }
 }

@@ -40,11 +40,11 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             IQuerySqlGeneratorFactory querySqlGeneratorFactory)
             : base(dependencies, brightChainQueryCompilationContext)
         {
-            _sqlExpressionFactory = sqlExpressionFactory;
-            _querySqlGeneratorFactory = querySqlGeneratorFactory;
-            _contextType = brightChainQueryCompilationContext.ContextType;
-            _threadSafetyChecksEnabled = dependencies.CoreSingletonOptions.AreThreadSafetyChecksEnabled;
-            _partitionKeyFromExtension = brightChainQueryCompilationContext.PartitionKeyFromExtension;
+            this._sqlExpressionFactory = sqlExpressionFactory;
+            this._querySqlGeneratorFactory = querySqlGeneratorFactory;
+            this._contextType = brightChainQueryCompilationContext.ContextType;
+            this._threadSafetyChecksEnabled = dependencies.CoreSingletonOptions.AreThreadSafetyChecksEnabled;
+            this._partitionKeyFromExtension = brightChainQueryCompilationContext.PartitionKeyFromExtension;
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             var shaperBody = shapedQueryExpression.ShaperExpression;
             shaperBody = new JObjectInjectingExpressionVisitor().Visit(shaperBody);
-            shaperBody = InjectEntityMaterializers(shaperBody);
+            shaperBody = this.InjectEntityMaterializers(shaperBody);
 
             switch (shapedQueryExpression.QueryExpression)
             {
@@ -69,7 +69,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
                     shaperBody = new BrightChainProjectionBindingRemovingExpressionVisitor(
                             selectExpression, jObjectParameter,
-                            QueryCompilationContext.QueryTrackingBehavior == QueryTrackingBehavior.TrackAll)
+                            this.QueryCompilationContext.QueryTrackingBehavior == QueryTrackingBehavior.TrackAll)
                         .Visit(shaperBody);
 
                     var shaperLambda = Expression.Lambda(
@@ -82,21 +82,21 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         Expression.Convert(
                             QueryCompilationContext.QueryContextParameter,
                             typeof(BrightChainQueryContext)),
-                        Expression.Constant(_sqlExpressionFactory),
-                        Expression.Constant(_querySqlGeneratorFactory),
+                        Expression.Constant(this._sqlExpressionFactory),
+                        Expression.Constant(this._querySqlGeneratorFactory),
                         Expression.Constant(selectExpression),
                         Expression.Constant(shaperLambda.Compile()),
-                        Expression.Constant(_contextType),
-                        Expression.Constant(_partitionKeyFromExtension, typeof(string)),
+                        Expression.Constant(this._contextType),
+                        Expression.Constant(this._partitionKeyFromExtension, typeof(string)),
                         Expression.Constant(
-                            QueryCompilationContext.QueryTrackingBehavior == QueryTrackingBehavior.NoTrackingWithIdentityResolution),
-                        Expression.Constant(_threadSafetyChecksEnabled));
+                            this.QueryCompilationContext.QueryTrackingBehavior == QueryTrackingBehavior.NoTrackingWithIdentityResolution),
+                        Expression.Constant(this._threadSafetyChecksEnabled));
 
                 case ReadItemExpression readItemExpression:
 
                     shaperBody = new BrightChainProjectionBindingRemovingReadItemExpressionVisitor(
                             readItemExpression, jObjectParameter,
-                            QueryCompilationContext.QueryTrackingBehavior == QueryTrackingBehavior.TrackAll)
+                            this.QueryCompilationContext.QueryTrackingBehavior == QueryTrackingBehavior.TrackAll)
                         .Visit(shaperBody);
 
                     var shaperReadItemLambda = Expression.Lambda(
@@ -111,10 +111,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                             typeof(BrightChainQueryContext)),
                         Expression.Constant(readItemExpression),
                         Expression.Constant(shaperReadItemLambda.Compile()),
-                        Expression.Constant(_contextType),
+                        Expression.Constant(this._contextType),
                         Expression.Constant(
-                            QueryCompilationContext.QueryTrackingBehavior == QueryTrackingBehavior.NoTrackingWithIdentityResolution),
-                        Expression.Constant(_threadSafetyChecksEnabled));
+                            this.QueryCompilationContext.QueryTrackingBehavior == QueryTrackingBehavior.NoTrackingWithIdentityResolution),
+                        Expression.Constant(this._threadSafetyChecksEnabled));
 
                 default:
                     throw new NotSupportedException(CoreStrings.UnhandledExpressionNode(shapedQueryExpression.QueryExpression));

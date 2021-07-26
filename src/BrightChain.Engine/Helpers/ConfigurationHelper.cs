@@ -1,9 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Text.Json;
-using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.Extensions.Configuration;
-using YamlDotNet.RepresentationModel;
 
 namespace BrightChain.Engine.Helpers
 {
@@ -27,14 +24,16 @@ namespace BrightChain.Engine.Helpers
                 path2: ConfigurationHelper.ConfigurationFileName);
 
         public static IConfiguration LoadConfiguration()
-            => new ConfigurationBuilder()
-                .SetBasePath(ConfigurationHelper.ConfigurationBaseDirectory)
-                .AddYamlFile(
-                    path: ConfigurationHelper.ConfigurationFileName,
-                    optional: false,
-                    reloadOnChange: true)
-                .AddEnvironmentVariables()
-            .Build();
+        {
+            return new ConfigurationBuilder()
+                           .SetBasePath(ConfigurationHelper.ConfigurationBaseDirectory)
+                           .AddYamlFile(
+                               path: ConfigurationHelper.ConfigurationFileName,
+                               optional: false,
+                               reloadOnChange: true)
+                           .AddEnvironmentVariables()
+                       .Build();
+        }
 
         public static T LoadConfigurationAs<T>()
         {
@@ -45,8 +44,10 @@ namespace BrightChain.Engine.Helpers
             return sourceDocument;
         }
 
-        public static void SaveConfigurationFrom<T>(T configuration) =>
+        public static void SaveConfigurationFrom<T>(T configuration)
+        {
             File.WriteAllText(ConfigurationHelper.FullyQualifiedConfigurationFileName, new YamlDotNet.Serialization.Serializer().Serialize(configuration));
+        }
 
         public static void AddOrUpdateAppSetting<T>(string sectionPathKey, T value)
         {

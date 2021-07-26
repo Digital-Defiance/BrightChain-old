@@ -31,7 +31,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(sqlExpressionFactory, nameof(sqlExpressionFactory));
 
-            _sqlExpressionFactory = sqlExpressionFactory;
+            this._sqlExpressionFactory = sqlExpressionFactory;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 selectExpression.ApplyProjection();
             }
 
-            query = new BrightChainValueConverterCompensatingExpressionVisitor(_sqlExpressionFactory).Visit(query);
+            query = new BrightChainValueConverterCompensatingExpressionVisitor(this._sqlExpressionFactory).Visit(query);
 
             return query;
         }

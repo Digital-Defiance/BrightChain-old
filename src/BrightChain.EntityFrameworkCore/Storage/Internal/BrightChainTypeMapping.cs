@@ -54,7 +54,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         public override CoreTypeMapping Clone(ValueConverter? converter)
         {
-            return new BrightChainTypeMapping(Parameters.WithComposedConverter(converter));
+            return new BrightChainTypeMapping(this.Parameters.WithComposedConverter(converter));
         }
     }
 }

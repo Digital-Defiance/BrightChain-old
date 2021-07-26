@@ -20,7 +20,7 @@ namespace BrightChain.EntityFrameworkCore.Utilities
 
         public ISet<TVertex> GetUnreachableVertices(IReadOnlyList<TVertex> roots)
         {
-            var unreachableVertices = new HashSet<TVertex>(Vertices);
+            var unreachableVertices = new HashSet<TVertex>(this.Vertices);
             unreachableVertices.ExceptWith(roots);
             var visitingQueue = new List<TVertex>(roots);
 
@@ -30,7 +30,7 @@ namespace BrightChain.EntityFrameworkCore.Utilities
                 var currentVertex = visitingQueue[currentVertexIndex];
                 currentVertexIndex++;
                 // ReSharper disable once LoopCanBeConvertedToQuery
-                foreach (var neighbor in GetOutgoingNeighbors(currentVertex))
+                foreach (var neighbor in this.GetOutgoingNeighbors(currentVertex))
                 {
                     if (unreachableVertices.Remove(neighbor))
                     {
@@ -45,7 +45,7 @@ namespace BrightChain.EntityFrameworkCore.Utilities
         public IList<ISet<TVertex>> GetWeaklyConnectedComponents()
         {
             var components = new List<ISet<TVertex>>();
-            var unvisitedVertices = new HashSet<TVertex>(Vertices);
+            var unvisitedVertices = new HashSet<TVertex>(this.Vertices);
             var neighbors = new Queue<TVertex>();
             while (unvisitedVertices.Count > 0)
             {
@@ -64,12 +64,12 @@ namespace BrightChain.EntityFrameworkCore.Utilities
 
                     currentComponent.Add(currentVertex);
                     unvisitedVertices.Remove(currentVertex);
-                    foreach (var neighbor in GetOutgoingNeighbors(currentVertex))
+                    foreach (var neighbor in this.GetOutgoingNeighbors(currentVertex))
                     {
                         neighbors.Enqueue(neighbor);
                     }
 
-                    foreach (var neighbor in GetIncomingNeighbors(currentVertex))
+                    foreach (var neighbor in this.GetIncomingNeighbors(currentVertex))
                     {
                         neighbors.Enqueue(neighbor);
                     }

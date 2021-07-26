@@ -51,15 +51,15 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 bool standAloneStateManager,
                 bool threadSafetyChecksEnabled)
             {
-                _brightChainQueryContext = brightChainQueryContext;
-                _sqlExpressionFactory = sqlExpressionFactory;
-                _querySqlGeneratorFactory = querySqlGeneratorFactory;
-                _selectExpression = selectExpression;
-                _shaper = shaper;
-                _contextType = contextType;
-                _queryLogger = brightChainQueryContext.QueryLogger;
-                _standAloneStateManager = standAloneStateManager;
-                _threadSafetyChecksEnabled = threadSafetyChecksEnabled;
+                this._brightChainQueryContext = brightChainQueryContext;
+                this._sqlExpressionFactory = sqlExpressionFactory;
+                this._querySqlGeneratorFactory = querySqlGeneratorFactory;
+                this._selectExpression = selectExpression;
+                this._shaper = shaper;
+                this._contextType = contextType;
+                this._queryLogger = brightChainQueryContext.QueryLogger;
+                this._standAloneStateManager = standAloneStateManager;
+                this._threadSafetyChecksEnabled = threadSafetyChecksEnabled;
 
                 var partitionKey = selectExpression.GetPartitionKey(brightChainQueryContext.ParameterValues);
                 if (partitionKey != null && partitionKeyFromExtension != null && partitionKeyFromExtension != partitionKey)
@@ -67,7 +67,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     throw new InvalidOperationException(BrightChainStrings.PartitionKeyMismatch(partitionKeyFromExtension, partitionKey));
                 }
 
-                _partitionKey = partitionKey ?? partitionKeyFromExtension;
+                this._partitionKey = partitionKey ?? partitionKeyFromExtension;
             }
 
             public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
@@ -82,22 +82,22 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return GetEnumerator();
+                return this.GetEnumerator();
             }
 
             private BrightChainSqlQuery GenerateQuery()
             {
-                return _querySqlGeneratorFactory.Create().GetSqlQuery(
+                return this._querySqlGeneratorFactory.Create().GetSqlQuery(
                                    (SelectExpression)new InExpressionValuesExpandingExpressionVisitor(
-                                           _sqlExpressionFactory,
-                                           _brightChainQueryContext.ParameterValues)
-                                       .Visit(_selectExpression),
-                                   _brightChainQueryContext.ParameterValues);
+                                           this._sqlExpressionFactory,
+                                           this._brightChainQueryContext.ParameterValues)
+                                       .Visit(this._selectExpression),
+                                   this._brightChainQueryContext.ParameterValues);
             }
 
             public string ToQueryString()
             {
-                var sqlQuery = GenerateQuery();
+                var sqlQuery = this.GenerateQuery();
                 if (sqlQuery.Parameters.Count == 0)
                 {
                     return sqlQuery.Query;
@@ -133,65 +133,65 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
                 public Enumerator(QueryingEnumerable<T> queryingEnumerable)
                 {
-                    _queryingEnumerable = queryingEnumerable;
-                    _brightChainQueryContext = queryingEnumerable._brightChainQueryContext;
-                    _shaper = queryingEnumerable._shaper;
-                    _selectExpression = queryingEnumerable._selectExpression;
-                    _contextType = queryingEnumerable._contextType;
-                    _partitionKey = queryingEnumerable._partitionKey;
-                    _queryLogger = queryingEnumerable._queryLogger;
-                    _standAloneStateManager = queryingEnumerable._standAloneStateManager;
+                    this._queryingEnumerable = queryingEnumerable;
+                    this._brightChainQueryContext = queryingEnumerable._brightChainQueryContext;
+                    this._shaper = queryingEnumerable._shaper;
+                    this._selectExpression = queryingEnumerable._selectExpression;
+                    this._contextType = queryingEnumerable._contextType;
+                    this._partitionKey = queryingEnumerable._partitionKey;
+                    this._queryLogger = queryingEnumerable._queryLogger;
+                    this._standAloneStateManager = queryingEnumerable._standAloneStateManager;
 
-                    _concurrencyDetector = queryingEnumerable._threadSafetyChecksEnabled
-                        ? _brightChainQueryContext.ConcurrencyDetector
+                    this._concurrencyDetector = queryingEnumerable._threadSafetyChecksEnabled
+                        ? this._brightChainQueryContext.ConcurrencyDetector
                         : null;
                 }
 
                 public T Current { get; private set; }
 
                 object IEnumerator.Current
-                    => Current;
+                    => this.Current;
 
                 public bool MoveNext()
                 {
                     try
                     {
-                        _concurrencyDetector?.EnterCriticalSection();
+                        this._concurrencyDetector?.EnterCriticalSection();
 
                         try
                         {
-                            if (_enumerator == null)
+                            if (this._enumerator == null)
                             {
-                                var sqlQuery = _queryingEnumerable.GenerateQuery();
+                                var sqlQuery = this._queryingEnumerable.GenerateQuery();
 
                                 EntityFrameworkEventSource.Log.QueryExecuting();
 
-                                _enumerator = _brightChainQueryContext.BrightChainClient
+                                this._enumerator = this._brightChainQueryContext.BrightChainClient
                                     .ExecuteSqlQuery(
-                                        _selectExpression.Container,
-                                        _partitionKey,
+                                        this._selectExpression.Container,
+                                        this._partitionKey,
                                         sqlQuery)
                                     .GetEnumerator();
-                                _brightChainQueryContext.InitializeStateManager(_standAloneStateManager);
+                                this._brightChainQueryContext.InitializeStateManager(this._standAloneStateManager);
                             }
 
-                            var hasNext = _enumerator.MoveNext();
+                            var hasNext = this._enumerator.MoveNext();
 
-                            Current
+                            this.Current
                                 = hasNext
-                                    ? _shaper(_brightChainQueryContext, _enumerator.Current)
+                                    ? this._shaper(this._brightChainQueryContext, this._enumerator.Current)
                                     : default;
 
                             return hasNext;
                         }
                         finally
                         {
-                            _concurrencyDetector?.ExitCriticalSection();
+                            this._concurrencyDetector?.ExitCriticalSection();
                         }
                     }
                     catch (Exception exception)
                     {
-                        _queryLogger.QueryIterationFailed(_contextType, exception);
+                        this._queryLogger.QueryIterationFailed(this._contextType, exception);
 
                         throw;
                     }
@@ -199,8 +199,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
                 public void Dispose()
                 {
-                    _enumerator?.Dispose();
-                    _enumerator = null;
+                    this._enumerator?.Dispose();
+                    this._enumerator = null;
                 }
 
                 public void Reset()
@@ -226,18 +226,18 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
                 public AsyncEnumerator(QueryingEnumerable<T> queryingEnumerable, CancellationToken cancellationToken)
                 {
-                    _queryingEnumerable = queryingEnumerable;
-                    _brightChainQueryContext = queryingEnumerable._brightChainQueryContext;
-                    _shaper = queryingEnumerable._shaper;
-                    _selectExpression = queryingEnumerable._selectExpression;
-                    _contextType = queryingEnumerable._contextType;
-                    _partitionKey = queryingEnumerable._partitionKey;
-                    _queryLogger = queryingEnumerable._queryLogger;
-                    _standAloneStateManager = queryingEnumerable._standAloneStateManager;
-                    _cancellationToken = cancellationToken;
+                    this._queryingEnumerable = queryingEnumerable;
+                    this._brightChainQueryContext = queryingEnumerable._brightChainQueryContext;
+                    this._shaper = queryingEnumerable._shaper;
+                    this._selectExpression = queryingEnumerable._selectExpression;
+                    this._contextType = queryingEnumerable._contextType;
+                    this._partitionKey = queryingEnumerable._partitionKey;
+                    this._queryLogger = queryingEnumerable._queryLogger;
+                    this._standAloneStateManager = queryingEnumerable._standAloneStateManager;
+                    this._cancellationToken = cancellationToken;
 
-                    _concurrencyDetector = queryingEnumerable._threadSafetyChecksEnabled
-                        ? _brightChainQueryContext.ConcurrencyDetector
+                    this._concurrencyDetector = queryingEnumerable._threadSafetyChecksEnabled
+                        ? this._brightChainQueryContext.ConcurrencyDetector
                         : null;
                 }
 
@@ -247,42 +247,42 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 {
                     try
                     {
-                        _concurrencyDetector?.EnterCriticalSection();
+                        this._concurrencyDetector?.EnterCriticalSection();
 
                         try
                         {
-                            if (_enumerator == null)
+                            if (this._enumerator == null)
                             {
-                                var sqlQuery = _queryingEnumerable.GenerateQuery();
+                                var sqlQuery = this._queryingEnumerable.GenerateQuery();
 
                                 EntityFrameworkEventSource.Log.QueryExecuting();
 
-                                _enumerator = _brightChainQueryContext.BrightChainClient
+                                this._enumerator = this._brightChainQueryContext.BrightChainClient
                                     .ExecuteSqlQueryAsync(
-                                        _selectExpression.Container,
-                                        _partitionKey,
+                                        this._selectExpression.Container,
+                                        this._partitionKey,
                                         sqlQuery)
-                                    .GetAsyncEnumerator(_cancellationToken);
-                                _brightChainQueryContext.InitializeStateManager(_standAloneStateManager);
+                                    .GetAsyncEnumerator(this._cancellationToken);
+                                this._brightChainQueryContext.InitializeStateManager(this._standAloneStateManager);
                             }
 
-                            var hasNext = await _enumerator.MoveNextAsync().ConfigureAwait(false);
+                            var hasNext = await this._enumerator.MoveNextAsync().ConfigureAwait(false);
 
-                            Current
+                            this.Current
                                 = hasNext
-                                    ? _shaper(_brightChainQueryContext, _enumerator.Current)
+                                    ? this._shaper(this._brightChainQueryContext, this._enumerator.Current)
                                     : default;
 
                             return hasNext;
                         }
                         finally
                         {
-                            _concurrencyDetector?.ExitCriticalSection();
+                            this._concurrencyDetector?.ExitCriticalSection();
                         }
                     }
                     catch (Exception exception)
                     {
-                        _queryLogger.QueryIterationFailed(_contextType, exception);
+                        this._queryLogger.QueryIterationFailed(this._contextType, exception);
 
                         throw;
                     }
@@ -290,10 +290,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
                 public ValueTask DisposeAsync()
                 {
-                    var enumerator = _enumerator;
+                    var enumerator = this._enumerator;
                     if (enumerator != null)
                     {
-                        _enumerator = null;
+                        this._enumerator = null;
                         return enumerator.DisposeAsync();
                     }
                     return default;

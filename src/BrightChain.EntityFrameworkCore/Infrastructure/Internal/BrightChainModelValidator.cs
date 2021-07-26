@@ -45,10 +45,10 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
         {
             base.Validate(model, logger);
 
-            ValidateDatabaseProperties(model, logger);
-            ValidateKeys(model, logger);
-            ValidateSharedContainerCompatibility(model, logger);
-            ValidateOnlyETagConcurrencyToken(model, logger);
+            this.ValidateDatabaseProperties(model, logger);
+            this.ValidateKeys(model, logger);
+            this.ValidateSharedContainerCompatibility(model, logger);
+            this.ValidateOnlyETagConcurrencyToken(model, logger);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
             {
                 var mappedTypes = containerMapping.Value;
                 var container = containerMapping.Key;
-                ValidateSharedContainerCompatibility(mappedTypes, container, logger);
+                this.ValidateSharedContainerCompatibility(mappedTypes, container, logger);
             }
         }
 

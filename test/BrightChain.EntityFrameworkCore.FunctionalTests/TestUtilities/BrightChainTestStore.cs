@@ -59,10 +59,10 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
             Action<BrightChainDbContextOptionsBuilder> extensionConfiguration = null)
             : base(CreateName(name), shared)
         {
-            ConnectionUri = TestEnvironment.DefaultConnection;
-            AuthToken = TestEnvironment.AuthToken;
-            ConnectionString = TestEnvironment.ConnectionString;
-            _configureBrightChain = extensionConfiguration == null
+            this.ConnectionUri = TestEnvironment.DefaultConnection;
+            this.AuthToken = TestEnvironment.AuthToken;
+            this.ConnectionString = TestEnvironment.ConnectionString;
+            this._configureBrightChain = extensionConfiguration == null
                 ? (b => b.ApplyConfiguration())
                 : (b =>
                 {
@@ -70,11 +70,11 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
                     extensionConfiguration(b);
                 });
 
-            _storeContext = new TestStoreContext(this);
+            this._storeContext = new TestStoreContext(this);
 
             if (dataFilePath != null)
             {
-                _dataFilePath = Path.Combine(
+                this._dataFilePath = Path.Combine(
                     Path.GetDirectoryName(typeof(BrightChainTestStore).Assembly.Location),
                     dataFilePath);
             }
@@ -99,10 +99,10 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
         public override DbContextOptionsBuilder AddProviderOptions(DbContextOptionsBuilder builder)
         {
             return builder.UseBrightChain(
-                           ConnectionUri,
-                           AuthToken,
-                           Name,
-                           _configureBrightChain);
+                           this.ConnectionUri,
+                           this.AuthToken,
+                           this.Name,
+                           this._configureBrightChain);
         }
 
         public static async ValueTask<bool> IsConnectionAvailableAsync()
@@ -165,21 +165,21 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
 
         protected override void Initialize(Func<DbContext> createContext, Action<DbContext> seed, Action<DbContext> clean)
         {
-            _initialized = true;
+            this._initialized = true;
 
             if (_connectionAvailable == false)
             {
                 return;
             }
 
-            if (_dataFilePath == null)
+            if (this._dataFilePath == null)
             {
-                base.Initialize(createContext ?? (() => _storeContext), seed, clean);
+                base.Initialize(createContext ?? (() => this._storeContext), seed, clean);
             }
             else
             {
                 using var context = createContext();
-                CreateFromFile(context).GetAwaiter().GetResult();
+                this.CreateFromFile(context).GetAwaiter().GetResult();
             }
         }
 
@@ -188,7 +188,7 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
             if (await context.Database.EnsureCreatedAsync())
             {
                 var brightChainClient = context.GetService<IBrightChainClientWrapper>();
-                using var fs = new FileStream(_dataFilePath, FileMode.Open, FileAccess.Read);
+                using var fs = new FileStream(this._dataFilePath, FileMode.Open, FileAccess.Read);
                 using var sr = new StreamReader(fs);
                 throw new NotImplementedException();
                 //using var reader = new JsonTextReader(sr);
@@ -244,7 +244,7 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
 
         public override void Clean(DbContext context)
         {
-            CleanAsync(context).GetAwaiter().GetResult();
+            this.CleanAsync(context).GetAwaiter().GetResult();
         }
 
         public override async Task CleanAsync(DbContext context)
@@ -256,7 +256,7 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
                 if (!created)
                 {
                     var brightChainClient = context.Database.GetBrightChainClient();
-                    var database = brightChainClient.GetDatabase(Name);
+                    var database = brightChainClient.GetDatabase(this.Name);
                     throw new NotImplementedException();
                     //var containerIterator = database.GetContainerQueryIterator<ContainerProperties>();
                     //while (containerIterator.HasMoreResults)
@@ -319,23 +319,23 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
 
         public override async Task DisposeAsync()
         {
-            if (_initialized
-                && _dataFilePath == null)
+            if (this._initialized
+                && this._dataFilePath == null)
             {
                 if (_connectionAvailable == false)
                 {
                     return;
                 }
 
-                if (Shared)
+                if (this.Shared)
                 {
-                    GetTestStoreIndex(ServiceProvider).RemoveShared(GetType().Name + Name);
+                    this.GetTestStoreIndex(this.ServiceProvider).RemoveShared(this.GetType().Name + this.Name);
                 }
 
-                await _storeContext.Database.EnsureDeletedAsync();
+                await this._storeContext.Database.EnsureDeletedAsync();
             }
 
-            _storeContext.Dispose();
+            this._storeContext.Dispose();
         }
 
         private class TestStoreContext : DbContext
@@ -344,12 +344,12 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
 
             public TestStoreContext(BrightChainTestStore testStore)
             {
-                _testStore = testStore;
+                this._testStore = testStore;
             }
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
-                optionsBuilder.UseBrightChain(_testStore.ConnectionUri, _testStore.AuthToken, _testStore.Name, _testStore._configureBrightChain);
+                optionsBuilder.UseBrightChain(this._testStore.ConnectionUri, this._testStore.AuthToken, this._testStore.Name, this._testStore._configureBrightChain);
             }
         }
 

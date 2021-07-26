@@ -26,7 +26,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public ContainsTranslator(ISqlExpressionFactory sqlExpressionFactory)
         {
-            _sqlExpressionFactory = sqlExpressionFactory;
+            this._sqlExpressionFactory = sqlExpressionFactory;
         }
 
         /// <summary>
@@ -43,17 +43,17 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             if (method.IsGenericMethod
                 && method.GetGenericMethodDefinition().Equals(EnumerableMethods.Contains)
-                && ValidateValues(arguments[0]))
+                && this.ValidateValues(arguments[0]))
             {
-                return _sqlExpressionFactory.In(arguments[1], arguments[0], false);
+                return this._sqlExpressionFactory.In(arguments[1], arguments[0], false);
             }
 
             if (arguments.Count == 1
                 && method.IsContainsMethod()
                 && instance != null
-                && ValidateValues(instance))
+                && this.ValidateValues(instance))
             {
-                return _sqlExpressionFactory.In(arguments[0], instance, false);
+                return this._sqlExpressionFactory.In(arguments[0], instance, false);
             }
 
             return null;

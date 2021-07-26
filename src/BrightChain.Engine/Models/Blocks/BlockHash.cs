@@ -67,40 +67,54 @@ namespace BrightChain.Engine.Models.Blocks
         /// </summary>
         public BlockSize BlockSize { get; }
 
-        public static bool operator ==(BlockHash a, BlockHash b) =>
-             a.SourceDataLength == b.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;
+        public static bool operator ==(BlockHash a, BlockHash b)
+        {
+            return a.SourceDataLength == b.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;
+        }
 
-        public static bool operator ==(ReadOnlyMemory<byte> a, BlockHash b) =>
-            a.Length == b.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(b.HashBytes, a) == 0;
+        public static bool operator ==(ReadOnlyMemory<byte> a, BlockHash b)
+        {
+            return a.Length == b.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(b.HashBytes, a) == 0;
+        }
 
-        public static bool operator !=(ReadOnlyMemory<byte> b, BlockHash a) =>
-            !(b == a);
+        public static bool operator !=(ReadOnlyMemory<byte> b, BlockHash a)
+        {
+            return !(b == a);
+        }
 
         public static bool operator !=(BlockHash a, BlockHash b)
-            => !a.Equals(b);
+        {
+            return !a.Equals(b);
+        }
 
         /// <summary>
         /// Compares the raw bytes of the hash with a BlockHash classed as a plain object.
         /// </summary>
         /// <param name="obj">Should be of BlockHash type.</param>
         /// <returns>Returns a boolean indicating whether the bytes are the same in both objects.</returns>
-        public override bool Equals(object obj) =>
-            obj is BlockHash blockHash ? blockHash.SourceDataLength == this.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, blockHash.HashBytes) == 0 : false;
+        public override bool Equals(object obj)
+        {
+            return obj is BlockHash blockHash ? blockHash.SourceDataLength == this.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, blockHash.HashBytes) == 0 : false;
+        }
 
         /// <summary>
         /// Compares the raw bytes of the hash.
         /// </summary>
         /// <param name="other">Other BlockHash to compare bytes with.</param>
         /// <returns>Returns a standard comparison result, -1, 0, 1 for less than, equal, greater than.</returns>
-        public int CompareTo(BlockHash other) =>
-            other.SourceDataLength == this.SourceDataLength ? ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) : other.SourceDataLength > this.SourceDataLength ? -1 : 1;
+        public int CompareTo(BlockHash other)
+        {
+            return other.SourceDataLength == this.SourceDataLength ? ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) : other.SourceDataLength > this.SourceDataLength ? -1 : 1;
+        }
 
         /// <summary>
         /// Returns a boolean whether the two objects contain the same series of bytes.
         /// </summary>
         /// <param name="other">Other BlockHash to compare bytes with.</param>
         /// <returns>Returns the standard comparison result, -1, 0, 1 for less than, equal, greater than.</returns>
-        public bool Equals(BlockHash other) =>
-            other.SourceDataLength == this.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) == 0;
+        public bool Equals(BlockHash other)
+        {
+            return other.SourceDataLength == this.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) == 0;
+        }
     }
 }

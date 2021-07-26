@@ -14,19 +14,19 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         [ConditionalFact]
         public virtual void Passes_on_valid_model()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Customer>();
 
-            Validate(modelBuilder);
+            this.Validate(modelBuilder);
         }
 
         [ConditionalFact]
         public virtual void Passes_on_valid_keyless_entity_type()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Customer>().HasPartitionKey(c => c.PartitionId).HasNoKey();
 
-            var model = Validate(modelBuilder);
+            var model = this.Validate(modelBuilder);
 
             Assert.Empty(model.FindEntityType(typeof(Customer)).GetKeys());
         }
@@ -34,7 +34,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         [ConditionalFact]
         public virtual void Detects_missing_id_property()
         {
-            var modelBuilder = CreateConventionlessModelBuilder();
+            var modelBuilder = this.CreateConventionlessModelBuilder();
             modelBuilder.Entity<Order>(
                 b =>
                 {
@@ -46,13 +46,13 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
                     b.Ignore(o => o.Products);
                 });
 
-            VerifyError(BrightChainStrings.NoIdProperty(typeof(Order).Name), modelBuilder);
+            this.VerifyError(BrightChainStrings.NoIdProperty(typeof(Order).Name), modelBuilder);
         }
 
         [ConditionalFact]
         public virtual void Detects_non_key_id_property()
         {
-            var modelBuilder = CreateConventionlessModelBuilder();
+            var modelBuilder = this.CreateConventionlessModelBuilder();
             modelBuilder.Entity<Order>(
                 b =>
                 {
@@ -65,13 +65,13 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
                     b.Ignore(o => o.Products);
                 });
 
-            VerifyError(BrightChainStrings.NoIdKey(typeof(Order).Name, "id"), modelBuilder);
+            this.VerifyError(BrightChainStrings.NoIdKey(typeof(Order).Name, "id"), modelBuilder);
         }
 
         [ConditionalFact]
         public virtual void Detects_non_string_id_property()
         {
-            var modelBuilder = CreateConventionlessModelBuilder();
+            var modelBuilder = this.CreateConventionlessModelBuilder();
             modelBuilder.Entity<Order>(
                 b =>
                 {
@@ -85,24 +85,24 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
                     b.Ignore(o => o.Products);
                 });
 
-            VerifyError(BrightChainStrings.IdNonStringStoreType("id", typeof(Order).Name, "int"), modelBuilder);
+            this.VerifyError(BrightChainStrings.IdNonStringStoreType("id", typeof(Order).Name, "int"), modelBuilder);
         }
 
         [ConditionalFact]
         public virtual void Passes_on_valid_partition_keys()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Customer>().ToContainer("Orders").HasPartitionKey(c => c.PartitionId);
             modelBuilder.Entity<Order>().ToContainer("Orders").HasPartitionKey(o => o.PartitionId)
                 .Property(o => o.PartitionId).HasConversion<string>();
 
-            Validate(modelBuilder);
+            this.Validate(modelBuilder);
         }
 
         [ConditionalFact]
         public virtual void Passes_PK_partition_key()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Order>(
                 b =>
                 {
@@ -112,13 +112,13 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
                     b.Ignore(o => o.Products);
                 });
 
-            Validate(modelBuilder);
+            this.Validate(modelBuilder);
         }
 
         [ConditionalFact]
         public virtual void Detects_non_key_partition_key_property()
         {
-            var modelBuilder = CreateConventionlessModelBuilder();
+            var modelBuilder = this.CreateConventionlessModelBuilder();
             modelBuilder.Entity<Order>(
                 b =>
                 {
@@ -132,47 +132,47 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
                     b.Ignore(o => o.Products);
                 });
 
-            VerifyError(BrightChainStrings.NoPartitionKeyKey(typeof(Order).Name, nameof(Order.PartitionId), "id"), modelBuilder);
+            this.VerifyError(BrightChainStrings.NoPartitionKeyKey(typeof(Order).Name, nameof(Order.PartitionId), "id"), modelBuilder);
         }
 
         [ConditionalFact]
         public virtual void Detects_missing_partition_key_property()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Order>().HasPartitionKey("PartitionKey");
 
-            VerifyError(BrightChainStrings.PartitionKeyMissingProperty(typeof(Order).Name, "PartitionKey"), modelBuilder);
+            this.VerifyError(BrightChainStrings.PartitionKeyMissingProperty(typeof(Order).Name, "PartitionKey"), modelBuilder);
         }
 
         [ConditionalFact]
         public virtual void Detects_missing_partition_key_on_first_type()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Customer>().ToContainer("Orders");
             modelBuilder.Entity<Order>().ToContainer("Orders").HasPartitionKey(c => c.PartitionId);
 
-            VerifyError(BrightChainStrings.NoPartitionKey(typeof(Customer).Name, "Orders"), modelBuilder);
+            this.VerifyError(BrightChainStrings.NoPartitionKey(typeof(Customer).Name, "Orders"), modelBuilder);
         }
 
         [ConditionalFact]
         public virtual void Detects_missing_partition_keys_one_last_type()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Customer>().ToContainer("Orders").HasPartitionKey(c => c.PartitionId);
             modelBuilder.Entity<Order>().ToContainer("Orders");
 
-            VerifyError(BrightChainStrings.NoPartitionKey(typeof(Order).Name, "Orders"), modelBuilder);
+            this.VerifyError(BrightChainStrings.NoPartitionKey(typeof(Order).Name, "Orders"), modelBuilder);
         }
 
         [ConditionalFact]
         public virtual void Detects_partition_keys_mapped_to_different_properties()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Customer>().ToContainer("Orders").HasPartitionKey(c => c.PartitionId)
                 .Property(c => c.PartitionId).ToJsonProperty("pk");
             modelBuilder.Entity<Order>().ToContainer("Orders").HasPartitionKey(c => c.PartitionId);
 
-            VerifyError(
+            this.VerifyError(
                 BrightChainStrings.PartitionKeyStoreNameMismatch(
                     nameof(Customer.PartitionId), typeof(Customer).Name, "pk", nameof(Order.PartitionId), typeof(Order).Name,
                     nameof(Order.PartitionId)), modelBuilder);
@@ -181,12 +181,12 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         [ConditionalFact]
         public virtual void Detects_partition_key_of_different_type()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Customer>().ToContainer("Orders").HasPartitionKey(c => c.PartitionId);
             modelBuilder.Entity<Order>().ToContainer("Orders").HasPartitionKey(o => o.PartitionId)
                 .Property(c => c.PartitionId).HasConversion<int>();
 
-            VerifyError(
+            this.VerifyError(
                 BrightChainStrings.PartitionKeyNonStringStoreType(
                     nameof(Customer.PartitionId), typeof(Order).Name, "int"), modelBuilder);
         }
@@ -194,7 +194,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         [ConditionalFact]
         public virtual void Detects_properties_mapped_to_same_property()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Order>(
                 ob =>
                 {
@@ -202,7 +202,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
                     ob.Property(o => o.PartitionId).ToJsonProperty("Details");
                 });
 
-            VerifyError(
+            this.VerifyError(
                 BrightChainStrings.JsonPropertyCollision(
                     nameof(Order.PartitionId), nameof(Order.Id), typeof(Order).Name, "Details"), modelBuilder);
         }
@@ -210,7 +210,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         [ConditionalFact]
         public virtual void Detects_property_and_embedded_type_mapped_to_same_property()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Order>(
                 ob =>
                 {
@@ -218,7 +218,7 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
                     ob.OwnsOne(o => o.OrderDetails).ToJsonProperty("Details");
                 });
 
-            VerifyError(
+            this.VerifyError(
                 BrightChainStrings.JsonPropertyCollision(
                     nameof(Order.OrderDetails), nameof(Order.PartitionId), typeof(Order).Name, "Details"), modelBuilder);
         }
@@ -226,67 +226,67 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure
         [ConditionalFact]
         public virtual void Detects_missing_discriminator()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Customer>().ToContainer("Orders").HasNoDiscriminator();
             modelBuilder.Entity<Order>().ToContainer("Orders");
 
-            VerifyError(BrightChainStrings.NoDiscriminatorProperty(typeof(Customer).Name, "Orders"), modelBuilder);
+            this.VerifyError(BrightChainStrings.NoDiscriminatorProperty(typeof(Customer).Name, "Orders"), modelBuilder);
         }
 
         [ConditionalFact]
         public virtual void Detects_missing_discriminator_value()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Customer>().ToContainer("Orders").HasDiscriminator().HasValue(null);
             modelBuilder.Entity<Order>().ToContainer("Orders");
 
-            VerifyError(BrightChainStrings.NoDiscriminatorValue(typeof(Customer).Name, "Orders"), modelBuilder);
+            this.VerifyError(BrightChainStrings.NoDiscriminatorValue(typeof(Customer).Name, "Orders"), modelBuilder);
         }
 
         [ConditionalFact]
         public virtual void Detects_duplicate_discriminator_values()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Customer>().ToContainer("Orders").HasDiscriminator().HasValue("type");
             modelBuilder.Entity<Order>().ToContainer("Orders").HasDiscriminator().HasValue("type");
 
-            VerifyError(BrightChainStrings.DuplicateDiscriminatorValue(typeof(Order).Name, "type", typeof(Customer).Name, "Orders"), modelBuilder);
+            this.VerifyError(BrightChainStrings.DuplicateDiscriminatorValue(typeof(Order).Name, "type", typeof(Customer).Name, "Orders"), modelBuilder);
         }
 
         [ConditionalFact]
         public virtual void Passes_on_valid_concurrency_token()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Customer>()
                 .ToContainer("Orders")
                 .Property<string>("_etag")
                 .IsConcurrencyToken();
 
-            Validate(modelBuilder);
+            this.Validate(modelBuilder);
         }
 
         [ConditionalFact]
         public virtual void Detects_invalid_concurrency_token()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Customer>()
                 .ToContainer("Orders")
                 .Property<string>("_not_etag")
                 .IsConcurrencyToken();
 
-            VerifyError(BrightChainStrings.NonETagConcurrencyToken(typeof(Customer).Name, "_not_etag"), modelBuilder);
+            this.VerifyError(BrightChainStrings.NonETagConcurrencyToken(typeof(Customer).Name, "_not_etag"), modelBuilder);
         }
 
         [ConditionalFact]
         public virtual void Detects_nonString_concurrency_token()
         {
-            var modelBuilder = CreateConventionalModelBuilder();
+            var modelBuilder = this.CreateConventionalModelBuilder();
             modelBuilder.Entity<Customer>()
                 .ToContainer("Orders")
                 .Property<int>("_etag")
                 .IsConcurrencyToken();
 
-            VerifyError(BrightChainStrings.ETagNonStringStoreType("_etag", typeof(Customer).Name, "int"), modelBuilder);
+            this.VerifyError(BrightChainStrings.ETagNonStringStoreType("_etag", typeof(Customer).Name, "int"), modelBuilder);
         }
 
         protected override TestHelpers TestHelpers

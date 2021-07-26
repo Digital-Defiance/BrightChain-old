@@ -17,7 +17,7 @@ namespace BrightChain.Engine.Tests
         [TestInitialize]
         public void PreTestSetUp()
         {
-            logger = new Mock<ILogger<BlockCacheManager>>().Object;
+            this.logger = new Mock<ILogger<BlockCacheManager>>().Object;
         }
 
         [DataTestMethod]
@@ -37,7 +37,7 @@ namespace BrightChain.Engine.Tests
                     privateEncrypted: false))
                 .Validate());
 
-            var loggerMock = Mock.Get(logger);
+            var loggerMock = Mock.Get(this.logger);
             loggerMock.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),

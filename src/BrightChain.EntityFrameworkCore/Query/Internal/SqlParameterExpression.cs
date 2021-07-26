@@ -31,8 +31,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.DebugAssert(parameterExpression.Name != null, "Parameter must have name.");
 
-            _parameterExpression = parameterExpression;
-            _name = parameterExpression.Name;
+            this._parameterExpression = parameterExpression;
+            this._name = parameterExpression.Name;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public string Name
-            => _name;
+            => this._name;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -52,7 +52,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public SqlExpression ApplyTypeMapping(CoreTypeMapping? typeMapping)
         {
-            return new SqlParameterExpression(_parameterExpression, typeMapping ?? TypeMapping);
+            return new SqlParameterExpression(this._parameterExpression, typeMapping ?? this.TypeMapping);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(expressionPrinter, nameof(expressionPrinter));
 
-            expressionPrinter.Append("@" + _parameterExpression.Name);
+            expressionPrinter.Append("@" + this._parameterExpression.Name);
         }
 
         /// <summary>
@@ -92,12 +92,12 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return obj != null
                            && (ReferenceEquals(this, obj)
                                || obj is SqlParameterExpression sqlParameterExpression
-                               && Equals(sqlParameterExpression));
+                               && this.Equals(sqlParameterExpression));
         }
 
         private bool Equals(SqlParameterExpression sqlParameterExpression)
         {
-            return base.Equals(sqlParameterExpression) && Name != sqlParameterExpression.Name;
+            return base.Equals(sqlParameterExpression) && this.Name != sqlParameterExpression.Name;
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Name);
+            return HashCode.Combine(base.GetHashCode(), this.Name);
         }
     }
 }

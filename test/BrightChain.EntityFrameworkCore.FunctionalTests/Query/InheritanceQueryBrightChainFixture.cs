@@ -15,6 +15,6 @@ namespace BrightChain.EntityFrameworkCore.Query
             => BrightChainTestStoreFactory.Instance;
 
         public TestSqlLoggerFactory TestSqlLoggerFactory
-            => (TestSqlLoggerFactory)ServiceProvider.GetRequiredService<ILoggerFactory>();
+            => (TestSqlLoggerFactory)this.ServiceProvider.GetRequiredService<ILoggerFactory>();
     }
 }

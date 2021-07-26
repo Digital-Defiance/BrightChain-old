@@ -37,14 +37,14 @@ namespace BrightChain.Engine.Models.Hashes
 
         public DataSignature(BlockSize originalBlockSize, ReadOnlyMemory<byte> providedHashBytes)
         {
-            SignatureHashBytes = providedHashBytes;
-            Computed = false;
+            this.SignatureHashBytes = providedHashBytes;
+            this.Computed = false;
         }
 
         internal DataSignature(BlockSize originalBlockSize, ReadOnlyMemory<byte> providedHashBytes, bool computed = false)
         {
-            SignatureHashBytes = providedHashBytes;
-            Computed = computed;
+            this.SignatureHashBytes = providedHashBytes;
+            this.Computed = computed;
         }
 
         public DataSignature(ReadOnlyMemory<byte> dataBytes)
@@ -53,17 +53,17 @@ namespace BrightChain.Engine.Models.Hashes
             {
                 throw new NotImplementedException();
             }
-            Computed = true;
+            this.Computed = true;
         }
 
         public string ToString(string format, IFormatProvider _)
         {
-            return BitConverter.ToString(SignatureHashBytes.ToArray()).Replace("-", string.Empty).ToLower(culture: System.Globalization.CultureInfo.InvariantCulture);
+            return BitConverter.ToString(this.SignatureHashBytes.ToArray()).Replace("-", string.Empty).ToLower(culture: System.Globalization.CultureInfo.InvariantCulture);
         }
 
         public new string ToString()
         {
-            return BitConverter.ToString(SignatureHashBytes.ToArray()).Replace("-", string.Empty).ToLower(culture: System.Globalization.CultureInfo.InvariantCulture);
+            return BitConverter.ToString(this.SignatureHashBytes.ToArray()).Replace("-", string.Empty).ToLower(culture: System.Globalization.CultureInfo.InvariantCulture);
         }
 
         public static bool operator ==(DataSignature a, DataSignature b)
@@ -88,17 +88,17 @@ namespace BrightChain.Engine.Models.Hashes
 
         public override bool Equals(object obj)
         {
-            return obj is DataSignature ? ReadOnlyMemoryComparer<byte>.Compare(SignatureHashBytes, (obj as DataSignature).SignatureHashBytes) == 0 : false;
+            return obj is DataSignature ? ReadOnlyMemoryComparer<byte>.Compare(this.SignatureHashBytes, (obj as DataSignature).SignatureHashBytes) == 0 : false;
         }
 
         public override int GetHashCode()
         {
-            return SignatureHashBytes.GetHashCode();
+            return this.SignatureHashBytes.GetHashCode();
         }
 
         public int CompareTo(DataSignature other)
         {
-            return ReadOnlyMemoryComparer<byte>.Compare(SignatureHashBytes, other.SignatureHashBytes);
+            return ReadOnlyMemoryComparer<byte>.Compare(this.SignatureHashBytes, other.SignatureHashBytes);
         }
     }
 }

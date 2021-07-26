@@ -19,7 +19,7 @@ namespace BrightChain.EntityFrameworkCore.Query
             ITestOutputHelper testOutputHelper)
             : base(fixture)
         {
-            ClearLog();
+            this.ClearLog();
             //Fixture.TestSqlLoggerFactory.SetTestOutputHelper(testOutputHelper);
         }
 
@@ -28,7 +28,7 @@ namespace BrightChain.EntityFrameworkCore.Query
         {
             await base.KeylessEntity_simple(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -39,7 +39,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.KeylessEntity_where_simple(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = ""London""))");
@@ -65,14 +65,14 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = ""London""))");
         {
             base.KeylessEntity_with_nav_defining_query();
 
-            AssertSql(
+            this.AssertSql(
                 @"");
         }
 
         [ConditionalTheory(Skip = "Issue #17246")]
         public override async Task KeylessEntity_with_mixed_tracking(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => from c in ss.Set<Customer>().Where(ct => ct.City == "London")
                       from o in ss.Set<OrderQuery>().Where(ov => ov.CustomerID == c.CustomerID)
@@ -80,11 +80,11 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = ""London""))");
                 elementSorter: e => (e.c.CustomerID, e.o.CustomerID),
                 elementAsserter: (e, a) =>
                 {
-                    AssertEqual(e.c, a.c);
-                    AssertEqual(e.o, a.o);
+                    this.AssertEqual(e.c, a.c);
+                    this.AssertEqual(e.o, a.o);
                 });
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = ""London""))");
@@ -100,7 +100,7 @@ WHERE ((c[""Discriminator""] = ""Customer"") AND (c[""City""] = ""London""))");
         {
             await base.KeylessEntity_with_defining_query(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Order"") AND (c[""CustomerID""] = ""ALFKI""))");
@@ -111,7 +111,7 @@ WHERE ((c[""Discriminator""] = ""Order"") AND (c[""CustomerID""] = ""ALFKI""))")
         {
             await base.KeylessEntity_with_defining_query_and_correlated_collection(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")");
@@ -122,19 +122,19 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.KeylessEntity_select_where_navigation(async);
 
-            AssertSql(@"");
+            this.AssertSql(@"");
         }
 
         [ConditionalTheory(Skip = "issue#17314")] // left join translation
         public override async Task KeylessEntity_select_where_navigation_multi_level(bool async)
         {
-            await AssertQuery(
+            await this.AssertQuery(
                 async,
                 ss => from ov in ss.Set<OrderQuery>().Where(o => o.CustomerID == "ALFKI")
                       where ov.Customer.Orders.Any()
                       select ov);
 
-            AssertSql(@"");
+            this.AssertSql(@"");
         }
 
         [ConditionalTheory(Skip = "Issue #17246")]
@@ -142,7 +142,7 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.KeylessEntity_groupby(async);
 
-            AssertSql(@"");
+            this.AssertSql(@"");
         }
 
         [ConditionalTheory(Skip = "Issue #17246")]
@@ -150,17 +150,17 @@ WHERE (c[""Discriminator""] = ""Customer"")");
         {
             await base.Collection_correlated_with_keyless_entity_in_predicate_works(async);
 
-            AssertSql(@"");
+            this.AssertSql(@"");
         }
 
         private void AssertSql(params string[] expected)
         {
-            Fixture.TestSqlLoggerFactory.AssertBaseline(expected);
+            this.Fixture.TestSqlLoggerFactory.AssertBaseline(expected);
         }
 
         protected override void ClearLog()
         {
-            Fixture.TestSqlLoggerFactory.Clear();
+            this.Fixture.TestSqlLoggerFactory.Clear();
         }
     }
 }

@@ -32,9 +32,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             ISqlExpressionFactory sqlExpressionFactory,
             IEnumerable<IMethodCallTranslatorPlugin> plugins)
         {
-            _plugins.AddRange(plugins.SelectMany(p => p.Translators));
+            this._plugins.AddRange(plugins.SelectMany(p => p.Translators));
 
-            _translators.AddRange(
+            this._translators.AddRange(
                 new IMethodCallTranslator[]
                 {
                     new EqualsTranslator(sqlExpressionFactory),
@@ -66,7 +66,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(arguments, nameof(arguments));
             Check.NotNull(logger, nameof(logger));
 
-            return _plugins.Concat(_translators)
+            return this._plugins.Concat(this._translators)
                 .Select(t => t.Translate(instance, method, arguments, logger))
                 .FirstOrDefault(t => t != null);
         }
@@ -79,7 +79,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         protected virtual void AddTranslators(IEnumerable<IMethodCallTranslator> translators)
         {
-            _translators.InsertRange(0, translators);
+            this._translators.InsertRange(0, translators);
         }
     }
 }

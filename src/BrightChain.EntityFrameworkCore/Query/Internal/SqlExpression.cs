@@ -25,8 +25,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         protected SqlExpression(Type type, CoreTypeMapping? typeMapping)
         {
-            Type = type;
-            TypeMapping = typeMapping;
+            this.Type = type;
+            this.TypeMapping = typeMapping;
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// <inheritdoc />
         void IPrintableExpression.Print(ExpressionPrinter expressionPrinter)
         {
-            Print(expressionPrinter);
+            this.Print(expressionPrinter);
         }
 
         /// <summary>
@@ -90,13 +90,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return obj != null
                            && (ReferenceEquals(this, obj)
                                || obj is SqlExpression sqlExpression
-                               && Equals(sqlExpression));
+                               && this.Equals(sqlExpression));
         }
 
         private bool Equals(SqlExpression sqlExpression)
         {
-            return Type == sqlExpression.Type
-                           && TypeMapping?.Equals(sqlExpression.TypeMapping) == true;
+            return this.Type == sqlExpression.Type
+                           && this.TypeMapping?.Equals(sqlExpression.TypeMapping) == true;
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override int GetHashCode()
         {
-            return HashCode.Combine(Type, TypeMapping);
+            return HashCode.Combine(this.Type, this.TypeMapping);
         }
     }
 }

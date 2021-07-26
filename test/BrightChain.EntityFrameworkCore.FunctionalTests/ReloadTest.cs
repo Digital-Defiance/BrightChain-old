@@ -51,18 +51,18 @@ namespace BrightChain.EntityFrameworkCore
 
             public ReloadTestContext(BrightChainTestStore testStore)
             {
-                _connectionUri = testStore.ConnectionUri;
-                _authToken = testStore.AuthToken;
-                _name = testStore.Name;
+                this._connectionUri = testStore.ConnectionUri;
+                this._authToken = testStore.AuthToken;
+                this._name = testStore.Name;
             }
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
                 optionsBuilder
                     .UseBrightChain(
-                        _connectionUri,
-                        _authToken,
-                        _name,
+                        this._connectionUri,
+                        this._authToken,
+                        this._name,
                         b => b.ApplyConfiguration());
             }
 

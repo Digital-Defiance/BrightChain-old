@@ -1,9 +1,7 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Services;
-using BrightChain.EntityFrameworkCore.Data;
 using MediatR;
 
 namespace BrightChain.API.Queries

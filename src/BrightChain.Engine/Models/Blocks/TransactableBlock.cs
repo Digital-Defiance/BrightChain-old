@@ -66,8 +66,10 @@ namespace BrightChain.Engine.Models.Blocks
 
         public bool AllowCommit { get; protected set; } = false;
 
-        public static bool operator ==(TransactableBlock a, TransactableBlock b) =>
-            a.BlockSize == b.BlockSize && ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;
+        public static bool operator ==(TransactableBlock a, TransactableBlock b)
+        {
+            return a.BlockSize == b.BlockSize && ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;
+        }
 
         public static bool operator !=(TransactableBlock a, TransactableBlock b)
         {
@@ -104,9 +106,7 @@ namespace BrightChain.Engine.Models.Blocks
                 data: data);
         }
 
-        public override TransactableBlockParams BlockParams
-        {
-            get => new TransactableBlockParams(
+        public override TransactableBlockParams BlockParams => new TransactableBlockParams(
                 cacheManager: this.CacheManager,
                 allowCommit: this.AllowCommit,
                 blockParams: new BlockParams(
@@ -115,19 +115,26 @@ namespace BrightChain.Engine.Models.Blocks
                     keepUntilAtLeast: this.StorageContract.KeepUntilAtLeast,
                     redundancy: this.StorageContract.RedundancyContractType,
                     privateEncrypted: false));
+
+        public override bool Equals(object obj)
+        {
+            return obj is Block block ? block.BlockSize == this.BlockSize && ReadOnlyMemoryComparer<byte>.Compare(this.Data, block.Data) == 0 : false;
         }
 
-        public override bool Equals(object obj) =>
-            obj is Block block ? block.BlockSize == this.BlockSize && ReadOnlyMemoryComparer<byte>.Compare(this.Data, block.Data) == 0 : false;
+        public override int GetHashCode()
+        {
+            return this.Data.GetHashCode();
+        }
 
-        public override int GetHashCode() =>
-            this.Data.GetHashCode();
+        public int CompareTo(TransactableBlock other)
+        {
+            return other.BlockSize == this.BlockSize ? ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data) : (other.Data.Length > this.Data.Length ? -1 : 1);
+        }
 
-        public int CompareTo(TransactableBlock other) =>
-            other.BlockSize == this.BlockSize ? ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data) : (other.Data.Length > this.Data.Length ? -1 : 1);
-
-        public int CompareTo(ITransactableBlock other) =>
-            other.BlockSize == this.BlockSize ? ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data) : other.Data.Length > this.Data.Length ? -1 : 1;
+        public int CompareTo(ITransactableBlock other)
+        {
+            return other.BlockSize == this.BlockSize ? ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data) : other.Data.Length > this.Data.Length ? -1 : 1;
+        }
 
         // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
         // ~TransactableBlock()

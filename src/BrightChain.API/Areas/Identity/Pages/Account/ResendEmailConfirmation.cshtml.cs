@@ -20,8 +20,8 @@
 
         public ResendEmailConfirmationModel(UserManager<BrightChainEntityUser> userManager, IEmailSender emailSender)
         {
-            _userManager = userManager;
-            _emailSender = emailSender;
+            this._userManager = userManager;
+            this._emailSender = emailSender;
         }
 
         [BindProperty]
@@ -40,33 +40,33 @@
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return Page();
+                return this.Page();
             }
 
-            var user = await _userManager.FindByEmailAsync(Input.Email).ConfigureAwait(false);
+            var user = await this._userManager.FindByEmailAsync(this.Input.Email).ConfigureAwait(false);
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
-                return Page();
+                this.ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+                return this.Page();
             }
 
-            var userId = await _userManager.GetUserIdAsync(user).ConfigureAwait(false);
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user).ConfigureAwait(false);
+            var userId = await this._userManager.GetUserIdAsync(user).ConfigureAwait(false);
+            var code = await this._userManager.GenerateEmailConfirmationTokenAsync(user).ConfigureAwait(false);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = Url.Page(
+            var callbackUrl = this.Url.Page(
                 "/Account/ConfirmEmail",
                 pageHandler: null,
                 values: new { userId = userId, code = code },
-                protocol: Request.Scheme);
-            await _emailSender.SendEmailAsync(
-                Input.Email,
+                protocol: this.Request.Scheme);
+            await this._emailSender.SendEmailAsync(
+                this.Input.Email,
                 "Confirm your email",
                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.").ConfigureAwait(false);
 
-            ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
-            return Page();
+            this.ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+            return this.Page();
         }
     }
 }

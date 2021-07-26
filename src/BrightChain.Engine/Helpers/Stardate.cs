@@ -67,20 +67,18 @@
             return stardate;
         }
 
-        public double Double
+        public double Double => this.starDate;
+
+        public DateTime DateTime => this.utcDate;
+
+        public int CompareTo(Stardate other)
         {
-            get => this.starDate;
+            return (this.Double == other.Double) ? 0 : (this.Double > other.Double) ? -1 : 1;
         }
 
-        public DateTime DateTime
+        public bool Equals(Stardate other)
         {
-            get => this.utcDate;
+            return this.Double == other.Double;
         }
-
-        public int CompareTo(Stardate other) =>
-            (this.Double == other.Double) ? 0 : (this.Double > other.Double) ? -1 : 1;
-
-        public bool Equals(Stardate other) =>
-            this.Double == other.Double;
     }
 }

@@ -67,7 +67,7 @@ namespace BrightChain.EntityFrameworkCore.Metadata.Conventions
         /// <param name="dependencies"> Parameter object containing dependencies for this convention. </param>
         public StoreKeyConvention(ProviderConventionSetBuilderDependencies dependencies)
         {
-            Dependencies = dependencies;
+            this.Dependencies = dependencies;
         }
 
         /// <summary>

@@ -28,7 +28,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public EqualsTranslator(ISqlExpressionFactory sqlExpressionFactory)
         {
-            _sqlExpressionFactory = sqlExpressionFactory;
+            this._sqlExpressionFactory = sqlExpressionFactory;
         }
 
         /// <summary>
@@ -71,8 +71,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 return left.Type.UnwrapNullableType() == right.Type.UnwrapNullableType()
                     || (right.Type == typeof(object) && right is SqlParameterExpression)
                     || (left.Type == typeof(object) && left is SqlParameterExpression)
-                        ? _sqlExpressionFactory.Equal(left, right)
-                        : _sqlExpressionFactory.Constant(false);
+                        ? this._sqlExpressionFactory.Equal(left, right)
+                        : this._sqlExpressionFactory.Constant(false);
             }
 
             return null;

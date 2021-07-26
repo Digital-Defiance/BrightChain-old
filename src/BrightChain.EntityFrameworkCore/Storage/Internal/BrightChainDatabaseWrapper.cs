@@ -56,11 +56,11 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             ILoggingOptions loggingOptions)
             : base(dependencies)
         {
-            _brightChainClient = brightChainClient;
+            this._brightChainClient = brightChainClient;
 
             if (loggingOptions.IsSensitiveDataLoggingEnabled)
             {
-                _sensitiveLoggingEnabled = true;
+                this._sensitiveLoggingEnabled = true;
             }
         }
 
@@ -88,7 +88,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
                 {
 #pragma warning disable EF1001 // Internal EF Core API usage.
                     // #16707
-                    var root = GetRootDocument((InternalEntityEntry)entry);
+                    var root = this.GetRootDocument((InternalEntityEntry)entry);
 #pragma warning restore EF1001 // Internal EF Core API usage.
                     if (!entriesSaved.Contains(root)
                         && rootEntriesToSave.Add(root)
@@ -107,21 +107,21 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
 
                 try
                 {
-                    if (Save(entry))
+                    if (this.Save(entry))
                     {
                         rowsAffected++;
                     }
                 }
                 catch (BrightChainException ex)
                 {
-                    throw ThrowUpdateException(ex, entry);
+                    throw this.ThrowUpdateException(ex, entry);
                 }
             }
 
             foreach (var rootEntry in rootEntriesToSave)
             {
                 if (!entriesSaved.Contains(rootEntry)
-                    && Save(rootEntry))
+                    && this.Save(rootEntry))
                 {
                     rowsAffected++;
                 }
@@ -154,7 +154,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
 
                 if (!entityType.IsDocumentRoot())
                 {
-                    var root = GetRootDocument((InternalEntityEntry)entry);
+                    var root = this.GetRootDocument((InternalEntityEntry)entry);
                     if (!entriesSaved.Contains(root)
                         && rootEntriesToSave.Add(root)
                         && root.EntityState == EntityState.Unchanged)
@@ -171,21 +171,21 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
                 entriesSaved.Add(entry);
                 try
                 {
-                    if (await SaveAsync(entry, cancellationToken).ConfigureAwait(false))
+                    if (await this.SaveAsync(entry, cancellationToken).ConfigureAwait(false))
                     {
                         rowsAffected++;
                     }
                 }
                 catch (BrightChainException ex)
                 {
-                    throw ThrowUpdateException(ex, entry);
+                    throw this.ThrowUpdateException(ex, entry);
                 }
             }
 
             foreach (var rootEntry in rootEntriesToSave)
             {
                 if (!entriesSaved.Contains(rootEntry)
-                    && await SaveAsync(rootEntry, cancellationToken).ConfigureAwait(false))
+                    && await this.SaveAsync(rootEntry, cancellationToken).ConfigureAwait(false))
                 {
                     rowsAffected++;
                 }
@@ -197,7 +197,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         private bool Save(IUpdateEntry entry)
         {
             var entityType = entry.EntityType;
-            var documentSource = GetDocumentSource(entityType);
+            var documentSource = this.GetDocumentSource(entityType);
             var collectionId = documentSource.GetContainerId();
             var state = entry.EntityState;
 
@@ -227,7 +227,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
                         newDocument = documentSource.CreateDocument(entry);
                     }
 
-                    return _brightChainClient.CreateItem(collectionId, newDocument, entry);
+                    return this._brightChainClient.CreateItem(collectionId, newDocument, entry);
 
                 case EntityState.Modified:
                     var document = documentSource.GetCurrentDocument(entry);
@@ -249,11 +249,11 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
                         }
                     }
 
-                    return _brightChainClient.ReplaceItem(
+                    return this._brightChainClient.ReplaceItem(
                         collectionId, documentSource.GetId(entry.SharedIdentityEntry ?? entry), document, entry);
 
                 case EntityState.Deleted:
-                    return _brightChainClient.DeleteItem(collectionId, documentSource.GetId(entry), entry);
+                    return this._brightChainClient.DeleteItem(collectionId, documentSource.GetId(entry), entry);
 
                 default:
                     return false;
@@ -263,7 +263,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         private Task<bool> SaveAsync(IUpdateEntry entry, CancellationToken cancellationToken)
         {
             var entityType = entry.EntityType;
-            var documentSource = GetDocumentSource(entityType);
+            var documentSource = this.GetDocumentSource(entityType);
             var collectionId = documentSource.GetContainerId();
             var state = entry.EntityState;
 
@@ -293,7 +293,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
                         newDocument = documentSource.CreateDocument(entry);
                     }
 
-                    return _brightChainClient.CreateItemAsync(
+                    return this._brightChainClient.CreateItemAsync(
                         collectionId, newDocument, entry, cancellationToken);
 
                 case EntityState.Modified:
@@ -316,7 +316,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
                         }
                     }
 
-                    return _brightChainClient.ReplaceItemAsync(
+                    return this._brightChainClient.ReplaceItemAsync(
                         collectionId,
                         documentSource.GetId(entry.SharedIdentityEntry ?? entry),
                         document,
@@ -324,7 +324,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
                         cancellationToken);
 
                 case EntityState.Deleted:
-                    return _brightChainClient.DeleteItemAsync(
+                    return this._brightChainClient.DeleteItemAsync(
                         collectionId, documentSource.GetId(entry), entry, cancellationToken);
 
                 default:
@@ -340,9 +340,9 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         public virtual DocumentSource GetDocumentSource(IEntityType entityType)
         {
-            if (!_documentCollections.TryGetValue(entityType, out var documentSource))
+            if (!this._documentCollections.TryGetValue(entityType, out var documentSource))
             {
-                _documentCollections.Add(
+                this._documentCollections.Add(
                     entityType, documentSource = new DocumentSource(entityType, this));
             }
 
@@ -358,7 +358,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
             var principal = stateManager.FindPrincipal(entry, ownership);
             if (principal == null)
             {
-                if (_sensitiveLoggingEnabled)
+                if (this._sensitiveLoggingEnabled)
                 {
                     throw new InvalidOperationException(
                         BrightChainStrings.OrphanedNestedDocumentSensitive(
@@ -373,13 +373,13 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
                         ownership.PrincipalEntityType.DisplayName()));
             }
 
-            return principal.EntityType.IsDocumentRoot() ? principal : GetRootDocument(principal);
+            return principal.EntityType.IsDocumentRoot() ? principal : this.GetRootDocument(principal);
         }
 #pragma warning restore EF1001 // Internal EF Core API usage.
 
         private Exception ThrowUpdateException(BrightChainException exception, IUpdateEntry entry)
         {
-            var documentSource = GetDocumentSource(entry.EntityType);
+            var documentSource = this.GetDocumentSource(entry.EntityType);
             var id = documentSource.GetId(entry.SharedIdentityEntry ?? entry);
             throw exception.StatusCode switch
             {

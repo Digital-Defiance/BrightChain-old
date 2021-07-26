@@ -48,17 +48,17 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             IMethodCallTranslatorProvider methodCallTranslatorProvider)
             : base(dependencies, queryCompilationContext, subquery: false)
         {
-            _queryCompilationContext = queryCompilationContext;
-            _sqlExpressionFactory = sqlExpressionFactory;
-            _memberTranslatorProvider = memberTranslatorProvider;
-            _methodCallTranslatorProvider = methodCallTranslatorProvider;
-            _sqlTranslator = new BrightChainSqlTranslatingExpressionVisitor(
+            this._queryCompilationContext = queryCompilationContext;
+            this._sqlExpressionFactory = sqlExpressionFactory;
+            this._memberTranslatorProvider = memberTranslatorProvider;
+            this._methodCallTranslatorProvider = methodCallTranslatorProvider;
+            this._sqlTranslator = new BrightChainSqlTranslatingExpressionVisitor(
                 queryCompilationContext,
-                _sqlExpressionFactory,
-                _memberTranslatorProvider,
-                _methodCallTranslatorProvider);
-            _projectionBindingExpressionVisitor =
-                new BrightChainProjectionBindingExpressionVisitor(_queryCompilationContext.Model, _sqlTranslator);
+                this._sqlExpressionFactory,
+                this._memberTranslatorProvider,
+                this._methodCallTranslatorProvider);
+            this._projectionBindingExpressionVisitor =
+                new BrightChainProjectionBindingExpressionVisitor(this._queryCompilationContext.Model, this._sqlTranslator);
         }
 
         /// <summary>
@@ -71,15 +71,15 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             BrightChainQueryableMethodTranslatingExpressionVisitor parentVisitor)
             : base(parentVisitor.Dependencies, parentVisitor.QueryCompilationContext, subquery: true)
         {
-            _queryCompilationContext = parentVisitor._queryCompilationContext;
-            _sqlExpressionFactory = parentVisitor._sqlExpressionFactory;
-            _sqlTranslator = new BrightChainSqlTranslatingExpressionVisitor(
-                QueryCompilationContext,
-                _sqlExpressionFactory,
-                _memberTranslatorProvider,
-                _methodCallTranslatorProvider);
-            _projectionBindingExpressionVisitor =
-                new BrightChainProjectionBindingExpressionVisitor(_queryCompilationContext.Model, _sqlTranslator);
+            this._queryCompilationContext = parentVisitor._queryCompilationContext;
+            this._sqlExpressionFactory = parentVisitor._sqlExpressionFactory;
+            this._sqlTranslator = new BrightChainSqlTranslatingExpressionVisitor(
+                this.QueryCompilationContext,
+                this._sqlExpressionFactory,
+                this._memberTranslatorProvider,
+                this._methodCallTranslatorProvider);
+            this._projectionBindingExpressionVisitor =
+                new BrightChainProjectionBindingExpressionVisitor(this._queryCompilationContext.Model, this._sqlTranslator);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
                                     var readItemExpression = new ReadItemExpression(entityType, propertyParameterList);
 
-                                    return CreateShapedQueryExpression(readItemExpression, entityType)
+                                    return this.CreateShapedQueryExpression(readItemExpression, entityType)
                                         .UpdateResultCardinality(ResultCardinality.Single);
                                 }
                             }
@@ -222,8 +222,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(elementType, nameof(elementType));
 
-            var entityType = _queryCompilationContext.Model.FindEntityType(elementType);
-            var selectExpression = _sqlExpressionFactory.Select(entityType);
+            var entityType = this._queryCompilationContext.Model.FindEntityType(elementType);
+            var selectExpression = this._sqlExpressionFactory.Select(entityType);
 
             return new ShapedQueryExpression(
                 selectExpression,
@@ -246,9 +246,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(entityType, nameof(entityType));
 
-            var selectExpression = _sqlExpressionFactory.Select(entityType);
+            var selectExpression = this._sqlExpressionFactory.Select(entityType);
 
-            return CreateShapedQueryExpression(selectExpression, entityType);
+            return this.CreateShapedQueryExpression(selectExpression, entityType);
         }
 
         private ShapedQueryExpression CreateShapedQueryExpression(Expression queryExpression, IEntityType entityType)
@@ -310,14 +310,14 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             if (selector != null)
             {
-                source = TranslateSelect(source, selector);
+                source = this.TranslateSelect(source, selector);
             }
 
             var projection = (SqlExpression)selectExpression.GetMappedProjection(new ProjectionMember());
-            projection = _sqlExpressionFactory.Function(
+            projection = this._sqlExpressionFactory.Function(
                 "AVG", new[] { projection }, projection.Type, projection.TypeMapping);
 
-            return AggregateResultShaper(source, projection, throwOnNullResult: true, resultType);
+            return this.AggregateResultShaper(source, projection, throwOnNullResult: true, resultType);
         }
 
         /// <summary>
@@ -384,15 +384,15 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             if (predicate != null)
             {
-                source = TranslateWhere(source, predicate);
+                source = this.TranslateWhere(source, predicate);
                 if (source == null)
                 {
                     return null;
                 }
             }
 
-            var translation = _sqlExpressionFactory.ApplyDefaultTypeMapping(
-                _sqlExpressionFactory.Function("COUNT", new[] { _sqlExpressionFactory.Constant(1) }, typeof(int)));
+            var translation = this._sqlExpressionFactory.ApplyDefaultTypeMapping(
+                this._sqlExpressionFactory.Function("COUNT", new[] { this._sqlExpressionFactory.Constant(1) }, typeof(int)));
 
             var projectionMapping = new Dictionary<ProjectionMember, Expression> { { new ProjectionMember(), translation } };
 
@@ -480,7 +480,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             if (predicate != null)
             {
-                source = TranslateWhere(source, predicate);
+                source = this.TranslateWhere(source, predicate);
                 if (source == null)
                 {
                     return null;
@@ -491,10 +491,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             if (selectExpression.Predicate == null
                 && selectExpression.Orderings.Count == 0)
             {
-                _queryCompilationContext.Logger.FirstWithoutOrderByAndFilterWarning();
+                this._queryCompilationContext.Logger.FirstWithoutOrderByAndFilterWarning();
             }
 
-            selectExpression.ApplyLimit(TranslateExpression(Expression.Constant(1)));
+            selectExpression.ApplyLimit(this.TranslateExpression(Expression.Constant(1)));
 
             return source.ShaperExpression.Type != returnType
                 ? source.UpdateShaperExpression(Expression.Convert(source.ShaperExpression, returnType))
@@ -594,7 +594,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             if (predicate != null)
             {
-                source = TranslateWhere(source, predicate);
+                source = this.TranslateWhere(source, predicate);
                 if (source == null)
                 {
                     return null;
@@ -603,7 +603,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             var selectExpression = (SelectExpression)source.QueryExpression;
             selectExpression.ReverseOrderings();
-            selectExpression.ApplyLimit(TranslateExpression(Expression.Constant(1)));
+            selectExpression.ApplyLimit(this.TranslateExpression(Expression.Constant(1)));
 
             return source.ShaperExpression.Type != returnType
                 ? source.UpdateShaperExpression(Expression.Convert(source.ShaperExpression, returnType))
@@ -652,15 +652,15 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             if (predicate != null)
             {
-                source = TranslateWhere(source, predicate);
+                source = this.TranslateWhere(source, predicate);
                 if (source == null)
                 {
                     return null;
                 }
             }
 
-            var translation = _sqlExpressionFactory.ApplyDefaultTypeMapping(
-                _sqlExpressionFactory.Function("COUNT", new[] { _sqlExpressionFactory.Constant(1) }, typeof(long)));
+            var translation = this._sqlExpressionFactory.ApplyDefaultTypeMapping(
+                this._sqlExpressionFactory.Function("COUNT", new[] { this._sqlExpressionFactory.Constant(1) }, typeof(long)));
             var projectionMapping = new Dictionary<ProjectionMember, Expression> { { new ProjectionMember(), translation } };
 
             selectExpression.ClearOrdering();
@@ -691,14 +691,14 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             if (selector != null)
             {
-                source = TranslateSelect(source, selector);
+                source = this.TranslateSelect(source, selector);
             }
 
             var projection = (SqlExpression)selectExpression.GetMappedProjection(new ProjectionMember());
 
-            projection = _sqlExpressionFactory.Function("MAX", new[] { projection }, resultType, projection.TypeMapping);
+            projection = this._sqlExpressionFactory.Function("MAX", new[] { projection }, resultType, projection.TypeMapping);
 
-            return AggregateResultShaper(source, projection, throwOnNullResult: true, resultType);
+            return this.AggregateResultShaper(source, projection, throwOnNullResult: true, resultType);
         }
 
         /// <summary>
@@ -721,14 +721,14 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             if (selector != null)
             {
-                source = TranslateSelect(source, selector);
+                source = this.TranslateSelect(source, selector);
             }
 
             var projection = (SqlExpression)selectExpression.GetMappedProjection(new ProjectionMember());
 
-            projection = _sqlExpressionFactory.Function("MIN", new[] { projection }, resultType, projection.TypeMapping);
+            projection = this._sqlExpressionFactory.Function("MIN", new[] { projection }, resultType, projection.TypeMapping);
 
-            return AggregateResultShaper(source, projection, throwOnNullResult: true, resultType);
+            return this.AggregateResultShaper(source, projection, throwOnNullResult: true, resultType);
         }
 
         /// <summary>
@@ -752,7 +752,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
                 var parameterExpression = Expression.Parameter(entityShaperExpression.Type);
                 var predicate = Expression.Lambda(Expression.TypeIs(parameterExpression, resultType), parameterExpression);
-                var translation = TranslateLambdaExpression(source, predicate);
+                var translation = this.TranslateLambdaExpression(source, predicate);
                 if (translation == null)
                 {
                     // EntityType is not part of hierarchy
@@ -806,7 +806,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(source, nameof(source));
             Check.NotNull(keySelector, nameof(keySelector));
 
-            var translation = TranslateLambdaExpression(source, keySelector);
+            var translation = this.TranslateLambdaExpression(source, keySelector);
             if (translation != null)
             {
                 ((SelectExpression)source.QueryExpression).ApplyOrdering(new OrderingExpression(translation, ascending));
@@ -830,7 +830,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             var selectExpression = (SelectExpression)source.QueryExpression;
             if (selectExpression.Orderings.Count == 0)
             {
-                AddTranslationErrorDetails(BrightChainStrings.MissingOrderingInSelectExpression);
+                this.AddTranslationErrorDetails(BrightChainStrings.MissingOrderingInSelectExpression);
                 return null;
             }
 
@@ -863,7 +863,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             var newSelectorBody = ReplacingExpressionVisitor.Replace(selector.Parameters.Single(), source.ShaperExpression, selector.Body);
 
-            return source.UpdateShaperExpression(_projectionBindingExpressionVisitor.Translate(selectExpression, newSelectorBody));
+            return source.UpdateShaperExpression(this._projectionBindingExpressionVisitor.Translate(selectExpression, newSelectorBody));
         }
 
         /// <summary>
@@ -915,7 +915,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             if (predicate != null)
             {
-                source = TranslateWhere(source, predicate);
+                source = this.TranslateWhere(source, predicate);
                 if (source == null)
                 {
                     return null;
@@ -923,7 +923,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             }
 
             var selectExpression = (SelectExpression)source.QueryExpression;
-            selectExpression.ApplyLimit(TranslateExpression(Expression.Constant(2)));
+            selectExpression.ApplyLimit(this.TranslateExpression(Expression.Constant(2)));
 
             return source.ShaperExpression.Type != returnType
                 ? source.UpdateShaperExpression(Expression.Convert(source.ShaperExpression, returnType))
@@ -942,13 +942,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(count, nameof(count));
 
             var selectExpression = (SelectExpression)source.QueryExpression;
-            var translation = TranslateExpression(count);
+            var translation = this.TranslateExpression(count);
 
             if (translation != null)
             {
                 if (selectExpression.Orderings.Count == 0)
                 {
-                    _queryCompilationContext.Logger.RowLimitingOperationWithoutOrderByWarning();
+                    this._queryCompilationContext.Logger.RowLimitingOperationWithoutOrderByWarning();
                 }
 
                 selectExpression.ApplyOffset(translation);
@@ -994,16 +994,16 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
             if (selector != null)
             {
-                source = TranslateSelect(source, selector);
+                source = this.TranslateSelect(source, selector);
             }
 
             var serverOutputType = resultType.UnwrapNullableType();
             var projection = (SqlExpression)selectExpression.GetMappedProjection(new ProjectionMember());
 
-            projection = _sqlExpressionFactory.Function(
+            projection = this._sqlExpressionFactory.Function(
                 "SUM", new[] { projection }, serverOutputType, projection.TypeMapping);
 
-            return AggregateResultShaper(source, projection, throwOnNullResult: false, resultType);
+            return this.AggregateResultShaper(source, projection, throwOnNullResult: false, resultType);
         }
 
         /// <summary>
@@ -1018,13 +1018,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(count, nameof(count));
 
             var selectExpression = (SelectExpression)source.QueryExpression;
-            var translation = TranslateExpression(count);
+            var translation = this.TranslateExpression(count);
 
             if (translation != null)
             {
                 if (selectExpression.Orderings.Count == 0)
                 {
-                    _queryCompilationContext.Logger.RowLimitingOperationWithoutOrderByWarning();
+                    this._queryCompilationContext.Logger.RowLimitingOperationWithoutOrderByWarning();
                 }
 
                 selectExpression.ApplyLimit(translation);
@@ -1060,7 +1060,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(source, nameof(source));
             Check.NotNull(keySelector, nameof(keySelector));
 
-            var translation = TranslateLambdaExpression(source, keySelector);
+            var translation = this.TranslateLambdaExpression(source, keySelector);
             if (translation != null)
             {
                 ((SelectExpression)source.QueryExpression).AppendOrdering(new OrderingExpression(translation, ascending));
@@ -1113,7 +1113,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 predicate = Expression.Lambda(newPredicate, predicate.Parameters);
             }
 
-            var translation = TranslateLambdaExpression(source, predicate);
+            var translation = this.TranslateLambdaExpression(source, predicate);
             if (translation != null)
             {
                 ((SelectExpression)source.QueryExpression).ApplyPredicate(translation);
@@ -1193,7 +1193,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         break;
 
                     case MethodCallExpression methodCallExpression
-                        when methodCallExpression.TryGetIndexerArguments(_queryCompilationContext.Model, out _, out var propertyName):
+                        when methodCallExpression.TryGetIndexerArguments(this._queryCompilationContext.Model, out _, out var propertyName):
                         property = entityType.FindProperty(propertyName);
                         break;
                 }
@@ -1204,10 +1204,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
         private SqlExpression TranslateExpression(Expression expression)
         {
-            var translation = _sqlTranslator.Translate(expression);
-            if (translation == null && _sqlTranslator.TranslationErrorDetails != null)
+            var translation = this._sqlTranslator.Translate(expression);
+            if (translation == null && this._sqlTranslator.TranslationErrorDetails != null)
             {
-                AddTranslationErrorDetails(_sqlTranslator.TranslationErrorDetails);
+                this.AddTranslationErrorDetails(this._sqlTranslator.TranslationErrorDetails);
             }
 
             return translation;
@@ -1219,7 +1219,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             var lambdaBody = RemapLambdaBody(shapedQueryExpression.ShaperExpression, lambdaExpression);
 
-            return TranslateExpression(lambdaBody);
+            return this.TranslateExpression(lambdaBody);
         }
 
         private static Expression RemapLambdaBody(Expression shaperBody, LambdaExpression lambdaExpression)

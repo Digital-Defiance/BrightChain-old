@@ -2,19 +2,18 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Models.Blocks;
 
     public static class Utilities
     {
-        public static string HashToFormattedString(byte[] hashBytes) =>
-            BitConverter.ToString(hashBytes)
-                        .Replace("-", string.Empty)
-                        .ToLower(culture: System.Globalization.CultureInfo.InvariantCulture);
+        public static string HashToFormattedString(byte[] hashBytes)
+        {
+            return BitConverter.ToString(hashBytes)
+                .Replace("-", string.Empty)
+                .ToLower(culture: System.Globalization.CultureInfo.InvariantCulture);
+        }
 
         /// <summary>
         /// Generate a hash of an empty array to determine the block hash byte length

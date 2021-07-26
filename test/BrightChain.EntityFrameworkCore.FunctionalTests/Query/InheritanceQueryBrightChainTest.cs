@@ -13,7 +13,7 @@ namespace BrightChain.EntityFrameworkCore.Query
         public InheritanceQueryBrightChainTest(InheritanceQueryBrightChainFixture fixture, ITestOutputHelper testOutputHelper)
             : base(fixture)
         {
-            ClearLog();
+            this.ClearLog();
             //TestLoggerFactory.TestOutputHelper = testOutputHelper;
         }
 
@@ -21,7 +21,7 @@ namespace BrightChain.EntityFrameworkCore.Query
         {
             await base.Can_query_when_shared_column(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Coke"")
@@ -42,7 +42,7 @@ OFFSET 0 LIMIT 2");
         {
             await base.Can_query_all_types_when_shared_column(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE c[""Discriminator""] IN (""Drink"", ""Coke"", ""Lilt"", ""Tea"")");
@@ -52,7 +52,7 @@ WHERE c[""Discriminator""] IN (""Drink"", ""Coke"", ""Lilt"", ""Tea"")");
         {
             await base.Can_use_of_type_animal(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE c[""Discriminator""] IN (""Eagle"", ""Kiwi"")
@@ -63,7 +63,7 @@ ORDER BY c[""Species""]");
         {
             await base.Can_use_is_kiwi(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND (c[""Discriminator""] = ""Kiwi""))");
@@ -73,7 +73,7 @@ WHERE (c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND (c[""Discriminator""] =
         {
             await base.Can_use_is_kiwi_with_cast(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT VALUE {""Value"" : ((c[""Discriminator""] = ""Kiwi"") ? c[""FoundOn""] : 0)}
 FROM root c
 WHERE c[""Discriminator""] IN (""Eagle"", ""Kiwi"")");
@@ -83,7 +83,7 @@ WHERE c[""Discriminator""] IN (""Eagle"", ""Kiwi"")");
         {
             await base.Can_use_backwards_is_animal(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Kiwi"")");
@@ -93,7 +93,7 @@ WHERE (c[""Discriminator""] = ""Kiwi"")");
         {
             await base.Can_use_is_kiwi_with_other_predicate(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND ((c[""Discriminator""] = ""Kiwi"") AND (c[""CountryId""] = 1)))");
@@ -103,7 +103,7 @@ WHERE (c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND ((c[""Discriminator""] 
         {
             await base.Can_use_is_kiwi_in_projection(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT VALUE {""c"" : (c[""Discriminator""] = ""Kiwi"")}
 FROM root c
 WHERE c[""Discriminator""] IN (""Eagle"", ""Kiwi"")");
@@ -113,7 +113,7 @@ WHERE c[""Discriminator""] IN (""Eagle"", ""Kiwi"")");
         {
             await base.Can_use_of_type_bird(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND c[""Discriminator""] IN (""Eagle"", ""Kiwi""))
@@ -124,7 +124,7 @@ ORDER BY c[""Species""]");
         {
             await base.Can_use_of_type_bird_predicate(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND (c[""CountryId""] = 1)) AND c[""Discriminator""] IN (""Eagle"", ""Kiwi""))
@@ -135,7 +135,7 @@ ORDER BY c[""Species""]");
         {
             await base.Can_use_of_type_bird_with_projection(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c[""EagleId""]
 FROM root c
 WHERE (c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND c[""Discriminator""] IN (""Eagle"", ""Kiwi""))");
@@ -145,7 +145,7 @@ WHERE (c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND c[""Discriminator""] IN
         {
             await base.Can_use_of_type_bird_first(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND c[""Discriminator""] IN (""Eagle"", ""Kiwi""))
@@ -157,7 +157,7 @@ OFFSET 0 LIMIT 1");
         {
             await base.Can_use_of_type_kiwi(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND (c[""Discriminator""] = ""Kiwi""))");
@@ -167,14 +167,14 @@ WHERE (c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND (c[""Discriminator""] =
         {
             await base.Can_use_backwards_of_type_animal(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         public override async Task Can_use_of_type_rose(bool async)
         {
             await base.Can_use_of_type_rose(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] IN (""Daisy"", ""Rose"") AND (c[""Discriminator""] = ""Rose""))");
@@ -184,7 +184,7 @@ WHERE (c[""Discriminator""] IN (""Daisy"", ""Rose"") AND (c[""Discriminator""] =
         {
             await base.Can_query_all_animals(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE c[""Discriminator""] IN (""Eagle"", ""Kiwi"")
@@ -196,14 +196,14 @@ ORDER BY c[""Species""]");
         {
             await base.Can_query_all_animal_views(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         public override async Task Can_query_all_plants(bool async)
         {
             await base.Can_query_all_plants(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE c[""Discriminator""] IN (""Daisy"", ""Rose"")
@@ -214,7 +214,7 @@ ORDER BY c[""Species""]");
         {
             await base.Can_filter_all_animals(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND (c[""Name""] = ""Great spotted kiwi""))
@@ -225,7 +225,7 @@ ORDER BY c[""Species""]");
         {
             await base.Can_query_all_birds(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE c[""Discriminator""] IN (""Eagle"", ""Kiwi"")
@@ -236,7 +236,7 @@ ORDER BY c[""Species""]");
         {
             await base.Can_query_just_kiwis(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Kiwi"")
@@ -247,7 +247,7 @@ OFFSET 0 LIMIT 2");
         {
             await base.Can_query_just_roses(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Rose"")
@@ -259,7 +259,7 @@ OFFSET 0 LIMIT 2");
         {
             await base.Can_include_animals(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         [ConditionalTheory(Skip = "Issue#17246 Non-embedded Include")]
@@ -267,14 +267,14 @@ OFFSET 0 LIMIT 2");
         {
             await base.Can_include_prey(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         public override async Task Can_use_of_type_kiwi_where_south_on_derived_property(bool async)
         {
             await base.Can_use_of_type_kiwi_where_south_on_derived_property(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND (c[""Discriminator""] = ""Kiwi"")) AND (c[""FoundOn""] = 1))");
@@ -284,7 +284,7 @@ WHERE ((c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND (c[""Discriminator""] 
         {
             await base.Can_use_of_type_kiwi_where_north_on_derived_property(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE ((c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND (c[""Discriminator""] = ""Kiwi"")) AND (c[""FoundOn""] = 0))");
@@ -294,7 +294,7 @@ WHERE ((c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND (c[""Discriminator""] 
         {
             await base.Discriminator_used_when_projection_over_derived_type(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c[""FoundOn""]
 FROM root c
 WHERE (c[""Discriminator""] = ""Kiwi"")");
@@ -304,7 +304,7 @@ WHERE (c[""Discriminator""] = ""Kiwi"")");
         {
             await base.Discriminator_used_when_projection_over_derived_type2(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c[""IsFlightless""], c[""Discriminator""]
 FROM root c
 WHERE c[""Discriminator""] IN (""Eagle"", ""Kiwi"")");
@@ -314,7 +314,7 @@ WHERE c[""Discriminator""] IN (""Eagle"", ""Kiwi"")");
         {
             await base.Discriminator_with_cast_in_shadow_property(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT VALUE {""Predator"" : c[""EagleId""]}
 FROM root c
 WHERE (c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND (""Kiwi"" = c[""Discriminator""]))");
@@ -324,7 +324,7 @@ WHERE (c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND (""Kiwi"" = c[""Discrim
         {
             await base.Discriminator_used_when_projection_over_of_type(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c[""FoundOn""]
 FROM root c
 WHERE (c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND (c[""Discriminator""] = ""Kiwi""))");
@@ -335,35 +335,35 @@ WHERE (c[""Discriminator""] IN (""Eagle"", ""Kiwi"") AND (c[""Discriminator""] =
         {
             base.Can_insert_update_delete();
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         public override async Task Union_siblings_with_duplicate_property_in_subquery(bool async)
         {
             await base.Union_siblings_with_duplicate_property_in_subquery(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         public override async Task OfType_Union_subquery(bool async)
         {
             await base.OfType_Union_subquery(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         public override async Task OfType_Union_OfType(bool async)
         {
             await base.OfType_Union_OfType(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         public override async Task Subquery_OfType(bool async)
         {
             await base.Subquery_OfType(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"@__p_0='5'
 
 SELECT DISTINCT c
@@ -377,14 +377,14 @@ OFFSET 0 LIMIT @__p_0");
         {
             await base.Union_entity_equality(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         public override void Setting_foreign_key_to_a_different_type_throws()
         {
             base.Setting_foreign_key_to_a_different_type_throws();
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c
 FROM root c
 WHERE (c[""Discriminator""] = ""Kiwi"")
@@ -395,7 +395,7 @@ OFFSET 0 LIMIT 2");
         {
             await base.Byte_enum_value_constant_used_in_projection(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT VALUE {""c"" : (c[""IsFlightless""] ? 0 : 1)}
 FROM root c
 WHERE (c[""Discriminator""] = ""Kiwi"")");
@@ -405,7 +405,7 @@ WHERE (c[""Discriminator""] = ""Kiwi"")");
         {
             base.Member_access_on_intermediate_type_works();
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c[""Name""]
 FROM root c
 WHERE (c[""Discriminator""] = ""Kiwi"")
@@ -417,14 +417,14 @@ ORDER BY c[""Name""]");
         {
             await base.Is_operator_on_result_of_FirstOrDefault(async);
 
-            AssertSql(" ");
+            this.AssertSql(" ");
         }
 
         public override async Task Selecting_only_base_properties_on_base_type(bool async)
         {
             await base.Selecting_only_base_properties_on_base_type(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c[""Name""]
 FROM root c
 WHERE c[""Discriminator""] IN (""Eagle"", ""Kiwi"")");
@@ -434,7 +434,7 @@ WHERE c[""Discriminator""] IN (""Eagle"", ""Kiwi"")");
         {
             await base.Selecting_only_base_properties_on_derived_type(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT c[""Name""]
 FROM root c
 WHERE c[""Discriminator""] IN (""Eagle"", ""Kiwi"")");
@@ -445,12 +445,12 @@ WHERE c[""Discriminator""] IN (""Eagle"", ""Kiwi"")");
 
         private void AssertSql(params string[] expected)
         {
-            Fixture.TestSqlLoggerFactory.AssertBaseline(expected);
+            this.Fixture.TestSqlLoggerFactory.AssertBaseline(expected);
         }
 
         protected override void ClearLog()
         {
-            Fixture.TestSqlLoggerFactory.Clear();
+            this.Fixture.TestSqlLoggerFactory.Clear();
         }
     }
 }

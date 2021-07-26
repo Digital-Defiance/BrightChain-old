@@ -33,19 +33,19 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             EntityProjectionExpression? innerProjection = null)
         {
             var targetType = navigation.TargetEntityType;
-            Type = typeof(IEnumerable<>).MakeGenericType(targetType.ClrType);
+            this.Type = typeof(IEnumerable<>).MakeGenericType(targetType.ClrType);
 
-            Name = targetType.GetContainingPropertyName();
-            if (Name == null)
+            this.Name = targetType.GetContainingPropertyName();
+            if (this.Name == null)
             {
                 throw new InvalidOperationException(
                     BrightChainStrings.NavigationPropertyIsNotAnEmbeddedEntity(
                         navigation.DeclaringEntityType.DisplayName(), navigation.Name));
             }
 
-            Navigation = navigation;
-            AccessExpression = accessExpression;
-            InnerProjection = innerProjection
+            this.Navigation = navigation;
+            this.AccessExpression = accessExpression;
+            this.InnerProjection = innerProjection
                 ?? new EntityProjectionExpression(
                     targetType,
                     new RootReferenceExpression(targetType, ""));
@@ -110,10 +110,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(visitor, nameof(visitor));
 
-            var accessExpression = visitor.Visit(AccessExpression);
-            var innerProjection = visitor.Visit(InnerProjection);
+            var accessExpression = visitor.Visit(this.AccessExpression);
+            var innerProjection = visitor.Visit(this.InnerProjection);
 
-            return Update(accessExpression, (EntityProjectionExpression)innerProjection);
+            return this.Update(accessExpression, (EntityProjectionExpression)innerProjection);
         }
 
         /// <summary>
@@ -126,8 +126,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Expression accessExpression,
             EntityProjectionExpression innerProjection)
         {
-            return accessExpression != AccessExpression || innerProjection != InnerProjection
-                           ? new ObjectArrayProjectionExpression(Navigation, accessExpression, innerProjection)
+            return accessExpression != this.AccessExpression || innerProjection != this.InnerProjection
+                           ? new ObjectArrayProjectionExpression(this.Navigation, accessExpression, innerProjection)
                            : this;
         }
 
@@ -141,7 +141,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(expressionPrinter, nameof(expressionPrinter));
 
-            expressionPrinter.Append(ToString());
+            expressionPrinter.Append(this.ToString());
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override string ToString()
         {
-            return $"{AccessExpression}[\"{Name}\"]";
+            return $"{this.AccessExpression}[\"{this.Name}\"]";
         }
 
         /// <summary>
@@ -166,13 +166,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return obj != null
                            && (ReferenceEquals(this, obj)
                                || obj is ObjectArrayProjectionExpression arrayProjectionExpression
-                               && Equals(arrayProjectionExpression));
+                               && this.Equals(arrayProjectionExpression));
         }
 
         private bool Equals(ObjectArrayProjectionExpression objectArrayProjectionExpression)
         {
-            return AccessExpression.Equals(objectArrayProjectionExpression.AccessExpression)
-                           && InnerProjection.Equals(objectArrayProjectionExpression.InnerProjection);
+            return this.AccessExpression.Equals(objectArrayProjectionExpression.AccessExpression)
+                           && this.InnerProjection.Equals(objectArrayProjectionExpression.InnerProjection);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override int GetHashCode()
         {
-            return HashCode.Combine(AccessExpression, InnerProjection);
+            return HashCode.Combine(this.AccessExpression, this.InnerProjection);
         }
     }
 }

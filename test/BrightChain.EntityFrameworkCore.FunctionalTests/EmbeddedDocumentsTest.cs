@@ -29,14 +29,14 @@ namespace BrightChain.EntityFrameworkCore
 
         public EmbeddedDocumentsTest(BrightChainFixture fixture, ITestOutputHelper testOutputHelper)
         {
-            Fixture = fixture;
+            this.Fixture = fixture;
             //TestSqlLoggerFactory.SetTestOutputHelper(testOutputHelper);
         }
 
         [ConditionalFact(Skip = "Issue #17670")]
         public virtual async Task Can_update_dependents()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
             Operator firstOperator;
             Microsoft.EntityFrameworkCore.TestModels.TransportationModel.Engine firstEngine;
             using (var context = new EmbeddedTransportationContext(options))
@@ -64,7 +64,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public virtual async Task Can_update_owner_with_dependents()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
             Operator firstOperator;
             using (var context = new EmbeddedTransportationContext(options))
             {
@@ -84,7 +84,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public virtual async Task Can_attach_owner_with_dependents()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
             Vehicle firstVehicle;
             using (var context = new EmbeddedTransportationContext(options))
             {
@@ -113,7 +113,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public virtual async Task Can_manipulate_embedded_collections()
         {
-            var options = Fixture.CreateOptions(seed: false);
+            var options = this.Fixture.CreateOptions(seed: false);
 
             Address existingAddress1Person2;
             Address existingAddress1Person3;
@@ -272,7 +272,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public virtual async Task Properties_on_owned_types_can_be_client_generated()
         {
-            var options = Fixture.CreateOptions(seed: false);
+            var options = this.Fixture.CreateOptions(seed: false);
 
             using (var context = new EmbeddedTransportationContext(options))
             {
@@ -296,7 +296,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public virtual async Task Can_use_non_int_keys_for_embedded_entities()
         {
-            var options = Fixture.CreateOptions(
+            var options = this.Fixture.CreateOptions(
                 modelBuilder =>
                 {
                     modelBuilder.Entity<Person>(
@@ -342,7 +342,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public virtual async Task Can_query_and_modify_nested_embedded_types()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
             using (var context = new EmbeddedTransportationContext(options))
             {
                 var missile = context.Set<Vehicle>().First(v => v.Name == "AIM-9M Sidewinder");
@@ -365,7 +365,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public virtual async Task Can_query_just_embedded_reference()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
             using var context = new EmbeddedTransportationContext(options);
             var firstOperator = await context.Set<Vehicle>().OrderBy(o => o.Name).Select(v => v.Operator)
                 .AsNoTracking().FirstAsync();
@@ -377,7 +377,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public virtual async Task Can_query_just_embedded_collection()
         {
-            var options = Fixture.CreateOptions(seed: false);
+            var options = this.Fixture.CreateOptions(seed: false);
 
             using (var context = new EmbeddedTransportationContext(options))
             {
@@ -405,7 +405,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public virtual async Task Inserting_dependent_without_principal_throws()
         {
-            var options = Fixture.CreateOptions(seed: false);
+            var options = this.Fixture.CreateOptions(seed: false);
             using var context = new EmbeddedTransportationContext(options);
             context.Add(
                 new LicensedOperator
@@ -424,7 +424,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public virtual async Task Can_change_nested_instance_non_derived()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
             using (var context = new EmbeddedTransportationContext(options))
             {
                 var bike = await context.Vehicles.SingleAsync(v => v.Name == "Trek Pro Fit Madone 6 Series");
@@ -435,7 +435,7 @@ namespace BrightChain.EntityFrameworkCore
 
                 bike.Operator = new LicensedOperator { Name = "repairman" };
 
-                TestSqlLoggerFactory.Clear();
+                this.TestSqlLoggerFactory.Clear();
                 await context.SaveChangesAsync();
             }
 
@@ -449,7 +449,7 @@ namespace BrightChain.EntityFrameworkCore
         [ConditionalFact]
         public virtual async Task Can_change_principal_instance_non_derived()
         {
-            var options = Fixture.CreateOptions();
+            var options = this.Fixture.CreateOptions();
             using (var context = new EmbeddedTransportationContext(options))
             {
                 var bike = await context.Vehicles.SingleAsync(v => v.Name == "Trek Pro Fit Madone 6 Series");
@@ -464,7 +464,7 @@ namespace BrightChain.EntityFrameworkCore
                 context.Remove(bike);
                 context.Add(newBike);
 
-                TestSqlLoggerFactory.Clear();
+                this.TestSqlLoggerFactory.Clear();
                 await context.SaveChangesAsync();
             }
 
@@ -478,23 +478,23 @@ namespace BrightChain.EntityFrameworkCore
         }
 
         protected TestSqlLoggerFactory TestSqlLoggerFactory
-            => (TestSqlLoggerFactory)Fixture.ListLoggerFactory;
+            => (TestSqlLoggerFactory)this.Fixture.ListLoggerFactory;
 
         protected void AssertSql(params string[] expected)
         {
-            TestSqlLoggerFactory.AssertBaseline(expected);
+            this.TestSqlLoggerFactory.AssertBaseline(expected);
         }
 
         protected void AssertContainsSql(params string[] expected)
         {
-            TestSqlLoggerFactory.AssertBaseline(expected, assertOrder: false);
+            this.TestSqlLoggerFactory.AssertBaseline(expected, assertOrder: false);
         }
 
         public class BrightChainFixture : ServiceProviderFixtureBase, IAsyncLifetime
         {
             public BrightChainFixture()
             {
-                TestStore = BrightChainTestStore.Create(DatabaseName);
+                this.TestStore = BrightChainTestStore.Create(DatabaseName);
             }
 
             protected override ITestStoreFactory TestStoreFactory
@@ -506,7 +506,7 @@ namespace BrightChain.EntityFrameworkCore
 
             protected override void OnModelCreating(ModelBuilder modelBuilder, DbContext context)
             {
-                OnModelCreatingAction?.Invoke(modelBuilder);
+                this.OnModelCreatingAction?.Invoke(modelBuilder);
             }
 
             public DbContextOptions CreateOptions(
@@ -514,11 +514,11 @@ namespace BrightChain.EntityFrameworkCore
                 object additionalModelCacheKey = null,
                 bool seed = true)
             {
-                OnModelCreatingAction = onModelCreating;
-                AdditionalModelCacheKey = additionalModelCacheKey;
-                var options = CreateOptions(TestStore);
-                TestStore.Initialize(
-                    ServiceProvider, () => new EmbeddedTransportationContext(options), c =>
+                this.OnModelCreatingAction = onModelCreating;
+                this.AdditionalModelCacheKey = additionalModelCacheKey;
+                var options = this.CreateOptions(this.TestStore);
+                this.TestStore.Initialize(
+                    this.ServiceProvider, () => new EmbeddedTransportationContext(options), c =>
                     {
                         if (seed)
                         {
@@ -526,14 +526,14 @@ namespace BrightChain.EntityFrameworkCore
                         }
                     });
 
-                ListLoggerFactory.Clear();
+                this.ListLoggerFactory.Clear();
                 return options;
             }
 
             protected override IServiceCollection AddServices(IServiceCollection serviceCollection)
             {
                 return base.AddServices(serviceCollection)
-                                   .AddSingleton<IModelCacheKeyFactory>(new TestModelCacheKeyFactory(() => AdditionalModelCacheKey));
+                                   .AddSingleton<IModelCacheKeyFactory>(new TestModelCacheKeyFactory(() => this.AdditionalModelCacheKey));
             }
 
             public Task InitializeAsync()
@@ -543,7 +543,7 @@ namespace BrightChain.EntityFrameworkCore
 
             public Task DisposeAsync()
             {
-                return TestStore.DisposeAsync();
+                return this.TestStore.DisposeAsync();
             }
 
             private class TestModelCacheKeyFactory : IModelCacheKeyFactory
@@ -552,17 +552,17 @@ namespace BrightChain.EntityFrameworkCore
 
                 public TestModelCacheKeyFactory(Func<object> getAdditionalKey)
                 {
-                    _getAdditionalKey = getAdditionalKey;
+                    this._getAdditionalKey = getAdditionalKey;
                 }
 
                 public object Create(DbContext context)
                 {
-                    return Tuple.Create(context.GetType(), _getAdditionalKey());
+                    return Tuple.Create(context.GetType(), this._getAdditionalKey());
                 }
 
                 public object Create(DbContext context, bool designTime)
                 {
-                    return Tuple.Create(context.GetType(), _getAdditionalKey(), designTime);
+                    return Tuple.Create(context.GetType(), this._getAdditionalKey(), designTime);
                 }
             }
         }

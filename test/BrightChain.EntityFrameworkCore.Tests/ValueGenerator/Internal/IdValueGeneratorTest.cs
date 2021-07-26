@@ -78,24 +78,24 @@ namespace BrightChain.EntityFrameworkCore.ValueGenerator.Internal
 
             public IntClass(int value)
             {
-                Value = value;
+                this.Value = value;
             }
 
             private bool Equals(IntClass other)
             {
-                return other != null && Value == other.Value;
+                return other != null && this.Value == other.Value;
             }
 
             public override bool Equals(object obj)
             {
                 return obj == this
-                                   || obj?.GetType() == GetType()
-                                   && Equals((IntClass)obj);
+                                   || obj?.GetType() == this.GetType()
+                                   && this.Equals((IntClass)obj);
             }
 
             public override int GetHashCode()
             {
-                return Value;
+                return this.Value;
             }
 
             public int Value { get; }
@@ -113,7 +113,7 @@ namespace BrightChain.EntityFrameworkCore.ValueGenerator.Internal
 
             public IntStruct(int value)
             {
-                Value = value;
+                this.Value = value;
             }
 
             public int Value { get; }
@@ -131,25 +131,25 @@ namespace BrightChain.EntityFrameworkCore.ValueGenerator.Internal
 
             public BytesStruct(byte[] value)
             {
-                Value = value;
+                this.Value = value;
             }
 
             public byte[] Value { get; }
 
             public bool Equals(BytesStruct other)
             {
-                return (Value == null
+                return (this.Value == null
                                        && other.Value == null)
                                    || (other.Value != null
-                                       && Value?.SequenceEqual(other.Value) == true);
+                                       && this.Value?.SequenceEqual(other.Value) == true);
             }
 
             public override int GetHashCode()
             {
                 var code = new HashCode();
-                if (Value != null)
+                if (this.Value != null)
                 {
-                    foreach (var b in Value)
+                    foreach (var b in this.Value)
                     {
                         code.Add(b);
                     }

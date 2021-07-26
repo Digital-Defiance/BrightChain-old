@@ -35,9 +35,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(sqlExpressionFactory, nameof(sqlExpressionFactory));
             Check.NotNull(querySqlGeneratorFactory, nameof(querySqlGeneratorFactory));
 
-            _dependencies = dependencies;
-            _sqlExpressionFactory = sqlExpressionFactory;
-            _querySqlGeneratorFactory = querySqlGeneratorFactory;
+            this._dependencies = dependencies;
+            this._sqlExpressionFactory = sqlExpressionFactory;
+            this._querySqlGeneratorFactory = querySqlGeneratorFactory;
         }
 
         /// <summary>
@@ -51,10 +51,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(queryCompilationContext, nameof(queryCompilationContext));
 
             return new BrightChainShapedQueryCompilingExpressionVisitor(
-                _dependencies,
+                this._dependencies,
                 (BrightChainQueryCompilationContext)queryCompilationContext,
-                _sqlExpressionFactory,
-                _querySqlGeneratorFactory);
+                this._sqlExpressionFactory,
+                this._querySqlGeneratorFactory);
         }
     }
 }

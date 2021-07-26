@@ -21,20 +21,20 @@ namespace BrightChain.EntityFrameworkCore
 
         private void AssertSql(params string[] expected)
         {
-            Fixture.TestSqlLoggerFactory.AssertBaseline(expected);
+            this.Fixture.TestSqlLoggerFactory.AssertBaseline(expected);
         }
 
         protected void ClearLog()
         {
-            Fixture.TestSqlLoggerFactory.Clear();
+            this.Fixture.TestSqlLoggerFactory.Clear();
         }
 
         protected BrightChainPartitionKeyFixture Fixture { get; }
 
         public PartitionKeyTest(BrightChainPartitionKeyFixture fixture)
         {
-            Fixture = fixture;
-            ClearLog();
+            this.Fixture = fixture;
+            this.ClearLog();
         }
 
         [ConditionalFact]
@@ -47,7 +47,7 @@ WHERE (c[""Discriminator""] = ""Customer"")
 ORDER BY c[""PartitionKey""]
 OFFSET 0 LIMIT 1";
 
-            await PartitionKeyTestAsync(
+            await this.PartitionKeyTestAsync(
                 ctx => ctx.Customers.OrderBy(c => c.PartitionKey).FirstAsync(),
                 readSql,
                 ctx => ctx.Customers.OrderBy(c => c.PartitionKey).LastAsync(),
@@ -64,7 +64,7 @@ FROM root c
 WHERE (c[""Discriminator""] = ""Customer"")
 OFFSET 0 LIMIT 1";
 
-            await PartitionKeyTestAsync(
+            await this.PartitionKeyTestAsync(
                 ctx => ctx.Customers.WithPartitionKey("1").FirstAsync(),
                 readSql,
                 ctx => ctx.Customers.WithPartitionKey("2").LastAsync(),
@@ -81,7 +81,7 @@ FROM root c
 WHERE ((c[""Discriminator""] = ""Customer"") AND ((c[""Id""] = 42) OR (c[""Name""] = ""John Snow"")))
 OFFSET 0 LIMIT 1";
 
-            await PartitionKeyTestAsync(
+            await this.PartitionKeyTestAsync(
                 ctx => ctx.Customers
                     .Where(b => (b.Id == 42 || b.Name == "John Snow") && b.PartitionKey == 1)
                     .FirstAsync(),
@@ -114,7 +114,7 @@ OFFSET 0 LIMIT 1";
                 PartitionKey = 2
             };
 
-            await using (var innerContext = CreateContext())
+            await using (var innerContext = this.CreateContext())
             {
                 await innerContext.Database.EnsureCreatedAsync();
 
@@ -124,11 +124,11 @@ OFFSET 0 LIMIT 1";
             }
 
             // Read & update
-            await using (var innerContext = CreateContext())
+            await using (var innerContext = this.CreateContext())
             {
                 var customerFromStore = await readSingleTask(innerContext);
 
-                AssertSql(readSql);
+                this.AssertSql(readSql);
 
                 Assert.Equal(42, customerFromStore.Id);
                 Assert.Equal("Theon", customerFromStore.Name);
@@ -140,7 +140,7 @@ OFFSET 0 LIMIT 1";
             }
 
             // Read list
-            await using (var innerContext = CreateContext())
+            await using (var innerContext = this.CreateContext())
             {
                 var customerFromStore = await readListTask(innerContext);
 
@@ -148,7 +148,7 @@ OFFSET 0 LIMIT 1";
             }
 
             // Test exception
-            await using (var innerContext = CreateContext())
+            await using (var innerContext = this.CreateContext())
             {
                 var customerFromStore = await readSingleTask(innerContext);
                 customerFromStore.PartitionKey = 2;
@@ -159,7 +159,7 @@ OFFSET 0 LIMIT 1";
             }
 
             // Read update & delete
-            await using (var innerContext = CreateContext())
+            await using (var innerContext = this.CreateContext())
             {
                 var customerFromStore = await readSingleTask(innerContext);
 
@@ -174,7 +174,7 @@ OFFSET 0 LIMIT 1";
                 await innerContext.SaveChangesAsync();
             }
 
-            await using (var innerContext = CreateContext())
+            await using (var innerContext = this.CreateContext())
             {
                 Assert.Empty(await readListTask(innerContext));
             }
@@ -182,7 +182,7 @@ OFFSET 0 LIMIT 1";
 
         protected PartitionKeyContext CreateContext()
         {
-            return Fixture.CreateContext();
+            return this.Fixture.CreateContext();
         }
 
         public class BrightChainPartitionKeyFixture : SharedStoreFixtureBase<PartitionKeyContext>
@@ -197,7 +197,7 @@ OFFSET 0 LIMIT 1";
                 => BrightChainTestStoreFactory.Instance;
 
             public TestSqlLoggerFactory TestSqlLoggerFactory
-                => (TestSqlLoggerFactory)ServiceProvider.GetRequiredService<ILoggerFactory>();
+                => (TestSqlLoggerFactory)this.ServiceProvider.GetRequiredService<ILoggerFactory>();
         }
 
         public class PartitionKeyContext : DbContext

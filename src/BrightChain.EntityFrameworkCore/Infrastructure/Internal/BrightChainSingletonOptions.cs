@@ -140,19 +140,19 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
             var brightChainOptions = options.FindExtension<BrightChainOptionsExtension>();
             if (brightChainOptions != null)
             {
-                AccountEndpoint = brightChainOptions.AccountEndpoint;
-                AccountKey = brightChainOptions.AccountKey;
-                ConnectionString = brightChainOptions.ConnectionString;
-                Region = brightChainOptions.Region;
-                LimitToEndpoint = brightChainOptions.LimitToEndpoint;
-                WebProxy = brightChainOptions.WebProxy;
-                RequestTimeout = brightChainOptions.RequestTimeout;
-                OpenTcpConnectionTimeout = brightChainOptions.OpenTcpConnectionTimeout;
-                IdleTcpConnectionTimeout = brightChainOptions.IdleTcpConnectionTimeout;
-                GatewayModeMaxConnectionLimit = brightChainOptions.GatewayModeMaxConnectionLimit;
-                MaxTcpConnectionsPerEndpoint = brightChainOptions.MaxTcpConnectionsPerEndpoint;
-                MaxRequestsPerTcpConnection = brightChainOptions.MaxRequestsPerTcpConnection;
-                EnableContentResponseOnWrite = brightChainOptions.EnableContentResponseOnWrite;
+                this.AccountEndpoint = brightChainOptions.AccountEndpoint;
+                this.AccountKey = brightChainOptions.AccountKey;
+                this.ConnectionString = brightChainOptions.ConnectionString;
+                this.Region = brightChainOptions.Region;
+                this.LimitToEndpoint = brightChainOptions.LimitToEndpoint;
+                this.WebProxy = brightChainOptions.WebProxy;
+                this.RequestTimeout = brightChainOptions.RequestTimeout;
+                this.OpenTcpConnectionTimeout = brightChainOptions.OpenTcpConnectionTimeout;
+                this.IdleTcpConnectionTimeout = brightChainOptions.IdleTcpConnectionTimeout;
+                this.GatewayModeMaxConnectionLimit = brightChainOptions.GatewayModeMaxConnectionLimit;
+                this.MaxTcpConnectionsPerEndpoint = brightChainOptions.MaxTcpConnectionsPerEndpoint;
+                this.MaxRequestsPerTcpConnection = brightChainOptions.MaxRequestsPerTcpConnection;
+                this.EnableContentResponseOnWrite = brightChainOptions.EnableContentResponseOnWrite;
             }
         }
 
@@ -167,19 +167,19 @@ namespace BrightChain.EntityFrameworkCore.Infrastructure.Internal
             var brightChainOptions = options.FindExtension<BrightChainOptionsExtension>();
 
             if (brightChainOptions != null
-                && (AccountEndpoint != brightChainOptions.AccountEndpoint
-                    || AccountKey != brightChainOptions.AccountKey
-                    || ConnectionString != brightChainOptions.ConnectionString
-                    || Region != brightChainOptions.Region
-                    || LimitToEndpoint != brightChainOptions.LimitToEndpoint
-                    || WebProxy != brightChainOptions.WebProxy
-                    || RequestTimeout != brightChainOptions.RequestTimeout
-                    || OpenTcpConnectionTimeout != brightChainOptions.OpenTcpConnectionTimeout
-                    || IdleTcpConnectionTimeout != brightChainOptions.IdleTcpConnectionTimeout
-                    || GatewayModeMaxConnectionLimit != brightChainOptions.GatewayModeMaxConnectionLimit
-                    || MaxTcpConnectionsPerEndpoint != brightChainOptions.MaxTcpConnectionsPerEndpoint
-                    || MaxRequestsPerTcpConnection != brightChainOptions.MaxRequestsPerTcpConnection
-                    || EnableContentResponseOnWrite != brightChainOptions.EnableContentResponseOnWrite
+                && (this.AccountEndpoint != brightChainOptions.AccountEndpoint
+                    || this.AccountKey != brightChainOptions.AccountKey
+                    || this.ConnectionString != brightChainOptions.ConnectionString
+                    || this.Region != brightChainOptions.Region
+                    || this.LimitToEndpoint != brightChainOptions.LimitToEndpoint
+                    || this.WebProxy != brightChainOptions.WebProxy
+                    || this.RequestTimeout != brightChainOptions.RequestTimeout
+                    || this.OpenTcpConnectionTimeout != brightChainOptions.OpenTcpConnectionTimeout
+                    || this.IdleTcpConnectionTimeout != brightChainOptions.IdleTcpConnectionTimeout
+                    || this.GatewayModeMaxConnectionLimit != brightChainOptions.GatewayModeMaxConnectionLimit
+                    || this.MaxTcpConnectionsPerEndpoint != brightChainOptions.MaxTcpConnectionsPerEndpoint
+                    || this.MaxRequestsPerTcpConnection != brightChainOptions.MaxRequestsPerTcpConnection
+                    || this.EnableContentResponseOnWrite != brightChainOptions.EnableContentResponseOnWrite
                     ))
             {
                 throw new InvalidOperationException(

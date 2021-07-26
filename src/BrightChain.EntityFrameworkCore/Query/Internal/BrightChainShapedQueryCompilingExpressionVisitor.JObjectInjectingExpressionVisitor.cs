@@ -25,13 +25,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 {
                     case EntityShaperExpression shaperExpression:
                     {
-                        _currentEntityIndex++;
+                        this._currentEntityIndex++;
 
                         var valueBufferExpression = shaperExpression.ValueBufferExpression;
 
                         var jObjectVariable = Expression.Variable(
                             typeof(JObject),
-                            "jObject" + _currentEntityIndex);
+                            "jObject" + this._currentEntityIndex);
                         var variables = new List<ParameterExpression> { jObjectVariable };
 
                         var expressions = new List<Expression>
@@ -57,11 +57,11 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     case CollectionShaperExpression collectionShaperExpression:
 #pragma warning restore CS0618 // Type or member is obsolete
                     {
-                        _currentEntityIndex++;
+                        this._currentEntityIndex++;
 
                         var jArrayVariable = Expression.Variable(
                             typeof(JArray),
-                            "jArray" + _currentEntityIndex);
+                            "jArray" + this._currentEntityIndex);
                         var variables = new List<ParameterExpression> { jArrayVariable };
 
                         var expressions = new List<Expression>

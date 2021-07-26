@@ -27,7 +27,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             BrightChainQueryCompilationContext brightChainQueryCompilationContext)
             : base(dependencies, brightChainQueryCompilationContext)
         {
-            _queryCompilationContext = brightChainQueryCompilationContext;
+            this._queryCompilationContext = brightChainQueryCompilationContext;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override Expression NormalizeQueryableMethod(Expression query)
         {
-            query = new BrightChainQueryMetadataExtractingExpressionVisitor(_queryCompilationContext).Visit(query);
+            query = new BrightChainQueryMetadataExtractingExpressionVisitor(this._queryCompilationContext).Visit(query);
             query = base.NormalizeQueryableMethod(query);
 
             return query;

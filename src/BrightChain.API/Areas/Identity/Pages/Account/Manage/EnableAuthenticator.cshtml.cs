@@ -24,9 +24,9 @@ namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
             ILogger<EnableAuthenticatorModel> logger,
             UrlEncoder urlEncoder)
         {
-            _userManager = userManager;
-            _logger = logger;
-            _urlEncoder = urlEncoder;
+            this._userManager = userManager;
+            this._logger = logger;
+            this._urlEncoder = urlEncoder;
         }
 
         public string SharedKey { get; set; }
@@ -53,76 +53,76 @@ namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await _userManager.GetUserAsync(User).ConfigureAwait(false);
+            var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return this.NotFound($"Unable to load user with ID '{this._userManager.GetUserId(this.User)}'.");
             }
 
-            await LoadSharedKeyAndQrCodeUriAsync(user).ConfigureAwait(false);
+            await this.LoadSharedKeyAndQrCodeUriAsync(user).ConfigureAwait(false);
 
-            return Page();
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await _userManager.GetUserAsync(User).ConfigureAwait(false);
+            var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return this.NotFound($"Unable to load user with ID '{this._userManager.GetUserId(this.User)}'.");
             }
 
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                await LoadSharedKeyAndQrCodeUriAsync(user).ConfigureAwait(false);
-                return Page();
+                await this.LoadSharedKeyAndQrCodeUriAsync(user).ConfigureAwait(false);
+                return this.Page();
             }
 
             // Strip spaces and hypens
-            var verificationCode = Input.Code.Replace(" ", string.Empty).Replace("-", string.Empty);
+            var verificationCode = this.Input.Code.Replace(" ", string.Empty).Replace("-", string.Empty);
 
-            var is2faTokenValid = await _userManager.VerifyTwoFactorTokenAsync(
-                user, _userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode).ConfigureAwait(false);
+            var is2faTokenValid = await this._userManager.VerifyTwoFactorTokenAsync(
+                user, this._userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode).ConfigureAwait(false);
 
             if (!is2faTokenValid)
             {
-                ModelState.AddModelError("Input.Code", "Verification code is invalid.");
-                await LoadSharedKeyAndQrCodeUriAsync(user).ConfigureAwait(false);
-                return Page();
+                this.ModelState.AddModelError("Input.Code", "Verification code is invalid.");
+                await this.LoadSharedKeyAndQrCodeUriAsync(user).ConfigureAwait(false);
+                return this.Page();
             }
 
-            await _userManager.SetTwoFactorEnabledAsync(user, true).ConfigureAwait(false);
-            var userId = await _userManager.GetUserIdAsync(user).ConfigureAwait(false);
-            _logger.LogInformation("User with ID '{UserId}' has enabled 2FA with an authenticator app.", userId);
+            await this._userManager.SetTwoFactorEnabledAsync(user, true).ConfigureAwait(false);
+            var userId = await this._userManager.GetUserIdAsync(user).ConfigureAwait(false);
+            this._logger.LogInformation("User with ID '{UserId}' has enabled 2FA with an authenticator app.", userId);
 
-            StatusMessage = "Your authenticator app has been verified.";
+            this.StatusMessage = "Your authenticator app has been verified.";
 
-            if (await _userManager.CountRecoveryCodesAsync(user).ConfigureAwait(false) == 0)
+            if (await this._userManager.CountRecoveryCodesAsync(user).ConfigureAwait(false) == 0)
             {
-                var recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10).ConfigureAwait(false);
-                RecoveryCodes = recoveryCodes.ToArray();
-                return RedirectToPage("./ShowRecoveryCodes");
+                var recoveryCodes = await this._userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10).ConfigureAwait(false);
+                this.RecoveryCodes = recoveryCodes.ToArray();
+                return this.RedirectToPage("./ShowRecoveryCodes");
             }
             else
             {
-                return RedirectToPage("./TwoFactorAuthentication");
+                return this.RedirectToPage("./TwoFactorAuthentication");
             }
         }
 
         private async Task LoadSharedKeyAndQrCodeUriAsync(BrightChainEntityUser user)
         {
             // Load the authenticator key & QR code URI to display on the form
-            var unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user).ConfigureAwait(false);
+            var unformattedKey = await this._userManager.GetAuthenticatorKeyAsync(user).ConfigureAwait(false);
             if (string.IsNullOrEmpty(unformattedKey))
             {
-                await _userManager.ResetAuthenticatorKeyAsync(user).ConfigureAwait(false);
-                unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user).ConfigureAwait(false);
+                await this._userManager.ResetAuthenticatorKeyAsync(user).ConfigureAwait(false);
+                unformattedKey = await this._userManager.GetAuthenticatorKeyAsync(user).ConfigureAwait(false);
             }
 
-            SharedKey = FormatKey(unformattedKey);
+            this.SharedKey = this.FormatKey(unformattedKey);
 
-            var email = await _userManager.GetEmailAsync(user).ConfigureAwait(false);
-            AuthenticatorUri = GenerateQrCodeUri(email, unformattedKey);
+            var email = await this._userManager.GetEmailAsync(user).ConfigureAwait(false);
+            this.AuthenticatorUri = this.GenerateQrCodeUri(email, unformattedKey);
         }
 
         private string FormatKey(string unformattedKey)
@@ -146,8 +146,8 @@ namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
         {
             return string.Format(
 AuthenticatorUriFormat,
-_urlEncoder.Encode("BrightChain.API"),
-_urlEncoder.Encode(email),
+this._urlEncoder.Encode("BrightChain.API"),
+this._urlEncoder.Encode(email),
 unformattedKey);
         }
     }

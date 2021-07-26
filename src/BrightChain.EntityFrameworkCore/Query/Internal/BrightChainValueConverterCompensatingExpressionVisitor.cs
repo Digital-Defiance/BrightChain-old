@@ -27,7 +27,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         public BrightChainValueConverterCompensatingExpressionVisitor(
             ISqlExpressionFactory sqlExpressionFactory)
         {
-            _sqlExpressionFactory = sqlExpressionFactory;
+            this._sqlExpressionFactory = sqlExpressionFactory;
         }
 
         /// <summary>
@@ -40,10 +40,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             return extensionExpression switch
             {
-                ShapedQueryExpression shapedQueryExpression => VisitShapedQueryExpression(shapedQueryExpression),
+                ShapedQueryExpression shapedQueryExpression => this.VisitShapedQueryExpression(shapedQueryExpression),
                 ReadItemExpression readItemExpression => readItemExpression,
-                SelectExpression selectExpression => VisitSelect(selectExpression),
-                SqlConditionalExpression sqlConditionalExpression => VisitSqlConditional(sqlConditionalExpression),
+                SelectExpression selectExpression => this.VisitSelect(selectExpression),
+                SqlConditionalExpression sqlConditionalExpression => this.VisitSqlConditional(sqlConditionalExpression),
                 _ => base.VisitExtension(extensionExpression),
             };
         }
@@ -51,7 +51,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         private Expression VisitShapedQueryExpression(ShapedQueryExpression shapedQueryExpression)
         {
             return shapedQueryExpression.Update(
-                Visit(shapedQueryExpression.QueryExpression), shapedQueryExpression.ShaperExpression);
+                this.Visit(shapedQueryExpression.QueryExpression), shapedQueryExpression.ShaperExpression);
         }
 
         private Expression VisitSelect(SelectExpression selectExpression)
@@ -63,27 +63,27 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             var projections = new List<ProjectionExpression>();
             foreach (var item in selectExpression.Projection)
             {
-                var updatedProjection = (ProjectionExpression)Visit(item);
+                var updatedProjection = (ProjectionExpression)this.Visit(item);
                 projections.Add(updatedProjection);
                 changed |= updatedProjection != item;
             }
 
-            var fromExpression = (RootReferenceExpression)Visit(selectExpression.FromExpression);
+            var fromExpression = (RootReferenceExpression)this.Visit(selectExpression.FromExpression);
             changed |= fromExpression != selectExpression.FromExpression;
 
-            var predicate = TryCompensateForBoolWithValueConverter((SqlExpression)Visit(selectExpression.Predicate));
+            var predicate = this.TryCompensateForBoolWithValueConverter((SqlExpression)this.Visit(selectExpression.Predicate));
             changed |= predicate != selectExpression.Predicate;
 
             var orderings = new List<OrderingExpression>();
             foreach (var ordering in selectExpression.Orderings)
             {
-                var orderingExpression = (SqlExpression)Visit(ordering.Expression);
+                var orderingExpression = (SqlExpression)this.Visit(ordering.Expression);
                 changed |= orderingExpression != ordering.Expression;
                 orderings.Add(ordering.Update(orderingExpression));
             }
 
-            var limit = (SqlExpression)Visit(selectExpression.Limit);
-            var offset = (SqlExpression)Visit(selectExpression.Offset);
+            var limit = (SqlExpression)this.Visit(selectExpression.Limit);
+            var offset = (SqlExpression)this.Visit(selectExpression.Offset);
 
             return changed
                 ? selectExpression.Update(projections, fromExpression, predicate, orderings, limit, offset)
@@ -94,9 +94,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(sqlConditionalExpression, nameof(sqlConditionalExpression));
 
-            var test = TryCompensateForBoolWithValueConverter((SqlExpression)Visit(sqlConditionalExpression.Test));
-            var ifTrue = (SqlExpression)Visit(sqlConditionalExpression.IfTrue);
-            var ifFalse = (SqlExpression)Visit(sqlConditionalExpression.IfFalse);
+            var test = this.TryCompensateForBoolWithValueConverter((SqlExpression)this.Visit(sqlConditionalExpression.Test));
+            var ifTrue = (SqlExpression)this.Visit(sqlConditionalExpression.IfTrue);
+            var ifFalse = (SqlExpression)this.Visit(sqlConditionalExpression.IfFalse);
 
             return sqlConditionalExpression.Update(test, ifTrue, ifFalse);
         }
@@ -107,15 +107,15 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 && keyAccessExpression.TypeMapping!.ClrType == typeof(bool)
                 && keyAccessExpression.TypeMapping!.Converter != null)
             {
-                return _sqlExpressionFactory.Equal(
+                return this._sqlExpressionFactory.Equal(
                     sqlExpression,
-                    _sqlExpressionFactory.Constant(true, sqlExpression.TypeMapping));
+                    this._sqlExpressionFactory.Constant(true, sqlExpression.TypeMapping));
             }
 
             if (sqlExpression is SqlUnaryExpression sqlUnaryExpression)
             {
                 return sqlUnaryExpression.Update(
-                    TryCompensateForBoolWithValueConverter(sqlUnaryExpression.Operand));
+                    this.TryCompensateForBoolWithValueConverter(sqlUnaryExpression.Operand));
             }
 
             if (sqlExpression is SqlBinaryExpression sqlBinaryExpression
@@ -123,8 +123,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                     || sqlBinaryExpression.OperatorType == ExpressionType.OrElse))
             {
                 return sqlBinaryExpression.Update(
-                    TryCompensateForBoolWithValueConverter(sqlBinaryExpression.Left),
-                    TryCompensateForBoolWithValueConverter(sqlBinaryExpression.Right));
+                    this.TryCompensateForBoolWithValueConverter(sqlBinaryExpression.Left),
+                    this.TryCompensateForBoolWithValueConverter(sqlBinaryExpression.Right));
             }
 
             return sqlExpression;

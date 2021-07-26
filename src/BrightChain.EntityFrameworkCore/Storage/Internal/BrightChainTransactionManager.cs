@@ -141,7 +141,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         public virtual Task ResetStateAsync(CancellationToken cancellationToken = default)
         {
-            ResetState();
+            this.ResetState();
 
             return Task.CompletedTask;
         }

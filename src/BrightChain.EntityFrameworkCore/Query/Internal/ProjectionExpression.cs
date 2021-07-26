@@ -26,8 +26,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public ProjectionExpression(Expression expression, string alias)
         {
-            Expression = expression;
-            Alias = alias;
+            this.Expression = expression;
+            this.Alias = alias;
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual string Name
-            => (Expression as IAccessExpression)?.Name;
+            => (this.Expression as IAccessExpression)?.Name;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -62,7 +62,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public override Type Type
-            => Expression.Type;
+            => this.Expression.Type;
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -83,7 +83,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(visitor, nameof(visitor));
 
-            return Update(visitor.Visit(Expression));
+            return this.Update(visitor.Visit(this.Expression));
         }
 
         /// <summary>
@@ -94,8 +94,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual ProjectionExpression Update(Expression expression)
         {
-            return expression != Expression
-                           ? new ProjectionExpression(expression, Alias)
+            return expression != this.Expression
+                           ? new ProjectionExpression(expression, this.Alias)
                            : this;
         }
 
@@ -109,10 +109,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(expressionPrinter, nameof(expressionPrinter));
 
-            expressionPrinter.Visit(Expression);
-            if (Alias != string.Empty && Alias != Name)
+            expressionPrinter.Visit(this.Expression);
+            if (this.Alias != string.Empty && this.Alias != this.Name)
             {
-                expressionPrinter.Append(" AS " + Alias);
+                expressionPrinter.Append(" AS " + this.Alias);
             }
         }
 
@@ -127,13 +127,13 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return obj != null
                            && (ReferenceEquals(this, obj)
                                || obj is ProjectionExpression projectionExpression
-                               && Equals(projectionExpression));
+                               && this.Equals(projectionExpression));
         }
 
         private bool Equals(ProjectionExpression projectionExpression)
         {
-            return Alias == projectionExpression.Alias
-                           && Expression.Equals(projectionExpression.Expression);
+            return this.Alias == projectionExpression.Alias
+                           && this.Expression.Equals(projectionExpression.Expression);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override int GetHashCode()
         {
-            return HashCode.Combine(Alias, Expression);
+            return HashCode.Combine(this.Alias, this.Expression);
         }
     }
 }

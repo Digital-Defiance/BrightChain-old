@@ -18,8 +18,8 @@
 
         public LoginWith2faModel(SignInManager<BrightChainEntityUser> signInManager, ILogger<LoginWith2faModel> logger)
         {
-            _signInManager = signInManager;
-            _logger = logger;
+            this._signInManager = signInManager;
+            this._logger = logger;
         }
 
         [BindProperty]
@@ -44,53 +44,53 @@
         public async Task<IActionResult> OnGetAsync(bool rememberMe, string returnUrl = null)
         {
             // Ensure the user has gone through the username & password screen first
-            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync().ConfigureAwait(false);
+            var user = await this._signInManager.GetTwoFactorAuthenticationUserAsync().ConfigureAwait(false);
 
             if (user == null)
             {
                 throw new InvalidOperationException($"Unable to load two-factor authentication user.");
             }
 
-            ReturnUrl = returnUrl;
-            RememberMe = rememberMe;
+            this.ReturnUrl = returnUrl;
+            this.RememberMe = rememberMe;
 
-            return Page();
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync(bool rememberMe, string returnUrl = null)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return Page();
+                return this.Page();
             }
 
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl = returnUrl ?? this.Url.Content("~/");
 
-            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync().ConfigureAwait(false);
+            var user = await this._signInManager.GetTwoFactorAuthenticationUserAsync().ConfigureAwait(false);
             if (user == null)
             {
                 throw new InvalidOperationException($"Unable to load two-factor authentication user.");
             }
 
-            var authenticatorCode = Input.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
+            var authenticatorCode = this.Input.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
 
-            var result = await _signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, rememberMe, Input.RememberMachine).ConfigureAwait(false);
+            var result = await this._signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, rememberMe, this.Input.RememberMachine).ConfigureAwait(false);
 
             if (result.Succeeded)
             {
-                _logger.LogInformation("User with ID '{UserId}' logged in with 2fa.", user.Id);
-                return LocalRedirect(returnUrl);
+                this._logger.LogInformation("User with ID '{UserId}' logged in with 2fa.", user.Id);
+                return this.LocalRedirect(returnUrl);
             }
             else if (result.IsLockedOut)
             {
-                _logger.LogWarning("User with ID '{UserId}' account locked out.", user.Id);
-                return RedirectToPage("./Lockout");
+                this._logger.LogWarning("User with ID '{UserId}' account locked out.", user.Id);
+                return this.RedirectToPage("./Lockout");
             }
             else
             {
-                _logger.LogWarning("Invalid authenticator code entered for user with ID '{UserId}'.", user.Id);
-                ModelState.AddModelError(string.Empty, "Invalid authenticator code.");
-                return Page();
+                this._logger.LogWarning("Invalid authenticator code entered for user with ID '{UserId}'.", user.Id);
+                this.ModelState.AddModelError(string.Empty, "Invalid authenticator code.");
+                return this.Page();
             }
         }
     }

@@ -28,7 +28,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(brightChainClient, nameof(brightChainClient));
 
-            BrightChainClient = brightChainClient;
+            this.BrightChainClient = brightChainClient;
         }
 
         /// <summary>

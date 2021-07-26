@@ -31,8 +31,8 @@ namespace JetBrains.Annotations
 
         public ContractAnnotationAttribute(string contract, bool forceFullStates)
         {
-            Contract = contract;
-            ForceFullStates = forceFullStates;
+            this.Contract = contract;
+            this.ForceFullStates = forceFullStates;
         }
     }
 
@@ -58,8 +58,8 @@ namespace JetBrains.Annotations
             ImplicitUseKindFlags useKindFlags,
             ImplicitUseTargetFlags targetFlags)
         {
-            UseKindFlags = useKindFlags;
-            TargetFlags = targetFlags;
+            this.UseKindFlags = useKindFlags;
+            this.TargetFlags = targetFlags;
         }
 
         public ImplicitUseKindFlags UseKindFlags { get; }
@@ -71,7 +71,7 @@ namespace JetBrains.Annotations
     {
         public StringFormatMethodAttribute(string formatParameterName)
         {
-            FormatParameterName = formatParameterName;
+            this.FormatParameterName = formatParameterName;
         }
 
         public string FormatParameterName { get; }

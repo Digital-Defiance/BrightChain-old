@@ -44,34 +44,43 @@ namespace BrightChain.Engine.Models.Contracts
             this.RedundancyContractType = redundancyContractType;
         }
 
-        public static bool operator ==(StorageContract a, StorageContract b) =>
-            a.RequestTime == b.RequestTime &&
-            a.KeepUntilAtLeast == b.KeepUntilAtLeast &&
-            a.ByteCount == b.ByteCount &&
-            a.PrivateEncrypted == b.PrivateEncrypted &&
-            a.RedundancyContractType == b.RedundancyContractType;
+        public static bool operator ==(StorageContract a, StorageContract b)
+        {
+            return a.RequestTime == b.RequestTime &&
+a.KeepUntilAtLeast == b.KeepUntilAtLeast &&
+a.ByteCount == b.ByteCount &&
+a.PrivateEncrypted == b.PrivateEncrypted &&
+a.RedundancyContractType == b.RedundancyContractType;
+        }
 
-        public static bool operator !=(StorageContract a, StorageContract b) => !(a == b);
+        public static bool operator !=(StorageContract a, StorageContract b)
+        {
+            return !(a == b);
+        }
 
         [JsonIgnore]
-        public double Duration => KeepUntilAtLeast.Subtract(RequestTime).TotalSeconds;
+        public double Duration => this.KeepUntilAtLeast.Subtract(this.RequestTime).TotalSeconds;
 
         [JsonIgnore]
         public ByteStorageDuration ByteStorageDuration => new ByteStorageDuration(
-                byteCount: ByteCount,
-                durationSeconds: (ulong)Duration);
+                byteCount: this.ByteCount,
+                durationSeconds: (ulong)this.Duration);
 
         [JsonIgnore]
-        public readonly bool DoNotStore => KeepUntilAtLeast.Equals(DateTime.MinValue);
+        public readonly bool DoNotStore => this.KeepUntilAtLeast.Equals(DateTime.MinValue);
 
         [JsonIgnore]
-        public readonly bool NonExpiring => KeepUntilAtLeast.Equals(DateTime.MaxValue);
+        public readonly bool NonExpiring => this.KeepUntilAtLeast.Equals(DateTime.MaxValue);
 
-        public bool Equals(StorageContract other) =>
-            this == other;
+        public bool Equals(StorageContract other)
+        {
+            return this == other;
+        }
 
-        public override bool Equals(object other) =>
-            other is StorageContract storageContract && storageContract == this;
+        public override bool Equals(object other)
+        {
+            return other is StorageContract storageContract && storageContract == this;
+        }
 
         public override int GetHashCode()
         {

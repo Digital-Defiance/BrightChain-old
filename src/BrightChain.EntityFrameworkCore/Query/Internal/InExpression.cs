@@ -30,9 +30,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             CoreTypeMapping typeMapping)
             : base(typeof(bool), typeMapping)
         {
-            Item = item;
-            IsNegated = negated;
-            Values = values;
+            this.Item = item;
+            this.IsNegated = negated;
+            this.Values = values;
         }
 
         /// <summary>
@@ -67,10 +67,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         protected override Expression VisitChildren(ExpressionVisitor visitor)
         {
-            var newItem = (SqlExpression)visitor.Visit(Item);
-            var values = (SqlExpression)visitor.Visit(Values);
+            var newItem = (SqlExpression)visitor.Visit(this.Item);
+            var values = (SqlExpression)visitor.Visit(this.Values);
 
-            return Update(newItem, values);
+            return this.Update(newItem, values);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual InExpression Negate()
         {
-            return new(Item, !IsNegated, Values, TypeMapping!);
+            return new(this.Item, !this.IsNegated, this.Values, this.TypeMapping!);
         }
 
         /// <summary>
@@ -92,8 +92,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual InExpression Update(SqlExpression item, SqlExpression values)
         {
-            return item != Item || values != Values
-                           ? new InExpression(item, IsNegated, values, TypeMapping!)
+            return item != this.Item || values != this.Values
+                           ? new InExpression(item, this.IsNegated, values, this.TypeMapping!)
                            : this;
         }
 
@@ -107,10 +107,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(expressionPrinter, nameof(expressionPrinter));
 
-            expressionPrinter.Visit(Item);
-            expressionPrinter.Append(IsNegated ? " NOT IN " : " IN ");
+            expressionPrinter.Visit(this.Item);
+            expressionPrinter.Append(this.IsNegated ? " NOT IN " : " IN ");
             expressionPrinter.Append("(");
-            expressionPrinter.Visit(Values);
+            expressionPrinter.Visit(this.Values);
             expressionPrinter.Append(")");
         }
 
@@ -125,15 +125,15 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return obj != null
                            && (ReferenceEquals(this, obj)
                                || obj is InExpression inExpression
-                               && Equals(inExpression));
+                               && this.Equals(inExpression));
         }
 
         private bool Equals(InExpression inExpression)
         {
             return base.Equals(inExpression)
-                           && Item.Equals(inExpression.Item)
-                           && IsNegated.Equals(inExpression.IsNegated)
-                           && Values.Equals(inExpression.Values);
+                           && this.Item.Equals(inExpression.Item)
+                           && this.IsNegated.Equals(inExpression.IsNegated)
+                           && this.Values.Equals(inExpression.Values);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Item, IsNegated, Values);
+            return HashCode.Combine(base.GetHashCode(), this.Item, this.IsNegated, this.Values);
         }
     }
 }

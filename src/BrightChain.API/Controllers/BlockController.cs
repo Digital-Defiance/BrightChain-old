@@ -17,7 +17,7 @@ namespace BrightChain.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(StoreBlockCommand command)
         {
-            return Ok(await Mediator.Send(command).ConfigureAwait(false));
+            return this.Ok(await this.Mediator.Send(command).ConfigureAwait(false));
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace BrightChain.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(BlockHash id)
         {
-            return Ok(await Mediator.Send(new GetBlockByIdQuery { Id = id }).ConfigureAwait(false));
+            return this.Ok(await this.Mediator.Send(new GetBlockByIdQuery { Id = id }).ConfigureAwait(false));
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace BrightChain.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(BlockHash id)
         {
-            return Ok(await Mediator.Send(new DropBlockByIdCommand { Id = id }).ConfigureAwait(false));
+            return this.Ok(await this.Mediator.Send(new DropBlockByIdCommand { Id = id }).ConfigureAwait(false));
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace BrightChain.API.Controllers
         [HttpPut("[action]")]
         public async Task<IActionResult> Update(Block block)
         {
-            return Ok(await Mediator.Send(new UpdateBlockCommand { Block = block }).ConfigureAwait(false));
+            return this.Ok(await this.Mediator.Send(new UpdateBlockCommand { Block = block }).ConfigureAwait(false));
         }
     }
 }

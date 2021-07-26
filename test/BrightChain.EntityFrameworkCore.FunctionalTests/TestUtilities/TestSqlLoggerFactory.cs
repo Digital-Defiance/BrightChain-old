@@ -28,17 +28,17 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
         public TestSqlLoggerFactory(Func<string, bool> shouldLogCategory)
             : base(c => shouldLogCategory(c) || c == DbLoggerCategory.Database.Command.Name)
         {
-            Logger = new TestSqlLogger(shouldLogCategory(DbLoggerCategory.Database.Command.Name));
+            this.Logger = new TestSqlLogger(shouldLogCategory(DbLoggerCategory.Database.Command.Name));
         }
 
         public IReadOnlyList<string> SqlStatements
-            => ((TestSqlLogger)Logger).SqlStatements;
+            => ((TestSqlLogger)this.Logger).SqlStatements;
 
         public IReadOnlyList<string> Parameters
-            => ((TestSqlLogger)Logger).Parameters;
+            => ((TestSqlLogger)this.Logger).Parameters;
 
         public string Sql
-            => string.Join(_eol + _eol, SqlStatements);
+            => string.Join(_eol + _eol, this.SqlStatements);
 
         public void AssertBaseline(string[] expected, bool assertOrder = true)
         {
@@ -48,10 +48,10 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
                 {
                     for (var i = 0; i < expected.Length; i++)
                     {
-                        Assert.Equal(expected[i], SqlStatements[i], ignoreLineEndingDifferences: true);
+                        Assert.Equal(expected[i], this.SqlStatements[i], ignoreLineEndingDifferences: true);
                     }
 
-                    Assert.Empty(SqlStatements.Skip(expected.Length));
+                    Assert.Empty(this.SqlStatements.Skip(expected.Length));
                 }
                 else
                 {
@@ -60,7 +60,7 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
                         var normalizedExpectedFragment = expectedFragment.Replace("\r", string.Empty).Replace("\n", _eol);
                         Assert.Contains(
                             normalizedExpectedFragment,
-                            SqlStatements);
+                            this.SqlStatements);
                     }
                 }
             }
@@ -86,17 +86,17 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
                 const string indent = FileNewLine + "                ";
 
                 var newBaseLine = $@"            AssertSql(
-                {string.Join("," + indent + "//" + indent, SqlStatements.Take(9).Select(sql => "@\"" + sql.Replace("\"", "\"\"") + "\""))});
+                {string.Join("," + indent + "//" + indent, this.SqlStatements.Take(9).Select(sql => "@\"" + sql.Replace("\"", "\"\"") + "\""))});
 
 ";
 
-                if (SqlStatements.Count > 9)
+                if (this.SqlStatements.Count > 9)
                 {
                     newBaseLine += "Output truncated.";
                 }
 
-                Logger.TestOutputHelper?.WriteLine("---- New Baseline -------------------------------------------------------------------");
-                Logger.TestOutputHelper?.WriteLine(newBaseLine);
+                this.Logger.TestOutputHelper?.WriteLine("---- New Baseline -------------------------------------------------------------------");
+                this.Logger.TestOutputHelper?.WriteLine(newBaseLine);
 
                 var contents = testInfo + newBaseLine + FileNewLine + "--------------------" + FileNewLine;
 
@@ -112,7 +112,7 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
 
             public TestSqlLogger(bool shouldLogCommands)
             {
-                _shouldLogCommands = shouldLogCommands;
+                this._shouldLogCommands = shouldLogCommands;
             }
 
             public List<string> SqlStatements { get; } = new();
@@ -122,8 +122,8 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
             {
                 base.UnsafeClear();
 
-                SqlStatements.Clear();
-                Parameters.Clear();
+                this.SqlStatements.Clear();
+                this.Parameters.Clear();
             }
 
             protected override void UnsafeLog<TState>(
@@ -135,7 +135,7 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
             {
                 if (eventId.Id == BrightChainEventId.ExecutingSqlQuery)
                 {
-                    if (_shouldLogCommands)
+                    if (this._shouldLogCommands)
                     {
                         base.UnsafeLog(logLevel, eventId, message, state, exception);
                     }
@@ -149,17 +149,17 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
 
                         if (!string.IsNullOrWhiteSpace(parameters))
                         {
-                            Parameters.Add(parameters);
+                            this.Parameters.Add(parameters);
                             parameters = parameters.Replace(", ", _eol) + _eol + _eol;
                         }
 
-                        SqlStatements.Add(parameters + commandText);
+                        this.SqlStatements.Add(parameters + commandText);
                     }
                 }
 
                 if (eventId.Id == BrightChainEventId.ExecutingReadItem)
                 {
-                    if (_shouldLogCommands)
+                    if (this._shouldLogCommands)
                     {
                         base.UnsafeLog(logLevel, eventId, message, state, exception);
                     }
@@ -171,7 +171,7 @@ namespace BrightChain.EntityFrameworkCore.TestUtilities
                         var partitionKey = structure.Where(i => i.Key == "partitionKey").Select(i => (string)i.Value).First();
                         var resourceId = structure.Where(i => i.Key == "resourceId").Select(i => (string)i.Value).First();
 
-                        SqlStatements.Add($"ReadItem({partitionKey}, {resourceId})");
+                        this.SqlStatements.Add($"ReadItem({partitionKey}, {resourceId})");
                     }
                 }
                 else

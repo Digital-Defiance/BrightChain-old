@@ -37,10 +37,10 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         {
             Check.NotNull(dependencies, nameof(dependencies));
 
-            Dependencies = dependencies;
+            this.Dependencies = dependencies;
 
-            _createExecutionStrategy = dependencies.Options.FindExtension<BrightChainOptionsExtension>()?.ExecutionStrategyFactory
-                ?? CreateDefaultStrategy;
+            this._createExecutionStrategy = dependencies.Options.FindExtension<BrightChainOptionsExtension>()?.ExecutionStrategyFactory
+                ?? this.CreateDefaultStrategy;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         protected virtual IExecutionStrategy CreateDefaultStrategy(ExecutionStrategyDependencies dependencies)
         {
-            return new BrightChainExecutionStrategy(Dependencies);
+            return new BrightChainExecutionStrategy(this.Dependencies);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         public virtual IExecutionStrategy Create()
         {
-            return _createExecutionStrategy(Dependencies);
+            return this._createExecutionStrategy(this.Dependencies);
         }
     }
 }

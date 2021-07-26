@@ -12,9 +12,9 @@ namespace BrightChain.Engine.Models.Units
 
         public ByteStorageRedundancyDuration(int byteCount, ulong durationSeconds, RedundancyContractType redundancy)
         {
-            ByteCount = byteCount;
-            DurationSeconds = durationSeconds;
-            Redundancy = redundancy;
+            this.ByteCount = byteCount;
+            this.DurationSeconds = durationSeconds;
+            this.Redundancy = redundancy;
         }
     }
 }

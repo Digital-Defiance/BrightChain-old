@@ -90,7 +90,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public StringMethodTranslator(ISqlExpressionFactory sqlExpressionFactory)
         {
-            _sqlExpressionFactory = sqlExpressionFactory;
+            this._sqlExpressionFactory = sqlExpressionFactory;
         }
 
         /// <summary>
@@ -113,27 +113,27 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             {
                 if (_containsMethodInfo.Equals(method))
                 {
-                    return TranslateSystemFunction("CONTAINS", typeof(bool), instance, arguments[0]);
+                    return this.TranslateSystemFunction("CONTAINS", typeof(bool), instance, arguments[0]);
                 }
 
                 if (_startsWithMethodInfo.Equals(method))
                 {
-                    return TranslateSystemFunction("STARTSWITH", typeof(bool), instance, arguments[0]);
+                    return this.TranslateSystemFunction("STARTSWITH", typeof(bool), instance, arguments[0]);
                 }
 
                 if (_endsWithMethodInfo.Equals(method))
                 {
-                    return TranslateSystemFunction("ENDSWITH", typeof(bool), instance, arguments[0]);
+                    return this.TranslateSystemFunction("ENDSWITH", typeof(bool), instance, arguments[0]);
                 }
 
                 if (_toLowerMethodInfo.Equals(method))
                 {
-                    return TranslateSystemFunction("LOWER", method.ReturnType, instance);
+                    return this.TranslateSystemFunction("LOWER", method.ReturnType, instance);
                 }
 
                 if (_toUpperMethodInfo.Equals(method))
                 {
-                    return TranslateSystemFunction("UPPER", method.ReturnType, instance);
+                    return this.TranslateSystemFunction("UPPER", method.ReturnType, instance);
                 }
 
                 if (_trimStartMethodInfoWithoutArgs?.Equals(method) == true
@@ -141,7 +141,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         // BrightChain DB LTRIM does not take arguments
                         && ((arguments[0] as SqlConstantExpression)?.Value as Array)?.Length == 0))
                 {
-                    return TranslateSystemFunction("LTRIM", method.ReturnType, instance);
+                    return this.TranslateSystemFunction("LTRIM", method.ReturnType, instance);
                 }
 
                 if (_trimEndMethodInfoWithoutArgs?.Equals(method) == true
@@ -149,7 +149,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         // BrightChain DB RTRIM does not take arguments
                         && ((arguments[0] as SqlConstantExpression)?.Value as Array)?.Length == 0))
                 {
-                    return TranslateSystemFunction("RTRIM", method.ReturnType, instance);
+                    return this.TranslateSystemFunction("RTRIM", method.ReturnType, instance);
                 }
 
                 if (_trimMethodInfoWithoutArgs?.Equals(method) == true
@@ -157,58 +157,58 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                         // BrightChain DB TRIM does not take arguments
                         && ((arguments[0] as SqlConstantExpression)?.Value as Array)?.Length == 0))
                 {
-                    return TranslateSystemFunction("TRIM", method.ReturnType, instance);
+                    return this.TranslateSystemFunction("TRIM", method.ReturnType, instance);
                 }
 
                 if (_substringMethodInfoWithOneArg.Equals(method))
                 {
-                    return TranslateSystemFunction(
+                    return this.TranslateSystemFunction(
                         "SUBSTRING",
                         method.ReturnType,
                         instance,
                         arguments[0],
-                        TranslateSystemFunction("LENGTH", typeof(int), instance));
+                        this.TranslateSystemFunction("LENGTH", typeof(int), instance));
                 }
 
                 if (_substringMethodInfoWithTwoArgs.Equals(method))
                 {
-                    return TranslateSystemFunction("SUBSTRING", method.ReturnType, instance, arguments[0], arguments[1]);
+                    return this.TranslateSystemFunction("SUBSTRING", method.ReturnType, instance, arguments[0], arguments[1]);
                 }
             }
 
             if (_firstOrDefaultMethodInfoWithoutArgs.Equals(method))
             {
-                return TranslateSystemFunction("LEFT", typeof(char), arguments[0], _sqlExpressionFactory.Constant(1));
+                return this.TranslateSystemFunction("LEFT", typeof(char), arguments[0], this._sqlExpressionFactory.Constant(1));
             }
 
             if (_lastOrDefaultMethodInfoWithoutArgs.Equals(method))
             {
-                return TranslateSystemFunction("RIGHT", typeof(char), arguments[0], _sqlExpressionFactory.Constant(1));
+                return this.TranslateSystemFunction("RIGHT", typeof(char), arguments[0], this._sqlExpressionFactory.Constant(1));
             }
 
             if (_stringConcatWithTwoArguments.Equals(method))
             {
-                return _sqlExpressionFactory.Add(
+                return this._sqlExpressionFactory.Add(
                     arguments[0],
                     arguments[1]);
             }
 
             if (_stringConcatWithThreeArguments.Equals(method))
             {
-                return _sqlExpressionFactory.Add(
+                return this._sqlExpressionFactory.Add(
                     arguments[0],
-                    _sqlExpressionFactory.Add(
+                    this._sqlExpressionFactory.Add(
                         arguments[1],
                         arguments[2]));
             }
 
             if (_stringConcatWithFourArguments.Equals(method))
             {
-                return _sqlExpressionFactory.Add(
+                return this._sqlExpressionFactory.Add(
                     arguments[0],
-                    _sqlExpressionFactory.Add(
+                    this._sqlExpressionFactory.Add(
                         arguments[1],
-                        _sqlExpressionFactory.Add(
+                        this._sqlExpressionFactory.Add(
                             arguments[2],
                             arguments[3])));
             }
@@ -218,7 +218,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
 
         private SqlExpression TranslateSystemFunction(string function, Type returnType, params SqlExpression[] arguments)
         {
-            return _sqlExpressionFactory.Function(function, arguments, returnType);
+            return this._sqlExpressionFactory.Function(function, arguments, returnType);
         }
     }
 }

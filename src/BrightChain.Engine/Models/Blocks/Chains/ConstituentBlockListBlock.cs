@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using BrightChain.Engine.Attributes;
-using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Interfaces;
 using BrightChain.Engine.Models.Blocks.DataObjects;
@@ -44,10 +43,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
         /// <summary>
         /// Gets a CBLBlockParams object with the parameters of this block.
         /// </summary>
-        public override ConstituentBlockListBlockParams BlockParams
-        {
-            get =>
-                new ConstituentBlockListBlockParams(
+        public override ConstituentBlockListBlockParams BlockParams => new ConstituentBlockListBlockParams(
                     blockParams: new TransactableBlockParams(
                         cacheManager: this.CacheManager,
                         allowCommit: this.AllowCommit,
@@ -63,7 +59,6 @@ namespace BrightChain.Engine.Models.Blocks.Chains
                     constituentBlocks: this.ConstituentBlocks,
                     previous: this.Previous,
                     next: this.Next);
-        }
 
         /// <summary>
         /// Gets or sets the hash of the sum bytes of the file when assembled in order.
@@ -139,8 +134,10 @@ namespace BrightChain.Engine.Models.Blocks.Chains
         /// Generate a BlockMap from the list of constituent blocks.
         /// </summary>
         /// <returns>BlockChainFileMap with TupleStripes of the chain.</returns>
-        public BlockChainFileMap GenerateBlockMap() =>
-            new BlockChainFileMap(this);
+        public BlockChainFileMap GenerateBlockMap()
+        {
+            return new BlockChainFileMap(this);
+        }
 
         /// <summary>
         /// Perform validation of this CBL and its underlying data.

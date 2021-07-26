@@ -18,11 +18,11 @@ namespace BrightChain.EntityFrameworkCore.Utilities
         private readonly Dictionary<TVertex, HashSet<TVertex>> _predecessorMap = new();
 
         public IEnumerable<TEdge> Edges
-            => _successorMap.Values.SelectMany(s => s.Values).SelectMany(e => e).Distinct();
+            => this._successorMap.Values.SelectMany(s => s.Values).SelectMany(e => e).Distinct();
 
         public IEnumerable<TEdge> GetEdges(TVertex from, TVertex to)
         {
-            if (_successorMap.TryGetValue(from, out var successorSet))
+            if (this._successorMap.TryGetValue(from, out var successorSet))
             {
                 if (successorSet.TryGetValue(to, out var edgeList))
                 {
@@ -35,32 +35,32 @@ namespace BrightChain.EntityFrameworkCore.Utilities
 
         public void AddVertex(TVertex vertex)
         {
-            _vertices.Add(vertex);
+            this._vertices.Add(vertex);
         }
 
         public void AddVertices(IEnumerable<TVertex> vertices)
         {
-            _vertices.UnionWith(vertices);
+            this._vertices.UnionWith(vertices);
         }
 
         public void AddEdge(TVertex from, TVertex to, TEdge edge)
         {
 #if DEBUG
-            if (!_vertices.Contains(from))
+            if (!this._vertices.Contains(from))
             {
                 throw new InvalidOperationException(CoreStrings.GraphDoesNotContainVertex(from));
             }
 
-            if (!_vertices.Contains(to))
+            if (!this._vertices.Contains(to))
             {
                 throw new InvalidOperationException(CoreStrings.GraphDoesNotContainVertex(to));
             }
 #endif
 
-            if (!_successorMap.TryGetValue(from, out var successorEdges))
+            if (!this._successorMap.TryGetValue(from, out var successorEdges))
             {
                 successorEdges = new Dictionary<TVertex, List<TEdge>>();
-                _successorMap.Add(from, successorEdges);
+                this._successorMap.Add(from, successorEdges);
             }
 
             if (!successorEdges.TryGetValue(to, out var edgeList))
@@ -71,10 +71,10 @@ namespace BrightChain.EntityFrameworkCore.Utilities
 
             edgeList.Add(edge);
 
-            if (!_predecessorMap.TryGetValue(to, out var predecessors))
+            if (!this._predecessorMap.TryGetValue(to, out var predecessors))
             {
                 predecessors = new HashSet<TVertex>();
-                _predecessorMap.Add(to, predecessors);
+                this._predecessorMap.Add(to, predecessors);
             }
 
             predecessors.Add(from);
@@ -83,21 +83,21 @@ namespace BrightChain.EntityFrameworkCore.Utilities
         public void AddEdges(TVertex from, TVertex to, IEnumerable<TEdge> edges)
         {
 #if DEBUG
-            if (!_vertices.Contains(from))
+            if (!this._vertices.Contains(from))
             {
                 throw new InvalidOperationException(CoreStrings.GraphDoesNotContainVertex(from));
             }
 
-            if (!_vertices.Contains(to))
+            if (!this._vertices.Contains(to))
             {
                 throw new InvalidOperationException(CoreStrings.GraphDoesNotContainVertex(to));
             }
 #endif
 
-            if (!_successorMap.TryGetValue(from, out var successorEdges))
+            if (!this._successorMap.TryGetValue(from, out var successorEdges))
             {
                 successorEdges = new Dictionary<TVertex, List<TEdge>>();
-                _successorMap.Add(from, successorEdges);
+                this._successorMap.Add(from, successorEdges);
             }
 
             if (!successorEdges.TryGetValue(to, out var edgeList))
@@ -108,10 +108,10 @@ namespace BrightChain.EntityFrameworkCore.Utilities
 
             edgeList.AddRange(edges);
 
-            if (!_predecessorMap.TryGetValue(to, out var predecessors))
+            if (!this._predecessorMap.TryGetValue(to, out var predecessors))
             {
                 predecessors = new HashSet<TVertex>();
-                _predecessorMap.Add(to, predecessors);
+                this._predecessorMap.Add(to, predecessors);
             }
 
             predecessors.Add(from);
@@ -119,26 +119,26 @@ namespace BrightChain.EntityFrameworkCore.Utilities
 
         public override void Clear()
         {
-            _vertices.Clear();
-            _successorMap.Clear();
-            _predecessorMap.Clear();
+            this._vertices.Clear();
+            this._successorMap.Clear();
+            this._predecessorMap.Clear();
         }
 
         public IReadOnlyList<TVertex> TopologicalSort()
         {
-            return TopologicalSort(null, null);
+            return this.TopologicalSort(null, null);
         }
 
         public IReadOnlyList<TVertex> TopologicalSort(
             Func<TVertex, TVertex, IEnumerable<TEdge>, bool> tryBreakEdge)
         {
-            return TopologicalSort(tryBreakEdge, null);
+            return this.TopologicalSort(tryBreakEdge, null);
         }
 
         public IReadOnlyList<TVertex> TopologicalSort(
             Func<IEnumerable<Tuple<TVertex, TVertex, IEnumerable<TEdge>>>, string> formatCycle)
         {
-            return TopologicalSort(null, formatCycle);
+            return this.TopologicalSort(null, formatCycle);
         }
 
         public IReadOnlyList<TVertex> TopologicalSort(
@@ -149,9 +149,9 @@ namespace BrightChain.EntityFrameworkCore.Utilities
             var sortedQueue = new List<TVertex>();
             var predecessorCounts = new Dictionary<TVertex, int>();
 
-            foreach (var vertex in _vertices)
+            foreach (var vertex in this._vertices)
             {
-                foreach (var outgoingNeighbor in GetOutgoingNeighbors(vertex))
+                foreach (var outgoingNeighbor in this.GetOutgoingNeighbors(vertex))
                 {
                     if (predecessorCounts.ContainsKey(outgoingNeighbor))
                     {
@@ -164,7 +164,7 @@ namespace BrightChain.EntityFrameworkCore.Utilities
                 }
             }
 
-            foreach (var vertex in _vertices)
+            foreach (var vertex in this._vertices)
             {
                 if (!predecessorCounts.ContainsKey(vertex))
                 {
@@ -173,13 +173,13 @@ namespace BrightChain.EntityFrameworkCore.Utilities
             }
 
             var index = 0;
-            while (sortedQueue.Count < _vertices.Count)
+            while (sortedQueue.Count < this._vertices.Count)
             {
                 while (index < sortedQueue.Count)
                 {
                     var currentRoot = sortedQueue[index];
 
-                    foreach (var successor in GetOutgoingNeighbors(currentRoot).Where(neighbor => predecessorCounts.ContainsKey(neighbor)))
+                    foreach (var successor in this.GetOutgoingNeighbors(currentRoot).Where(neighbor => predecessorCounts.ContainsKey(neighbor)))
                     {
                         // Decrement counts for edges from sorted vertices and append any vertices that no longer have predecessors
                         predecessorCounts[successor]--;
@@ -194,7 +194,7 @@ namespace BrightChain.EntityFrameworkCore.Utilities
                 }
 
                 // Cycle breaking
-                if (sortedQueue.Count < _vertices.Count)
+                if (sortedQueue.Count < this._vertices.Count)
                 {
                     var broken = false;
 
@@ -209,13 +209,13 @@ namespace BrightChain.EntityFrameworkCore.Utilities
                         var candidateVertex = candidateVertices[candidateIndex];
 
                         // Find vertices in the unsorted portion of the graph that have edges to the candidate
-                        var incomingNeighbors = GetIncomingNeighbors(candidateVertex)
+                        var incomingNeighbors = this.GetIncomingNeighbors(candidateVertex)
                             .Where(neighbor => predecessorCounts.ContainsKey(neighbor)).ToList();
 
                         foreach (var incomingNeighbor in incomingNeighbors)
                         {
                             // Check to see if the edge can be broken
-                            if (tryBreakEdge(incomingNeighbor, candidateVertex, _successorMap[incomingNeighbor][candidateVertex]))
+                            if (tryBreakEdge(incomingNeighbor, candidateVertex, this._successorMap[incomingNeighbor][candidateVertex]))
                             {
                                 predecessorCounts[candidateVertex]--;
                                 if (predecessorCounts[candidateVertex] == 0)
@@ -234,13 +234,13 @@ namespace BrightChain.EntityFrameworkCore.Utilities
                     if (!broken)
                     {
                         // Failed to break the cycle
-                        var currentCycleVertex = _vertices.First(v => predecessorCounts.ContainsKey(v));
+                        var currentCycleVertex = this._vertices.First(v => predecessorCounts.ContainsKey(v));
                         var cycle = new List<TVertex> { currentCycleVertex };
                         var finished = false;
                         while (!finished)
                         {
                             // Find a cycle
-                            foreach (var predecessor in GetIncomingNeighbors(currentCycleVertex)
+                            foreach (var predecessor in this.GetIncomingNeighbors(currentCycleVertex)
                                 .Where(neighbor => predecessorCounts.ContainsKey(neighbor)))
                             {
                                 if (predecessorCounts[predecessor] != 0)
@@ -257,7 +257,7 @@ namespace BrightChain.EntityFrameworkCore.Utilities
 
                         cycle.Reverse();
 
-                        ThrowCycle(cycle, formatCycle, formatException);
+                        this.ThrowCycle(cycle, formatCycle, formatException);
                     }
                 }
             }
@@ -273,7 +273,7 @@ namespace BrightChain.EntityFrameworkCore.Utilities
             string cycleString;
             if (formatCycle == null)
             {
-                cycleString = cycle.Select(e => ToString(e)!).Join(" ->" + Environment.NewLine);
+                cycleString = cycle.Select(e => this.ToString(e)!).Join(" ->" + Environment.NewLine);
             }
             else
             {
@@ -282,7 +282,7 @@ namespace BrightChain.EntityFrameworkCore.Utilities
 
                 foreach (var vertex in cycle.Skip(1))
                 {
-                    cycleData.Add(Tuple.Create(currentCycleVertex, vertex, GetEdges(currentCycleVertex, vertex)));
+                    cycleData.Add(Tuple.Create(currentCycleVertex, vertex, this.GetEdges(currentCycleVertex, vertex)));
                     currentCycleVertex = vertex;
                 }
 
@@ -300,7 +300,7 @@ namespace BrightChain.EntityFrameworkCore.Utilities
 
         public IReadOnlyList<List<TVertex>> BatchingTopologicalSort()
         {
-            return BatchingTopologicalSort(null);
+            return this.BatchingTopologicalSort(null);
         }
 
         public IReadOnlyList<List<TVertex>> BatchingTopologicalSort(
@@ -309,9 +309,9 @@ namespace BrightChain.EntityFrameworkCore.Utilities
             var currentRootsQueue = new List<TVertex>();
             var predecessorCounts = new Dictionary<TVertex, int>();
 
-            foreach (var vertex in _vertices)
+            foreach (var vertex in this._vertices)
             {
-                foreach (var outgoingNeighbor in GetOutgoingNeighbors(vertex))
+                foreach (var outgoingNeighbor in this.GetOutgoingNeighbors(vertex))
                 {
                     if (predecessorCounts.ContainsKey(outgoingNeighbor))
                     {
@@ -324,7 +324,7 @@ namespace BrightChain.EntityFrameworkCore.Utilities
                 }
             }
 
-            foreach (var vertex in _vertices)
+            foreach (var vertex in this._vertices)
             {
                 if (!predecessorCounts.ContainsKey(vertex))
                 {
@@ -342,7 +342,7 @@ namespace BrightChain.EntityFrameworkCore.Utilities
                 currentRootIndex++;
 
                 // Remove edges from current root and add any exposed vertices to the next batch
-                foreach (var successor in GetOutgoingNeighbors(currentRoot))
+                foreach (var successor in this.GetOutgoingNeighbors(currentRoot))
                 {
                     predecessorCounts[successor]--;
                     if (predecessorCounts[successor] == 0)
@@ -366,15 +366,15 @@ namespace BrightChain.EntityFrameworkCore.Utilities
                 }
             }
 
-            if (result.Sum(b => b.Count) != _vertices.Count)
+            if (result.Sum(b => b.Count) != this._vertices.Count)
             {
-                var currentCycleVertex = _vertices.First(
+                var currentCycleVertex = this._vertices.First(
                     v => predecessorCounts.TryGetValue(v, out var predecessorNumber) && predecessorNumber != 0);
                 var cyclicWalk = new List<TVertex> { currentCycleVertex };
                 var finished = false;
                 while (!finished)
                 {
-                    foreach (var predecessor in GetIncomingNeighbors(currentCycleVertex))
+                    foreach (var predecessor in this.GetIncomingNeighbors(currentCycleVertex))
                     {
                         if (!predecessorCounts.TryGetValue(predecessor, out var predecessorCount))
                         {
@@ -412,25 +412,25 @@ namespace BrightChain.EntityFrameworkCore.Utilities
 
                 cycle.Add(startingVertex);
 
-                ThrowCycle(cycle, formatCycle);
+                this.ThrowCycle(cycle, formatCycle);
             }
 
             return result;
         }
 
         public override IEnumerable<TVertex> Vertices
-            => _vertices;
+            => this._vertices;
 
         public override IEnumerable<TVertex> GetOutgoingNeighbors(TVertex from)
         {
-            return _successorMap.TryGetValue(from, out var successorSet)
+            return this._successorMap.TryGetValue(from, out var successorSet)
                            ? successorSet.Keys
                            : Enumerable.Empty<TVertex>();
         }
 
         public override IEnumerable<TVertex> GetIncomingNeighbors(TVertex to)
         {
-            return _predecessorMap.TryGetValue(to, out var predecessors)
+            return this._predecessorMap.TryGetValue(to, out var predecessors)
                            ? predecessors
                            : Enumerable.Empty<TVertex>();
         }

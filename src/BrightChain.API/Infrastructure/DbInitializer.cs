@@ -15,30 +15,30 @@ namespace BrightChain.API.Infrastructure
             IdentityDbContext context,
             RoleManager<IdentityRole> roleManager)
         {
-            _context = context;
-            _roleManager = roleManager;
+            this._context = context;
+            this._roleManager = roleManager;
         }
 
         //This example just creates an Administrator role and one Admin users
         public async Task Initialize()
         {
             //create database schema if none exists
-            _context.Database.EnsureCreated();
+            this._context.Database.EnsureCreated();
 
             //If there is already an Administrator role, abort
-            var adminRoleExists = await _roleManager.RoleExistsAsync("Admin").ConfigureAwait(false);
+            var adminRoleExists = await this._roleManager.RoleExistsAsync("Admin").ConfigureAwait(false);
 
             if (!adminRoleExists)
             {
                 //Create the Admin Role
                 var adminRole = new IdentityRole("Admin");
-                var result = await _roleManager.CreateAsync(adminRole).ConfigureAwait(false);
+                var result = await this._roleManager.CreateAsync(adminRole).ConfigureAwait(false);
 
                 if (result.Succeeded)
                 {
                     // Add the Trial claim
                     var foreverTrialClaim = new Claim("Trial", DateTime.Now.AddYears(1).ToString());
-                    await _roleManager.AddClaimAsync(adminRole, foreverTrialClaim).ConfigureAwait(false);
+                    await this._roleManager.AddClaimAsync(adminRole, foreverTrialClaim).ConfigureAwait(false);
                 }
             }
         }

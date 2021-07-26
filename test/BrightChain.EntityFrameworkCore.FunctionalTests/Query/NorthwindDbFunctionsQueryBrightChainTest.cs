@@ -15,7 +15,7 @@ namespace BrightChain.EntityFrameworkCore.Query
             ITestOutputHelper testOutputHelper)
             : base(fixture)
         {
-            ClearLog();
+            this.ClearLog();
         }
 
         public override Task Like_all_literals(bool async)
@@ -47,7 +47,7 @@ namespace BrightChain.EntityFrameworkCore.Query
         {
             await base.Random_return_less_than_1(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT COUNT(1) AS c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Order"") AND (RAND() < 1.0))");
@@ -57,7 +57,7 @@ WHERE ((c[""Discriminator""] = ""Order"") AND (RAND() < 1.0))");
         {
             await base.Random_return_greater_than_0(async);
 
-            AssertSql(
+            this.AssertSql(
                 @"SELECT COUNT(1) AS c
 FROM root c
 WHERE ((c[""Discriminator""] = ""Order"") AND (RAND() >= 0.0))");
@@ -65,12 +65,12 @@ WHERE ((c[""Discriminator""] = ""Order"") AND (RAND() >= 0.0))");
 
         private void AssertSql(params string[] expected)
         {
-            Fixture.TestSqlLoggerFactory.AssertBaseline(expected);
+            this.Fixture.TestSqlLoggerFactory.AssertBaseline(expected);
         }
 
         protected void ClearLog()
         {
-            Fixture.TestSqlLoggerFactory.Clear();
+            this.Fixture.TestSqlLoggerFactory.Clear();
         }
     }
 }

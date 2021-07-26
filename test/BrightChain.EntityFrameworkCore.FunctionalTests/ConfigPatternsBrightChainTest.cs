@@ -19,14 +19,14 @@ namespace BrightChain.EntityFrameworkCore
 
         public ConfigPatternsBrightChainTest(BrightChainFixture fixture)
         {
-            Fixture = fixture;
+            this.Fixture = fixture;
         }
 
         [ConditionalFact]
         public async Task BrightChain_client_instance_is_shared_between_contexts()
         {
             await using var testDatabase = BrightChainTestStore.CreateInitialized(DatabaseName);
-            var options = CreateOptions(testDatabase);
+            var options = this.CreateOptions(testDatabase);
 
             BrightChainClient client;
             using (var context = new CustomerContext(options))
@@ -42,7 +42,7 @@ namespace BrightChain.EntityFrameworkCore
             }
 
             await using var testDatabase2 = BrightChainTestStore.CreateInitialized(DatabaseName, null);
-            options = CreateOptions(testDatabase2);
+            options = this.CreateOptions(testDatabase2);
 
             using (var context = new CustomerContext(options))
             {
@@ -52,7 +52,7 @@ namespace BrightChain.EntityFrameworkCore
 
         private DbContextOptions CreateOptions(BrightChainTestStore testDatabase)
         {
-            return Fixture.AddOptions(testDatabase.AddProviderOptions(new DbContextOptionsBuilder()))
+            return this.Fixture.AddOptions(testDatabase.AddProviderOptions(new DbContextOptionsBuilder()))
                            .EnableDetailedErrors()
                            .Options;
         }

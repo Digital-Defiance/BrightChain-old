@@ -25,7 +25,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         public BrightChainQueryMetadataExtractingExpressionVisitor(BrightChainQueryCompilationContext brightChainQueryCompilationContext)
         {
             Check.NotNull(brightChainQueryCompilationContext, nameof(brightChainQueryCompilationContext));
-            _brightChainQueryCompilationContext = brightChainQueryCompilationContext;
+            this._brightChainQueryCompilationContext = brightChainQueryCompilationContext;
         }
 
         /// <summary>
@@ -39,9 +39,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             if (methodCallExpression.Method.IsGenericMethod
                 && methodCallExpression.Method.GetGenericMethodDefinition() == BrightChainQueryableExtensions.WithPartitionKeyMethodInfo)
             {
-                var innerQueryable = Visit(methodCallExpression.Arguments[0]);
+                var innerQueryable = this.Visit(methodCallExpression.Arguments[0]);
 
-                _brightChainQueryCompilationContext.PartitionKeyFromExtension = methodCallExpression.Arguments[1].GetConstantValue<string>();
+                this._brightChainQueryCompilationContext.PartitionKeyFromExtension = methodCallExpression.Arguments[1].GetConstantValue<string>();
 
                 return innerQueryable;
             }

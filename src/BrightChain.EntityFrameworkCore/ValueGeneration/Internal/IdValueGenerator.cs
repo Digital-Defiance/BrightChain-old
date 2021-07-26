@@ -42,7 +42,7 @@ namespace BrightChain.EntityFrameworkCore.ValueGeneration.Internal
             if (discriminator != null
                 && !primaryKey.Properties.Contains(entityType.FindDiscriminatorProperty()))
             {
-                AppendString(builder, discriminator);
+                this.AppendString(builder, discriminator);
                 builder.Append('|');
             }
 
@@ -63,7 +63,7 @@ namespace BrightChain.EntityFrameworkCore.ValueGeneration.Internal
                     value = converter.ConvertToProvider(value);
                 }
 
-                AppendString(builder, value);
+                this.AppendString(builder, value);
 
                 builder.Append('|');
             }

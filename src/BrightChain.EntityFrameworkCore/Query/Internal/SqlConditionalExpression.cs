@@ -28,9 +28,9 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             SqlExpression ifFalse)
             : base(ifTrue.Type, ifTrue.TypeMapping ?? ifFalse.TypeMapping)
         {
-            Test = test;
-            IfTrue = ifTrue;
-            IfFalse = ifFalse;
+            this.Test = test;
+            this.IfTrue = ifTrue;
+            this.IfFalse = ifFalse;
         }
 
         /// <summary>
@@ -67,11 +67,11 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(visitor, nameof(visitor));
 
-            var test = (SqlExpression)visitor.Visit(Test);
-            var ifTrue = (SqlExpression)visitor.Visit(IfTrue);
-            var ifFalse = (SqlExpression)visitor.Visit(IfFalse);
+            var test = (SqlExpression)visitor.Visit(this.Test);
+            var ifTrue = (SqlExpression)visitor.Visit(this.IfTrue);
+            var ifFalse = (SqlExpression)visitor.Visit(this.IfFalse);
 
-            return Update(test, ifTrue, ifFalse);
+            return this.Update(test, ifTrue, ifFalse);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             SqlExpression ifTrue,
             SqlExpression ifFalse)
         {
-            return test != Test || ifTrue != IfTrue || ifFalse != IfFalse
+            return test != this.Test || ifTrue != this.IfTrue || ifFalse != this.IfFalse
                            ? new SqlConditionalExpression(test, ifTrue, ifFalse)
                            : this;
         }
@@ -101,11 +101,11 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(expressionPrinter, nameof(expressionPrinter));
 
             expressionPrinter.Append("(");
-            expressionPrinter.Visit(Test);
+            expressionPrinter.Visit(this.Test);
             expressionPrinter.Append(" ? ");
-            expressionPrinter.Visit(IfTrue);
+            expressionPrinter.Visit(this.IfTrue);
             expressionPrinter.Append(" : ");
-            expressionPrinter.Visit(IfFalse);
+            expressionPrinter.Visit(this.IfFalse);
             expressionPrinter.Append(")");
         }
 
@@ -120,15 +120,15 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return obj != null
                            && (ReferenceEquals(this, obj)
                                || obj is SqlConditionalExpression sqlConditionalExpression
-                               && Equals(sqlConditionalExpression));
+                               && this.Equals(sqlConditionalExpression));
         }
 
         private bool Equals(SqlConditionalExpression sqlConditionalExpression)
         {
             return base.Equals(sqlConditionalExpression)
-                           && Test.Equals(sqlConditionalExpression.Test)
-                           && IfTrue.Equals(sqlConditionalExpression.IfTrue)
-                           && IfFalse.Equals(sqlConditionalExpression.IfFalse);
+                           && this.Test.Equals(sqlConditionalExpression.Test)
+                           && this.IfTrue.Equals(sqlConditionalExpression.IfTrue)
+                           && this.IfFalse.Equals(sqlConditionalExpression.IfFalse);
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Test, IfTrue, IfFalse);
+            return HashCode.Combine(base.GetHashCode(), this.Test, this.IfTrue, this.IfFalse);
         }
     }
 }

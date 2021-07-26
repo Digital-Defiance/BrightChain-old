@@ -39,9 +39,9 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         public SingletonMlictnRtaisClientWrapper(IBrightChainSingletonOptions options)
         {
-            _endpoint = options.AccountEndpoint;
-            _key = options.AccountKey;
-            _connectionString = options.ConnectionString;
+            this._endpoint = options.AccountEndpoint;
+            this._key = options.AccountKey;
+            this._connectionString = options.ConnectionString;
             var configuration = new BrightChainClientOptions { ApplicationName = _userAgent };
 
             if (options.Region != null)
@@ -79,7 +79,7 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
                 configuration.GatewayModeMaxConnectionLimit = options.GatewayModeMaxConnectionLimit.Value;
             }
 
-            _options = configuration;
+            this._options = configuration;
         }
 
         /// <summary>
@@ -89,9 +89,9 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
         public virtual BrightChainClient Client
-            => _client ??= string.IsNullOrEmpty(_connectionString)
-                ? new BrightChainClient(_endpoint, _key, _options)
-                : new BrightChainClient(_connectionString, _options);
+            => this._client ??= string.IsNullOrEmpty(this._connectionString)
+                ? new BrightChainClient(this._endpoint, this._key, this._options)
+                : new BrightChainClient(this._connectionString, this._options);
 
         /// <summary>
         ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -101,8 +101,8 @@ namespace BrightChain.EntityFrameworkCore.Storage.Internal
         /// </summary>
         public virtual void Dispose()
         {
-            _client?.Dispose();
-            _client = null;
+            this._client?.Dispose();
+            this._client = null;
         }
     }
 }

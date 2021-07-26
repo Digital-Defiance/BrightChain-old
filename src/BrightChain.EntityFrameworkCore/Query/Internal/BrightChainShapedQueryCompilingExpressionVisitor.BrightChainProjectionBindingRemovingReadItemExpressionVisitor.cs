@@ -20,12 +20,12 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
                 bool trackQueryResults)
                 : base(jObjectParameter, trackQueryResults)
             {
-                _readItemExpression = readItemExpression;
+                this._readItemExpression = readItemExpression;
             }
 
             protected override ProjectionExpression GetProjection(ProjectionBindingExpression _)
             {
-                return _readItemExpression.ProjectionExpression;
+                return this._readItemExpression.ProjectionExpression;
             }
         }
     }

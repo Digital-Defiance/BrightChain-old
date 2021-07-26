@@ -68,10 +68,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(left, nameof(left));
             Check.NotNull(right, nameof(right));
 
-            OperatorType = VerifyOperator(operatorType);
+            this.OperatorType = VerifyOperator(operatorType);
 
-            Left = left;
-            Right = right;
+            this.Left = left;
+            this.Right = right;
         }
 
         /// <summary>
@@ -108,10 +108,10 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(visitor, nameof(visitor));
 
-            var left = (SqlExpression)visitor.Visit(Left);
-            var right = (SqlExpression)visitor.Visit(Right);
+            var left = (SqlExpression)visitor.Visit(this.Left);
+            var right = (SqlExpression)visitor.Visit(this.Right);
 
-            return Update(left, right);
+            return this.Update(left, right);
         }
 
         /// <summary>
@@ -122,8 +122,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual SqlBinaryExpression Update(SqlExpression left, SqlExpression right)
         {
-            return left != Left || right != Right
-                           ? new SqlBinaryExpression(OperatorType, left, right, Type, TypeMapping)
+            return left != this.Left || right != this.Right
+                           ? new SqlBinaryExpression(this.OperatorType, left, right, this.Type, this.TypeMapping)
                            : this;
         }
 
@@ -137,30 +137,30 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         {
             Check.NotNull(expressionPrinter, nameof(expressionPrinter));
 
-            var requiresBrackets = RequiresBrackets(Left);
+            var requiresBrackets = RequiresBrackets(this.Left);
 
             if (requiresBrackets)
             {
                 expressionPrinter.Append("(");
             }
 
-            expressionPrinter.Visit(Left);
+            expressionPrinter.Visit(this.Left);
 
             if (requiresBrackets)
             {
                 expressionPrinter.Append(")");
             }
 
-            expressionPrinter.Append(expressionPrinter.GenerateBinaryOperator(OperatorType));
+            expressionPrinter.Append(expressionPrinter.GenerateBinaryOperator(this.OperatorType));
 
-            requiresBrackets = RequiresBrackets(Right);
+            requiresBrackets = RequiresBrackets(this.Right);
 
             if (requiresBrackets)
             {
                 expressionPrinter.Append("(");
             }
 
-            expressionPrinter.Visit(Right);
+            expressionPrinter.Visit(this.Right);
 
             if (requiresBrackets)
             {
@@ -184,15 +184,15 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             return obj != null
                            && (ReferenceEquals(this, obj)
                                || obj is SqlBinaryExpression sqlBinaryExpression
-                               && Equals(sqlBinaryExpression));
+                               && this.Equals(sqlBinaryExpression));
         }
 
         private bool Equals(SqlBinaryExpression sqlBinaryExpression)
         {
             return base.Equals(sqlBinaryExpression)
-                           && OperatorType == sqlBinaryExpression.OperatorType
-                           && Left.Equals(sqlBinaryExpression.Left)
-                           && Right.Equals(sqlBinaryExpression.Right);
+                           && this.OperatorType == sqlBinaryExpression.OperatorType
+                           && this.Left.Equals(sqlBinaryExpression.Left)
+                           && this.Right.Equals(sqlBinaryExpression.Right);
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), OperatorType, Left, Right);
+            return HashCode.Combine(base.GetHashCode(), this.OperatorType, this.Left, this.Right);
         }
     }
 }

@@ -17,8 +17,8 @@
             UserManager<BrightChainEntityUser> userManager,
             ILogger<Disable2faModel> logger)
         {
-            _userManager = userManager;
-            _logger = logger;
+            this._userManager = userManager;
+            this._logger = logger;
         }
 
         [TempData]
@@ -26,37 +26,37 @@
 
         public async Task<IActionResult> OnGet()
         {
-            var user = await _userManager.GetUserAsync(User).ConfigureAwait(false);
+            var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return this.NotFound($"Unable to load user with ID '{this._userManager.GetUserId(this.User)}'.");
             }
 
-            if (!await _userManager.GetTwoFactorEnabledAsync(user).ConfigureAwait(false))
+            if (!await this._userManager.GetTwoFactorEnabledAsync(user).ConfigureAwait(false))
             {
-                throw new InvalidOperationException($"Cannot disable 2FA for user with ID '{_userManager.GetUserId(User)}' as it's not currently enabled.");
+                throw new InvalidOperationException($"Cannot disable 2FA for user with ID '{this._userManager.GetUserId(this.User)}' as it's not currently enabled.");
             }
 
-            return Page();
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await _userManager.GetUserAsync(User).ConfigureAwait(false);
+            var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return this.NotFound($"Unable to load user with ID '{this._userManager.GetUserId(this.User)}'.");
             }
 
-            var disable2faResult = await _userManager.SetTwoFactorEnabledAsync(user, false).ConfigureAwait(false);
+            var disable2faResult = await this._userManager.SetTwoFactorEnabledAsync(user, false).ConfigureAwait(false);
             if (!disable2faResult.Succeeded)
             {
-                throw new InvalidOperationException($"Unexpected error occurred disabling 2FA for user with ID '{_userManager.GetUserId(User)}'.");
+                throw new InvalidOperationException($"Unexpected error occurred disabling 2FA for user with ID '{this._userManager.GetUserId(this.User)}'.");
             }
 
-            _logger.LogInformation("User with ID '{UserId}' has disabled 2fa.", _userManager.GetUserId(User));
-            StatusMessage = "2fa has been disabled. You can reenable 2fa when you setup an authenticator app";
-            return RedirectToPage("./TwoFactorAuthentication");
+            this._logger.LogInformation("User with ID '{UserId}' has disabled 2fa.", this._userManager.GetUserId(this.User));
+            this.StatusMessage = "2fa has been disabled. You can reenable 2fa when you setup an authenticator app";
+            return this.RedirectToPage("./TwoFactorAuthentication");
         }
     }
 }

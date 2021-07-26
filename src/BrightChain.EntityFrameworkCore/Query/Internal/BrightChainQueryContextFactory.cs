@@ -31,8 +31,8 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
             Check.NotNull(dependencies, nameof(dependencies));
             Check.NotNull(brightChainClient, nameof(brightChainClient));
 
-            _dependencies = dependencies;
-            _brightChainClient = brightChainClient;
+            this._dependencies = dependencies;
+            this._brightChainClient = brightChainClient;
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace BrightChain.EntityFrameworkCore.Query.Internal
         /// </summary>
         public virtual QueryContext Create()
         {
-            return new BrightChainQueryContext(_dependencies, _brightChainClient);
+            return new BrightChainQueryContext(this._dependencies, this._brightChainClient);
         }
     }
 }

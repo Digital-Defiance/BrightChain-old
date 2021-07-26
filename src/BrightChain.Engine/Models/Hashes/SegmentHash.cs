@@ -41,15 +41,19 @@ namespace BrightChain.Engine.Models.Blocks
         /// <param name="other">Other BlockHash to compare bytes with.</param>
         /// <returns>Returns a standard comparison result, -1, 0, 1 for less than, equal, greater than.</returns>
         /// TODO: verify -1/1 correctness
-        public int CompareTo(SegmentHash other) =>
-            other.SourceDataLength == this.SourceDataLength ? ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) : (this.SourceDataLength > other.SourceDataLength ? -1 : 1);
+        public int CompareTo(SegmentHash other)
+        {
+            return other.SourceDataLength == this.SourceDataLength ? ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) : (this.SourceDataLength > other.SourceDataLength ? -1 : 1);
+        }
 
         /// <summary>
         /// Returns a boolean whether the two objects contain the same series of bytes.
         /// </summary>
         /// <param name="other">Other BlockHash to compare bytes with.</param>
         /// <returns>Returns the standard comparison result, -1, 0, 1 for less than, equal, greater than.</returns>
-        public bool Equals(SegmentHash other) =>
-            !(other is null) ? other.SourceDataLength == this.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) == 0 : false;
+        public bool Equals(SegmentHash other)
+        {
+            return !(other is null) ? other.SourceDataLength == this.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) == 0 : false;
+        }
     }
 }

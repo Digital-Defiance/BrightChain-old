@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using BrightChain.Engine.Interfaces;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -69,7 +68,7 @@ namespace BrightChain.Engine.Tests
             this.configuration.Setup(x => x.GetSection(It.Is<string>(k => k == "NodeOptions"))).Returns(mockNodeSection.Object);
 
             // the cache manager under test
-            this.cacheManager = NewCacheManager(logger: logger.Object, configuration: this.configuration.Object);
+            this.cacheManager = this.NewCacheManager(logger: this.logger.Object, configuration: this.configuration.Object);
 
             // a key to be used for each test
             this.testPair = this.NewKeyValue();
@@ -88,18 +87,18 @@ namespace BrightChain.Engine.Tests
             // pre-setup
 
             // Act
-            cacheManager.Set(testPair.Value);
+            this.cacheManager.Set(this.testPair.Value);
 
             // Assert
-            Assert.IsNotNull(testPair.Key);
-            Assert.IsTrue(cacheManager.Contains(testPair.Key));
-            logger.Verify(l => l.Log(
+            Assert.IsNotNull(this.testPair.Key);
+            Assert.IsTrue(this.cacheManager.Contains(this.testPair.Key));
+            this.logger.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
-            logger.VerifyNoOtherCalls();
+            this.logger.VerifyNoOtherCalls();
         }
 
         /// <summary>
@@ -109,21 +108,21 @@ namespace BrightChain.Engine.Tests
         public virtual void ItPutsNullValuesTest()
         {
             // Arrange
-            Tvalue newData = NewNullData();
+            Tvalue newData = this.NewNullData();
 
             // Act
-            cacheManager.Set(newData);
+            this.cacheManager.Set(newData);
 
             // Assert
             Assert.IsNull(newData);
-            Assert.IsTrue(cacheManager.Contains(testPair.Key));
-            logger.Verify(l => l.Log(
+            Assert.IsTrue(this.cacheManager.Contains(this.testPair.Key));
+            this.logger.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
-            logger.VerifyNoOtherCalls();
+            this.logger.VerifyNoOtherCalls();
         }
 
         /// <summary>
@@ -143,13 +142,13 @@ namespace BrightChain.Engine.Tests
             // Assert
             Assert.IsNotNull(expectation);
             Assert.AreEqual(expectation, result);
-            logger.Verify(l => l.Log(
+            this.logger.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
-            logger.VerifyNoOtherCalls();
+            this.logger.VerifyNoOtherCalls();
         }
 
         /// <summary>
@@ -165,15 +164,15 @@ namespace BrightChain.Engine.Tests
             Assert.ThrowsException<IndexOutOfRangeException>(() =>
             {
                 // Act
-                Tvalue result = cacheManager.Get(testPair.Key);
+                Tvalue result = this.cacheManager.Get(this.testPair.Key);
             });
-            logger.Verify(l => l.Log(
+            this.logger.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
-            logger.VerifyNoOtherCalls();
+            this.logger.VerifyNoOtherCalls();
         }
 
         /// <summary>
@@ -183,22 +182,22 @@ namespace BrightChain.Engine.Tests
         public void ItDropsCachKeysTest()
         {
             // Arrange
-            cacheManager.Set(testPair.Value);
+            this.cacheManager.Set(this.testPair.Value);
             // verify that the key tests good before we drop
-            Assert.IsTrue(cacheManager.Contains(testPair.Key));
+            Assert.IsTrue(this.cacheManager.Contains(this.testPair.Key));
 
             // Act
-            cacheManager.Drop(testPair.Key);
+            this.cacheManager.Drop(this.testPair.Key);
 
             // Assert
-            Assert.IsFalse(cacheManager.Contains(testPair.Key));
-            logger.Verify(l => l.Log(
+            Assert.IsFalse(this.cacheManager.Contains(this.testPair.Key));
+            this.logger.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
-            logger.VerifyNoOtherCalls();
+            this.logger.VerifyNoOtherCalls();
         }
 
         /// <summary>
@@ -208,23 +207,23 @@ namespace BrightChain.Engine.Tests
         [TestMethod, Ignore]
         public void ItExpiresCacheKeysTest()
         {
-            var expectation = testPair.Value;
-            cacheManager.Set(expectation);
-            Assert.IsTrue(cacheManager.Contains(testPair.Key));
+            var expectation = this.testPair.Value;
+            this.cacheManager.Set(expectation);
+            Assert.IsTrue(this.cacheManager.Contains(this.testPair.Key));
             // TODO: System.Threading.Thread.Sleep((cacheManager.TTL * 1000) + 1);
-            Assert.IsFalse(cacheManager.Contains(testPair.Key));
+            Assert.IsFalse(this.cacheManager.Contains(this.testPair.Key));
             Assert.ThrowsException<KeyNotFoundException>(() =>
             {
-                Tvalue result = cacheManager.Get(testPair.Key);
+                Tvalue result = this.cacheManager.Get(this.testPair.Key);
                 Assert.IsNull(result);
             });
-            logger.Verify(l => l.Log(
+            this.logger.Verify(l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(4));
-            logger.VerifyNoOtherCalls();
+            this.logger.VerifyNoOtherCalls();
         }
 
         [TestMethod]

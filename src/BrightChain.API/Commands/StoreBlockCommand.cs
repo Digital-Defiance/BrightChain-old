@@ -4,8 +4,6 @@
     using System.Threading.Tasks;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Services;
-    using BrightChain.EntityFrameworkCore.Data;
-    using BrightChain.EntityFrameworkCore.Data.Entities;
     using MediatR;
 
     public class StoreBlockCommand : IRequest<BlockHash>
