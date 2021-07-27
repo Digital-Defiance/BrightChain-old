@@ -165,7 +165,7 @@ namespace BrightChain.Engine.Extensions
         public static bool TryRestoreMetadataFromBytesAndValidate(this Block block, ReadOnlyMemory<byte> metadataBytes)
         {
             // save metadata key -> values to be affected
-            ReadOnlyMemory<byte> savedMetadata = block.Metadata;
+            var savedMetadata = block.Metadata;
             // ReloadMetadataFromBytes
             var restored = block.RestoreMetadataFromBytes(metadataBytes);
             // if true validate the block

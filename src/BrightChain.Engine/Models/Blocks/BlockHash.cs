@@ -23,7 +23,18 @@ namespace BrightChain.Engine.Models.Blocks
         public BlockHash(IBlock block)
             : base(dataBytes: block.Data)
         {
-            this.BlockSize = BlockSizeMap.BlockSize(block.Data.Length);
+            if (block is not RootBlock)
+            {
+                var detectedSize = BlockSizeMap.BlockSize(block.Data.Length);
+                if (detectedSize != block.BlockSize)
+                {
+                    throw new BrightChainValidationException(
+                        element: nameof(detectedSize),
+                        message: "Detected block size did not match specified block size");
+                }
+
+                this.BlockSize = block.BlockSize;
+            }
         }
 
         /// <summary>

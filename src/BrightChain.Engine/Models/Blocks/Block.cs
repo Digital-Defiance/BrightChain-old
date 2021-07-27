@@ -67,14 +67,24 @@ namespace BrightChain.Engine.Models.Blocks
 
         public Block(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
-            var detectedBlockSize = BlockSizeMap.BlockSize(data.Length);
-
-            if (blockParams.BlockSize != BlockSize.Unknown && detectedBlockSize != blockParams.BlockSize)
+            if (this is RootBlock)
             {
-                throw new BrightChainException("Block size mismatch");
+                // it is much easier to validate that we're the only rootblock at the TransactableBlock level where we know the cache manager
+                // TODO: there can only be one
+                this.BlockSize = blockParams.BlockSize;
+            }
+            else
+            {
+                var detectedBlockSize = BlockSizeMap.BlockSize(data.Length);
+
+                if (blockParams.BlockSize != BlockSize.Unknown && detectedBlockSize != blockParams.BlockSize)
+                {
+                    throw new BrightChainException("Block size mismatch");
+                }
+
+                this.BlockSize = detectedBlockSize;
             }
 
-            this.BlockSize = detectedBlockSize;
             this.StorageContract = new StorageContract(
                 RequestTime: blockParams.RequestTime,
                 KeepUntilAtLeast: blockParams.KeepUntilAtLeast,

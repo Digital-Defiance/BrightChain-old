@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Helpers;
 using BrightChain.Engine.Interfaces;
 using BrightChain.Engine.Models.Blocks;
+using BrightChain.Engine.Models.Blocks.DataObjects;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using static BrightChain.Engine.Extensions.BlockMetadataExtensions;
@@ -12,45 +14,45 @@ using static BrightChain.Engine.Extensions.BlockMetadataExtensions;
 namespace BrightChain.Engine.Services
 {
     /// <summary>
-    /// Relatively naive Disk Based Block Cache Manager.
+    ///     Relatively naive Disk Based Block Cache Manager.
     /// </summary>
     public class DiskBlockCacheManager : BlockCacheManager
     {
         /// <summary>
-        /// Directory where the block tree root will be placed.
+        ///     Directory where the block tree root will be placed.
         /// </summary>
         private readonly string baseDirectory;
 
         /// <summary>
-        /// Database/directory name for this instance's tree root.
+        ///     Database/directory name for this instance's tree root.
         /// </summary>
         private readonly string databaseName;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DiskBlockCacheManager"/> class.
+        ///     Initializes a new instance of the <see cref="DiskBlockCacheManager" /> class.
         /// </summary>
         /// <param name="logger">Instance of the logging provider.</param>
         /// <param name="configuration">Instance of the configuration provider.</param>
         /// <param name="databaseName">Database/directory name for the store.</param>
         public DiskBlockCacheManager(ILogger logger, IConfiguration configuration)
-            : base(logger: logger, configuration: configuration)
+            : base(logger, configuration)
         {
             var nodeOptions = configuration.GetSection("NodeOptions");
             if (nodeOptions is null)
             {
-                throw new BrightChainException(string.Format(format: "'NodeOptions' config section must be defined, but is not"));
+                throw new BrightChainException("'NodeOptions' config section must be defined, but is not");
             }
 
             var configOption = nodeOptions.GetSection("BasePath");
             if (configOption is null)
             {
-                throw new BrightChainException(string.Format(format: "'BasePath' config option must be set, but is not"));
+                throw new BrightChainException("'BasePath' config option must be set, but is not");
             }
 
             var dir = configOption.Value;
             if (dir.Length == 0 || !Directory.Exists(dir))
             {
-                throw new BrightChainException(string.Format(format: "'BasePath' must exist, but does not: \"{0}\"", dir));
+                throw new BrightChainException(string.Format("'BasePath' must exist, but does not: \"{0}\"", dir));
             }
 
             this.baseDirectory = Path.GetFullPath(dir);
@@ -61,7 +63,7 @@ namespace BrightChain.Engine.Services
             if (configuredDbName is null)
             {
                 this.databaseName = Utilities.HashToFormattedString(this.Guid.ToByteArray());
-                BrightChain.Engine.Helpers.ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", this.databaseName);
+                ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", this.databaseName);
             }
             else
             {
@@ -69,42 +71,48 @@ namespace BrightChain.Engine.Services
                 this.databaseName = Utilities.HashToFormattedString(this.Guid.ToByteArray());
             }
 
-            foreach (var subDir in new string[] { "blocks", "indices" })
+            foreach (var subDir in new[] { "blocks", "indices" })
             {
                 var info = this.GetDiskCacheSubdirectory(subDir);
                 if (!info.Exists)
                 {
-                    throw new BrightChainException(String.Format("Failed to create blockstore directory '{0}'.", subDir));
+                    throw new BrightChainException(string.Format("Failed to create blockstore directory '{0}'.", subDir));
                 }
             }
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DiskBlockCacheManager"/> class.
-        /// Can not build a cache manager with no logger.
+        ///     Initializes a new instance of the <see cref="DiskBlockCacheManager" /> class.
+        ///     Can not build a cache manager with no logger.
         /// </summary>
         private DiskBlockCacheManager()
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        ///     Full path to the configuration file.
+        /// </summary>
+        public string ConfigurationFilePath
+            => this.configFile;
+
         protected DirectoryInfo GetDiskCacheDirectory()
         {
             return Directory.CreateDirectory(
-                path: Path.Combine(
-                path1: this.baseDirectory,
-                path2: string.Format(
-                provider: CultureInfo.InvariantCulture,
-                format: "BrightChain-{0}",
-                arg0: this.databaseName)));
+                Path.Combine(
+                    this.baseDirectory,
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "BrightChain-{0}",
+                        this.databaseName)));
         }
 
         protected DirectoryInfo GetDiskCacheSubdirectory(string path)
         {
             return Directory.CreateDirectory(
-                path: Path.Combine(
-                path1: this.GetDiskCacheDirectory().FullName,
-                path2: path));
+                Path.Combine(
+                    this.GetDiskCacheDirectory().FullName,
+                    path));
         }
 
         public DirectoryInfo GetBlocksDirectory()
@@ -119,15 +127,15 @@ namespace BrightChain.Engine.Services
             var keySub2 = keyString.Substring(2, 2);
 
             var blockSubDir = Path.Combine(
-                path1: this.GetBlocksDirectory().FullName,
-                path2: keySub1,
-                path3: keySub2);
+                this.GetBlocksDirectory().FullName,
+                keySub1,
+                keySub2);
 
             Directory.CreateDirectory(blockSubDir);
 
             return new FileInfo(Path.Combine(
-                path1: blockSubDir,
-                path2: id.ToString()));
+                blockSubDir,
+                id.ToString()));
         }
 
         public DirectoryInfo GetIndicesPath()
@@ -138,60 +146,52 @@ namespace BrightChain.Engine.Services
         public FileInfo GetIndexPath(BlockHash id)
         {
             return new FileInfo(Path.Combine(
-path1: this.GetIndicesPath().FullName,
-path2: id.ToString()));
+                this.GetIndicesPath().FullName,
+                id.ToString()));
         }
 
         /// <summary>
-        /// Full path to the configuration file.
-        /// </summary>
-        public string ConfigurationFilePath
-            => this.configFile;
-
-        /// <summary>
-        /// Fired whenever a block is added to the cache
+        ///     Fired whenever a block is added to the cache
         /// </summary>
         public override event ICacheManager<BlockHash, TransactableBlock>.KeyAddedEventHandler KeyAdded;
 
         /// <summary>
-        /// Fired whenever a block is expired from the cache
+        ///     Fired whenever a block is expired from the cache
         /// </summary>
         public override event ICacheManager<BlockHash, TransactableBlock>.KeyExpiredEventHandler KeyExpired;
 
         /// <summary>
-        /// Fired whenever a block is removed from the collection
+        ///     Fired whenever a block is removed from the collection
         /// </summary>
         public override event ICacheManager<BlockHash, TransactableBlock>.KeyRemovedEventHandler KeyRemoved;
 
         /// <summary>
-        /// Fired whenever a block is requested from the cache but is not present.
+        ///     Fired whenever a block is requested from the cache but is not present.
         /// </summary>
         public override event ICacheManager<BlockHash, TransactableBlock>.CacheMissEventHandler CacheMiss;
 
         /// <summary>
-        /// Returns whether the cache manager has the given key and it is not expired.
+        ///     Returns whether the cache manager has the given key and it is not expired.
         /// </summary>
         /// <param name="key">key to check the collection for.</param>
         /// <returns>boolean with whether key is present.</returns>
-        public override bool Contains(BlockHash key)
-        {
-            return File.Exists(this.GetBlockPath(key).FullName);
-        }
+        public override bool Contains(BlockHash key) =>
+            File.Exists(this.GetBlockPath(key).FullName);
 
         /// <summary>
-        /// Removes a key from the cache and returns a boolean wither whether it was actually present.
+        ///     Removes a key from the cache and returns a boolean wither whether it was actually present.
         /// </summary>
         /// <param name="key">key to drop from the collection.</param>
         /// <param name="noCheckContains">Skips the contains check for performance.</param>
         /// <returns>whether requested key was present and actually dropped.</returns>
         public override bool Drop(BlockHash key, bool noCheckContains = true)
         {
-            var fileInfo = this.GetBlockPath(key);
-            if (!noCheckContains && !fileInfo.Exists)
+            if (!base.Drop(key, noCheckContains))
             {
                 return false;
             }
 
+            var fileInfo = this.GetBlockPath(key);
             try
             {
                 File.Delete(fileInfo.FullName);
@@ -204,7 +204,7 @@ path2: id.ToString()));
         }
 
         /// <summary>
-        /// Retrieves a block from the cache if it is present.
+        ///     Retrieves a block from the cache if it is present.
         /// </summary>
         /// <param name="key">key to retrieve.</param>
         /// <returns>returns requested block or throws.</returns>
@@ -217,8 +217,8 @@ path2: id.ToString()));
             }
 
             var rawBlockData = File.ReadAllBytes(fileInfo.FullName);
-            int metadataLength = -1;
-            for (int i = 0; i < rawBlockData.Length; i++)
+            var metadataLength = -1;
+            for (var i = 0; i < rawBlockData.Length; i++)
             {
                 if (rawBlockData[i] == 0)
                 {
@@ -238,27 +238,27 @@ path2: id.ToString()));
             var blockBytes = new byte[dataLength];
 
             Array.Copy(
-                sourceArray: rawBlockData,
-                sourceIndex: 0,
-                destinationArray: metadataBytes,
-                destinationIndex: 0,
-                length: metadataLength);
+                rawBlockData,
+                0,
+                metadataBytes,
+                0,
+                metadataLength);
 
             Array.Copy(
-                sourceArray: rawBlockData,
-                sourceIndex: metadataLength + 1,
-                destinationArray: blockBytes,
-                destinationIndex: 0,
-                length: dataLength);
+                rawBlockData,
+                metadataLength + 1,
+                blockBytes,
+                0,
+                dataLength);
 
             var block = new RestoredBlock(
-                blockParams: new Models.Blocks.DataObjects.BlockParams(
-                    blockSize: Enumerations.BlockSize.Unknown,
-                    requestTime: DateTime.Now,
-                    keepUntilAtLeast: DateTime.MinValue,
-                    redundancy: Enumerations.RedundancyContractType.Unknown,
-                    privateEncrypted: false),
-                data: blockBytes);
+                new BlockParams(
+                    BlockSize.Unknown,
+                    DateTime.Now,
+                    DateTime.MinValue,
+                    RedundancyContractType.Unknown,
+                    false),
+                blockBytes);
 
             if (!block.TryRestoreMetadataFromBytesAndValidate(metadataBytes))
             {
@@ -266,33 +266,23 @@ path2: id.ToString()));
             }
 
             return new TransactableBlock(
-                cacheManager: this,
-                sourceBlock: block,
-                allowCommit: true);
+                this,
+                block,
+                true);
         }
 
         /// <summary>
-        /// Adds a key to the cache if it is not already present.
+        ///     Adds a key to the cache if it is not already present.
         /// </summary>
         /// <param name="block">block to palce in the cache.</param>
         public override void Set(TransactableBlock block)
         {
-            if (block is null)
-            {
-                throw new BrightChain.Engine.Exceptions.BrightChainException("Can not store null block");
-            }
-            else if (!block.Validate())
-            {
-                throw new BrightChainValidationEnumerableException(
-                    exceptions: block.ValidationExceptions,
-                    message: "Can not store invalid block");
-            }
-
+            base.Set(block);
             var fileInfo = this.GetBlockPath(block.Id);
 
             if (fileInfo.Exists)
             {
-                throw new BrightChain.Engine.Exceptions.BrightChainException("Key already exists");
+                throw new BrightChainException("Key already exists");
             }
 
             var file = File.OpenWrite(fileInfo.FullName);
