@@ -4,3 +4,6 @@
 [submodule "efcore"]
 	path = efcore
 	url = git@github.com:dotnet/efcore.git
+[submodule "ENT"]
+	path = src/ENT
+	url = git@github.com:The-Revolution-Network/ENT.git

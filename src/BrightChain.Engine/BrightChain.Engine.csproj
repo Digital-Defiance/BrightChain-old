@@ -74,6 +74,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\efcore\src\EFCore\EFCore.csproj" />
+    <ProjectReference Include="..\ENT\entropy.csproj" />
   </ItemGroup>
 
   <ItemGroup>
