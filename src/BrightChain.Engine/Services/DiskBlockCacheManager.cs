@@ -34,9 +34,11 @@ namespace BrightChain.Engine.Services
         /// <param name="logger">Instance of the logging provider.</param>
         /// <param name="configuration">Instance of the configuration provider.</param>
         /// <param name="databaseName">Database/directory name for the store.</param>
-        public DiskBlockCacheManager(ILogger logger, IConfiguration configuration)
-            : base(logger, configuration)
+        public DiskBlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
+            : base(logger, configuration, rootBlock)
         {
+            this.databaseName = Utilities.HashToFormattedString(this.RootBlock.Guid.ToByteArray());
+
             var nodeOptions = configuration.GetSection("NodeOptions");
             if (nodeOptions is null)
             {
@@ -62,13 +64,15 @@ namespace BrightChain.Engine.Services
 
             if (configuredDbName is null)
             {
-                this.databaseName = Utilities.HashToFormattedString(this.Guid.ToByteArray());
                 ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", this.databaseName);
             }
             else
             {
-                this.Guid = Guid.Parse(configuredDbName.Value);
-                this.databaseName = Utilities.HashToFormattedString(this.Guid.ToByteArray());
+                var expectedGuid = Guid.Parse(configuredDbName.Value);
+                if (expectedGuid != this.RootBlock.Guid)
+                {
+                    throw new BrightChainException("Provided root block does not match configured root block guid");
+                }
             }
 
             foreach (var subDir in new[] { "blocks", "indices" })

@@ -24,8 +24,8 @@ namespace BrightChain.Engine.Services
         /// </summary>
         /// <param name="logger">Instance of the logging provider.</param>
         /// <param name="configuration">Instance of the configuration provider.</param>
-        public MemoryDictionaryBlockCacheManager(ILogger logger, IConfiguration configuration)
-            : base(logger, configuration)
+        public MemoryDictionaryBlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
+            : base(logger, configuration, rootBlock)
         {
         }
 

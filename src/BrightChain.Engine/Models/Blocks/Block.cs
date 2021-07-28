@@ -16,7 +16,7 @@ namespace BrightChain.Engine.Models.Blocks
     /// <summary>
     /// The block is the base unit persisted to disk.
     /// </summary>
-    public abstract class Block : IBlock, IComparable<IBlock>, IComparable<Block> //TODO: , IEquatable<Block>, IEquatable<IBlock>
+    public abstract class Block : IBlock, IComparable<IBlock>, IComparable<Block>, IEquatable<Block>, IEquatable<IBlock>
     {
         public BlockHash Id { get; }
 
@@ -64,6 +64,18 @@ namespace BrightChain.Engine.Models.Blocks
         public Block AsBlock => this;
 
         public IEnumerable<BrightChainValidationException> ValidationExceptions { get; private set; }
+
+        /// <summary>
+        /// Gets a uint with the CRC32 of the block's data.
+        /// </summary>
+        public uint Crc32 =>
+            Helpers.Crc32.ComputeNewChecksum(this.Data.ToArray());
+
+        /// <summary>
+        /// Gets a uint with the CRC32 of the block's data.
+        /// </summary>
+        public uint MetadataCrc32 =>
+            Helpers.Crc32.ComputeNewChecksum(this.MetadataBytes().ToArray());
 
         public Block(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
@@ -265,5 +277,12 @@ namespace BrightChain.Engine.Models.Blocks
                 keepUntilAtLeast: this.StorageContract.KeepUntilAtLeast,
                 redundancy: this.StorageContract.RedundancyContractType,
                 privateEncrypted: false);
+
+        public bool Equals(IBlock other) =>
+            this.CompareTo(other) == 0;
+
+        public bool Equals(Block other) =>
+            this.CompareTo(other) == 0;
+
     }
 }

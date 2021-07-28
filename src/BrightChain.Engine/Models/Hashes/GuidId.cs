@@ -3,6 +3,9 @@ using BrightChain.Engine.Models.Blocks;
 
 namespace BrightChain.Engine.Models.Hashes
 {
+    /// <summary>
+    /// Notably a Guid is not a hash, but this is a convenient container.. maybe a refactor.
+    /// </summary>
     public class GuidId : DataHash
     {
         /// <summary>

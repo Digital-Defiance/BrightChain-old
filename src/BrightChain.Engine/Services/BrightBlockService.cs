@@ -66,37 +66,31 @@ namespace BrightChain.Engine.Services
             var configuredDbName
                 = nodeOptions.GetSection("DatabaseName");
 
-            Guid serviceUnifiedStoreGuid;
-            if (configuredDbName is null)
+            var dbNameConfigured = configuredDbName is not null;
+            Guid serviceUnifiedStoreGuid = dbNameConfigured ? Guid.Parse(configuredDbName.Value) : Guid.NewGuid();
+
+            if (!dbNameConfigured)
             {
-                serviceUnifiedStoreGuid = Guid.NewGuid();
                 BrightChain.Engine.Helpers.ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", Utilities.HashToFormattedString(serviceUnifiedStoreGuid.ToByteArray()));
             }
-            else
-            {
-                serviceUnifiedStoreGuid = Guid.Parse(configuredDbName.Value);
-            }
+
+            var rootBlock = new RootBlock(
+                databaseGuid: serviceUnifiedStoreGuid);
 
             this.blockMemoryCache = new MemoryDictionaryBlockCacheManager(
                 logger: this.logger,
-                configuration: this.configuration);
-            this.blockMemoryCache.Set(new RootBlock(
-                databaseGuid: serviceUnifiedStoreGuid,
-                blockCacheManager: this.blockMemoryCache));
+                configuration: this.configuration,
+                rootBlock: rootBlock);
 
             this.blockDiskCache = new DiskBlockCacheManager(
                 logger: this.logger,
-                configuration: this.configuration);
-            this.blockDiskCache.Set(new RootBlock(
-                databaseGuid: serviceUnifiedStoreGuid,
-                blockCacheManager: this.blockDiskCache));
+                configuration: this.configuration,
+                rootBlock: rootBlock);
 
             this.randomizerBlockMemoryCache = new MemoryDictionaryBlockCacheManager(
                 logger: this.logger,
-                configuration: this.configuration);
-            this.randomizerBlockMemoryCache.Set(new RootBlock(
-                databaseGuid: serviceUnifiedStoreGuid,
-                blockCacheManager: this.randomizerBlockMemoryCache));
+                configuration: this.configuration,
+                rootBlock: rootBlock);
 
             this.logger.LogInformation(string.Format("<{0}>: caches initialized", nameof(BrightBlockService)));
             this.blockBrightener = new BlockBrightener(

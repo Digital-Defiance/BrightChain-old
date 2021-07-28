@@ -27,7 +27,11 @@ namespace BrightChain.Engine.Tests
         public void PreTestSetUp()
         {
             this.logger = new Moq.Mock<ILogger>().Object;
-            this.cacheManager = new MemoryDictionaryBlockCacheManager(logger: this.logger, configuration: new Configuration());
+            var rootBlock = new RootBlock(databaseGuid: Guid.NewGuid(), blockSize: BlockSize.Large);
+            this.cacheManager = new MemoryDictionaryBlockCacheManager(
+                logger: this.logger,
+                configuration: new Configuration(),
+                rootBlock: rootBlock);
         }
 
         [DataTestMethod]

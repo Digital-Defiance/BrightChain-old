@@ -98,10 +98,14 @@ namespace BrightChain.Engine.Tests
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
                 privateEncrypted: false));
 
+            var rootBlock = new RootBlock(databaseGuid: Guid.NewGuid(), blockSize: blockSize);
             var block = new ConstituentBlockListBlock(
                             blockParams: new ConstituentBlockListBlockParams(
                                 blockParams: new TransactableBlockParams(
-                                    cacheManager: new MemoryDictionaryBlockCacheManager(logger: this.logger, configuration: new Configuration()),
+                                    cacheManager: new MemoryDictionaryBlockCacheManager(
+                                        logger: this.logger,
+                                        configuration: new Configuration(),
+                                        rootBlock: rootBlock),
                                     allowCommit: true,
                                     blockParams: dummyBlock.BlockParams),
                                 sourceId: new BlockHash(dummyBlock),
@@ -211,12 +215,14 @@ namespace BrightChain.Engine.Tests
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
                 privateEncrypted: false));
 
+            var rootBlock = new RootBlock(databaseGuid: Guid.NewGuid(), blockSize: blockSize);
             var block = new ConstituentBlockListBlock(
                             blockParams: new ConstituentBlockListBlockParams(
                                 blockParams: new TransactableBlockParams(
                                     cacheManager: new MemoryDictionaryBlockCacheManager(
                                         logger: this.logger,
-                                        configuration: new Configuration()),
+                                        configuration: new Configuration(),
+                                        rootBlock: rootBlock),
                                     allowCommit: true,
                                     blockParams: dummyBlock.BlockParams),
                                 sourceId: new BlockHash(dummyBlock),

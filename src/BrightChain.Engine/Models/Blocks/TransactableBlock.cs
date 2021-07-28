@@ -13,7 +13,7 @@ namespace BrightChain.Engine.Models.Blocks
     /// TODO: Currently heavily associated with underlying BPlusTree. Abstract
     /// TODO: base off TransactedCompoundFile?
     /// </summary>
-    public class TransactableBlock : Block, IDisposable, ITransactable, ITransactableBlock, IComparable<TransactableBlock>, IComparable<ITransactableBlock>
+    public class TransactableBlock : Block, IDisposable, ITransactable, ITransactableBlock, IComparable<TransactableBlock>, IComparable<ITransactableBlock>, IEquatable<IBlock>
     {
         public TransactableBlock(BlockCacheManager cacheManager, Block sourceBlock, bool allowCommit)
             : base(
@@ -78,6 +78,11 @@ namespace BrightChain.Engine.Models.Blocks
 
         public void SetCacheManager(ICacheManager<BlockHash, TransactableBlock> cacheManager)
         {
+            if (this.CacheManager is not null)
+            {
+                throw new BrightChainException("CacheManager already set");
+            }
+
             this.CacheManager = cacheManager;
         }
 

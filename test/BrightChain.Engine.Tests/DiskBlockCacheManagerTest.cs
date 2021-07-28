@@ -78,14 +78,21 @@ namespace BrightChain.Engine.Tests
         public new void PreTestSetup()
         {
             base.PreTestSetup();
-            DiskCacheTestBlock.CacheManager = new DiskBlockCacheManager(this.logger.Object, this.configuration.Object);
+            var rootBlock = new RootBlock(databaseGuid: Guid.NewGuid(), blockSize: BlockSize.Large);
+            DiskCacheTestBlock.CacheManager = new DiskBlockCacheManager(
+                logger: this.logger.Object,
+                configuration: this.configuration.Object,
+                rootBlock: rootBlock);
             this.cacheManager = DiskCacheTestBlock.CacheManager;
         }
 
         internal override DiskBlockCacheManager NewCacheManager(ILogger logger, IConfiguration configuration)
         {
+            var rootBlock = new RootBlock(databaseGuid: Guid.NewGuid(), blockSize: BlockSize.Large);
             return new DiskBlockCacheManager(
-logger: logger, configuration: configuration);
+                logger: logger,
+                configuration: configuration,
+                rootBlock: rootBlock);
         }
 
         internal override KeyValuePair<BlockHash, TransactableBlock> NewKeyValue()

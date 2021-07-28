@@ -1,35 +1,36 @@
-﻿using System;
-using BrightChain.Engine.Attributes;
-using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Interfaces;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-using BrightChain.Engine.Services;
-
-namespace BrightChain.Engine.Models.Blocks
+﻿namespace BrightChain.Engine.Models.Blocks
 {
-    public class RootBlock : TransactableBlock, IBlock, IComparable<IBlock>, IEquatable<IBlock>
+    using System;
+    using BrightChain.Engine.Attributes;
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Interfaces;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
+    using BrightChain.Engine.Services;
+
+    /// <summary>
+    /// The root block is the key / control node for the cache. Everything gets signed from here.
+    /// There can only be one.
+    /// </summary>
+    public class RootBlock : TransactableBlock, IBlock, IComparable<IBlock>
     {
-        public RootBlock(Guid databaseGuid, BlockCacheManager blockCacheManager)
+        public RootBlock(Guid databaseGuid, BlockSize blockSize = BlockSize.Large)
             : base(
                 blockParams: new TransactableBlockParams(
-                    cacheManager: blockCacheManager,
+                    cacheManager: null,
                     allowCommit: true,
                     blockParams: new BlockParams(
-                        blockSize: BlockSize.Large,
+                        blockSize: blockSize,
                         requestTime: DateTime.Now,
                         keepUntilAtLeast: DateTime.MaxValue,
                         redundancy: RedundancyContractType.HeapHighPriority,
                         privateEncrypted: false)),
-                data: Helpers.RandomDataHelper.DataFiller(default(ReadOnlyMemory<byte>), BlockSize.Large))
+                data: Helpers.RandomDataHelper.DataFiller(default(ReadOnlyMemory<byte>), blockSize))
         {
             this.Guid = databaseGuid;
         }
 
-        [BrightChainMetadata] public Guid Guid { get; set; }
-
-        public bool Equals(IBlock other)
-        {
-            throw new NotImplementedException();
-        }
+        [BrightChainMetadata]
+        public Guid Guid { get; set; }
     }
 }

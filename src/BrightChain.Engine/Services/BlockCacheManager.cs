@@ -37,14 +37,15 @@ namespace BrightChain.Engine.Services
         /// </summary>
         /// <param name="logger">Logging provider</param>
         /// <param name="configuration">Configuration data</param>
-        public BlockCacheManager(ILogger logger, IConfiguration configuration)
+        public BlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
         {
             this.logger = logger;
             this.configuration = configuration;
-            this.Guid = Guid.NewGuid();
             this.trustedNodes = new List<BrightChainNode>();
             // TODO: load supported block sizes from configurations
             var section = this.configuration.GetSection("NodeOptions");
+            this.RootBlock = rootBlock;
+            this.RootBlock.CacheManager = this;
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace BrightChain.Engine.Services
         /// </summary>
         public BlockCacheManager AsBlockCacheManager => this;
 
-        public Guid Guid { get; internal set; }
+        public RootBlock RootBlock { get; }
 
         /// <summary>
         ///     Fired whenever a block is added to the cache
@@ -141,8 +142,13 @@ namespace BrightChain.Engine.Services
                     "Can not store invalid block");
             }
 
-            if (value is RootBlock)
+            if (value is RootBlock rootBlock)
             {
+                // only allow the known root block ID to persist to cache
+                if (rootBlock.Id != this.RootBlock.Id)
+                {
+                    throw new BrightChainException(nameof(rootBlock.Id));
+                }
             }
         }
 

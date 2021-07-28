@@ -13,11 +13,6 @@ namespace BrightChain.Engine.Interfaces
         where Tvalue : IComparable<Tvalue>
     {
         /// <summary>
-        /// A unique ID for the instance.
-        /// </summary>
-        Guid Guid { get; }
-
-        /// <summary>
         /// Retrieves an object from the cache if it is present
         /// </summary>
         /// <param name="key">key to retrieve</param>
