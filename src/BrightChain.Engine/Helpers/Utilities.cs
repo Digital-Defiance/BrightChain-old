@@ -8,6 +8,46 @@
 
     public static class Utilities
     {
+        public static async IAsyncEnumerable<byte> ReadOnlyMemoryToAsyncEnumerable(ReadOnlyMemory<byte> source)
+        {
+            foreach (var b in source.ToArray())
+            {
+                yield return b;
+            }
+        }
+
+        public static async IAsyncEnumerable<byte> ParallelReadOnlyMemoryXORToAsyncEnumerable(ReadOnlyMemory<byte> sourceA, ReadOnlyMemory<byte> sourceB)
+        {
+            if (sourceA.Length != sourceB.Length)
+            {
+                throw new BrightChainException(nameof(sourceB.Length));
+            }
+
+            var aArray = sourceA.ToArray();
+            var bArray = sourceB.ToArray();
+            for (int i = 0; i < aArray.Length; i++) {
+                yield return (byte)(aArray[i] ^ bArray[i]);
+            }
+        }
+
+        public static ReadOnlyMemory<byte> ParallelReadOnlyMemoryXOR(ReadOnlyMemory<byte> sourceA, ReadOnlyMemory<byte> sourceB)
+        {
+            if (sourceA.Length != sourceB.Length)
+            {
+                throw new BrightChainException(nameof(sourceB.Length));
+            }
+
+            var aArray = sourceA.ToArray();
+            var bArray = sourceB.ToArray();
+            var cArray = new byte[aArray.Length];
+            for (int i = 0; i < aArray.Length; i++)
+            {
+                cArray[i] = (byte)(aArray[i] ^ bArray[i]);
+            }
+
+            return new ReadOnlyMemory<byte>(cArray);
+        }
+
         public static string HashToFormattedString(byte[] hashBytes)
         {
             return BitConverter.ToString(hashBytes)

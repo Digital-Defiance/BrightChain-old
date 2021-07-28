@@ -3,6 +3,7 @@ namespace BrightChain.Engine.Models.Blocks
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using BrightChain.Engine.Attributes;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
@@ -135,12 +136,6 @@ namespace BrightChain.Engine.Models.Blocks
             RedundancyContractType redundancy = this.StorageContract.RedundancyContractType > other.StorageContract.RedundancyContractType ?
                 this.StorageContract.RedundancyContractType :
                 other.StorageContract.RedundancyContractType;
-            int blockSize = BlockSizeMap.Map[this.BlockSize];
-            byte[] xorData = new byte[blockSize];
-            for (int i = 0; i < blockSize; i++)
-            {
-                xorData[i] = this.Data.Slice(start: i, length: 1).ToArray()[0];
-            }
 
             var result = this.NewBlock(
                 blockParams: new BlockParams(
@@ -148,22 +143,21 @@ namespace BrightChain.Engine.Models.Blocks
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: keepUntil,
                     redundancy: redundancy,
-                    privateEncrypted: this.StorageContract.PrivateEncrypted
-                ),
-                data: new ReadOnlyMemory<byte>(xorData)
-            ); // these XOR functions should be one of the only places this even happens
+                    privateEncrypted: this.StorageContract.PrivateEncrypted),
+                data: Utilities.ParallelReadOnlyMemoryXOR(this.Data, other.Data));
+
             var newList = new List<BlockHash>(this.ConstituentBlocks);
-            if (!(this is SourceBlock))
+            if (this is not SourceBlock)
             {
                 newList.Add(this.Id);
             }
 
-            if (!(other is SourceBlock))
+            if (other is not SourceBlock)
             {
                 newList.Add(other.Id);
             }
 
-            result.ConstituentBlocks = newList;
+            result.ConstituentBlocks = newList.ToArray();
             return result;
         }
 
@@ -178,7 +172,7 @@ namespace BrightChain.Engine.Models.Blocks
             RedundancyContractType redundancy = this.StorageContract.RedundancyContractType;
             int blockSize = BlockSizeMap.Map[this.BlockSize];
             var newList = new List<BlockHash>(this.ConstituentBlocks);
-            if (!(this is SourceBlock))
+            if (this is not SourceBlock)
             {
                 newList.Add(this.Id);
             }
@@ -191,7 +185,7 @@ namespace BrightChain.Engine.Models.Blocks
                 {
                     throw new BrightChainException("Unexpected SourceBlock");
                 }
-                else if (!(b is RandomizerBlock))
+                else if (b is not RandomizerBlock)
                 {
                     // TODO: this may change
                     throw new BrightChainException("Unexpected block type. Can only work with RandomizerBlocks");
@@ -207,10 +201,13 @@ namespace BrightChain.Engine.Models.Blocks
                 byte[] xorWith = b.Data.ToArray();
                 for (int i = 0; i < blockSize; i++)
                 {
-                    xorData[i] = (byte)(xorData[0] ^ xorWith[i]);
+                    xorData[i] = (byte)(xorData[i] ^ xorWith[i]);
                 }
 
-                newList.Add(b.Id);
+                if (b is not SourceBlock)
+                {
+                    newList.Add(b.Id);
+                }
             }
 
             var result = this.NewBlock(

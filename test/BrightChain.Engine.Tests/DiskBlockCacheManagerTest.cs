@@ -113,8 +113,7 @@ namespace BrightChain.Engine.Tests
                         requestTime: DateTime.Now,
                         keepUntilAtLeast: DateTime.MaxValue,
                         redundancy: Enumerations.RedundancyContractType.LocalNone,
-                        privateEncrypted: false)
-                    ),
+                        privateEncrypted: false)),
                 data: data);
 
             return new KeyValuePair<BlockHash, TransactableBlock>(block.Id, block);
