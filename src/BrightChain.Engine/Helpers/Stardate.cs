@@ -5,7 +5,7 @@
 
     public class Stardate : IComparable<Stardate>, IEquatable<Stardate>
     {
-        public const double BrightChainBirthDay = 99055.685;
+        public static readonly Stardate BrightChainBirthDay = new Stardate(new DateTime(year: 2021, month: 6, day: 16, hour: 3, minute: 33, second: 33));
 
         private readonly double starDate;
 
