@@ -11,9 +11,9 @@
     [AllowAnonymous]
     public class ConfirmEmailModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<BrightChainIdentityUser> _userManager;
 
-        public ConfirmEmailModel(UserManager<IdentityUser> userManager)
+        public ConfirmEmailModel(UserManager<BrightChainIdentityUser> userManager)
         {
             this._userManager = userManager;
         }

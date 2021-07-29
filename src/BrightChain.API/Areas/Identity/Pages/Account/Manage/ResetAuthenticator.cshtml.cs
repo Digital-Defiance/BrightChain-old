@@ -8,13 +8,13 @@
 
     public class ResetAuthenticatorModel : PageModel
     {
-        readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        readonly UserManager<BrightChainIdentityUser> _userManager;
+        private readonly SignInManager<BrightChainIdentityUser> _signInManager;
         readonly ILogger<ResetAuthenticatorModel> _logger;
 
         public ResetAuthenticatorModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<BrightChainIdentityUser> userManager,
+            SignInManager<BrightChainIdentityUser> signInManager,
             ILogger<ResetAuthenticatorModel> logger)
         {
             this._userManager = userManager;

@@ -8,12 +8,12 @@
 
     public partial class IndexModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<BrightChainIdentityUser> _userManager;
+        private readonly SignInManager<BrightChainIdentityUser> _signInManager;
 
         public IndexModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            UserManager<BrightChainIdentityUser> userManager,
+            SignInManager<BrightChainIdentityUser> signInManager)
         {
             this._userManager = userManager;
             this._signInManager = signInManager;
@@ -34,7 +34,7 @@
             public string PhoneNumber { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser user)
+        private async Task LoadAsync(BrightChainIdentityUser user)
         {
             var userName = await this._userManager.GetUserNameAsync(user).ConfigureAwait(false);
             var phoneNumber = await this._userManager.GetPhoneNumberAsync(user).ConfigureAwait(false);

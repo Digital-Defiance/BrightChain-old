@@ -10,10 +10,10 @@
     [AllowAnonymous]
     public class LogoutModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<BrightChainIdentityUser> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
 
-        public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger)
+        public LogoutModel(SignInManager<BrightChainIdentityUser> signInManager, ILogger<LogoutModel> logger)
         {
             this._signInManager = signInManager;
             this._logger = logger;

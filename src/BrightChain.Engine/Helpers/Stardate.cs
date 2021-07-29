@@ -3,7 +3,7 @@
     using System;
     using BrightChain.Engine.Exceptions;
 
-    public class Stardate : IComparable<Stardate>, IEquatable<Stardate>
+    public class Stardate : IComparable<Stardate>, IEquatable<Stardate>, IFormattable
     {
         public static readonly Stardate BrightChainBirthDay = new Stardate(new DateTime(year: 2021, month: 6, day: 16, hour: 3, minute: 33, second: 33));
 
@@ -80,5 +80,11 @@
         {
             return this.Double == other.Double;
         }
+
+        public string ToString(string format, IFormatProvider formatProvider) =>
+            this.Double.ToString(format, formatProvider);
+
+        public string ToString() =>
+            this.Double.ToString();
     }
 }

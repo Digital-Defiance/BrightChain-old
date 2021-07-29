@@ -12,10 +12,10 @@
     [AllowAnonymous]
     public class RegisterConfirmationModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<BrightChainIdentityUser> _userManager;
         private readonly IEmailSender _sender;
 
-        public RegisterConfirmationModel(UserManager<IdentityUser> userManager, IEmailSender sender)
+        public RegisterConfirmationModel(UserManager<BrightChainIdentityUser> userManager, IEmailSender sender)
         {
             this._userManager = userManager;
             this._sender = sender;

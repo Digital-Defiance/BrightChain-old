@@ -3,12 +3,14 @@
     using System;
     using System.Data;
     using System.Threading.Tasks;
+    using BrightChain.API.Areas.Identity;
+    using BrightChain.API.Interfaces;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
 
-    public class BrightChainIdentityDbContext : IdentityDbContext<IdentityUser>
+    public class BrightChainIdentityDbContext : IdentityDbContext<BrightChainIdentityUser>, IBrightChainDbContext
     {
         public IDbConnection Connection => this.Database.GetDbConnection();
 
@@ -67,9 +69,9 @@
             base.OnModelCreating(builder);
         }
 
-        public async Task<IdentityUser> CreateUserAsync()
+        public async Task<BrightChainIdentityUser> CreateUserAsync()
         {
-            var user = new IdentityUser();
+            var user = new BrightChainIdentityUser();
             // TODO: fill in user details from params
             throw new NotImplementedException();
             this.Database.EnsureCreated();

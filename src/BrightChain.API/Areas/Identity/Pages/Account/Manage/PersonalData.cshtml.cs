@@ -8,11 +8,11 @@
 
     public class PersonalDataModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<BrightChainIdentityUser> _userManager;
         private readonly ILogger<PersonalDataModel> _logger;
 
         public PersonalDataModel(
-            UserManager<IdentityUser> userManager,
+            UserManager<BrightChainIdentityUser> userManager,
             ILogger<PersonalDataModel> logger)
         {
             this._userManager = userManager;

@@ -14,10 +14,10 @@
     [AllowAnonymous]
     public class ResendEmailConfirmationModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<BrightChainIdentityUser> _userManager;
         private readonly IEmailSender _emailSender;
 
-        public ResendEmailConfirmationModel(UserManager<IdentityUser> userManager, IEmailSender emailSender)
+        public ResendEmailConfirmationModel(UserManager<BrightChainIdentityUser> userManager, IEmailSender emailSender)
         {
             this._userManager = userManager;
             this._emailSender = emailSender;

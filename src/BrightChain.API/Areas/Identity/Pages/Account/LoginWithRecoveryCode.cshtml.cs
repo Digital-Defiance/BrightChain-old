@@ -12,10 +12,10 @@
     [AllowAnonymous]
     public class LoginWithRecoveryCodeModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<BrightChainIdentityUser> _signInManager;
         private readonly ILogger<LoginWithRecoveryCodeModel> _logger;
 
-        public LoginWithRecoveryCodeModel(SignInManager<IdentityUser> signInManager, ILogger<LoginWithRecoveryCodeModel> logger)
+        public LoginWithRecoveryCodeModel(SignInManager<BrightChainIdentityUser> signInManager, ILogger<LoginWithRecoveryCodeModel> logger)
         {
             this._signInManager = signInManager;
             this._logger = logger;

@@ -12,9 +12,9 @@
     [AllowAnonymous]
     public class ResetPasswordModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<BrightChainIdentityUser> _userManager;
 
-        public ResetPasswordModel(UserManager<IdentityUser> userManager)
+        public ResetPasswordModel(UserManager<BrightChainIdentityUser> userManager)
         {
             this._userManager = userManager;
         }

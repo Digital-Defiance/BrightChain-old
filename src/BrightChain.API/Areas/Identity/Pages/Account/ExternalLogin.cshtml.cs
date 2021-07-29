@@ -16,14 +16,14 @@
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<BrightChainIdentityUser> _signInManager;
+        private readonly UserManager<BrightChainIdentityUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,
+            SignInManager<BrightChainIdentityUser> signInManager,
+            UserManager<BrightChainIdentityUser> userManager,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender)
         {
@@ -118,7 +118,7 @@
 
             if (this.ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = this.Input.Email, Email = this.Input.Email };
+                var user = new BrightChainIdentityUser { UserName = this.Input.Email, Email = this.Input.Email };
 
                 var result = await this._userManager.CreateAsync(user).ConfigureAwait(false);
                 if (result.Succeeded)

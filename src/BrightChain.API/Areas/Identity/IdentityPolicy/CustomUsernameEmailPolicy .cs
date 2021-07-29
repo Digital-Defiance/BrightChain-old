@@ -3,11 +3,12 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using BrightChain.API.Areas.Identity;
     using Microsoft.AspNetCore.Identity;
 
-    public class CustomUsernameEmailPolicy : UserValidator<IdentityUser>
+    public class CustomUsernameEmailPolicy : UserValidator<BrightChainIdentityUser>
     {
-        public override async Task<IdentityResult> ValidateAsync(UserManager<IdentityUser> manager, IdentityUser user)
+        public override async Task<IdentityResult> ValidateAsync(UserManager<BrightChainIdentityUser> manager, BrightChainIdentityUser user)
         {
             IdentityResult result = await base.ValidateAsync(manager, user).ConfigureAwait(false);
             List<IdentityError> errors = result.Succeeded ? new List<IdentityError>() : result.Errors.ToList();
@@ -16,7 +17,7 @@
             {
                 errors.Add(new IdentityError
                 {
-                    Description = "Google cannot be used as a user name"
+                    Description = "Google cannot be used as a user name",
                 });
             }
 

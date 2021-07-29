@@ -18,14 +18,14 @@
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<BrightChainIdentityUser> _signInManager;
+        private readonly UserManager<BrightChainIdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<BrightChainIdentityUser> userManager,
+            SignInManager<BrightChainIdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
@@ -73,7 +73,7 @@
             this.ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync().ConfigureAwait(false)).ToList();
             if (this.ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = this.Input.Email, Email = this.Input.Email };
+                var user = new BrightChainIdentityUser { UserName = this.Input.Email, Email = this.Input.Email };
                 var result = await this._userManager.CreateAsync(user, this.Input.Password).ConfigureAwait(false);
                 if (result.Succeeded)
                 {

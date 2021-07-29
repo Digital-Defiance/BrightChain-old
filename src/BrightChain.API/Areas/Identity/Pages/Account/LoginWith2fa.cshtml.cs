@@ -12,10 +12,10 @@
     [AllowAnonymous]
     public class LoginWith2faModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<BrightChainIdentityUser> _signInManager;
         private readonly ILogger<LoginWith2faModel> _logger;
 
-        public LoginWith2faModel(SignInManager<IdentityUser> signInManager, ILogger<LoginWith2faModel> logger)
+        public LoginWith2faModel(SignInManager<BrightChainIdentityUser> signInManager, ILogger<LoginWith2faModel> logger)
         {
             this._signInManager = signInManager;
             this._logger = logger;

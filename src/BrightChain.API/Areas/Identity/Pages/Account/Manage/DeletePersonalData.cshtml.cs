@@ -10,13 +10,13 @@
 
     public class DeletePersonalDataModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<BrightChainIdentityUser> _userManager;
+        private readonly SignInManager<BrightChainIdentityUser> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
 
         public DeletePersonalDataModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<BrightChainIdentityUser> userManager,
+            SignInManager<BrightChainIdentityUser> signInManager,
             ILogger<DeletePersonalDataModel> logger)
         {
             this._userManager = userManager;

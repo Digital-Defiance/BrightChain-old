@@ -12,13 +12,13 @@
 
     public partial class EmailModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<BrightChainIdentityUser> _userManager;
+        private readonly SignInManager<BrightChainIdentityUser> _signInManager;
         private readonly IEmailSender _emailSender;
 
         public EmailModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<BrightChainIdentityUser> userManager,
+            SignInManager<BrightChainIdentityUser> signInManager,
             IEmailSender emailSender)
         {
             this._userManager = userManager;
@@ -46,7 +46,7 @@
             public string NewEmail { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser user)
+        private async Task LoadAsync(BrightChainIdentityUser user)
         {
             var email = await this._userManager.GetEmailAsync(user).ConfigureAwait(false);
             this.Email = email;

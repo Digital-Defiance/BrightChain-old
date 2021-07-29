@@ -11,10 +11,10 @@
     [AllowAnonymous]
     public class ConfirmEmailChangeModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<BrightChainIdentityUser> _userManager;
+        private readonly SignInManager<BrightChainIdentityUser> _signInManager;
 
-        public ConfirmEmailChangeModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public ConfirmEmailChangeModel(UserManager<BrightChainIdentityUser> userManager, SignInManager<BrightChainIdentityUser> signInManager)
         {
             this._userManager = userManager;
             this._signInManager = signInManager;

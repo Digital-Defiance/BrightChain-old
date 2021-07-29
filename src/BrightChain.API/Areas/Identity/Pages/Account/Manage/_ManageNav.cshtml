@@ -1,5 +1,5 @@
 ﻿@using Microsoft.EntityFrameworkCore
-@inject SignInManager<IdentityUser> SignInManager
+@inject SignInManager<BrightChainIdentityUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
