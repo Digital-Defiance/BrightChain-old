@@ -1,7 +1,6 @@
 ﻿namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
 {
     using System.Threading.Tasks;
-    using BrightChain.EntityFrameworkCore.Data.Entities;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,13 +10,13 @@
     {
         private const string AuthenicatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}";
 
-        private readonly UserManager<BrightChainEntityUser> _userManager;
-        private readonly SignInManager<BrightChainEntityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<TwoFactorAuthenticationModel> _logger;
 
         public TwoFactorAuthenticationModel(
-            UserManager<BrightChainEntityUser> userManager,
-            SignInManager<BrightChainEntityUser> signInManager,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager,
             ILogger<TwoFactorAuthenticationModel> logger)
         {
             this._userManager = userManager;

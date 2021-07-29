@@ -2,19 +2,18 @@
 {
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
-    using BrightChain.EntityFrameworkCore.Data.Entities;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
 
     public partial class IndexModel : PageModel
     {
-        private readonly UserManager<BrightChainEntityUser> _userManager;
-        private readonly SignInManager<BrightChainEntityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
         public IndexModel(
-            UserManager<BrightChainEntityUser> userManager,
-            SignInManager<BrightChainEntityUser> signInManager)
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager)
         {
             this._userManager = userManager;
             this._signInManager = signInManager;
@@ -35,7 +34,7 @@
             public string PhoneNumber { get; set; }
         }
 
-        private async Task LoadAsync(BrightChainEntityUser user)
+        private async Task LoadAsync(IdentityUser user)
         {
             var userName = await this._userManager.GetUserNameAsync(user).ConfigureAwait(false);
             var phoneNumber = await this._userManager.GetPhoneNumberAsync(user).ConfigureAwait(false);

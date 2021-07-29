@@ -42,11 +42,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BrightChain.EntityFrameworkCore\BrightChain.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\BrightChain.Engine\BrightChain.Engine.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="..\..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Data\" />
   </ItemGroup>
 </Project>

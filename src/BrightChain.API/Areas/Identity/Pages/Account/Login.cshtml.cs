@@ -4,7 +4,6 @@
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Threading.Tasks;
-    using BrightChain.EntityFrameworkCore.Data.Entities;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -15,13 +14,13 @@
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        private readonly UserManager<BrightChainEntityUser> _userManager;
-        private readonly SignInManager<BrightChainEntityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<BrightChainEntityUser> signInManager,
+        public LoginModel(SignInManager<IdentityUser> signInManager,
             ILogger<LoginModel> logger,
-            UserManager<BrightChainEntityUser> userManager)
+            UserManager<IdentityUser> userManager)
         {
             this._userManager = userManager;
             this._signInManager = signInManager;

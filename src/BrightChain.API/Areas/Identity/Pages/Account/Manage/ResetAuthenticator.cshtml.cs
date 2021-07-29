@@ -1,7 +1,6 @@
 ﻿namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
 {
     using System.Threading.Tasks;
-    using BrightChain.EntityFrameworkCore.Data.Entities;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,13 +8,13 @@
 
     public class ResetAuthenticatorModel : PageModel
     {
-        readonly UserManager<BrightChainEntityUser> _userManager;
-        private readonly SignInManager<BrightChainEntityUser> _signInManager;
+        readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         readonly ILogger<ResetAuthenticatorModel> _logger;
 
         public ResetAuthenticatorModel(
-            UserManager<BrightChainEntityUser> userManager,
-            SignInManager<BrightChainEntityUser> signInManager,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager,
             ILogger<ResetAuthenticatorModel> logger)
         {
             this._userManager = userManager;

@@ -53,7 +53,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\efcore\src\EFCore\EFCore.csproj" />
     <ProjectReference Include="..\..\src\BrightChain.Engine.Client\BrightChain.Engine.Client.csproj" />
     <ProjectReference Include="..\..\src\BrightChain.Engine\BrightChain.Engine.csproj" />
   </ItemGroup>

@@ -1,19 +1,14 @@
-﻿using BrightChain.EntityFrameworkCore;
-
-namespace BrightChain.API.Identity.Data
+﻿namespace BrightChain.API.Identity.Data
 {
     using System;
     using System.Data;
     using System.Threading.Tasks;
-    using BrightChain.EntityFrameworkCore.Data.Entities;
-    using BrightChain.EntityFrameworkCore.Interfaces;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
-    using static BrightChainEntityTypeBuilderExtensions;
 
-    public class BrightChainIdentityDbContext : IdentityDbContext<BrightChainEntityUser>, IBrightChainDbContext
+    public class BrightChainIdentityDbContext : IdentityDbContext<IdentityUser>
     {
         public IDbConnection Connection => this.Database.GetDbConnection();
 
@@ -70,29 +65,11 @@ namespace BrightChain.API.Identity.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
             base.OnModelCreating(builder);
-
-            //builder.Entity<BrightChainEntityUser>()
-            //    .UseETagConcurrency();
-
-            //builder.Entity<IdentityUser>()
-            //    .UseETagConcurrency();
-
-            builder.Entity<BrightChainEntityUser>()
-                .Property(c => c.ConcurrencyStamp)
-                .IsConcurrencyToken(false);
-
-            builder.Entity<BrightChainEntityUser>()
-                .Property<string>("_etag")
-                .IsConcurrencyToken();
-
-            builder.Entity<IdentityRole>()
-                .ToContainer("Roles")
-                .UseETagConcurrency();
         }
 
-        public async Task<BrightChainEntityUser> CreateUserAsync()
+        public async Task<IdentityUser> CreateUserAsync()
         {
-            var user = new BrightChainEntityUser();
+            var user = new IdentityUser();
             // TODO: fill in user details from params
             throw new NotImplementedException();
             this.Database.EnsureCreated();

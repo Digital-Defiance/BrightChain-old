@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BrightChain.EntityFrameworkCore.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -13,14 +12,14 @@ namespace BrightChain.API.Infrastructure
     /// <summary>
     /// Custom UserManager to override Authenticator Token generation behavior (encrypt/decrypt)
     /// </summary>
-    public class BrightChainUserManager : UserManager<BrightChainEntityUser>
+    public class BrightChainUserManager : UserManager<IdentityUser>
     {
         private readonly IConfiguration _configuration;
 
-        public BrightChainUserManager(IUserStore<BrightChainEntityUser> store, IOptions<IdentityOptions> optionsAccessor,
-            IPasswordHasher<BrightChainEntityUser> passwordHasher, IEnumerable<IUserValidator<BrightChainEntityUser>> userValidators,
-            IEnumerable<IPasswordValidator<BrightChainEntityUser>> passwordValidators, ILookupNormalizer keyNormalizer,
-            IdentityErrorDescriber errors, IServiceProvider services, ILogger<UserManager<BrightChainEntityUser>> logger,
+        public BrightChainUserManager(IUserStore<IdentityUser> store, IOptions<IdentityOptions> optionsAccessor,
+            IPasswordHasher<IdentityUser> passwordHasher, IEnumerable<IUserValidator<IdentityUser>> userValidators,
+            IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators, ILookupNormalizer keyNormalizer,
+            IdentityErrorDescriber errors, IServiceProvider services, ILogger<UserManager<IdentityUser>> logger,
             IConfiguration configuration)
             : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators,
                 keyNormalizer, errors, services, logger)
@@ -46,7 +45,7 @@ namespace BrightChain.API.Infrastructure
             //return encryptedKey;
         }
 
-        public override async Task<string> GetAuthenticatorKeyAsync(BrightChainEntityUser user)
+        public override async Task<string> GetAuthenticatorKeyAsync(IdentityUser user)
         {
             var databaseKey = await base.GetAuthenticatorKeyAsync(user).ConfigureAwait(false);
 
@@ -84,7 +83,7 @@ namespace BrightChain.API.Infrastructure
             //return encryptedRecoveryCode;
         }
 
-        public override async Task<IEnumerable<string>> GenerateNewTwoFactorRecoveryCodesAsync(BrightChainEntityUser user, int number)
+        public override async Task<IEnumerable<string>> GenerateNewTwoFactorRecoveryCodesAsync(IdentityUser user, int number)
         {
             var tokens = await base.GenerateNewTwoFactorRecoveryCodesAsync(user, number).ConfigureAwait(false);
 
@@ -105,7 +104,7 @@ namespace BrightChain.API.Infrastructure
 
         }
 
-        public override Task<IdentityResult> RedeemTwoFactorRecoveryCodeAsync(BrightChainEntityUser user, string code)
+        public override Task<IdentityResult> RedeemTwoFactorRecoveryCodeAsync(IdentityUser user, string code)
         {
             bool.TryParse(this._configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
 

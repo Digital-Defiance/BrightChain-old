@@ -2,11 +2,8 @@ using System;
 using System.Reflection;
 using BrightChain.API.Areas.Identity;
 using BrightChain.API.Data;
-using BrightChain.API.Identity.Data;
 using BrightChain.API.Services;
 using BrightChain.Engine.Services;
-using BrightChain.EntityFrameworkCore.Data;
-using BrightChain.EntityFrameworkCore.Data.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -37,17 +34,6 @@ namespace BrightChain.API
             //services.AddPersistence(this.Configuration);
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<BrightChainEntityUser>>();
-            services.AddScoped<BrightChainBlockDbContext>(provider =>
-            {
-                var dbContext = provider.GetService<BrightChainBlockDbContext>();
-                if (dbContext is null)
-                {
-                    throw new Exception("could not obtain db context");
-                }
-
-                return dbContext;
-            });
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<BrightBlockService>();
@@ -73,7 +59,7 @@ namespace BrightChain.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, BrightChainIdentityDbContext dbContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -102,7 +88,7 @@ namespace BrightChain.API
                 endpoints.MapFallbackToPage("/_Host");
             });
 
-            dbContext.Database.EnsureCreated();
+            //dbContext.Database.EnsureCreated();
         }
     }
 }

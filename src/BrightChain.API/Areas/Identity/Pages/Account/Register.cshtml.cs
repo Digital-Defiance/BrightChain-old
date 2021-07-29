@@ -6,7 +6,6 @@
     using System.Text;
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
-    using BrightChain.EntityFrameworkCore.Data.Entities;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -19,14 +18,14 @@
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<BrightChainEntityUser> _signInManager;
-        private readonly UserManager<BrightChainEntityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
-            UserManager<BrightChainEntityUser> userManager,
-            SignInManager<BrightChainEntityUser> signInManager,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
@@ -74,7 +73,7 @@
             this.ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync().ConfigureAwait(false)).ToList();
             if (this.ModelState.IsValid)
             {
-                var user = new BrightChainEntityUser { UserName = this.Input.Email, Email = this.Input.Email };
+                var user = new IdentityUser { UserName = this.Input.Email, Email = this.Input.Email };
                 var result = await this._userManager.CreateAsync(user, this.Input.Password).ConfigureAwait(false);
                 if (result.Succeeded)
                 {

@@ -3,12 +3,11 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using BrightChain.EntityFrameworkCore.Data.Entities;
     using Microsoft.AspNetCore.Identity;
 
-    public class CustomPasswordPolicy : PasswordValidator<BrightChainEntityUser>
+    public class CustomPasswordPolicy : PasswordValidator<IdentityUser>
     {
-        public override async Task<IdentityResult> ValidateAsync(UserManager<BrightChainEntityUser> manager, BrightChainEntityUser user, string password)
+        public override async Task<IdentityResult> ValidateAsync(UserManager<IdentityUser> manager, IdentityUser user, string password)
         {
             IdentityResult result = await base.ValidateAsync(manager, user, password).ConfigureAwait(false);
             List<IdentityError> errors = result.Succeeded ? new List<IdentityError>() : result.Errors.ToList();

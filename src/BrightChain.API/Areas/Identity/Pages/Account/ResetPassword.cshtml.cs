@@ -3,7 +3,6 @@
     using System.ComponentModel.DataAnnotations;
     using System.Text;
     using System.Threading.Tasks;
-    using BrightChain.EntityFrameworkCore.Data.Entities;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -13,9 +12,9 @@
     [AllowAnonymous]
     public class ResetPasswordModel : PageModel
     {
-        private readonly UserManager<BrightChainEntityUser> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ResetPasswordModel(UserManager<BrightChainEntityUser> userManager)
+        public ResetPasswordModel(UserManager<IdentityUser> userManager)
         {
             this._userManager = userManager;
         }

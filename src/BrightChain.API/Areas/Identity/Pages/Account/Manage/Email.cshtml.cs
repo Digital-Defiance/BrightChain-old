@@ -4,7 +4,6 @@
     using System.Text;
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
-    using BrightChain.EntityFrameworkCore.Data.Entities;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
@@ -13,13 +12,13 @@
 
     public partial class EmailModel : PageModel
     {
-        private readonly UserManager<BrightChainEntityUser> _userManager;
-        private readonly SignInManager<BrightChainEntityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IEmailSender _emailSender;
 
         public EmailModel(
-            UserManager<BrightChainEntityUser> userManager,
-            SignInManager<BrightChainEntityUser> signInManager,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager,
             IEmailSender emailSender)
         {
             this._userManager = userManager;
@@ -47,7 +46,7 @@
             public string NewEmail { get; set; }
         }
 
-        private async Task LoadAsync(BrightChainEntityUser user)
+        private async Task LoadAsync(IdentityUser user)
         {
             var email = await this._userManager.GetEmailAsync(user).ConfigureAwait(false);
             this.Email = email;

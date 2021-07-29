@@ -9,10 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 namespace BrightChain.API.Areas.Identity
 {
     using System;
-    using BrightChain.API.Identity.Data;
-    using BrightChain.EntityFrameworkCore.Data.Entities;
     using Microsoft.Extensions.DependencyInjection;
-    using static BrightChain.EntityFrameworkCore.BrightChainDbContextOptionsExtensions;
 
     public class IdentityHostingStartup : IHostingStartup
     {
@@ -20,12 +17,6 @@ namespace BrightChain.API.Areas.Identity
         {
             builder.ConfigureServices((context, services) =>
                 {
-                    services.AddDbContext<BrightChainIdentityDbContext>((p, o) =>
-                    o.UseBrightChain(Guid.NewGuid().ToString(), "_", "_"));
-
-                    services.AddDefaultIdentity<BrightChainEntityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<BrightChainIdentityDbContext>();
-
                     //services.AddPersistence<BrightChainBlockDbContext>(configuration: this.Configuration);
                     //services.AddPersistence<BrightChainAPIUserContext>(configuration: this.Configuration);
                     //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)

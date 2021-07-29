@@ -5,7 +5,6 @@
     using System.Text;
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
-    using BrightChain.EntityFrameworkCore.Data.Entities;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.UI.Services;
@@ -17,14 +16,14 @@
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel
     {
-        private readonly SignInManager<BrightChainEntityUser> _signInManager;
-        private readonly UserManager<BrightChainEntityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
-            SignInManager<BrightChainEntityUser> signInManager,
-            UserManager<BrightChainEntityUser> userManager,
+            SignInManager<IdentityUser> signInManager,
+            UserManager<IdentityUser> userManager,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender)
         {
@@ -119,7 +118,7 @@
 
             if (this.ModelState.IsValid)
             {
-                var user = new BrightChainEntityUser { UserName = this.Input.Email, Email = this.Input.Email };
+                var user = new IdentityUser { UserName = this.Input.Email, Email = this.Input.Email };
 
                 var result = await this._userManager.CreateAsync(user).ConfigureAwait(false);
                 if (result.Succeeded)

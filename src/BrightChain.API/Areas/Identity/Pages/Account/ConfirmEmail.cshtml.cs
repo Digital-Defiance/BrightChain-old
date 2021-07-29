@@ -2,7 +2,6 @@
 {
     using System.Text;
     using System.Threading.Tasks;
-    using BrightChain.EntityFrameworkCore.Data.Entities;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -12,9 +11,9 @@
     [AllowAnonymous]
     public class ConfirmEmailModel : PageModel
     {
-        private readonly UserManager<BrightChainEntityUser> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ConfirmEmailModel(UserManager<BrightChainEntityUser> userManager)
+        public ConfirmEmailModel(UserManager<IdentityUser> userManager)
         {
             this._userManager = userManager;
         }

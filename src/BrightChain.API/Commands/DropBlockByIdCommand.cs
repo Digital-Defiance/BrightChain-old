@@ -4,8 +4,8 @@
     using System.Threading.Tasks;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Services;
-    using BrightChain.EntityFrameworkCore.Data;
     using MediatR;
+    using Microsoft.EntityFrameworkCore;
 
     public class DropBlockByIdCommand : IRequest<BlockHash>
     {
@@ -14,7 +14,7 @@
         public class DropBlockByIdCommandHandler : IRequestHandler<DropBlockByIdCommand, BlockHash>
         {
             private readonly BrightBlockService _brightChain;
-            private readonly BrightChainBlockDbContext _context;
+            private readonly DbContext _context;
 
             public DropBlockByIdCommandHandler(BrightBlockService brightBlockService)
             {
