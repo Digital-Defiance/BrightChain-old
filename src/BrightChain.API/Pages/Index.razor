@@ -1,12 +1,12 @@
 ﻿@page "/"
-@using BrightChain.Engine.Helpers;
+@using Stardate;
 
 <h1>BrightChain: The Revolution(ary) Network</h1>
 
 BrightChain is coming online soon.
 
 @code {
-    Stardate currentStardate = new Stardate(DateTime.UtcNow);
+    OldStardate currentStardate = new OldStardate(DateTime.UtcNow);
 }
-<p>Birthday: Stardate @Stardate.BrightChainBirthDay.Double</p>
+<p>Birthday: Stardate @OldStardate.BrightChainBirthDay.Double</p>
 <p>Stardate: @currentStardate.Double</p>

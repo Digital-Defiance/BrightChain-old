@@ -43,6 +43,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BrightChain.Engine\BrightChain.Engine.csproj" />
+    <ProjectReference Include="..\Stardate\Stardate.csproj" />
   </ItemGroup>
 
   <ItemGroup>
