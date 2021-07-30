@@ -7,7 +7,7 @@ namespace BrightChain.Engine.Tests
     /// Tests the CBL blocks for their ability to represent a file
     /// </summary>
     [TestClass]
-    public class TestContstituentBlockListBlockTest
+    public class ContstituentBlockListBlockTest
     {
         [TestMethod, Ignore]
         public void ItCalculatesTotalCostSumTest()
