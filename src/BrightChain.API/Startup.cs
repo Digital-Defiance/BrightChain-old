@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using BrightChain.API.Areas.Identity;
 using BrightChain.API.Data;
+using BrightChain.API.Extensions;
 using BrightChain.API.Services;
 using BrightChain.Engine.Services;
 using MediatR;
@@ -31,7 +32,7 @@ namespace BrightChain.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddLogging();
-            //services.AddPersistence(this.Configuration);
+            services.AddPersistence(this.Configuration);
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddDatabaseDeveloperPageExceptionFilter();
