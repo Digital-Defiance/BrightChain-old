@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BrightChain.Engine.Exceptions;
 
 namespace BrightChain.Engine.Models.Blocks.DataObjects
 {
@@ -27,6 +28,26 @@ namespace BrightChain.Engine.Models.Blocks.DataObjects
             this.SegmentId = segmentId;
             this.Previous = previous;
             this.Next = next;
+        }
+
+        public ConstituentBlockListBlockParams Merge(ConstituentBlockListBlockParams otherBlockParams)
+        {
+            if (otherBlockParams.BlockSize != this.BlockSize)
+            {
+                throw new BrightChainException("BlockSize mismatch");
+            }
+
+            var newConstituentBlocks = new List<BlockHash>(this.ConstituentBlocks);
+            newConstituentBlocks.AddRange(otherBlockParams.ConstituentBlocks);
+
+            return new ConstituentBlockListBlockParams(
+                blockParams: this.Merge(otherBlockParams),
+                sourceId: this.SourceId,
+                segmentId: this.SegmentId,
+                totalLength: this.TotalLength > otherBlockParams.TotalLength ? this.TotalLength : otherBlockParams.TotalLength,
+                constituentBlocks: newConstituentBlocks,
+                previous: this.Previous,
+                next: this.Next);
         }
     }
 }

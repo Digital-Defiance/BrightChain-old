@@ -1,5 +1,6 @@
 ﻿using System;
 using BrightChain.Engine.Enumerations;
+using BrightChain.Engine.Exceptions;
 
 namespace BrightChain.Engine.Models.Blocks.DataObjects
 {
@@ -21,6 +22,21 @@ namespace BrightChain.Engine.Models.Blocks.DataObjects
             this.KeepUntilAtLeast = keepUntilAtLeast;
             this.Redundancy = redundancy;
             this.PrivateEncrypted = privateEncrypted;
+        }
+
+        public BlockParams Merge(BlockParams otherBlockParams)
+        {
+            if (otherBlockParams.BlockSize != this.BlockSize)
+            {
+                throw new BrightChainException("BlockSize mismatch");
+            }
+
+            return new BlockParams(
+                blockSize: this.BlockSize,
+                requestTime: this.RequestTime > otherBlockParams.RequestTime ? this.RequestTime : otherBlockParams.RequestTime,
+                keepUntilAtLeast: (otherBlockParams.KeepUntilAtLeast > this.KeepUntilAtLeast) ? otherBlockParams.KeepUntilAtLeast : this.KeepUntilAtLeast,
+                redundancy: (otherBlockParams.Redundancy > this.Redundancy) ? otherBlockParams.Redundancy : this.Redundancy,
+                privateEncrypted: this.PrivateEncrypted || otherBlockParams.PrivateEncrypted);
         }
     }
 }

@@ -78,6 +78,16 @@ namespace BrightChain.Engine.Models.Blocks
         public uint MetadataCrc32 =>
             Helpers.Crc32.ComputeNewChecksum(this.MetadataBytes().ToArray());
 
+        public static bool operator ==(Block a, Block b)
+        {
+            return ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;
+        }
+
+        public static bool operator !=(Block a, Block b)
+        {
+            return !a.Equals(b);
+        }
+
         public Block(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
             if (this is RootBlock)
@@ -210,13 +220,15 @@ namespace BrightChain.Engine.Models.Blocks
                 }
             }
 
-            var result = this.NewBlock(
-                new BlockParams(
+            var newBlockParams = this.BlockParams.Merge(new BlockParams(
                     blockSize: this.BlockSize,
                     requestTime: System.DateTime.Now,
                     keepUntilAtLeast: keepUntil,
                     redundancy: redundancy,
-                    privateEncrypted: this.StorageContract.PrivateEncrypted), // these XOR functions should be one of the only places this even happens
+                    privateEncrypted: this.StorageContract.PrivateEncrypted));
+
+            var result = this.NewBlock(
+                blockParams: newBlockParams,
                 data: new ReadOnlyMemory<byte>(xorData));
             result.ConstituentBlocks = newList.ToArray();
             return result;
@@ -226,16 +238,6 @@ namespace BrightChain.Engine.Models.Blocks
         {
             throw new NotImplementedException();
             this.SignatureVerified = true;
-        }
-
-        public static bool operator ==(Block a, Block b)
-        {
-            return ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;
-        }
-
-        public static bool operator !=(Block a, Block b)
-        {
-            return !a.Equals(b);
         }
 
         public override bool Equals(object obj)

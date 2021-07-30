@@ -1,4 +1,5 @@
-﻿using BrightChain.Engine.Interfaces;
+﻿using BrightChain.Engine.Exceptions;
+using BrightChain.Engine.Interfaces;
 
 namespace BrightChain.Engine.Models.Blocks.DataObjects
 {
@@ -18,6 +19,19 @@ namespace BrightChain.Engine.Models.Blocks.DataObjects
         {
             this.CacheManager = cacheManager;
             this.AllowCommit = allowCommit;
+        }
+
+        public TransactableBlockParams Merge(TransactableBlockParams otherBlockParams)
+        {
+            if (otherBlockParams.BlockSize != this.BlockSize)
+            {
+                throw new BrightChainException("BlockSize mismatch");
+            }
+
+            return new TransactableBlockParams(
+                cacheManager: this.CacheManager,
+                allowCommit: this.AllowCommit && otherBlockParams.AllowCommit,
+                blockParams: this.Merge(otherBlockParams));
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace BrightChain.Engine.Models.Blocks.DataObjects
+﻿namespace BrightChain.Engine.Models.Blocks.DataObjects
 {
+    using BrightChain.Engine.Exceptions;
+
     public class ChainableDataBlockParams : TransactableBlockParams
     {
         public readonly BlockHash Previous = null;
@@ -15,6 +15,19 @@ namespace BrightChain.Engine.Models.Blocks.DataObjects
         {
             this.Previous = previous;
             this.Next = next;
+        }
+
+        public ChainableDataBlockParams Merge(ChainableDataBlockParams otherBlockParams)
+        {
+            if (otherBlockParams.BlockSize != this.BlockSize)
+            {
+                throw new BrightChainException("BlockSize mismatch");
+            }
+
+            return new ChainableDataBlockParams(
+                blockParams: this.Merge(otherBlockParams),
+                previous: this.Previous,
+                next: this.Next);
         }
     }
 }
