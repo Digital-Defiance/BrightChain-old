@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BrightChain.API.Areas.Identity;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-
-namespace BrightChain.API.Infrastructure
+﻿namespace BrightChain.API.Infrastructure
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using BrightChain.API.Areas.Identity;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
+    using NETCore.Encrypt;
+
     /// <summary>
-    /// Custom UserManager to override Authenticator Token generation behavior (encrypt/decrypt)
+    /// Custom UserManager to override Authenticator Token generation behavior (encrypt/decrypt).
+    /// from https://chsakell.com/2019/08/18/asp-net-core-identity-series-two-factor-authentication/
     /// </summary>
     public class BrightChainUserManager : UserManager<BrightChainIdentityUser>
     {
@@ -40,16 +42,15 @@ namespace BrightChain.API.Infrastructure
         {
             var originalAuthenticatorKey = base.GenerateNewAuthenticatorKey();
 
-            throw new NotImplementedException();
-            // var aesKey = EncryptProvider.CreateAesKey();
+            var aesKey = EncryptProvider.CreateAesKey();
 
             bool.TryParse(this._configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
 
-            //var encryptedKey = encryptionEnabled
-            //    ? EncryptProvider.AESEncrypt(originalAuthenticatorKey, _configuration["TwoFactorAuthentication:EncryptionKey"])
-            //    : originalAuthenticatorKey;
+            var encryptedKey = encryptionEnabled
+                ? EncryptProvider.AESEncrypt(originalAuthenticatorKey, _configuration["TwoFactorAuthentication:EncryptionKey"])
+                : originalAuthenticatorKey;
 
-            //return encryptedKey;
+            return encryptedKey;
         }
 
         public override async Task<string> GetAuthenticatorKeyAsync(BrightChainIdentityUser user)
@@ -60,16 +61,15 @@ namespace BrightChain.API.Infrastructure
             {
                 return null;
             }
-            throw new NotImplementedException();
 
             // Decryption
             bool.TryParse(this._configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
 
-            //var originalAuthenticatorKey = encryptionEnabled
-            //    ? EncryptProvider.AESDecrypt(databaseKey, _configuration["TwoFactorAuthentication:EncryptionKey"])
-            //    : databaseKey;
+            var originalAuthenticatorKey = encryptionEnabled
+                ? EncryptProvider.AESDecrypt(databaseKey, _configuration["TwoFactorAuthentication:EncryptionKey"])
+                : databaseKey;
 
-            //return originalAuthenticatorKey;
+           return originalAuthenticatorKey;
         }
 
         #endregion
@@ -80,14 +80,13 @@ namespace BrightChain.API.Infrastructure
         {
             var originalRecoveryCode = base.CreateTwoFactorRecoveryCode();
 
-            throw new NotImplementedException();
             bool.TryParse(this._configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
 
-            //var encryptedRecoveryCode = encryptionEnabled
-            //    ? EncryptProvider.AESEncrypt(originalRecoveryCode, _configuration["TwoFactorAuthentication:EncryptionKey"])
-            //    : originalRecoveryCode;
+            var encryptedRecoveryCode = encryptionEnabled
+                ? EncryptProvider.AESEncrypt(originalRecoveryCode, _configuration["TwoFactorAuthentication:EncryptionKey"])
+                : originalRecoveryCode;
 
-            //return encryptedRecoveryCode;
+            return encryptedRecoveryCode;
         }
 
         public override async Task<IEnumerable<string>> GenerateNewTwoFactorRecoveryCodesAsync(BrightChainIdentityUser user, int number)
@@ -100,15 +99,13 @@ namespace BrightChain.API.Infrastructure
                 return generatedTokens;
             }
 
-            throw new NotImplementedException();
             bool.TryParse(this._configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
 
-            //return encryptionEnabled
-            //    ? generatedTokens
-            //        .Select(token =>
-            //            EncryptProvider.AESDecrypt(token, _configuration["TwoFactorAuthentication:EncryptionKey"]))
-            //    : generatedTokens;
-
+            return encryptionEnabled
+                ? generatedTokens
+                    .Select(token =>
+                        EncryptProvider.AESDecrypt(token, _configuration["TwoFactorAuthentication:EncryptionKey"]))
+                : generatedTokens;
         }
 
         public override Task<IdentityResult> RedeemTwoFactorRecoveryCodeAsync(BrightChainIdentityUser user, string code)
@@ -117,8 +114,7 @@ namespace BrightChain.API.Infrastructure
 
             if (encryptionEnabled && !string.IsNullOrEmpty(code))
             {
-                //code = EncryptProvider.AESEncrypt(code, _configuration["TwoFactorAuthentication:EncryptionKey"]);
-                throw new NotImplementedException();
+                code = EncryptProvider.AESEncrypt(code, _configuration["TwoFactorAuthentication:EncryptionKey"]);
             }
 
             return base.RedeemTwoFactorRecoveryCodeAsync(user, code);

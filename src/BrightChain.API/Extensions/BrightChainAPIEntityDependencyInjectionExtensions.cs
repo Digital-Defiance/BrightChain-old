@@ -11,7 +11,9 @@
         public static void AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
             //services.AddEntityFrameworkBrightChain();
-            services.AddDbContext<BrightChainIdentityDbContext>();
+            services.AddDbContext<BrightChainIdentityDbContext>(
+                (p, o) =>
+                    o.UseInternalServiceProvider(p));
             //services.AddDbContext<BrightChainIdentityDbContext>((p, o) =>
             //        o.UseBrightChain(Guid.NewGuid().ToString(), "_", "_")
             //            .UseInternalServiceProvider(p));

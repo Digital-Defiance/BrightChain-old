@@ -1,6 +1,7 @@
 ﻿namespace BrightChain.API.Identity.Data
 {
     using System;
+using System.Collections.Generic;
     using System.Data;
     using System.Threading.Tasks;
     using BrightChain.API.Areas.Identity;
@@ -34,30 +35,6 @@
                    //.AddJsonFile("appsettings.json")
                    .Build();
                 //optionsBuilder.UseBrightChain(databaseName: Guid.NewGuid().ToString());
-
-                //builder.Entity<Role>().HasData(new List<Role>
-                //    {
-                //      new Role {
-                //        Id = 1,
-                //        Name = "Admin",
-                //        NormalizedName = "
-                //        ADMIN"
-                //      },
-                //      new Role {
-                //        Id = 2,
-                //        Name = "Staff",
-                //        NormalizedName = "STAFF"
-                //      },
-                //    });
-                //builder.Entity<LogEvent>().HasKey(x => x.LogId);
-                //builder.Entity<LogEvent>().ToTable("LogEvents");
-                //builder.Entity<Client>().HasKey(x => x.ClientId);
-                //builder.Entity<Client>().ToTable("Clients");
-                //builder.Entity<LogEventsHistory>().HasKey(x => x.HistoryId);
-                //builder.Entity<Flag>().HasKey(x => x.FlagId);
-                //builder.Entity<Flag>().ToTable("Flags");
-                //builder.Entity<LogRallyHistory>().HasKey(x => x.HistoryId);
-                //builder.Entity<LogEventsLineHistory>().HasKey(x => x.LineHistoryId);
             }
         }
 
@@ -67,6 +44,30 @@
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
             base.OnModelCreating(builder);
+            builder.Entity<BrightChainIdentityRole>().HasData(new List<BrightChainIdentityRole>
+                    {
+                      new BrightChainIdentityRole
+                      {
+                        Id = "1",
+                        Name = "Admin",
+                        NormalizedName = "ADMIN",
+                      },
+                      new BrightChainIdentityRole
+                      {
+                        Id = "2",
+                        Name = "Staff",
+                        NormalizedName = "STAFF",
+                      },
+                    });
+            //builder.Entity<LogEvent>().HasKey(x => x.LogId);
+            //builder.Entity<LogEvent>().ToTable("LogEvents");
+            //builder.Entity<Client>().HasKey(x => x.ClientId);
+            //builder.Entity<Client>().ToTable("Clients");
+            //builder.Entity<LogEventsHistory>().HasKey(x => x.HistoryId);
+            //builder.Entity<Flag>().HasKey(x => x.FlagId);
+            //builder.Entity<Flag>().ToTable("Flags");
+            //builder.Entity<LogRallyHistory>().HasKey(x => x.HistoryId);
+            //builder.Entity<LogEventsLineHistory>().HasKey(x => x.LineHistoryId);
         }
 
         public async Task<BrightChainIdentityUser> CreateUserAsync()
