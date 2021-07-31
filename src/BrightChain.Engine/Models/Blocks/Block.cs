@@ -227,10 +227,11 @@ namespace BrightChain.Engine.Models.Blocks
                     redundancy: redundancy,
                     privateEncrypted: this.StorageContract.PrivateEncrypted));
 
-            var result = this.NewBlock(
+            var result = new BrightenedBlock(
                 blockParams: newBlockParams,
-                data: new ReadOnlyMemory<byte>(xorData));
-            result.ConstituentBlocks = newList.ToArray();
+                data: new ReadOnlyMemory<byte>(xorData),
+                constituentBlocks: newList);
+
             return result;
         }
 

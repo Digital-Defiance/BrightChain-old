@@ -3,8 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using BrightChain.Engine.Exceptions;
-    using BrightChain.Engine.Services;
+    using global::BrightChain.Engine.Exceptions;
+    using global::BrightChain.Engine.Services;
+
     /// <summary>
     /// Represents a virtual map of all the contituent tuple-sets/blocks in a given source/reconstructed file. These cannot themselves be committed to disk
     /// The block datas may not actually be loaded in memory, but the appropriate blocks will be loaded (all non-local will be pulled into the cache first) relative to their access offsets.

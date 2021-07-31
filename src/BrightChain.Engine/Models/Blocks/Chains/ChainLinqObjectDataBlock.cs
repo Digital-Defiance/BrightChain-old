@@ -8,14 +8,13 @@
     using System.Text;
     using System.Text.Json;
     using System.Threading.Tasks;
-    using BrightChain.Engine.Attributes;
-    using BrightChain.Engine.Exceptions;
-    using BrightChain.Engine.Extensions;
-    using BrightChain.Engine.Factories;
-    using BrightChain.Engine.Models.Blocks.DataObjects;
+    using global::BrightChain.Engine.Attributes;
+    using global::BrightChain.Engine.Exceptions;
+    using global::BrightChain.Engine.Factories;
+    using global::BrightChain.Engine.Models.Blocks.DataObjects;
 
     public class ChainLinqObjectDataBlock<T>
-        : TransactableBlock
+        : SourceBlock
         where T : ISerializable
     {
         public static JsonSerializerOptions NewSerializerOptions()
@@ -70,7 +69,7 @@
         public ChainLinqObjectDataBlock(ChainLinqBlockParams blockParams, T blockObject)
             : base(
                   blockParams: blockParams,
-                  data: BrightChain.Engine.Helpers.RandomDataHelper.DataFiller(
+                  data: global::BrightChain.Engine.Helpers.RandomDataHelper.DataFiller(
                     inputData: SerializeDictionaryToMemory(blockObject),
                     blockSize: blockParams.BlockSize))
         {
@@ -79,6 +78,7 @@
         }
 
         public ChainLinqObjectDataBlock(ChainLinqBlockParams blockParams, ReadOnlyMemory<byte> persistedData)
+            : base(blockParams, persistedData)
         {
             var jsonString = new string(persistedData.ToArray().Select(c => (char)c).ToArray());
             object blockDataObject = JsonSerializer.Deserialize(jsonString, typeof(Dictionary<string, object>), NewSerializerOptions());
@@ -93,16 +93,16 @@
             this._next = (BlockHash)blockDictionary["Next"];
         }
 
-
         public override void Dispose()
         {
             this._next = null;
         }
 
-        public override ChainLinqObjectDataBlock<T> NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
-        {
-            throw new NotImplementedException();
-        }
+        public override ChainLinqObjectDataBlock<T> NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data) =>
+                new ChainLinqObjectDataBlock<T>(
+                    blockParams: new ChainLinqBlockParams(
+                        blockParams: blockParams),
+                    persistedData: data);
 
         /// <summary>
         /// Loaded block data.
@@ -112,20 +112,12 @@
         private T _blockObject;
         private BlockHash _next;
 
-        /// <summary>
-        /// Gets or sets the hash of the next CBL in this CBL Chain.
-        /// </summary>
         [BrightChainBlockData]
         public BlockHash Next
         {
             get => this._next;
             set
             {
-                if (this.Committed)
-                {
-                    throw new BrightChainException("Block already committed. Would change hash.");
-                }
-
                 this._next = value;
             }
         }

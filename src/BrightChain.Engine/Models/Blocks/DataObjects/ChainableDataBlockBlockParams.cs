@@ -2,20 +2,22 @@
 {
     using BrightChain.Engine.Exceptions;
 
-    public class ChainLinqBlockParams : TransactableBlockParams
+    public class ChainLinqBlockParams : BlockParams
     {
         public readonly BlockHash Next = null;
 
-        public ChainLinqBlockParams(TransactableBlockParams blockParams, BlockHash next = null)
+        public ChainLinqBlockParams(BlockParams blockParams, BlockHash next = null)
        : base(
-             cacheManager: blockParams.CacheManager,
-             allowCommit: blockParams.AllowCommit,
-             blockParams: blockParams)
+             blockSize: blockParams.BlockSize,
+             requestTime: blockParams.RequestTime,
+             keepUntilAtLeast: blockParams.KeepUntilAtLeast,
+             redundancy: blockParams.Redundancy,
+             privateEncrypted: blockParams.PrivateEncrypted)
         {
             this.Next = next;
         }
 
-        public ChainLinqBlockParams Merge(ChainLinqBlockParams otherBlockParams)
+        public ChainLinqBlockParams Merge(BlockParams otherBlockParams)
         {
             if (otherBlockParams.BlockSize != this.BlockSize)
             {

@@ -71,7 +71,7 @@ namespace BrightChain.Engine.Services
 
             if (!dbNameConfigured)
             {
-                BrightChain.Engine.Helpers.ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", Utilities.HashToFormattedString(serviceUnifiedStoreGuid.ToByteArray()));
+                global::BrightChain.Engine.Helpers.ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", Utilities.HashToFormattedString(serviceUnifiedStoreGuid.ToByteArray()));
             }
 
             var rootBlock = new RootBlock(
@@ -385,7 +385,8 @@ namespace BrightChain.Engine.Services
                 using (SHA256 sha = SHA256.Create())
                 {
                     StreamWriter streamWriter = new StreamWriter(stream);
-                    await foreach (Block block in blockMap.ConsolidateTuplesToChainAsync(this.blockMemoryCache))
+                    var cacheManager = this.blockMemoryCache.AsBlockCacheManager;
+                    await foreach (Block block in blockMap.ConsolidateTuplesToChainAsync(cacheManager))
                     {
                         var bytesLeft = constituentBlockListBlock.TotalLength - bytesWritten;
                         var lastBlock = bytesLeft <= iBlockSize;
@@ -566,6 +567,36 @@ namespace BrightChain.Engine.Services
 
                 yield return response;
             }
+        }
+
+        public BrightChain BrightenBlocks(SourceBlock[] sourceBlocks)
+        {
+            BrightenedBlock[] brightenedBlocks = new BrightenedBlock[sourceBlocks.Length];
+            long i = 0;
+            foreach (var sourceBlock in sourceBlocks)
+            {
+                Block[] randomizersUsed;
+                var brightenedBlock = this.blockBrightener.Brighten(
+                    block: sourceBlock,
+                    randomizersUsed: out randomizersUsed);
+
+                this.blockMemoryCache.Set(new TransactableBlock(
+                        cacheManager: this.blockMemoryCache,
+                        sourceBlock: brightenedBlock,
+                        allowCommit: true));
+
+                foreach (var randomizer in randomizersUsed)
+                {
+                    this.blockMemoryCache.Set(block: new TransactableBlock(
+                        cacheManager: this.blockMemoryCache,
+                        sourceBlock: randomizer,
+                        allowCommit: true));
+                }
+
+                brightenedBlocks[i++] = brightenedBlock;
+            }
+
+            return new BrightChain(brightenedBlocks);
         }
     }
 }
