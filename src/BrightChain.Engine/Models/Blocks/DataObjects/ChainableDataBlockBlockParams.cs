@@ -2,31 +2,28 @@
 {
     using BrightChain.Engine.Exceptions;
 
-    public class ChainableDataBlockParams : TransactableBlockParams
+    public class ChainLinqBlockParams : TransactableBlockParams
     {
-        public readonly BlockHash Previous = null;
         public readonly BlockHash Next = null;
 
-        public ChainableDataBlockParams(TransactableBlockParams blockParams, BlockHash previous = null, BlockHash next = null)
+        public ChainLinqBlockParams(TransactableBlockParams blockParams, BlockHash next = null)
        : base(
              cacheManager: blockParams.CacheManager,
              allowCommit: blockParams.AllowCommit,
              blockParams: blockParams)
         {
-            this.Previous = previous;
             this.Next = next;
         }
 
-        public ChainableDataBlockParams Merge(ChainableDataBlockParams otherBlockParams)
+        public ChainLinqBlockParams Merge(ChainLinqBlockParams otherBlockParams)
         {
             if (otherBlockParams.BlockSize != this.BlockSize)
             {
                 throw new BrightChainException("BlockSize mismatch");
             }
 
-            return new ChainableDataBlockParams(
+            return new ChainLinqBlockParams(
                 blockParams: this.Merge(otherBlockParams),
-                previous: this.Previous,
                 next: this.Next);
         }
     }
