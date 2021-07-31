@@ -103,7 +103,7 @@ using global::BrightChain.Engine.Enumerations;
             this._next = null;
         }
 
-        public static ChainLinqObjectDataBlock<T> Make(ChainLinqBlockParams blockParams, T blockObject, BlockHash next = null)
+        public static ChainLinqObjectDataBlock<T> MakeBlock(ChainLinqBlockParams blockParams, T blockObject, BlockHash next = null)
         {
             var serialized = ChainLinqObjectDataBlock<T>.SerializeObjectThroughDictionaryToMemory(
                 objectData: blockObject,
@@ -123,7 +123,7 @@ using global::BrightChain.Engine.Enumerations;
             ChainLinqObjectDataBlock<T>[] blocks = new ChainLinqObjectDataBlock<T>[blockObjects.Count()];
             foreach (var blockObject in blockObjects)
             {
-                blocks[i++] = ChainLinqObjectDataBlock<T>.Make(
+                blocks[i++] = MakeBlock(
                     blockParams: blockParams,
                     blockObject: blockObject,
                     next: null);
