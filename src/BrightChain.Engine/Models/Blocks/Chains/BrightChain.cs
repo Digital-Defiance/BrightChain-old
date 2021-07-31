@@ -2,12 +2,14 @@
 {
     using System.Collections;
     using System.Collections.Generic;
+    using global::BrightChain.Engine.Models.Blocks.DataObjects;
 
-    public class BrightChain : IEnumerable<BrightenedBlock>
+    public class BrightChain : ConstituentBlockListBlock, IEnumerable<BrightenedBlock>
     {
         private IEnumerable<BrightenedBlock> _blocks;
 
-        public BrightChain(IEnumerable<BrightenedBlock> sourceBlocks)
+        public BrightChain(ConstituentBlockListBlockParams blockParams, IEnumerable<BrightenedBlock> sourceBlocks)
+            : base(blockParams)
         {
             this._blocks = sourceBlocks;
         }

@@ -1,8 +1,10 @@
 ﻿namespace BrightChain.Engine.Models.Blocks.Chains
 {
+using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
+    using global::BrightChain.Engine.Models.Blocks.DataObjects;
     using global::BrightChain.Engine.Services;
 
     public class ChainLinq<T>
@@ -33,6 +35,6 @@
             this.Blocks.Select(b => b.BlockObject);
 
         public BrightChain BrightenAll(BrightBlockService brightBlockService) =>
-            new BrightChain(brightBlockService.BrightenBlocks(this.Blocks));
+            brightBlockService.BrightenBlocks(sourceBlocks: this.Blocks);
     }
 }

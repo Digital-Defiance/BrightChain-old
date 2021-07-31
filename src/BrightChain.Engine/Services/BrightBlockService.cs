@@ -605,7 +605,22 @@ namespace BrightChain.Engine.Services
                 brightenedBlocks[i++] = brightenedBlock;
             }
 
-            return new BrightChain(brightenedBlocks);
+            var segmentBytes = (byte[])brightenedBlocks.SelectMany(b => b.Id.HashBytes.ToArray()).ToArray();
+
+            return new BrightChain(
+                blockParams: new ConstituentBlockListBlockParams(
+                    blockParams: new TransactableBlockParams(
+                        cacheManager: this.blockMemoryCache,
+                        allowCommit: true,
+                        blockParams: brightenedBlocks[0].BlockParams),
+                    sourceId: brightenedBlocks[0].Id,
+                    segmentId: new SegmentHash(
+                        dataBytes: new ReadOnlyMemory<byte>(segmentBytes)),
+                    totalLength: BlockSizeMap.BlockSize(brightenedBlocks[0].BlockSize) * brightenedBlocks.Length,
+                    constituentBlocks: brightenedBlocks.Select(b => b.Id),
+                    previous: null,
+                    next: null),
+                sourceBlocks: brightenedBlocks);
         }
     }
 }
