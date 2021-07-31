@@ -15,7 +15,7 @@ using global::BrightChain.Engine.Enumerations;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
     using global::BrightChain.Engine.Services;
 
-    public class ChainLinqObjectDataBlock<T>
+    public class ChainLinqObjectBlock<T>
         : SourceBlock
         where T : ISerializable
     {
@@ -68,7 +68,7 @@ using global::BrightChain.Engine.Enumerations;
             return true;
         }
 
-        public ChainLinqObjectDataBlock(ChainLinqBlockParams blockParams, T blockObject, ReadOnlyMemory<byte> serializedData)
+        public ChainLinqObjectBlock(ChainLinqBlockParams blockParams, T blockObject, ReadOnlyMemory<byte> serializedData)
             : base(
                   blockParams: blockParams,
                   data: global::BrightChain.Engine.Helpers.RandomDataHelper.DataFiller(
@@ -80,7 +80,7 @@ using global::BrightChain.Engine.Enumerations;
             this._length = serializedData.Length;
         }
 
-        public ChainLinqObjectDataBlock(ChainLinqBlockParams blockParams, ReadOnlyMemory<byte> persistedData)
+        public ChainLinqObjectBlock(ChainLinqBlockParams blockParams, ReadOnlyMemory<byte> persistedData)
             : base(blockParams, persistedData)
         {
             this._length = persistedData.Length;
@@ -103,13 +103,13 @@ using global::BrightChain.Engine.Enumerations;
             this._next = null;
         }
 
-        public static ChainLinqObjectDataBlock<T> MakeBlock(ChainLinqBlockParams blockParams, T blockObject, BlockHash next = null)
+        public static ChainLinqObjectBlock<T> MakeBlock(ChainLinqBlockParams blockParams, T blockObject, BlockHash next = null)
         {
-            var serialized = ChainLinqObjectDataBlock<T>.SerializeObjectThroughDictionaryToMemory(
+            var serialized = ChainLinqObjectBlock<T>.SerializeObjectThroughDictionaryToMemory(
                 objectData: blockObject,
                 next: next);
 
-            return new ChainLinqObjectDataBlock<T>(
+            return new ChainLinqObjectBlock<T>(
                 blockParams: new Models.Blocks.DataObjects.ChainLinqBlockParams(
                     blockParams: blockParams,
                     next: next),
@@ -120,7 +120,7 @@ using global::BrightChain.Engine.Enumerations;
         public static BrightChain MakeChain(BrightBlockService brightBlockService, ChainLinqBlockParams blockParams, IEnumerable<T> blockObjects)
         {
             long i = 0;
-            ChainLinqObjectDataBlock<T>[] blocks = new ChainLinqObjectDataBlock<T>[blockObjects.Count()];
+            ChainLinqObjectBlock<T>[] blocks = new ChainLinqObjectBlock<T>[blockObjects.Count()];
             foreach (var blockObject in blockObjects)
             {
                 blocks[i++] = MakeBlock(
@@ -132,8 +132,8 @@ using global::BrightChain.Engine.Enumerations;
             return ChainLinq<T>.BrightenAll(brightBlockService, blocks);
         }
 
-        public override ChainLinqObjectDataBlock<T> NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data) =>
-                new ChainLinqObjectDataBlock<T>(
+        public override ChainLinqObjectBlock<T> NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data) =>
+                new ChainLinqObjectBlock<T>(
                     blockParams: new ChainLinqBlockParams(
                         blockParams: blockParams),
                     persistedData: data);

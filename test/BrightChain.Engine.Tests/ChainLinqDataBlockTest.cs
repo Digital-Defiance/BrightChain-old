@@ -80,7 +80,7 @@ using System.IO;
                 logger: this.loggerFactory.Object,
                 configuration: this.configuration.Object);
 
-            var brightChain = ChainLinqObjectDataBlock<ChainLinqExampleSerializable>.MakeChain(
+            var brightChain = ChainLinqObjectBlock<ChainLinqExampleSerializable>.MakeChain(
                 brightBlockService: brightBlockService,
                 blockParams: requestParams,
                 blockObjects: datas);
@@ -88,14 +88,14 @@ using System.IO;
             await brightBlockService.PersistMemoryCacheAsync(clearAfter: true);
 
             var firstBlock = (await brightBlockService.TryFindBlockByIdAsync(brightChain.First().Id)).AsBlock;
-            var typedBlock = firstBlock as ChainLinqObjectDataBlock<ChainLinqExampleSerializable>;
+            var typedBlock = firstBlock as ChainLinqObjectBlock<ChainLinqExampleSerializable>;
             var block = typedBlock;
             var j = 0;
             while (block is not null)
             {
                 var nextBlock = await brightBlockService.TryFindBlockByIdAsync(block.Next);
                 Assert.IsNotNull(nextBlock);
-                typedBlock = nextBlock as ChainLinqObjectDataBlock<ChainLinqExampleSerializable>;
+                typedBlock = nextBlock as ChainLinqObjectBlock<ChainLinqExampleSerializable>;
                 Assert.AreEqual(datas[j++], block.BlockObject);
             }
         }

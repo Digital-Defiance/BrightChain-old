@@ -10,9 +10,9 @@ using System;
     public class ChainLinq<T>
         where T : ISerializable
     {
-        public ChainLinq(IEnumerable<ChainLinqObjectDataBlock<T>> blocks)
+        public ChainLinq(IEnumerable<ChainLinqObjectBlock<T>> blocks)
         {
-            this.Blocks = (ChainLinqObjectDataBlock<T>[])blocks;
+            this.Blocks = (ChainLinqObjectBlock<T>[])blocks;
             for (int i = this.Blocks.Length - 1; i >= 1; i--)
             {
                 var block = this.Blocks[i];
@@ -21,14 +21,14 @@ using System;
             }
         }
 
-        public ChainLinqObjectDataBlock<T>[] Blocks { get; }
+        public ChainLinqObjectBlock<T>[] Blocks { get; }
 
         public long Count() => this.Blocks.LongLength;
 
-        public ChainLinqObjectDataBlock<T> First() =>
+        public ChainLinqObjectBlock<T> First() =>
             this.Blocks[0];
 
-        public ChainLinqObjectDataBlock<T> Last() =>
+        public ChainLinqObjectBlock<T> Last() =>
             this.Blocks[this.Blocks.Length - 1];
 
         public IEnumerable<T> All() =>
