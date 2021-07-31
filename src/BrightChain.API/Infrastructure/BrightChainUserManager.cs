@@ -47,7 +47,7 @@
             bool.TryParse(this._configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
 
             var encryptedKey = encryptionEnabled
-                ? EncryptProvider.AESEncrypt(originalAuthenticatorKey, _configuration["TwoFactorAuthentication:EncryptionKey"])
+                ? EncryptProvider.AESEncrypt(originalAuthenticatorKey, this._configuration["TwoFactorAuthentication:EncryptionKey"])
                 : originalAuthenticatorKey;
 
             return encryptedKey;
@@ -66,10 +66,10 @@
             bool.TryParse(this._configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
 
             var originalAuthenticatorKey = encryptionEnabled
-                ? EncryptProvider.AESDecrypt(databaseKey, _configuration["TwoFactorAuthentication:EncryptionKey"])
+                ? EncryptProvider.AESDecrypt(databaseKey, this._configuration["TwoFactorAuthentication:EncryptionKey"])
                 : databaseKey;
 
-           return originalAuthenticatorKey;
+            return originalAuthenticatorKey;
         }
 
         #endregion
@@ -83,7 +83,7 @@
             bool.TryParse(this._configuration["TwoFactorAuthentication:EncryptionEnabled"], out bool encryptionEnabled);
 
             var encryptedRecoveryCode = encryptionEnabled
-                ? EncryptProvider.AESEncrypt(originalRecoveryCode, _configuration["TwoFactorAuthentication:EncryptionKey"])
+                ? EncryptProvider.AESEncrypt(originalRecoveryCode, this._configuration["TwoFactorAuthentication:EncryptionKey"])
                 : originalRecoveryCode;
 
             return encryptedRecoveryCode;
@@ -104,7 +104,7 @@
             return encryptionEnabled
                 ? generatedTokens
                     .Select(token =>
-                        EncryptProvider.AESDecrypt(token, _configuration["TwoFactorAuthentication:EncryptionKey"]))
+                        EncryptProvider.AESDecrypt(token, this._configuration["TwoFactorAuthentication:EncryptionKey"]))
                 : generatedTokens;
         }
 
@@ -114,7 +114,7 @@
 
             if (encryptionEnabled && !string.IsNullOrEmpty(code))
             {
-                code = EncryptProvider.AESEncrypt(code, _configuration["TwoFactorAuthentication:EncryptionKey"]);
+                code = EncryptProvider.AESEncrypt(code, this._configuration["TwoFactorAuthentication:EncryptionKey"]);
             }
 
             return base.RedeemTwoFactorRecoveryCodeAsync(user, code);

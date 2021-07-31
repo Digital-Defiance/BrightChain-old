@@ -63,8 +63,10 @@ namespace BrightChain.Engine.Services
         /// </summary>
         /// <param name="key">key to check the collection for.</param>
         /// <returns>boolean with whether key is present.</returns>
-        public override bool Contains(BlockHash key) =>
-            this.blocks.ContainsKey(key);
+        public override bool Contains(BlockHash key)
+        {
+            return this.blocks.ContainsKey(key);
+        }
 
         /// <summary>
         ///     Removes a key from the cache and returns a boolean wither whether it was actually present.

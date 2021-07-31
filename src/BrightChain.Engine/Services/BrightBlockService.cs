@@ -9,7 +9,6 @@ namespace BrightChain.Engine.Services
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Runtime.Serialization;
     using System.Security.Cryptography;
     using System.Threading.Tasks;
     using BrightChain.Engine.Enumerations;
@@ -607,7 +606,7 @@ namespace BrightChain.Engine.Services
                 brightenedBlocks[i++] = brightenedBlock;
             }
 
-            var segmentBytes = (byte[])brightenedBlocks.SelectMany(b => b.Id.HashBytes.ToArray()).ToArray();
+            var segmentBytes = brightenedBlocks.SelectMany(b => b.Id.HashBytes.ToArray()).ToArray();
 
             return new BrightChain(
                 blockParams: new ConstituentBlockListBlockParams(

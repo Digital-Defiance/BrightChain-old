@@ -3,7 +3,6 @@ namespace BrightChain.Engine.Models.Blocks
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
     using BrightChain.Engine.Attributes;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
@@ -278,11 +277,14 @@ namespace BrightChain.Engine.Models.Blocks
                 redundancy: this.StorageContract.RedundancyContractType,
                 privateEncrypted: false);
 
-        public bool Equals(IBlock other) =>
-            this.CompareTo(other) == 0;
+        public bool Equals(IBlock other)
+        {
+            return this.CompareTo(other) == 0;
+        }
 
-        public bool Equals(Block other) =>
-            this.CompareTo(other) == 0;
-
+        public bool Equals(Block other)
+        {
+            return this.CompareTo(other) == 0;
+        }
     }
 }

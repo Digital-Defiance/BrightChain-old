@@ -179,8 +179,10 @@ namespace BrightChain.Engine.Services
         /// </summary>
         /// <param name="key">key to check the collection for.</param>
         /// <returns>boolean with whether key is present.</returns>
-        public override bool Contains(BlockHash key) =>
-            File.Exists(this.GetBlockPath(key).FullName);
+        public override bool Contains(BlockHash key)
+        {
+            return File.Exists(this.GetBlockPath(key).FullName);
+        }
 
         /// <summary>
         ///     Removes a key from the cache and returns a boolean wither whether it was actually present.

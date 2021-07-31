@@ -1,6 +1,5 @@
 ﻿namespace BrightChain.Engine.Models.Blocks.Chains
 {
-using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
@@ -50,21 +49,34 @@ using System;
             return BrightenAll(brightBlockService, blocks);
         }
 
-        public long Count() => this.Blocks.LongLength;
+        public long Count()
+        {
+            return this.Blocks.LongLength;
+        }
 
-        public ChainLinqObjectBlock<T> First() =>
-            this.Blocks[0];
+        public ChainLinqObjectBlock<T> First()
+        {
+            return this.Blocks[0];
+        }
 
-        public ChainLinqObjectBlock<T> Last() =>
-            this.Blocks[this.Blocks.Length - 1];
+        public ChainLinqObjectBlock<T> Last()
+        {
+            return this.Blocks[this.Blocks.Length - 1];
+        }
 
-        public IEnumerable<T> All() =>
-            this.Blocks.Select(b => b.BlockObject);
+        public IEnumerable<T> All()
+        {
+            return this.Blocks.Select(b => b.BlockObject);
+        }
 
-        public BrightChain BrightenAll(BrightBlockService brightBlockService) =>
-            brightBlockService.BrightenBlocks(sourceBlocks: SetNextLinks(this.Blocks));
+        public BrightChain BrightenAll(BrightBlockService brightBlockService)
+        {
+            return brightBlockService.BrightenBlocks(sourceBlocks: SetNextLinks(this.Blocks));
+        }
 
         public static BrightChain BrightenAll(BrightBlockService brightBlockService, IEnumerable<ChainLinqObjectBlock<T>> sourceBlocks)
-         => brightBlockService.BrightenBlocks(sourceBlocks: SetNextLinks(sourceBlocks));
+        {
+            return brightBlockService.BrightenBlocks(sourceBlocks: SetNextLinks(sourceBlocks));
+        }
     }
 }

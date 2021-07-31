@@ -2,8 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-using System.IO;
-    using System.Linq;
+    using System.IO;
     using System.Threading.Tasks;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Models.Blocks;
@@ -54,12 +53,12 @@ using System.IO;
         }
 
         [DataTestMethod]
-        [DataRow(BlockSize.Message)]
-        [DataRow(BlockSize.Tiny)]
-        [DataRow(BlockSize.Small)]
-        [DataRow(BlockSize.Medium)]
-        [DataRow(BlockSize.Large)]
-        public async Task ItSavesDataCorrectlyTest(BlockSize blockSize)
+        [DataRow(BlockSize.Message, 4)]
+        [DataRow(BlockSize.Tiny, 4)]
+        [DataRow(BlockSize.Small, 4)]
+        [DataRow(BlockSize.Medium, 4)]
+        [DataRow(BlockSize.Large, 4)]
+        public async Task ItSavesDataCorrectlyTest(BlockSize blockSize, int objectCount)
         {
             var requestParams = new Models.Blocks.DataObjects.ChainLinqBlockParams(
                     blockParams: new Models.Blocks.DataObjects.BlockParams(
@@ -69,11 +68,8 @@ using System.IO;
                         redundancy: RedundancyContractType.HeapAuto,
                         privateEncrypted: false));
 
-            ChainLinqExampleSerializable[] datas = new ChainLinqExampleSerializable[4];
-            for (int i = 0; i < 4; i++)
-            {
-                datas[i] = new ChainLinqExampleSerializable();
-            }
+            var datas = (ChainLinqExampleSerializable[])ChainLinqExampleSerializable.MakeMultiple(objectCount);
+            Assert.AreEqual(objectCount, datas.Length);
 
             var brightBlockService = new BrightBlockService(
                 logger: this.loggerFactory.Object,
@@ -83,6 +79,7 @@ using System.IO;
                 brightBlockService: brightBlockService,
                 blockParams: requestParams,
                 blockObjects: datas);
+            Assert.AreEqual(objectCount, brightChain.Count());
 
             await brightBlockService.PersistMemoryCacheAsync(clearAfter: true);
 

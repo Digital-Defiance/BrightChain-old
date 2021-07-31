@@ -1,13 +1,10 @@
-using System;
 using System.Reflection;
-using BrightChain.API.Areas.Identity;
 using BrightChain.API.Data;
 using BrightChain.API.Extensions;
 using BrightChain.API.Services;
 using BrightChain.Engine.Services;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;

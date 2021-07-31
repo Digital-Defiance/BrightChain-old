@@ -3,10 +3,8 @@
     using System;
     using BrightChain.Engine.Attributes;
     using BrightChain.Engine.Enumerations;
-    using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Services;
 
     /// <summary>
     /// The root block is the key / control node for the cache. Everything gets signed from here.

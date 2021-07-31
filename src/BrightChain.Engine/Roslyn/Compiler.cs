@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
-using Microsoft.CodeAnalysis;
-using System.IO;
 
 namespace BrightChain.Engine.Roslyn
 {
@@ -24,7 +22,7 @@ namespace BrightChain.Engine.Roslyn
                 "System.Collections.Generic",
             };
 
-        private static string runtimePath = @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\{0}.dll";
+        private static readonly string runtimePath = @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\{0}.dll";
 
         private static readonly IEnumerable<MetadataReference> DefaultReferences =
             new[]

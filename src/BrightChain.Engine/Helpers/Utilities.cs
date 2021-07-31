@@ -25,7 +25,8 @@
 
             var aArray = sourceA.ToArray();
             var bArray = sourceB.ToArray();
-            for (int i = 0; i < aArray.Length; i++) {
+            for (int i = 0; i < aArray.Length; i++)
+            {
                 yield return (byte)(aArray[i] ^ bArray[i]);
             }
         }

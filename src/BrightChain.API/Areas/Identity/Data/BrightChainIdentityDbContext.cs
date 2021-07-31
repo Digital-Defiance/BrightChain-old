@@ -1,12 +1,11 @@
 ﻿namespace BrightChain.API.Identity.Data
 {
     using System;
-using System.Collections.Generic;
+    using System.Collections.Generic;
     using System.Data;
     using System.Threading.Tasks;
     using BrightChain.API.Areas.Identity;
     using BrightChain.API.Interfaces;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;

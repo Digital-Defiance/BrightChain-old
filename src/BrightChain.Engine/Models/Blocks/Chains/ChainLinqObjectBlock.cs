@@ -5,15 +5,11 @@
     using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
-    using System.Text;
     using System.Text.Json;
-    using System.Threading.Tasks;
     using global::BrightChain.Engine.Attributes;
-using global::BrightChain.Engine.Enumerations;
     using global::BrightChain.Engine.Exceptions;
     using global::BrightChain.Engine.Factories;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
-    using global::BrightChain.Engine.Services;
 
     public class ChainLinqObjectBlock<T>
         : SourceBlock
@@ -116,29 +112,28 @@ using global::BrightChain.Engine.Enumerations;
                 blockObject: blockObject);
         }
 
-        public override ChainLinqObjectBlock<T> NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data) =>
-                new ChainLinqObjectBlock<T>(
-                    blockParams: new ChainLinqBlockParams(
-                        blockParams: blockParams),
-                    persistedData: data);
+        public override ChainLinqObjectBlock<T> NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
+        {
+            return new ChainLinqObjectBlock<T>(
+blockParams: new ChainLinqBlockParams(
+blockParams: blockParams),
+persistedData: data);
+        }
 
         /// <summary>
         /// Loaded block data.
         /// </summary>
-        public T BlockObject { get => this._blockObject; }
+        public T BlockObject => this._blockObject;
 
-        private T _blockObject;
+        private readonly T _blockObject;
         private BlockHash _next;
-        private long _length;
+        private readonly long _length;
 
         [BrightChainBlockData]
         public BlockHash Next
         {
             get => this._next;
-            set
-            {
-                this._next = value;
-            }
+            set => this._next = value;
         }
     }
 }

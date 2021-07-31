@@ -1,13 +1,10 @@
 ﻿namespace BrightChain.API.Extensions
 {
     using System;
-    using BrightChain.API.Areas.Identity;
     using BrightChain.API.Identity.Data;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Options;
 
     public static class BrightChainAPIEntityDependencyInjectionExtensions
     {
