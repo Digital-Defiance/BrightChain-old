@@ -58,7 +58,6 @@ namespace BrightChain.Engine.Tests
             this.logger = new Mock<ILogger<Tcache>>();
             this.configuration = new Mock<IConfiguration>();
 
-
             Mock<IConfigurationSection> mockPathSection = new Mock<IConfigurationSection>();
             mockPathSection.Setup(x => x.Value).Returns(Path.GetTempPath());
 

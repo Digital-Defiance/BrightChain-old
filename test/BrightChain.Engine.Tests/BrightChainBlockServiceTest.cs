@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Helpers;
@@ -29,9 +30,19 @@ namespace BrightChain.Engine.Tests
         [TestInitialize]
         public void PreTestSetup()
         {
-            this._configuration = new Mock<IConfiguration>().Object;
+            var mockConfiguration = new Mock<IConfiguration>();
+
+            this._configuration = mockConfiguration.Object;
             this._services = new Mock<IServiceCollection>().Object;
             this._logger = new Mock<ILogger>().Object;
+
+            Mock<IConfigurationSection> mockPathSection = new Mock<IConfigurationSection>();
+            mockPathSection.Setup(x => x.Value).Returns(Path.GetTempPath());
+
+            var mockNodeSection = new Mock<IConfigurationSection>();
+            mockNodeSection.Setup(x => x.GetSection(It.Is<string>(k => k == "BasePath"))).Returns(mockPathSection.Object);
+
+            mockConfiguration.Setup(x => x.GetSection(It.Is<string>(k => k == "NodeOptions"))).Returns(mockNodeSection.Object);
 
             var factoryMock = new Mock<ILoggerFactory>();
 
