@@ -59,7 +59,8 @@ namespace BrightChain.Engine.Tests
             var loggerMock = Mock.Get(this._logger);
 
             var brightChainService = new BrightBlockService(
-                logger: this._loggerFactory);
+                logger: this._loggerFactory,
+                configuration: this._configuration);
 
             loggerMock.Verify(l => l.Log(
                 LogLevel.Information,
@@ -100,7 +101,8 @@ namespace BrightChain.Engine.Tests
             var loggerMock = Mock.Get(this._logger);
 
             var brightChainService = new BrightBlockService(
-                logger: this._loggerFactory);
+                logger: this._loggerFactory,
+                configuration: this._configuration);
 
             var sourceInfo = RandomDataHelper.GenerateRandomFile(
                 blockSize: blockSize,
@@ -168,7 +170,8 @@ namespace BrightChain.Engine.Tests
             var loggerMock = Mock.Get(this._logger);
 
             var brightChainService = new BrightBlockService(
-                logger: this._loggerFactory);
+                logger: this._loggerFactory,
+                configuration: this._configuration);
 
             var sourceInfo = RandomDataHelper.GenerateRandomFile(
                 blockSize: blockSize,

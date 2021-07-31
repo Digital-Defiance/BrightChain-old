@@ -38,7 +38,7 @@ namespace BrightChain.Engine.Services
         /// Initializes a new instance of the <see cref="BrightBlockService"/> class.
         /// </summary>
         /// <param name="logger">Instance of the logging provider.</param>
-        public BrightBlockService(ILoggerFactory logger)
+        public BrightBlockService(ILoggerFactory logger, IConfiguration configuration)
         {
             this.logger = logger.CreateLogger(nameof(BrightBlockService));
             if (this.logger is null)
@@ -47,17 +47,26 @@ namespace BrightChain.Engine.Services
             }
 
             this.logger.LogInformation(string.Format("<{0}>: logging initialized", nameof(BrightBlockService)));
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddYamlFile(
-                    path: "brightChainSettings.yaml",
-                    optional: false,
-                    reloadOnChange: true)
-                .AddEnvironmentVariables();
 
-            this.configuration = builder.Build();
+            var nodeOptions = configuration.GetSection("NodeOptions");
+            if (nodeOptions is null)
+            {
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                    .AddYamlFile(
+                        path: "brightChainSettings.yaml",
+                        optional: false,
+                        reloadOnChange: true)
+                    .AddEnvironmentVariables();
 
-            var nodeOptions = this.configuration.GetSection("NodeOptions");
+                this.configuration = builder.Build();
+                nodeOptions = this.configuration.GetSection("NodeOptions");
+            }
+            else
+            {
+                this.configuration = configuration;
+            }
+
             if (nodeOptions is null)
             {
                 throw new BrightChainException(string.Format(format: "'NodeOptions' config section must be defined, but is not"));

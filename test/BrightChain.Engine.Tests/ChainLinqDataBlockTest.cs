@@ -83,7 +83,8 @@ using System.IO;
             var chainLinq = new ChainLinq<ChainLinqExampleSerializable>(blocks);
 
             var brightChainService = new BrightBlockService(
-                logger: this.loggerFactory.Object);
+                logger: this.loggerFactory.Object,
+                configuration: this.configuration.Object);
 
             var brightChain = chainLinq.BrightenAll(brightChainService);
             await brightChainService.PersistMemoryCacheAsync(clearAfter: true);
