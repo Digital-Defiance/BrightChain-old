@@ -1,8 +1,8 @@
 ﻿namespace BrightChain.Engine.Tests
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Models.Blocks;
@@ -68,8 +68,8 @@
                         redundancy: RedundancyContractType.HeapAuto,
                         privateEncrypted: false));
 
-            var datas = (ChainLinqExampleSerializable[])ChainLinqExampleSerializable.MakeMultiple(objectCount);
-            Assert.AreEqual(objectCount, datas.Length);
+            var datas = ChainLinqExampleSerializable.MakeMultiple(objectCount);
+            Assert.AreEqual(objectCount, datas.Count());
 
             var brightBlockService = new BrightBlockService(
                 logger: this.loggerFactory.Object,
@@ -92,7 +92,7 @@
                 var nextBlock = await brightBlockService.TryFindBlockByIdAsync(block.Next);
                 Assert.IsNotNull(nextBlock);
                 typedBlock = nextBlock as ChainLinqObjectBlock<ChainLinqExampleSerializable>;
-                Assert.AreEqual(datas[j++], block.BlockObject);
+                Assert.AreEqual(datas.ElementAt(j++), block.BlockObject);
             }
         }
 

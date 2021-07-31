@@ -26,7 +26,7 @@
         public static IEnumerable<ChainLinqExampleSerializable> MakeMultiple(int count)
         {
             ChainLinqExampleSerializable[] datas = new ChainLinqExampleSerializable[count];
-            for (int i=0; i<count; i++)
+            for (int i = 0; i < count; i++)
             {
                 datas[i] = new ChainLinqExampleSerializable();
             }
