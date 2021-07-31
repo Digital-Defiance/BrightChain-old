@@ -67,8 +67,7 @@ using System.IO;
                         requestTime: DateTime.Now,
                         keepUntilAtLeast: DateTime.MaxValue,
                         redundancy: RedundancyContractType.HeapAuto,
-                        privateEncrypted: false),
-                    next: null);
+                        privateEncrypted: false));
 
             ChainLinqExampleSerializable[] datas = new ChainLinqExampleSerializable[4];
             for (int i = 0; i < 4; i++)
@@ -80,7 +79,7 @@ using System.IO;
                 logger: this.loggerFactory.Object,
                 configuration: this.configuration.Object);
 
-            var brightChain = ChainLinqObjectBlock<ChainLinqExampleSerializable>.MakeChain(
+            var brightChain = ChainLinq<ChainLinqExampleSerializable>.MakeChain(
                 brightBlockService: brightBlockService,
                 blockParams: requestParams,
                 blockObjects: datas);

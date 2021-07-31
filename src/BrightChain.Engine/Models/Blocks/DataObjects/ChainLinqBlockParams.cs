@@ -4,9 +4,7 @@
 
     public class ChainLinqBlockParams : BlockParams
     {
-        public readonly BlockHash Next = null;
-
-        public ChainLinqBlockParams(BlockParams blockParams, BlockHash next = null)
+        public ChainLinqBlockParams(BlockParams blockParams)
        : base(
              blockSize: blockParams.BlockSize,
              requestTime: blockParams.RequestTime,
@@ -14,7 +12,6 @@
              redundancy: blockParams.Redundancy,
              privateEncrypted: blockParams.PrivateEncrypted)
         {
-            this.Next = next;
         }
 
         public ChainLinqBlockParams Merge(BlockParams otherBlockParams)
@@ -24,9 +21,7 @@
                 throw new BrightChainException("BlockSize mismatch");
             }
 
-            return new ChainLinqBlockParams(
-                blockParams: this.Merge(otherBlockParams),
-                next: this.Next);
+            return new ChainLinqBlockParams(blockParams: this.Merge(otherBlockParams));
         }
     }
 }
