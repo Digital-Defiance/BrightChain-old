@@ -36,5 +36,8 @@ using System;
 
         public BrightChain BrightenAll(BrightBlockService brightBlockService) =>
             brightBlockService.BrightenBlocks(sourceBlocks: this.Blocks);
+
+        public static BrightChain BrightenAll(BrightBlockService brightBlockService, IEnumerable<SourceBlock> sourceBlocks)
+         => brightBlockService.BrightenBlocks(sourceBlocks: sourceBlocks);
     }
 }

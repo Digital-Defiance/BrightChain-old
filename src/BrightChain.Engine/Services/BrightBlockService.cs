@@ -9,6 +9,7 @@ namespace BrightChain.Engine.Services
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Runtime.Serialization;
     using System.Security.Cryptography;
     using System.Threading.Tasks;
     using BrightChain.Engine.Enumerations;
@@ -578,13 +579,14 @@ namespace BrightChain.Engine.Services
             }
         }
 
-        public BrightChain BrightenBlocks(SourceBlock[] sourceBlocks)
+        public BrightChain BrightenBlocks(IEnumerable<SourceBlock> sourceBlocks)
         {
-            BrightenedBlock[] brightenedBlocks = new BrightenedBlock[sourceBlocks.Length];
+            BrightenedBlock[] brightenedBlocks = new BrightenedBlock[sourceBlocks.Count()];
             long i = 0;
             foreach (var sourceBlock in sourceBlocks)
             {
                 Block[] randomizersUsed;
+
                 var brightenedBlock = this.blockBrightener.Brighten(
                     block: sourceBlock,
                     randomizersUsed: out randomizersUsed);

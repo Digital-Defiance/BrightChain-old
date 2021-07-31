@@ -61,45 +61,42 @@ using System.IO;
         [DataRow(BlockSize.Large)]
         public async Task ItSavesDataCorrectlyTest(BlockSize blockSize)
         {
-            ChainLinqObjectDataBlock<ChainLinqExampleSerializable>[] blocks = new ChainLinqObjectDataBlock<ChainLinqExampleSerializable>[4];
+            var requestParams = new Models.Blocks.DataObjects.ChainLinqBlockParams(
+                    blockParams: new Models.Blocks.DataObjects.BlockParams(
+                        blockSize: blockSize,
+                        requestTime: DateTime.Now,
+                        keepUntilAtLeast: DateTime.MaxValue,
+                        redundancy: RedundancyContractType.HeapAuto,
+                        privateEncrypted: false),
+                    next: null);
+
+            ChainLinqExampleSerializable[] datas = new ChainLinqExampleSerializable[4];
             for (int i = 0; i < 4; i++)
             {
-                var chainableDataBlock = new ChainLinqObjectDataBlock<ChainLinqExampleSerializable>(
-                    blockParams: new Models.Blocks.DataObjects.ChainLinqBlockParams(
-                        blockParams: new Models.Blocks.DataObjects.TransactableBlockParams(
-                            cacheManager: this.cacheManager,
-                            allowCommit: true,
-                            blockParams: new Models.Blocks.DataObjects.BlockParams(
-                                blockSize: blockSize,
-                                requestTime: DateTime.Now,
-                                keepUntilAtLeast: DateTime.MaxValue,
-                                redundancy: RedundancyContractType.HeapAuto,
-                                privateEncrypted: false)),
-                        next: null),
-                    blockObject: new ChainLinqExampleSerializable());
-                blocks[i] = chainableDataBlock;
+                datas[i] = new ChainLinqExampleSerializable();
             }
 
-            var chainLinq = new ChainLinq<ChainLinqExampleSerializable>(blocks);
-
-            var brightChainService = new BrightBlockService(
+            var brightBlockService = new BrightBlockService(
                 logger: this.loggerFactory.Object,
                 configuration: this.configuration.Object);
 
-            var brightChain = chainLinq.BrightenAll(brightChainService);
-            await brightChainService.PersistMemoryCacheAsync(clearAfter: true);
+            var brightChain = ChainLinqObjectDataBlock<ChainLinqExampleSerializable>.MakeChain(
+                brightBlockService: brightBlockService,
+                blockParams: requestParams,
+                blockObjects: datas);
 
-            var firstBlock = (await brightChainService.TryFindBlockByIdAsync(brightChain.First().Id)).AsBlock;
+            await brightBlockService.PersistMemoryCacheAsync(clearAfter: true);
+
+            var firstBlock = (await brightBlockService.TryFindBlockByIdAsync(brightChain.First().Id)).AsBlock;
             var typedBlock = firstBlock as ChainLinqObjectDataBlock<ChainLinqExampleSerializable>;
             var block = typedBlock;
             var j = 0;
             while (block is not null)
             {
-                var nextBlock = await brightChainService.TryFindBlockByIdAsync(block.Next);
+                var nextBlock = await brightBlockService.TryFindBlockByIdAsync(block.Next);
                 Assert.IsNotNull(nextBlock);
                 typedBlock = nextBlock as ChainLinqObjectDataBlock<ChainLinqExampleSerializable>;
-                Assert.AreEqual(blocks[j].BlockObject, block.BlockObject);
-                j++;
+                Assert.AreEqual(datas[j++], block.BlockObject);
             }
         }
 

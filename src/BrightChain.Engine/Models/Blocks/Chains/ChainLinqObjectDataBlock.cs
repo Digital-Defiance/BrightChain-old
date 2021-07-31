@@ -9,9 +9,11 @@
     using System.Text.Json;
     using System.Threading.Tasks;
     using global::BrightChain.Engine.Attributes;
+using global::BrightChain.Engine.Enumerations;
     using global::BrightChain.Engine.Exceptions;
     using global::BrightChain.Engine.Factories;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
+    using global::BrightChain.Engine.Services;
 
     public class ChainLinqObjectDataBlock<T>
         : SourceBlock
@@ -28,7 +30,7 @@
             };
         }
 
-        public static ReadOnlyMemory<byte> SerializeDictionaryToMemory(T objectData, BlockHash previous = null, BlockHash next = null)
+        public static ReadOnlyMemory<byte> SerializeObjectThroughDictionaryToMemory(T objectData, BlockHash next = null)
         {
             SerializationInfo info = new SerializationInfo(typeof(StrongNameKeyPair), new FormatterConverter());
             StreamingContext context = new StreamingContext();
@@ -66,20 +68,23 @@
             return true;
         }
 
-        public ChainLinqObjectDataBlock(ChainLinqBlockParams blockParams, T blockObject)
+        public ChainLinqObjectDataBlock(ChainLinqBlockParams blockParams, T blockObject, ReadOnlyMemory<byte> serializedData)
             : base(
                   blockParams: blockParams,
                   data: global::BrightChain.Engine.Helpers.RandomDataHelper.DataFiller(
-                    inputData: SerializeDictionaryToMemory(blockObject),
+                    inputData: serializedData,
                     blockSize: blockParams.BlockSize))
         {
             this._blockObject = blockObject;
             this._next = blockParams.Next;
+            this._length = serializedData.Length;
         }
 
         public ChainLinqObjectDataBlock(ChainLinqBlockParams blockParams, ReadOnlyMemory<byte> persistedData)
             : base(blockParams, persistedData)
         {
+            this._length = persistedData.Length;
+
             var jsonString = new string(persistedData.ToArray().Select(c => (char)c).ToArray());
             object blockDataObject = JsonSerializer.Deserialize(jsonString, typeof(Dictionary<string, object>), NewSerializerOptions());
 
@@ -98,6 +103,35 @@
             this._next = null;
         }
 
+        public static ChainLinqObjectDataBlock<T> Make(ChainLinqBlockParams blockParams, T blockObject, BlockHash next = null)
+        {
+            var serialized = ChainLinqObjectDataBlock<T>.SerializeObjectThroughDictionaryToMemory(
+                objectData: blockObject,
+                next: next);
+
+            return new ChainLinqObjectDataBlock<T>(
+                blockParams: new Models.Blocks.DataObjects.ChainLinqBlockParams(
+                    blockParams: blockParams,
+                    next: next),
+                serializedData: serialized,
+                blockObject: blockObject);
+        }
+
+        public static BrightChain MakeChain(BrightBlockService brightBlockService, ChainLinqBlockParams blockParams, IEnumerable<T> blockObjects)
+        {
+            long i = 0;
+            ChainLinqObjectDataBlock<T>[] blocks = new ChainLinqObjectDataBlock<T>[blockObjects.Count()];
+            foreach (var blockObject in blockObjects)
+            {
+                blocks[i++] = ChainLinqObjectDataBlock<T>.Make(
+                    blockParams: blockParams,
+                    blockObject: blockObject,
+                    next: null);
+            }
+
+            return ChainLinq<T>.BrightenAll(brightBlockService, blocks);
+        }
+
         public override ChainLinqObjectDataBlock<T> NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data) =>
                 new ChainLinqObjectDataBlock<T>(
                     blockParams: new ChainLinqBlockParams(
@@ -111,6 +145,7 @@
 
         private T _blockObject;
         private BlockHash _next;
+        private long _length;
 
         [BrightChainBlockData]
         public BlockHash Next
