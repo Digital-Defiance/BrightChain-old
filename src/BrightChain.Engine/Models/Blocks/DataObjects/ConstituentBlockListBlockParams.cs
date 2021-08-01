@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BrightChain.Engine.Exceptions;
 
 namespace BrightChain.Engine.Models.Blocks.DataObjects

@@ -3,7 +3,7 @@ namespace BrightChain.Engine.Models.Blocks
     using System;
     using System.Collections.Generic;
     using System.Linq;
-using System.Reflection;
+    using System.Reflection;
     using BrightChain.Engine.Attributes;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;

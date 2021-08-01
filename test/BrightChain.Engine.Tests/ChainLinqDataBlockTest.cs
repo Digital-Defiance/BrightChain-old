@@ -89,11 +89,14 @@
                 configuration: this.configuration.Object);
 
             IEnumerable<ChainLinqExampleSerializable> datas;
-            var brightChain = MakeChain(
+            var brightChain = this.MakeChain(
                 brightBlockService: brightBlockService,
                 blockSize: blockSize,
                 objectCount: objectCount,
                 out datas);
+
+            var chainType = brightChain.BlockParams.OriginalType;
+            Assert.AreEqual(chainType, typeof(ChainLinqObjectBlock<ChainLinqExampleSerializable>));
 
             await brightBlockService.PersistMemoryCacheAsync(clearAfter: true);
 
@@ -139,7 +142,7 @@
                 configuration: this.configuration.Object);
 
             IEnumerable<ChainLinqExampleSerializable> datas;
-            var brightChain = MakeChain(
+            var brightChain = this.MakeChain(
                 brightBlockService: brightBlockService,
                 blockSize: blockSize,
                 objectCount: objectCount,

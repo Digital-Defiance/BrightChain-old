@@ -15,10 +15,12 @@ namespace BrightChain.Engine.Services
         public static byte TupleCount { get; } = 5;
 
         private readonly MemoryDictionaryBlockCacheManager pregeneratedRandomizerCache;
+        private readonly BlockCacheManager resultCache;
 
-        public BlockBrightener(MemoryDictionaryBlockCacheManager pregeneratedRandomizerCache)
+        public BlockBrightener(MemoryDictionaryBlockCacheManager pregeneratedRandomizerCache, BlockCacheManager resultCache)
         {
             this.pregeneratedRandomizerCache = pregeneratedRandomizerCache;
+            this.resultCache = resultCache;
         }
 
         /// <summary>
@@ -49,7 +51,16 @@ namespace BrightChain.Engine.Services
 
             var xorBlock = block.XOR(randomizersUsed);
             return new BrightenedBlock(
-                blockParams: xorBlock.BlockParams,
+                blockParams: new TransactableBlockParams(
+                    cacheManager: this.resultCache,
+                    allowCommit: true,
+                    blockParams: new BlockParams(
+                        blockSize: block.BlockSize,
+                        requestTime: block.StorageContract.RequestTime,
+                        keepUntilAtLeast: block.StorageContract.KeepUntilAtLeast,
+                        redundancy: block.StorageContract.RedundancyContractType,
+                        privateEncrypted: block.StorageContract.PrivateEncrypted,
+                        originalType: Type.GetType(block.OriginalType))),
                 data: xorBlock.Data,
                 constituentBlocks: randomizersUsed.Select(b => b.Id).ToArray());
         }

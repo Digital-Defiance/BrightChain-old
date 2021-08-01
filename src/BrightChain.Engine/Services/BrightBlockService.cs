@@ -9,7 +9,6 @@ namespace BrightChain.Engine.Services
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Runtime.Serialization;
     using System.Security.Cryptography;
     using System.Threading.Tasks;
     using BrightChain.Engine.Enumerations;
@@ -104,7 +103,8 @@ namespace BrightChain.Engine.Services
 
             this.logger.LogInformation(string.Format("<{0}>: caches initialized", nameof(BrightBlockService)));
             this.blockBrightener = new BlockBrightener(
-                pregeneratedRandomizerCache: this.randomizerBlockMemoryCache);
+                pregeneratedRandomizerCache: this.randomizerBlockMemoryCache,
+                resultCache: this.blockMemoryCache);
             //this.brightChainNodeAuthority = default(BrightChainNode);
             //this.brightChainNodeAuthority = BrightChainKeyService.LoadPrivateKeyFromBlock(this.blockDiskCache.Get(_));
         }
@@ -222,6 +222,12 @@ namespace BrightChain.Engine.Services
             } // end using
         }
 
+        /// <summary>
+        /// TODO: refactor out the core into a streaming CBL maker with a file stream wrapper. Then we can have a functionm that just takes the data.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="blockParams"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<ConstituentBlockListBlock>> MakeCBLChainFromParamsAsync(string fileName, BlockParams blockParams)
         {
             var sourceInfo = new SourceFileInfo(

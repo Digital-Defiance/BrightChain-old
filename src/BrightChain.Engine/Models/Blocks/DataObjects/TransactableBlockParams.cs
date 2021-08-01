@@ -1,5 +1,4 @@
-﻿using System;
-using BrightChain.Engine.Exceptions;
+﻿using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Interfaces;
 
 namespace BrightChain.Engine.Models.Blocks.DataObjects
