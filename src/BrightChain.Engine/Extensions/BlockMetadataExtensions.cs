@@ -133,7 +133,7 @@ namespace BrightChain.Engine.Extensions
                         Exception reloadException = null;
                         bool wasSet = block.ReloadMetadata(key, keyValue, out reloadException);
 
-                        if (reloadException != null)
+                        if (reloadException is not null)
                         {
                             throw reloadException;
                         }

@@ -34,7 +34,7 @@
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
-            if (user == null)
+            if (user is null)
             {
                 return this.NotFound($"Unable to load user with ID 'user.Id'.");
             }
@@ -43,14 +43,14 @@
             this.OtherLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync().ConfigureAwait(false))
                 .Where(auth => this.CurrentLogins.All(ul => auth.Name != ul.LoginProvider))
                 .ToList();
-            this.ShowRemoveButton = user.PasswordHash != null || this.CurrentLogins.Count > 1;
+            this.ShowRemoveButton = user.PasswordHash is not null || this.CurrentLogins.Count > 1;
             return this.Page();
         }
 
         public async Task<IActionResult> OnPostRemoveLoginAsync(string loginProvider, string providerKey)
         {
             var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
-            if (user == null)
+            if (user is null)
             {
                 return this.NotFound($"Unable to load user with ID 'user.Id'.");
             }
@@ -81,13 +81,13 @@
         public async Task<IActionResult> OnGetLinkLoginCallbackAsync()
         {
             var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
-            if (user == null)
+            if (user is null)
             {
                 return this.NotFound($"Unable to load user with ID 'user.Id'.");
             }
 
             var info = await this._signInManager.GetExternalLoginInfoAsync(user.Id).ConfigureAwait(false);
-            if (info == null)
+            if (info is null)
             {
                 throw new InvalidOperationException($"Unexpected error occurred loading external login info for user with ID '{user.Id}'.");
             }

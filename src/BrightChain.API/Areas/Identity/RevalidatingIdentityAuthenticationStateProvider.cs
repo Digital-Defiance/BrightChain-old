@@ -55,7 +55,7 @@ namespace BrightChain.API.Areas.Identity
         private async Task<bool> ValidateSecurityStampAsync(UserManager<TUser> userManager, ClaimsPrincipal principal)
         {
             var user = await userManager.GetUserAsync(principal).ConfigureAwait(false);
-            if (user == null)
+            if (user is null)
             {
                 return false;
             }

@@ -27,7 +27,7 @@
         {
             await this._signInManager.SignOutAsync().ConfigureAwait(false);
             this._logger.LogInformation("User logged out.");
-            if (returnUrl != null)
+            if (returnUrl is not null)
             {
                 return this.LocalRedirect(returnUrl);
             }

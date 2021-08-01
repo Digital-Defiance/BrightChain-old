@@ -17,7 +17,7 @@ namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
 
         public IActionResult OnGet()
         {
-            if (this.RecoveryCodes == null || this.RecoveryCodes.Length == 0)
+            if (this.RecoveryCodes is null || this.RecoveryCodes.Length == 0)
             {
                 return this.RedirectToPage("./TwoFactorAuthentication");
             }

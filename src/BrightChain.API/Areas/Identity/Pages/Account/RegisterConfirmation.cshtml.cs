@@ -29,13 +29,13 @@
 
         public async Task<IActionResult> OnGetAsync(string email, string returnUrl = null)
         {
-            if (email == null)
+            if (email is null)
             {
                 return this.RedirectToPage("/Index");
             }
 
             var user = await this._userManager.FindByEmailAsync(email).ConfigureAwait(false);
-            if (user == null)
+            if (user is null)
             {
                 return this.NotFound($"Unable to load user with email '{email}'.");
             }

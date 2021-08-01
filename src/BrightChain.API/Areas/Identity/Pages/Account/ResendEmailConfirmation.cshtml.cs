@@ -45,7 +45,7 @@
             }
 
             var user = await this._userManager.FindByEmailAsync(this.Input.Email).ConfigureAwait(false);
-            if (user == null)
+            if (user is null)
             {
                 this.ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
                 return this.Page();

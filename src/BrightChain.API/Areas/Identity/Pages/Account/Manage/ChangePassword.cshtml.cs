@@ -52,7 +52,7 @@ namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
-            if (user == null)
+            if (user is null)
             {
                 return this.NotFound($"Unable to load user with ID '{this._userManager.GetUserId(this.User)}'.");
             }
@@ -74,7 +74,7 @@ namespace BrightChain.API.Areas.Identity.Pages.Account.Manage
             }
 
             var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
-            if (user == null)
+            if (user is null)
             {
                 return this.NotFound($"Unable to load user with ID '{this._userManager.GetUserId(this.User)}'.");
             }

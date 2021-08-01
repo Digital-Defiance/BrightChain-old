@@ -21,7 +21,7 @@ namespace BrightChain.Engine.Extensions
 
         public static T ToObject<T>(this JsonDocument document, JsonSerializerOptions options = null)
         {
-            if (document == null)
+            if (document is null)
             {
                 throw new ArgumentNullException(nameof(document));
             }
@@ -42,7 +42,7 @@ namespace BrightChain.Engine.Extensions
 
         public static object ToObject(this JsonDocument document, Type returnType, JsonSerializerOptions options = null)
         {
-            if (document == null)
+            if (document is null)
             {
                 throw new ArgumentNullException(nameof(document));
             }

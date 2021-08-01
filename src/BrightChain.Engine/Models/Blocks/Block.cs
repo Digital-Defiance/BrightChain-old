@@ -30,10 +30,13 @@ namespace BrightChain.Engine.Models.Blocks
 
         public bool HashVerified { get; private set; }
 
+        /// <summary>
+        /// Gets a BlockSignature containing a signature of the block's hash and all other contents of metadata except signature.
+        /// </summary>
         [BrightChainMetadata]
         public BlockSignature Signature { get; internal set; }
 
-        public bool Signed => (this.Signature != null);
+        public bool Signed => (this.Signature is not null);
 
         public bool SignatureVerified { get; internal set; }
 

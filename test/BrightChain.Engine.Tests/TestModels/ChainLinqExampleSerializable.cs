@@ -15,7 +15,7 @@
 
         protected ChainLinqExampleSerializable(SerializationInfo info, StreamingContext context)
         {
-            if (info == null)
+            if (info is null)
             {
                 throw new ArgumentNullException("info");
             }
@@ -46,7 +46,7 @@
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null)
+            if (info is null)
             {
                 throw new ArgumentNullException("info");
             }

@@ -66,13 +66,13 @@
         public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null, string remoteError = null)
         {
             returnUrl = returnUrl ?? this.Url.Content("~/");
-            if (remoteError != null)
+            if (remoteError is not null)
             {
                 this.ErrorMessage = $"Error from external provider: {remoteError}";
                 return this.RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
             var info = await this._signInManager.GetExternalLoginInfoAsync().ConfigureAwait(false);
-            if (info == null)
+            if (info is null)
             {
                 this.ErrorMessage = "Error loading external login information.";
                 return this.RedirectToPage("./Login", new { ReturnUrl = returnUrl });
@@ -110,7 +110,7 @@
             returnUrl = returnUrl ?? this.Url.Content("~/");
             // Get the information about the user from the external login provider
             var info = await this._signInManager.GetExternalLoginInfoAsync().ConfigureAwait(false);
-            if (info == null)
+            if (info is null)
             {
                 this.ErrorMessage = "Error loading external login information during confirmation.";
                 return this.RedirectToPage("./Login", new { ReturnUrl = returnUrl });

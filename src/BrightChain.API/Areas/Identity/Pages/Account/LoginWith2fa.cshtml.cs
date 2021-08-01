@@ -45,7 +45,7 @@
             // Ensure the user has gone through the username & password screen first
             var user = await this._signInManager.GetTwoFactorAuthenticationUserAsync().ConfigureAwait(false);
 
-            if (user == null)
+            if (user is null)
             {
                 throw new InvalidOperationException($"Unable to load two-factor authentication user.");
             }
@@ -66,7 +66,7 @@
             returnUrl = returnUrl ?? this.Url.Content("~/");
 
             var user = await this._signInManager.GetTwoFactorAuthenticationUserAsync().ConfigureAwait(false);
-            if (user == null)
+            if (user is null)
             {
                 throw new InvalidOperationException($"Unable to load two-factor authentication user.");
             }

@@ -25,13 +25,13 @@
 
         public async Task<IActionResult> OnGetAsync(string userId, string email, string code)
         {
-            if (userId == null || email == null || code == null)
+            if (userId is null || email is null || code is null)
             {
                 return this.RedirectToPage("/Index");
             }
 
             var user = await this._userManager.FindByIdAsync(userId).ConfigureAwait(false);
-            if (user == null)
+            if (user is null)
             {
                 return this.NotFound($"Unable to load user with ID '{userId}'.");
             }

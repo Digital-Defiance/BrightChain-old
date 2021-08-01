@@ -42,7 +42,7 @@
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
-            if (user == null)
+            if (user is null)
             {
                 return this.NotFound($"Unable to load user with ID '{this._userManager.GetUserId(this.User)}'.");
             }
@@ -65,7 +65,7 @@
             }
 
             var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
-            if (user == null)
+            if (user is null)
             {
                 return this.NotFound($"Unable to load user with ID '{this._userManager.GetUserId(this.User)}'.");
             }

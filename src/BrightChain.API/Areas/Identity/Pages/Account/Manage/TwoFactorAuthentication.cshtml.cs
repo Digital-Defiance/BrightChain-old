@@ -39,12 +39,12 @@
         public async Task<IActionResult> OnGet()
         {
             var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
-            if (user == null)
+            if (user is null)
             {
                 return this.NotFound($"Unable to load user with ID '{this._userManager.GetUserId(this.User)}'.");
             }
 
-            this.HasAuthenticator = await this._userManager.GetAuthenticatorKeyAsync(user).ConfigureAwait(false) != null;
+            this.HasAuthenticator = await this._userManager.GetAuthenticatorKeyAsync(user).ConfigureAwait(false) is not null;
             this.Is2faEnabled = await this._userManager.GetTwoFactorEnabledAsync(user).ConfigureAwait(false);
             this.IsMachineRemembered = await this._signInManager.IsTwoFactorClientRememberedAsync(user).ConfigureAwait(false);
             this.RecoveryCodesLeft = await this._userManager.CountRecoveryCodesAsync(user).ConfigureAwait(false);
@@ -55,7 +55,7 @@
         public async Task<IActionResult> OnPost()
         {
             var user = await this._userManager.GetUserAsync(this.User).ConfigureAwait(false);
-            if (user == null)
+            if (user is null)
             {
                 return this.NotFound($"Unable to load user with ID '{this._userManager.GetUserId(this.User)}'.");
             }

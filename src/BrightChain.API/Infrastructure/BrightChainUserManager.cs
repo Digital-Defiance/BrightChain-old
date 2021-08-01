@@ -57,7 +57,7 @@
         {
             var databaseKey = await base.GetAuthenticatorKeyAsync(user).ConfigureAwait(false);
 
-            if (databaseKey == null)
+            if (databaseKey is null)
             {
                 return null;
             }

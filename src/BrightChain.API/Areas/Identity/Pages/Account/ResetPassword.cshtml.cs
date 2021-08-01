@@ -43,7 +43,7 @@
 
         public IActionResult OnGet(string code = null)
         {
-            if (code == null)
+            if (code is null)
             {
                 return this.BadRequest("A code must be supplied for password reset.");
             }
@@ -65,7 +65,7 @@
             }
 
             var user = await this._userManager.FindByEmailAsync(this.Input.Email).ConfigureAwait(false);
-            if (user == null)
+            if (user is null)
             {
                 // Don't reveal that the user does not exist
                 return this.RedirectToPage("./ResetPasswordConfirmation");
