@@ -21,7 +21,9 @@ namespace BrightChain.Engine.Models.Blocks
             base(
                 blockParams: blockParams,
                 data: NewEmptyBlockData(blockParams.BlockSize))
-        { }
+        {
+            this.OriginalType = typeof(EmptyDummyBlock).FullName;
+        }
 
         /// <summary>
         /// replace incoming data (will be empty byte array to fit conventions) with random data

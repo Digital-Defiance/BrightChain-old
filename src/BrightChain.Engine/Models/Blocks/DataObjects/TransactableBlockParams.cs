@@ -1,4 +1,5 @@
-﻿using BrightChain.Engine.Exceptions;
+﻿using System;
+using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Interfaces;
 
 namespace BrightChain.Engine.Models.Blocks.DataObjects
@@ -15,7 +16,8 @@ namespace BrightChain.Engine.Models.Blocks.DataObjects
                   requestTime: blockParams.RequestTime,
                   keepUntilAtLeast: blockParams.KeepUntilAtLeast,
                   redundancy: blockParams.Redundancy,
-                  privateEncrypted: blockParams.PrivateEncrypted)
+                  privateEncrypted: blockParams.PrivateEncrypted,
+                  originalType: blockParams.OriginalType)
         {
             this.CacheManager = cacheManager;
             this.AllowCommit = allowCommit;

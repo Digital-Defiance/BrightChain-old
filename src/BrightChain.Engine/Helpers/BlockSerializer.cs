@@ -53,7 +53,8 @@ namespace BrightChain.Engine.Helpers
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.MaxValue,
                     redundancy: RedundancyContractType.HeapAuto,
-                    privateEncrypted: false),
+                    privateEncrypted: false,
+                    originalType: typeof(RestoredBlock)),
                 data: blockData);
 
             // fill in metadata

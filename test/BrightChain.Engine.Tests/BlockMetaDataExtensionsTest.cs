@@ -43,7 +43,8 @@ namespace BrightChain.Engine.Tests
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.Now.AddDays(1),
                     redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                    privateEncrypted: false));
+                    privateEncrypted: false,
+                    originalType: typeof(EmptyDummyBlock)));
             Assert.IsTrue(block.Validate());
             var metaData = block.Metadata;
             var metaDataString = new string(metaData.ToArray().Select(c => (char)c).ToArray());
@@ -96,7 +97,8 @@ namespace BrightChain.Engine.Tests
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                privateEncrypted: false));
+                privateEncrypted: false,
+                originalType: typeof(EmptyDummyBlock)));
 
             var rootBlock = new RootBlock(databaseGuid: Guid.NewGuid(), blockSize: blockSize);
             var block = new ConstituentBlockListBlock(
@@ -172,7 +174,8 @@ namespace BrightChain.Engine.Tests
                 requestTime: testStart,
                 keepUntilAtLeast: testStart.AddDays(1),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                privateEncrypted: false));
+                privateEncrypted: false,
+                originalType: typeof(EmptyDummyBlock)));
             Assert.IsTrue(block.Validate());
             var metaData = block.Metadata;
 
@@ -182,7 +185,8 @@ namespace BrightChain.Engine.Tests
                 requestTime: testStart.AddSeconds(5),
                 keepUntilAtLeast: testStart.AddDays(1).AddSeconds(5),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                privateEncrypted: false));
+                privateEncrypted: false,
+                originalType: typeof(EmptyDummyBlock)));
             Assert.IsTrue(block2.TryRestoreMetadataFromBytesAndValidate(metaData));
             Assert.AreEqual(block.StorageContract, block2.StorageContract);
             Assert.AreEqual(block.Signature, block2.Signature);
@@ -213,7 +217,8 @@ namespace BrightChain.Engine.Tests
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                privateEncrypted: false));
+                privateEncrypted: false,
+                originalType: typeof(EmptyDummyBlock)));
 
             var rootBlock = new RootBlock(databaseGuid: Guid.NewGuid(), blockSize: blockSize);
             var block = new ConstituentBlockListBlock(
@@ -244,7 +249,8 @@ namespace BrightChain.Engine.Tests
                             requestTime: DateTime.MinValue, // bad
                             keepUntilAtLeast: DateTime.MinValue, // bad
                             redundancy: RedundancyContractType.LocalNone, // different
-                            privateEncrypted: true)), // opposite
+                            privateEncrypted: true,
+                            originalType: typeof(EmptyDummyBlock))), // opposite
                     sourceId: new DataHash(
                         providedHashBytes: dummyBlock.Id.HashBytes,
                         sourceDataLength: dummyBlock.Data.Length,

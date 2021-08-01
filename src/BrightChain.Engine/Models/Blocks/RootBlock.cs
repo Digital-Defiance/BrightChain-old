@@ -22,10 +22,12 @@
                         requestTime: DateTime.Now,
                         keepUntilAtLeast: DateTime.MaxValue,
                         redundancy: RedundancyContractType.HeapHighPriority,
-                        privateEncrypted: false)),
+                        privateEncrypted: false,
+                        originalType: typeof(RootBlock))),
                 data: Helpers.RandomDataHelper.DataFiller(default(ReadOnlyMemory<byte>), blockSize))
         {
             this.Guid = databaseGuid;
+            this.OriginalType = typeof(RootBlock).FullName;
         }
 
         [BrightChainMetadata]

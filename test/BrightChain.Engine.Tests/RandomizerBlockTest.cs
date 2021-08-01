@@ -51,7 +51,8 @@ namespace BrightChain.Engine.Tests
                         requestTime: DateTime.Now,
                         keepUntilAtLeast: DateTime.Now.AddDays(1),
                         redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                        privateEncrypted: false)));
+                        privateEncrypted: false,
+                        originalType: typeof(RandomizerBlock))));
 
             Assert.IsTrue(block.Validate());
             Assert.IsTrue(this.cacheManager.Contains(block.Id));

@@ -19,6 +19,7 @@ namespace BrightChain.Engine.Models.Blocks
         {
             this.CacheManager.Set(this);
             var blockpath = this.CacheManager.GetBlockPath(this.Id);
+            this.OriginalType = typeof(DiskBlock).FullName;
         }
 
         public override DiskBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)

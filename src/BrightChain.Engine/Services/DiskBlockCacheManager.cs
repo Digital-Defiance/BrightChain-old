@@ -257,13 +257,15 @@ namespace BrightChain.Engine.Services
                 0,
                 dataLength);
 
+            // these initial values will be overwritten during the restore
             var block = new RestoredBlock(
                 new BlockParams(
-                    BlockSize.Unknown,
-                    DateTime.Now,
-                    DateTime.MinValue,
-                    RedundancyContractType.Unknown,
-                    false),
+                    blockSize: BlockSize.Unknown,
+                    requestTime: DateTime.MinValue,
+                    keepUntilAtLeast: DateTime.MinValue,
+                    redundancy: RedundancyContractType.Unknown,
+                    privateEncrypted: false,
+                    originalType: typeof(RestoredBlock)),
                 blockBytes);
 
             if (!block.TryRestoreMetadataFromBytesAndValidate(metadataBytes))

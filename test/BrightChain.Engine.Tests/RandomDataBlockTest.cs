@@ -40,7 +40,8 @@ namespace BrightChain.Engine.Tests
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                privateEncrypted: false));
+                privateEncrypted: false,
+                originalType: typeof(RandomDataBlock)));
 
             Assert.IsTrue(block.Validate());
 

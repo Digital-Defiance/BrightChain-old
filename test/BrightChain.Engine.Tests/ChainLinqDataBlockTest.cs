@@ -1,6 +1,7 @@
 ﻿namespace BrightChain.Engine.Tests
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -52,6 +53,29 @@
             this.cacheManager = DiskCacheTestBlock.CacheManager;
         }
 
+        public BrightChain MakeChain(BrightBlockService brightBlockService, BlockSize blockSize, int objectCount, out IEnumerable<ChainLinqExampleSerializable> datas)
+        {
+            var requestParams = new Models.Blocks.DataObjects.ChainLinqBlockParams(
+                    blockParams: new Models.Blocks.DataObjects.BlockParams(
+                        blockSize: blockSize,
+                        requestTime: DateTime.Now,
+                        keepUntilAtLeast: DateTime.MaxValue,
+                        redundancy: RedundancyContractType.HeapAuto,
+                        privateEncrypted: false,
+                        originalType: typeof(ChainLinqObjectBlock<ChainLinqExampleSerializable>)));
+
+            datas = ChainLinqExampleSerializable.MakeMultiple(objectCount);
+            Assert.AreEqual(objectCount, datas.Count());
+
+            var brightChain = ChainLinq<ChainLinqExampleSerializable>.MakeChain(
+                brightBlockService: brightBlockService,
+                blockParams: requestParams,
+                blockObjects: datas);
+            Assert.AreEqual(objectCount, brightChain.Count());
+
+            return brightChain;
+        }
+
         [DataTestMethod]
         [DataRow(BlockSize.Message, 4)]
         [DataRow(BlockSize.Tiny, 4)]
@@ -60,46 +84,68 @@
         [DataRow(BlockSize.Large, 4)]
         public async Task ItSavesDataCorrectlyTest(BlockSize blockSize, int objectCount)
         {
-            var requestParams = new Models.Blocks.DataObjects.ChainLinqBlockParams(
-                    blockParams: new Models.Blocks.DataObjects.BlockParams(
-                        blockSize: blockSize,
-                        requestTime: DateTime.Now,
-                        keepUntilAtLeast: DateTime.MaxValue,
-                        redundancy: RedundancyContractType.HeapAuto,
-                        privateEncrypted: false));
-
-            var datas = ChainLinqExampleSerializable.MakeMultiple(objectCount);
-            Assert.AreEqual(objectCount, datas.Count());
-
             var brightBlockService = new BrightBlockService(
                 logger: this.loggerFactory.Object,
                 configuration: this.configuration.Object);
 
-            var brightChain = ChainLinq<ChainLinqExampleSerializable>.MakeChain(
+            IEnumerable<ChainLinqExampleSerializable> datas;
+            var brightChain = MakeChain(
                 brightBlockService: brightBlockService,
-                blockParams: requestParams,
-                blockObjects: datas);
-            Assert.AreEqual(objectCount, brightChain.Count());
+                blockSize: blockSize,
+                objectCount: objectCount,
+                out datas);
 
             await brightBlockService.PersistMemoryCacheAsync(clearAfter: true);
 
-            var firstBlock = (await brightBlockService.TryFindBlockByIdAsync(brightChain.First().Id)).AsBlock;
+            var id = brightChain.First().Id;
+
+            // V1
+            var firstBlock = (await brightBlockService.TryFindBlockByIdAsync(id)).AsBlock;
             var typedBlock = firstBlock as ChainLinqObjectBlock<ChainLinqExampleSerializable>;
+            Assert.IsNotNull(typedBlock);
             var block = typedBlock;
+
+            // V2
+            var block2 = await brightBlockService
+                .TryFindBlockByIdAsync<ChainLinqObjectBlock<ChainLinqExampleSerializable>>(id, true);
+            Assert.IsNotNull(block2);
+
             var j = 0;
             while (block is not null)
             {
-                var nextBlock = await brightBlockService.TryFindBlockByIdAsync(block.Next);
-                Assert.IsNotNull(nextBlock);
-                typedBlock = nextBlock as ChainLinqObjectBlock<ChainLinqExampleSerializable>;
+                var next = block.Next;
+                if (next is null)
+                {
+                    break;
+                }
+
+                block = await brightBlockService
+                    .TryFindBlockByIdAsync<ChainLinqObjectBlock<ChainLinqExampleSerializable>>(next, false);
+                Assert.IsNotNull(block);
                 Assert.AreEqual(datas.ElementAt(j++), block.BlockObject);
             }
         }
 
-        [TestMethod, Ignore]
-        public void ItChainsCorrectlyTest()
+        [DataTestMethod]
+        [DataRow(BlockSize.Message, 4)]
+        [DataRow(BlockSize.Tiny, 4)]
+        [DataRow(BlockSize.Small, 4)]
+        [DataRow(BlockSize.Medium, 4)]
+        [DataRow(BlockSize.Large, 4)]
+        public async Task ItLoadsDataCorrectlyTest(BlockSize blockSize, int objectCount)
         {
-            throw new NotImplementedException();
+            var brightBlockService = new BrightBlockService(
+                logger: this.loggerFactory.Object,
+                configuration: this.configuration.Object);
+
+            IEnumerable<ChainLinqExampleSerializable> datas;
+            var brightChain = MakeChain(
+                brightBlockService: brightBlockService,
+                blockSize: blockSize,
+                objectCount: objectCount,
+                out datas);
+
+            await brightBlockService.PersistMemoryCacheAsync(clearAfter: true);
         }
     }
 }

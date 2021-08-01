@@ -1,11 +1,10 @@
-using System;
-using BrightChain.Engine.Exceptions;
-using BrightChain.Engine.Interfaces;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-using BrightChain.Engine.Services;
-
 namespace BrightChain.Engine.Models.Blocks
 {
+    using System;
+    using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Interfaces;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
+    using BrightChain.Engine.Services;
     /// <summary>
     /// Block that can be contained in a MemoryBlockCacheManager / Btree
     /// </summary>
@@ -22,6 +21,7 @@ namespace BrightChain.Engine.Models.Blocks
             }
 
             this.CacheManager.Set(this);
+            this.OriginalType = typeof(MemoryBlock).FullName;
         }
 
         public override MemoryBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)

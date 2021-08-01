@@ -116,7 +116,8 @@ namespace BrightChain.Engine.Tests
                     keepUntilAtLeast: DateTime.MaxValue,
                     redundancy: Enumerations.RedundancyContractType.HeapAuto,
                     privateEncrypted: false,
-                    blockSize: blockSize));
+                    blockSize: blockSize,
+                    originalType: typeof(ConstituentBlockListBlock)));
 
             if (cblBlock is SuperConstituentBlockListBlock)
             {
@@ -185,7 +186,8 @@ namespace BrightChain.Engine.Tests
                     keepUntilAtLeast: DateTime.MaxValue,
                     redundancy: Enumerations.RedundancyContractType.HeapAuto,
                     privateEncrypted: false,
-                    blockSize: blockSize));
+                    blockSize: blockSize,
+                    originalType: typeof(ConstituentBlockListBlock)));
 
             var restoredFile = await brightChainService.RestoreFileFromCBLAsync(cblBlock);
 

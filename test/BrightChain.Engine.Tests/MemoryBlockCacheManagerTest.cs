@@ -35,7 +35,8 @@
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.MaxValue,
                     redundancy: RedundancyContractType.HeapAuto,
-                    privateEncrypted: false)),
+                    privateEncrypted: false,
+                    originalType: typeof(MemoryDictionaryCacheTestBlock))),
                 data: NewRandomData())
         {
         }
@@ -113,7 +114,8 @@
                         requestTime: DateTime.Now,
                         keepUntilAtLeast: DateTime.MaxValue,
                         redundancy: Enumerations.RedundancyContractType.LocalNone,
-                        privateEncrypted: false)),
+                        privateEncrypted: false,
+                        originalType: typeof(MemoryDictionaryCacheTestBlock))),
                 data: data);
 
             return new KeyValuePair<BlockHash, TransactableBlock>(block.Id, block);

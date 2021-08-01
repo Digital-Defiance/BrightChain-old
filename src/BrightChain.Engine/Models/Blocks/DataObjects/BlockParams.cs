@@ -14,14 +14,16 @@ namespace BrightChain.Engine.Models.Blocks.DataObjects
         public readonly DateTime KeepUntilAtLeast;
         public readonly RedundancyContractType Redundancy;
         public readonly bool PrivateEncrypted;
+        public readonly Type OriginalType;
 
-        public BlockParams(BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, bool privateEncrypted)
+        public BlockParams(BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, bool privateEncrypted, Type originalType)
         {
             this.BlockSize = blockSize;
             this.RequestTime = requestTime;
             this.KeepUntilAtLeast = keepUntilAtLeast;
             this.Redundancy = redundancy;
             this.PrivateEncrypted = privateEncrypted;
+            this.OriginalType = originalType;
         }
 
         public BlockParams Merge(BlockParams otherBlockParams)
@@ -36,7 +38,8 @@ namespace BrightChain.Engine.Models.Blocks.DataObjects
                 requestTime: this.RequestTime > otherBlockParams.RequestTime ? this.RequestTime : otherBlockParams.RequestTime,
                 keepUntilAtLeast: (otherBlockParams.KeepUntilAtLeast > this.KeepUntilAtLeast) ? otherBlockParams.KeepUntilAtLeast : this.KeepUntilAtLeast,
                 redundancy: (otherBlockParams.Redundancy > this.Redundancy) ? otherBlockParams.Redundancy : this.Redundancy,
-                privateEncrypted: this.PrivateEncrypted || otherBlockParams.PrivateEncrypted);
+                privateEncrypted: this.PrivateEncrypted || otherBlockParams.PrivateEncrypted,
+                originalType: this.OriginalType);
         }
     }
 }

@@ -67,5 +67,8 @@ namespace BrightChain.Engine.Interfaces
         /// </summary>
         bool SignatureVerified { get; }
 
+        string OriginalType { get; }
+
+        string AssemblyVersion { get; }
     }
 }

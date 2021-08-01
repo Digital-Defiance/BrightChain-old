@@ -9,6 +9,7 @@ namespace BrightChain.Engine.Services
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Runtime.Serialization;
     using System.Security.Cryptography;
     using System.Threading.Tasks;
     using BrightChain.Engine.Enumerations;
@@ -475,6 +476,21 @@ namespace BrightChain.Engine.Services
                     yield return block;
                 }
             }
+        }
+
+        public async Task<T> TryFindBlockByIdAsync<T>(BlockHash id, bool useAsBlock)
+            where T : class
+        {
+            var firstBlock = await this.TryFindBlockByIdAsync(id)
+                .ConfigureAwait(false);
+            var temp = firstBlock.OriginalType;
+            var block = useAsBlock ? firstBlock.AsBlock as T : firstBlock as T;
+            if (block is null)
+            {
+                throw new BrightChainException("Unable to cast from unrelated type");
+            }
+
+            return block;
         }
 
         protected async Task ClearAllBlocks()

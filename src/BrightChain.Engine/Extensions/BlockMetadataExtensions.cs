@@ -54,16 +54,11 @@ namespace BrightChain.Engine.Extensions
                 }
             }
 
-            // get assembly version
-            Assembly assembly = Assembly.GetEntryAssembly();
-            AssemblyInformationalVersionAttribute versionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-            string assemblyVersion = versionAttribute.InformationalVersion;
-
             // add block type
-            metadataDictionary.Add("_t", block.GetType().Name);
+            metadataDictionary.Add("_t", block.OriginalType);
 
             // add assembly version
-            metadataDictionary.Add("_v", assemblyVersion);
+            metadataDictionary.Add("_v", block.AssemblyVersion);
 
             string jsonData = JsonSerializer.Serialize(metadataDictionary, NewSerializerOptions());
             var readonlyChars = jsonData.AsMemory();
@@ -122,12 +117,13 @@ namespace BrightChain.Engine.Extensions
                 {
                     if (key == "_t")
                     {
+                        block.OriginalType = ((JsonElement)metadataDictionary[key]).ToObject<string>();
                         // TODO: validate compatible types and assembly versions
                     }
                     else if (key == "_v")
                     {
+                        block.AssemblyVersion = ((JsonElement)metadataDictionary[key]).ToObject<string>();
                         // TODO: validate compatible types and assembly versions
-
                     }
                     else if (!key.StartsWith("_", false, culture: System.Globalization.CultureInfo.InvariantCulture))
                     {

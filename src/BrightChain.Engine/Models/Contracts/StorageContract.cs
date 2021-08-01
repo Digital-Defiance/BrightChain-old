@@ -47,10 +47,10 @@ namespace BrightChain.Engine.Models.Contracts
         public static bool operator ==(StorageContract a, StorageContract b)
         {
             return a.RequestTime == b.RequestTime &&
-a.KeepUntilAtLeast == b.KeepUntilAtLeast &&
-a.ByteCount == b.ByteCount &&
-a.PrivateEncrypted == b.PrivateEncrypted &&
-a.RedundancyContractType == b.RedundancyContractType;
+                a.KeepUntilAtLeast == b.KeepUntilAtLeast &&
+                a.ByteCount == b.ByteCount &&
+                a.PrivateEncrypted == b.PrivateEncrypted &&
+                a.RedundancyContractType == b.RedundancyContractType;
         }
 
         public static bool operator !=(StorageContract a, StorageContract b)

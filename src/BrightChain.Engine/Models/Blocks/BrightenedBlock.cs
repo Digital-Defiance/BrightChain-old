@@ -18,6 +18,7 @@ namespace BrightChain.Engine.Models.Blocks
                 data: data)
         {
             this.ConstituentBlocks = constituentBlocks;
+            this.OriginalType = typeof(BrightenedBlock).FullName;
         }
 
         public override BrightenedBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)

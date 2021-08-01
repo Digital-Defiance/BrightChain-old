@@ -1,13 +1,13 @@
-﻿using System;
-using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Exceptions;
-using BrightChain.Engine.Helpers;
-using BrightChain.Engine.Interfaces;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-using BrightChain.Engine.Services;
-
-namespace BrightChain.Engine.Models.Blocks
+﻿namespace BrightChain.Engine.Models.Blocks
 {
+    using System;
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Helpers;
+    using BrightChain.Engine.Interfaces;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
+    using BrightChain.Engine.Services;
+
     /// <summary>
     /// Block that is able to be stored, rolled back, committed, or prevented from being stored.
     /// TODO: Currently heavily associated with underlying BPlusTree. Abstract
@@ -45,7 +45,8 @@ namespace BrightChain.Engine.Models.Blocks
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.MaxValue,
                     redundancy: RedundancyContractType.HeapAuto,
-                    privateEncrypted: false),
+                    privateEncrypted: false,
+                    originalType: typeof(TransactableBlock)),
                 data: new ReadOnlyMemory<byte>() { })
         {
         }
@@ -119,7 +120,8 @@ namespace BrightChain.Engine.Models.Blocks
                     requestTime: this.StorageContract.RequestTime,
                     keepUntilAtLeast: this.StorageContract.KeepUntilAtLeast,
                     redundancy: this.StorageContract.RedundancyContractType,
-                    privateEncrypted: false));
+                    privateEncrypted: this.StorageContract.PrivateEncrypted,
+                    originalType: Type.GetType(this.OriginalType)));
 
         public override bool Equals(object obj)
         {

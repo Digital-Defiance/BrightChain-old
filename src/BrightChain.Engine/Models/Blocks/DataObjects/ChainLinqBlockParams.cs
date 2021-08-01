@@ -10,7 +10,8 @@
              requestTime: blockParams.RequestTime,
              keepUntilAtLeast: blockParams.KeepUntilAtLeast,
              redundancy: blockParams.Redundancy,
-             privateEncrypted: blockParams.PrivateEncrypted)
+             privateEncrypted: blockParams.PrivateEncrypted,
+             originalType: blockParams.OriginalType)
         {
         }
 

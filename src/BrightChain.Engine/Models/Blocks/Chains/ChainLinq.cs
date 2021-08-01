@@ -7,6 +7,10 @@
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
     using global::BrightChain.Engine.Services;
 
+    /// <summary>
+    /// ChainLinq is the un-brightened/source array. ChainLinq helps build BrightChains.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class ChainLinq<T>
         where T : ISerializable
     {

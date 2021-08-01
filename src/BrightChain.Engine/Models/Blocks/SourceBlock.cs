@@ -16,6 +16,7 @@ namespace BrightChain.Engine.Models.Blocks
                 blockParams: blockParams,
                 data: data)
         {
+            this.OriginalType = typeof(SourceBlock).FullName;
         }
 
         public override SourceBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
@@ -26,7 +27,8 @@ namespace BrightChain.Engine.Models.Blocks
                     requestTime: this.StorageContract.RequestTime,
                     keepUntilAtLeast: this.StorageContract.KeepUntilAtLeast,
                     redundancy: this.StorageContract.RedundancyContractType,
-                    privateEncrypted: blockParams.PrivateEncrypted),
+                    privateEncrypted: this.StorageContract.PrivateEncrypted,
+                    originalType: Type.GetType(this.OriginalType)),
                 data: data);
         }
 

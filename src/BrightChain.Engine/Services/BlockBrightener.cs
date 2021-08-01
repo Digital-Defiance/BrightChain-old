@@ -43,7 +43,8 @@ namespace BrightChain.Engine.Services
                         requestTime: DateTime.Now,
                         keepUntilAtLeast: block.StorageContract.KeepUntilAtLeast,
                         redundancy: block.StorageContract.RedundancyContractType,
-                        privateEncrypted: false)));
+                        privateEncrypted: false, // randomizers are never "private encrypted"
+                        originalType: typeof(RandomizerBlock))));
             }
 
             var xorBlock = block.XOR(randomizersUsed);

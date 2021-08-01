@@ -34,7 +34,8 @@ namespace BrightChain.Engine.Tests
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.MaxValue,
                     redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                    privateEncrypted: false))
+                    privateEncrypted: false,
+                    originalType: typeof(RandomDataBlock)))
                 .Validate());
 
             var loggerMock = Mock.Get(this.logger);

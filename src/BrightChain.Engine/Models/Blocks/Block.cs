@@ -3,6 +3,7 @@ namespace BrightChain.Engine.Models.Blocks
     using System;
     using System.Collections.Generic;
     using System.Linq;
+using System.Reflection;
     using BrightChain.Engine.Attributes;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
@@ -35,6 +36,12 @@ namespace BrightChain.Engine.Models.Blocks
         public bool Signed => (this.Signature != null);
 
         public bool SignatureVerified { get; internal set; }
+
+        public string OriginalType { get; internal set; }
+
+        private readonly Type originalType;
+
+        public string AssemblyVersion { get; internal set; }
 
         /// <summary>
         /// For private encrypted files, a special token encrypted with the original user's key will allow revocation
@@ -107,6 +114,9 @@ namespace BrightChain.Engine.Models.Blocks
                 this.BlockSize = detectedBlockSize;
             }
 
+            Assembly assembly = Assembly.GetEntryAssembly();
+            AssemblyInformationalVersionAttribute versionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+
             this.StorageContract = new StorageContract(
                 RequestTime: blockParams.RequestTime,
                 KeepUntilAtLeast: blockParams.KeepUntilAtLeast,
@@ -116,10 +126,13 @@ namespace BrightChain.Engine.Models.Blocks
             this.Data = data;
             this.Id = new BlockHash(this); // must happen after data is in place
             this.ConstituentBlocks = new BlockHash[] { };
-            this.HashVerified = this.Validate(); // also fills in any validation errors in the array
             this.Signature = null;
             this.SignatureVerified = false;
             this.RevocationCertificates = new List<RevocationCertificate>();
+            this.originalType = this.GetType();
+            this.OriginalType = this.originalType.FullName;
+            this.AssemblyVersion = versionAttribute.InformationalVersion;
+            this.HashVerified = this.Validate(); // also fills in any validation errors in the array
         }
 
         /// <summary>
@@ -152,7 +165,8 @@ namespace BrightChain.Engine.Models.Blocks
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: keepUntil,
                     redundancy: redundancy,
-                    privateEncrypted: this.StorageContract.PrivateEncrypted),
+                    privateEncrypted: this.StorageContract.PrivateEncrypted,
+                    originalType: this.originalType),
                 data: Utilities.ParallelReadOnlyMemoryXOR(this.Data, other.Data));
 
             var newList = new List<BlockHash>(this.ConstituentBlocks);
@@ -224,7 +238,8 @@ namespace BrightChain.Engine.Models.Blocks
                     requestTime: System.DateTime.Now,
                     keepUntilAtLeast: keepUntil,
                     redundancy: redundancy,
-                    privateEncrypted: this.StorageContract.PrivateEncrypted));
+                    privateEncrypted: this.StorageContract.PrivateEncrypted,
+                    originalType: this.originalType));
 
             var result = new BrightenedBlock(
                 blockParams: newBlockParams,
@@ -275,7 +290,8 @@ namespace BrightChain.Engine.Models.Blocks
                 requestTime: this.StorageContract.RequestTime,
                 keepUntilAtLeast: this.StorageContract.KeepUntilAtLeast,
                 redundancy: this.StorageContract.RedundancyContractType,
-                privateEncrypted: false);
+                privateEncrypted: false, // not supported at this level
+                originalType: this.originalType);
 
         public bool Equals(IBlock other)
         {
