@@ -1,12 +1,19 @@
 ﻿namespace BrightChain.Engine.Models.Contracts
 {
     using System;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Hashes;
 
     /// <summary>
     /// Type box for the revocation certificates/tokens to delete private/encrypted blocks.
     /// </summary>
-    public class RevocationCertificate : IComparable<RevocationCertificate>
+    public class RevocationCertificate : DataSignature, IComparable<RevocationCertificate>
     {
+        public RevocationCertificate(BrightenedBlock block)
+            : base(block)
+        {
+        }
+
         /// <summary>
         /// Compares this RevocationCertificate to another for equality.
         /// </summary>
