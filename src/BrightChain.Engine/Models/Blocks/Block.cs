@@ -13,10 +13,11 @@ namespace BrightChain.Engine.Models.Blocks
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Contracts;
     using BrightChain.Engine.Models.Entities;
+using BrightChain.Engine.Models.Nodes;
 
-    /// <summary>
-    /// The block is the base unit persisted to disk.
-    /// </summary>
+/// <summary>
+/// The block is the base unit persisted to disk.
+/// </summary>
     public abstract class Block : IBlock, IComparable<IBlock>, IComparable<Block>, IEquatable<Block>, IEquatable<IBlock>
     {
         public BlockHash Id { get; }
@@ -39,6 +40,9 @@ namespace BrightChain.Engine.Models.Blocks
         public bool Signed => (this.Signature is not null);
 
         public bool SignatureVerified { get; internal set; }
+
+        [BrightChainMetadata]
+        public BrightChainNode SourceNode { get; internal set; }
 
         public string OriginalType { get; internal set; }
 
@@ -129,6 +133,7 @@ namespace BrightChain.Engine.Models.Blocks
             this.Data = data;
             this.Id = new BlockHash(this); // must happen after data is in place
             this.ConstituentBlocks = new BlockHash[] { };
+            this.SourceNode = null;
             this.Signature = null;
             this.SignatureVerified = false;
             this.RevocationCertificates = new List<RevocationCertificate>();

@@ -3,6 +3,7 @@ using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Contracts;
 using BrightChain.Engine.Models.Entities;
+using BrightChain.Engine.Models.Nodes;
 
 namespace BrightChain.Engine.Interfaces
 {
@@ -51,6 +52,8 @@ namespace BrightChain.Engine.Interfaces
         /// Returns only the raw data for the block and none of the metadata. The hash is based only on this.
         /// </summary>
         ReadOnlyMemory<byte> Data { get; }
+
+        BrightChainNode SourceNode { get; }
 
         /// <summary>
         /// Signature hash of the data by the committer

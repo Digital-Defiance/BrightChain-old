@@ -54,6 +54,7 @@ namespace BrightChain.Engine.Tests
             {
                 "_t",
                 "_v",
+                "SourceNode",
                 "StorageContract",
                 "Signature",
                 "RevocationCertificates",
@@ -124,6 +125,7 @@ namespace BrightChain.Engine.Tests
             {
                 "_t",
                 "_v",
+                "SourceNode",
                 "StorageContract",
                 "Signature",
                 "PrivateEncrypted",
@@ -136,6 +138,9 @@ namespace BrightChain.Engine.Tests
                 "Next",
                 "RevocationCertificates",
             };
+            Assert.AreEqual(
+                expected: 14,
+                actual: expectedKeys.Length); // Hash, Signature, RedundancyContract, _t, _v
 
             Assert.AreEqual(
                 expected: expectedKeys.Length,
@@ -148,7 +153,6 @@ namespace BrightChain.Engine.Tests
 
             var contractObj = (JsonElement)metaDataDictionary["StorageContract"];
             var contract = contractObj.ToObject<StorageContract>(BlockMetadataExtensions.NewSerializerOptions());
-            Assert.AreEqual(13, metaDataDictionary.Count); // Hash, Signature, RedundancyContract, _t, _v
             Assert.AreEqual(block.StorageContract, contract);
             var sourceIdObj = (JsonElement)metaDataDictionary["SourceId"];
             var sourceId = sourceIdObj.ToObject<BlockHash>(BlockMetadataExtensions.NewSerializerOptions());
