@@ -73,6 +73,32 @@
             return this.Blocks.Select(b => b.BlockObject);
         }
 
+        public async IAsyncEnumerable<T> AllAsync()
+        {
+            foreach (var block in this.All())
+            {
+                yield return block;
+            }
+        }
+
+        /// <summary>
+        /// Technically the "Id" field of the blocks, but as these are unbrightened source blocks, the Id will change and not be used.
+        /// Do NOT rely on the Id of these blocks for anything other than comparison of whether the contents have changed, prior to being brightened into a BrightChain.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<BlockHash> Hashes()
+        {
+            return this.Blocks.Select(b => b.Id);
+        }
+
+        public async IAsyncEnumerable<BlockHash> HashesAsync()
+        {
+            foreach (var blockHash in this.Hashes())
+            {
+                yield return blockHash;
+            }
+        }
+
         public BrightChain BrightenAll(BrightBlockService brightBlockService)
         {
             return brightBlockService.BrightenBlocks(sourceBlocks: SetNextLinks(this.Blocks));

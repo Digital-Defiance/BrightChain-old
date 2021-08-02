@@ -1,19 +1,19 @@
-using System.Reflection;
-using BrightChain.API.Data;
-using BrightChain.API.Extensions;
-using BrightChain.API.Services;
-using BrightChain.Engine.Services;
-using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-
 namespace BrightChain.API
 {
+    using System.Reflection;
+    using BrightChain.API.Data;
+    using BrightChain.API.Extensions;
+    using BrightChain.API.Services;
+    using BrightChain.Engine.Services;
+    using MediatR;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity.UI.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+
     public class Startup
     {
 
@@ -85,8 +85,6 @@ namespace BrightChain.API
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
-
-            //dbContext.Database.EnsureCreated();
         }
     }
 }

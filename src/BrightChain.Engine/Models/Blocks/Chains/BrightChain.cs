@@ -46,6 +46,11 @@
             return this._head;
         }
 
+        /// <summary>
+        /// Returns a Tuple of (BrightenedBlock, int) with the tail node and count.
+        /// Future planning that this verification process will walk the stack and get the counts/tail anyway, regardless of Async/eager loaded.
+        /// </summary>
+        /// <returns></returns>
         public Tuple<BrightenedBlock, int> VerifyHomogeneity()
         {
             foreach (var block in this._blocks)
@@ -69,6 +74,27 @@
             return this._blocks;
         }
 
+        public async IAsyncEnumerator<BrightenedBlock> AllAsync()
+        {
+            foreach (var block in this._blocks)
+            {
+                yield return block;
+            }
+        }
+
+        public IEnumerable<BlockHash> Ids()
+        {
+            return this._blocks.Select(b => b.Id);
+        }
+
+        public async IAsyncEnumerable<BlockHash> IdsAsync()
+        {
+            foreach (var blockHash in this.Ids())
+            {
+                yield return blockHash;
+            }
+        }
+
         public IEnumerator<BrightenedBlock> GetEnumerator()
         {
             return this._blocks.GetEnumerator();
@@ -77,14 +103,6 @@
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this._blocks.GetEnumerator();
-        }
-
-        public async IAsyncEnumerator<BrightenedBlock> GetAsyncEnumerator()
-        {
-            foreach (var block in this._blocks)
-            {
-                yield return block;
-            }
         }
     }
 }
