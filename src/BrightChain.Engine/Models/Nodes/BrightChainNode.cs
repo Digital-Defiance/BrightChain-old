@@ -1,9 +1,9 @@
-﻿using System.Security.Cryptography;
-using BrightChain.Engine.Models.Agents;
-using BrightChain.Engine.Models.Blocks;
-
-namespace BrightChain.Engine.Models.Nodes
+﻿namespace BrightChain.Engine.Models.Nodes
 {
+    using System.Security.Cryptography;
+    using BrightChain.Engine.Models.Agents;
+    using BrightChain.Engine.Models.Blocks;
+
     /// <summary>
     /// Representation of a bright chain participartory node.
     /// </summary>
@@ -23,11 +23,11 @@ namespace BrightChain.Engine.Models.Nodes
         /// This will be used in TrustedNode lists.
         /// </summary>
         public BlockHash Id { get; }
+
         public ECDiffieHellmanCngPublicKey PublicKey { get; }
 
         public BrightChainAgent NodeAgent { get; }
 
         public BrightChainNodeInfo NodeInfo { get; }
-
     }
 }
