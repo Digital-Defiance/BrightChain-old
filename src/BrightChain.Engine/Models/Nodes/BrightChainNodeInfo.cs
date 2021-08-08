@@ -1,6 +1,5 @@
 ﻿namespace BrightChain.Engine.Models.Nodes
 {
-    using System;
     using System.Collections.Generic;
     using BrightChain.Engine.Enumerations;
 

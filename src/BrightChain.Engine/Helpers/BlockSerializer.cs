@@ -82,7 +82,7 @@ namespace BrightChain.Engine.Helpers
                 offset: 0,
                 count: block.Data.Length);
             // part 2: metadata
-            ReadOnlyMemory<byte> metaData = block.MetadataBytes();
+            ReadOnlyMemory<byte> metaData = block.GetMetadataBytes();
             buffer = BitConverter.GetBytes(metaData.Length);
             stream.Write(
                 buffer: buffer,

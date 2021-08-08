@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace BrightChain.Engine.Models.Blocks
+﻿namespace BrightChain.Engine.Models.Blocks
 {
+    using System;
+
     /// <summary>
     /// Constitues really just the user's id- however the system will allow users to store data with registered identities or even anonymously
     /// but we will store error correction (FEC) data that allows us to recover the original Id if all the pieces of it (once sharded) are reconstructed.

@@ -1,8 +1,8 @@
-﻿using System;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-
-namespace BrightChain.Engine.Models.Blocks
+﻿namespace BrightChain.Engine.Models.Blocks
 {
+    using System;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
+
     public class RestoredBlock : Block
     {
         public RestoredBlock(BlockParams blockParams, ReadOnlyMemory<byte> data) : base(

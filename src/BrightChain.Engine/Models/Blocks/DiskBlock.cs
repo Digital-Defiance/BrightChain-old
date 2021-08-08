@@ -1,10 +1,10 @@
-using System;
-using BrightChain.Engine.Interfaces;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-using BrightChain.Engine.Services;
-
 namespace BrightChain.Engine.Models.Blocks
 {
+    using System;
+    using BrightChain.Engine.Interfaces;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
+    using BrightChain.Engine.Services;
+
     /// <summary>
     /// Block that can be contained in a DiskBlockCacheManager / Btree
     /// </summary>

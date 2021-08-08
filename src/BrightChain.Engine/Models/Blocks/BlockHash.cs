@@ -127,5 +127,10 @@ namespace BrightChain.Engine.Models.Blocks
         {
             return other.SourceDataLength == this.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) == 0;
         }
+
+        public override int GetHashCode()
+        {
+            return this.HashBytes.ToArray().GetHashCode();
+        }
     }
 }

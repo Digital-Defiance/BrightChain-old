@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using BrightChain.Engine.Extensions;
-using BrightChain.Engine.Helpers;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-
-namespace BrightChain.Engine.Models.Blocks
+﻿namespace BrightChain.Engine.Models.Blocks
 {
+    using System;
+    using System.Collections.Generic;
+    using BrightChain.Engine.Extensions;
+    using BrightChain.Engine.Helpers;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
+
     /// <summary>
     /// User data that must be whitened with the block whitener before being persisted. These blocks must never be stored directly.
     /// *** CBLs are considered user data ***

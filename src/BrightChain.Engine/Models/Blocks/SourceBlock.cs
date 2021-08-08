@@ -1,15 +1,16 @@
-﻿using System;
-using BrightChain.Engine.Extensions;
-using BrightChain.Engine.Helpers;
-using BrightChain.Engine.Interfaces;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-
-namespace BrightChain.Engine.Models.Blocks
+﻿namespace BrightChain.Engine.Models.Blocks
 {
+    using System;
+    using global::BrightChain.Engine.Extensions;
+    using global::BrightChain.Engine.Helpers;
+    using global::BrightChain.Engine.Interfaces;
+    using global::BrightChain.Engine.Models.Blocks.DataObjects;
+
     /// <summary>
     /// User data that must be whitened with the block whitener before being persisted. These blocks must never be stored directly.
     /// </summary>
-    public class SourceBlock : Block, IComparable<SourceBlock>, IComparable<Block>, IComparable<IBlock>
+    public class SourceBlock
+        : Block, IComparable<SourceBlock>, IComparable<Block>, IComparable<IBlock>
     {
         public SourceBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
             : base(

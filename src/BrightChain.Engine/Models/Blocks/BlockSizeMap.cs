@@ -1,19 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using BrightChain.Engine.Enumerations;
-
-namespace BrightChain.Engine.Models.Blocks
+﻿namespace BrightChain.Engine.Models.Blocks
 {
+    using System;
+    using System.Collections.Generic;
+    using BrightChain.Engine.Enumerations;
+
     /// <summary>
     ///     Map of the block size enumeration values to their actual sizes.
     /// </summary>
     public static class BlockSizeMap
     {
-        public const int MessageSize = 512; // 512B
-        public const int TinySize = 1024; // 1K
-        public const int SmallSize = 4 * 1024; // 4K
-        public const int MediumSize = 1024 * 1024; // 1M
-        public const int LargeSize = 4 * 1024 * 1024; // 4M
+        /// <summary>
+        /// Smallest block size. Best for small payloads like messages. 512 bytes.
+        /// </summary>
+        public const int MessageSize = 512;
+
+        /// <summary>
+        /// Tiny block size. Best for small payloads larger than basic messages. 1024 bytes. 1K.
+        /// </summary>
+        public const int TinySize = 1024;
+
+        /// <summary>
+        /// Small block size. Best for small files. 4024 bytes. 4K.
+        /// </summary>
+        public const int SmallSize = 4 * 1024;
+
+        /// <summary>
+        /// Medium block size. Best for small to moderately sized data. 1,048,576 bytes. 1M.
+        /// </summary>
+        public const int MediumSize = 1024 * 1024;
+
+        /// <summary>
+        /// Large block size. Best for large data. 4,194.304 bytes. 4M.
+        /// </summary>
+        public const int LargeSize = 4 * 1024 * 1024;
 
         public static readonly Dictionary<BlockSize, int> Map = new()
         {
@@ -22,7 +41,7 @@ namespace BrightChain.Engine.Models.Blocks
             { Enumerations.BlockSize.Tiny, TinySize },
             { Enumerations.BlockSize.Small, SmallSize },
             { Enumerations.BlockSize.Medium, MediumSize },
-            { Enumerations.BlockSize.Large, LargeSize }
+            { Enumerations.BlockSize.Large, LargeSize },
         };
 
         public static readonly Dictionary<BlockSize, int> HashesPerBlockMap = new()
@@ -32,7 +51,7 @@ namespace BrightChain.Engine.Models.Blocks
             { Enumerations.BlockSize.Tiny, TinySize / DataHash.HashSizeBytes },
             { Enumerations.BlockSize.Small, SmallSize / DataHash.HashSizeBytes },
             { Enumerations.BlockSize.Medium, MediumSize / DataHash.HashSizeBytes },
-            { Enumerations.BlockSize.Large, LargeSize / DataHash.HashSizeBytes }
+            { Enumerations.BlockSize.Large, LargeSize / DataHash.HashSizeBytes },
         };
 
         /// <summary>

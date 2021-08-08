@@ -3,6 +3,7 @@ namespace BrightChain.Engine.Models.Blocks
     using System;
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Models.Blocks.DataObjects;
+
     /// <summary>
     /// Input blocks to the whitener service that consist of purely CSPRNG data of the specified block size
     /// </summary>

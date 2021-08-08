@@ -13,7 +13,7 @@ namespace BrightChain.Engine.Interfaces
     public interface IBlock : IDisposable, IComparable<IBlock>, IValidatable
     {
         /// <summary>
-        /// Block's SHA-256 hash.
+        /// Gets the block's SHA-256 hash.
         /// </summary>
         BlockHash Id { get; }
 
@@ -25,12 +25,12 @@ namespace BrightChain.Engine.Interfaces
         /// <summary>
         /// Function to XOR this block's data with another.
         /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <param name="other">Block to XOR with.</param>
+        /// <returns>Returns resultant block with its constituent blocks.</returns>
         Block XOR(IBlock other);
 
         /// <summary>
-        /// Function to XOR this block's data with an array of others
+        /// Function to XOR this block's data with an array of others.
         /// </summary>
         /// <param name="others"></param>
         /// <returns></returns>
@@ -39,24 +39,27 @@ namespace BrightChain.Engine.Interfaces
         BlockSignature Sign(Agent user, string password);
 
         /// <summary>
-        /// Parameters of the duration contract for this block
+        /// Gets the parameters of the storage contract for this block.
         /// </summary>
         StorageContract StorageContract { get; set; }
 
         /// <summary>
-        /// Returns the serialized MetaData pulled from attributes
+        /// Gets the serialized MetaData pulled from attributes.
         /// </summary>
         ReadOnlyMemory<byte> Metadata { get; }
 
         /// <summary>
-        /// Returns only the raw data for the block and none of the metadata. The hash is based only on this.
+        /// Gets only the raw data for the block and none of the metadata. The hash is based only on this.
         /// </summary>
         ReadOnlyMemory<byte> Data { get; }
 
+        /// <summary>
+        /// Gets the node that originated the block.
+        /// </summary>
         BrightChainNode SourceNode { get; }
 
         /// <summary>
-        /// Signature hash of the data by the committer
+        /// Gets the signature hash of the data by the committer.
         /// </summary>
         BlockSignature Signature { get; }
 

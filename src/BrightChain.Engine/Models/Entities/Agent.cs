@@ -1,7 +1,21 @@
-﻿
-namespace BrightChain.Engine.Models.Entities
+﻿namespace BrightChain.Engine.Models.Entities
 {
+    using System;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Keys;
+
+    /// <summary>
+    /// A user in the BrightChain network.
+    /// Likely to change.
+    /// </summary>
     public class Agent
     {
+        public Guid Id { get; }
+
+        public BrightChainKey Key { get; }
+
+        public Block[] PublicBlocks { get; }
+
+        public Block[] PrivateBlocks { get; }
     }
 }

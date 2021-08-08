@@ -71,11 +71,13 @@ namespace BrightChain.Engine.Models.Blocks
         /// Gets the serialization of the block minus data and any ignored attributes (including itself).
         /// </summary>
         public ReadOnlyMemory<byte> Metadata =>
-            this.MetadataBytes();
+            this.GetMetadataBytes();
 
         public abstract Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data);
 
         public Block AsBlock => this;
+
+        public IBlock AsIBlock => this;
 
         public IEnumerable<BrightChainValidationException> ValidationExceptions { get; private set; }
 
@@ -89,8 +91,14 @@ namespace BrightChain.Engine.Models.Blocks
         /// Gets a uint with the CRC32 of the block's data.
         /// </summary>
         public uint MetadataCrc32 =>
-            Helpers.Crc32.ComputeNewChecksum(this.MetadataBytes().ToArray());
+            Helpers.Crc32.ComputeNewChecksum(this.GetMetadataBytes().ToArray());
 
+        /// <summary>
+        /// Compares the data hashes only.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static bool operator ==(Block a, Block b)
         {
             return ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;
@@ -101,6 +109,12 @@ namespace BrightChain.Engine.Models.Blocks
             return !a.Equals(b);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Block"/> class.
+        /// Construct a block from the given parameters and data.
+        /// </summary>
+        /// <param name="blockParams"></param>
+        /// <param name="data"></param>
         public Block(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
             if (this is RootBlock)
@@ -144,7 +158,7 @@ namespace BrightChain.Engine.Models.Blocks
         }
 
         /// <summary>
-        /// XORs this block with another/randomizer block
+        /// XORs this block with another/randomizer block.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -193,7 +207,7 @@ namespace BrightChain.Engine.Models.Blocks
         }
 
         /// <summary>
-        /// XORs this block with a list of other/randomizer blocks
+        /// XORs this block with a list of other/randomizer blocks.
         /// </summary>
         /// <param name="others"></param>
         /// <returns></returns>
@@ -257,21 +271,41 @@ namespace BrightChain.Engine.Models.Blocks
             return result;
         }
 
+        /// <summary>
+        /// Sign the block/metadata.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public BlockSignature Sign(Agent user, string password)
         {
             throw new NotImplementedException();
             this.SignatureVerified = true;
         }
 
-        public override bool Equals(object obj)
+        /// <summary>
+        /// Verifies the block's signature.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <param name="signature">Signature hash. If signature is not provided, pull from attributes.</param>
+        /// <returns></returns>
+        public bool VerifySignature(Agent user, string password, ReadOnlyMemory<byte>? signature = null)
         {
-            return obj is Block ? ReadOnlyMemoryComparer<byte>.Compare(this.Data, (obj as Block).Data) == 0 : false;
+            throw new NotImplementedException();
+            return false;
         }
 
-        public override int GetHashCode()
-        {
-            return this.Data.GetHashCode();
-        }
+        /// <summary>
+        /// Gets a blockParams object from this block's attributes.
+        /// </summary>
+        public virtual BlockParams BlockParams => new BlockParams(
+                blockSize: this.BlockSize,
+                requestTime: this.StorageContract.RequestTime,
+                keepUntilAtLeast: this.StorageContract.KeepUntilAtLeast,
+                redundancy: this.StorageContract.RedundancyContractType,
+                privateEncrypted: this.StorageContract.PrivateEncrypted,
+                originalType: this.originalType);
 
         public bool Validate()
         {
@@ -283,6 +317,11 @@ namespace BrightChain.Engine.Models.Blocks
 
         public abstract void Dispose();
 
+        public override int GetHashCode()
+        {
+            return this.Data.GetHashCode();
+        }
+
         public int CompareTo(IBlock other)
         {
             return other is null ? -1 : ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
@@ -293,13 +332,10 @@ namespace BrightChain.Engine.Models.Blocks
             return other is null ? -1 : ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
         }
 
-        public virtual BlockParams BlockParams => new BlockParams(
-                blockSize: this.BlockSize,
-                requestTime: this.StorageContract.RequestTime,
-                keepUntilAtLeast: this.StorageContract.KeepUntilAtLeast,
-                redundancy: this.StorageContract.RedundancyContractType,
-                privateEncrypted: false, // not supported at this level
-                originalType: this.originalType);
+        public override bool Equals(object obj)
+        {
+            return obj is Block ? ReadOnlyMemoryComparer<byte>.Compare(this.Data, (obj as Block).Data) == 0 : false;
+        }
 
         public bool Equals(IBlock other)
         {

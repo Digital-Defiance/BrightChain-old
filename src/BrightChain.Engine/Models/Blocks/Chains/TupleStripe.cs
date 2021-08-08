@@ -1,11 +1,18 @@
-﻿using System.Collections.Generic;
-using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Exceptions;
-
-namespace BrightChain.Engine.Models.Blocks.Chains
+﻿namespace BrightChain.Engine.Models.Blocks.Chains
 {
+    using System.Collections.Generic;
+    using global::BrightChain.Engine.Enumerations;
+    using global::BrightChain.Engine.Exceptions;
+
+    /// <summary>
+    /// A tuple stripe is a representation of the blocks used to brighten or recover a source block.
+    /// </summary>
     public struct TupleStripe
     {
+        /// <summary>
+        /// Gets the blocks within the stripd.
+        /// Within a stripel block order doesn't technically matter.
+        /// </summary>
         public readonly IEnumerable<Block> Blocks { get; }
 
         public TupleStripe(int tupleCountMatch, BlockSize blockSizeMatch, IEnumerable<Block> blocks)
@@ -26,6 +33,10 @@ namespace BrightChain.Engine.Models.Blocks.Chains
             this.Blocks = blocks;
         }
 
+        /// <summary>
+        /// XOR's the stripe's blocks back into a SourceBlock.
+        /// </summary>
+        /// <returns></returns>
         public SourceBlock Consolidate()
         {
             var blocks = (Block[])this.Blocks;

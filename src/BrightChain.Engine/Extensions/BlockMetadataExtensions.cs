@@ -36,11 +36,12 @@ namespace BrightChain.Engine.Extensions
         }
 
         /// <summary>
-        /// Emits a json binary blob from the metadata properties 
+        /// Emits a dictionary containing the BrightChainMetadataAttribute marked items and the internal members.)=
         /// </summary>
         /// <param name="block"></param>
+        /// <param name="addInternal"></param>
         /// <returns></returns>
-        public static ReadOnlyMemory<byte> MetadataBytes(this IBlock block)
+        public static Dictionary<string, object> GetMetadataDictionary(this IBlock block, bool addInternal = true)
         {
             Dictionary<string, object> metadataDictionary = new Dictionary<string, object>();
             foreach (PropertyInfo prop in block.GetType().GetProperties())
@@ -54,11 +55,26 @@ namespace BrightChain.Engine.Extensions
                 }
             }
 
-            // add block type
-            metadataDictionary.Add("_t", block.OriginalType);
+            if (addInternal)
+            {
+                // add block type
+                metadataDictionary.Add("_t", block.OriginalType);
 
-            // add assembly version
-            metadataDictionary.Add("_v", block.AssemblyVersion);
+                // add assembly version
+                metadataDictionary.Add("_v", block.AssemblyVersion);
+            }
+
+            return metadataDictionary;
+        }
+
+        /// <summary>
+        /// Emits a json binary blob from the metadata properties.
+        /// </summary>
+        /// <param name="block"></param>
+        /// <returns></returns>
+        public static ReadOnlyMemory<byte> GetMetadataBytes(this IBlock block)
+        {
+            Dictionary<string, object> metadataDictionary = GetMetadataDictionary(block);
 
             string jsonData = JsonSerializer.Serialize(metadataDictionary, NewSerializerOptions());
             var readonlyChars = jsonData.AsMemory();

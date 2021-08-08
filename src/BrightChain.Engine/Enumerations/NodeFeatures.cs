@@ -1,7 +1,5 @@
 ﻿namespace BrightChain.Engine.Enumerations
 {
-    using System;
-
     /// <summary>
     /// Exhaustive list of supported node protocol sources and destinations.
     /// </summary>

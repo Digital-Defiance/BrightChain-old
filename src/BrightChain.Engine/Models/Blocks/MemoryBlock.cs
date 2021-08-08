@@ -5,6 +5,7 @@ namespace BrightChain.Engine.Models.Blocks
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Services;
+
     /// <summary>
     /// Block that can be contained in a MemoryBlockCacheManager / Btree
     /// </summary>
