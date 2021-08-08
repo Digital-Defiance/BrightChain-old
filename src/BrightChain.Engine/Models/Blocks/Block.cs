@@ -13,11 +13,11 @@ namespace BrightChain.Engine.Models.Blocks
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Contracts;
     using BrightChain.Engine.Models.Entities;
-using BrightChain.Engine.Models.Nodes;
+    using BrightChain.Engine.Models.Nodes;
 
-/// <summary>
-/// The block is the base unit persisted to disk.
-/// </summary>
+    /// <summary>
+    /// The block is the base unit persisted to disk.
+    /// </summary>
     public abstract class Block : IBlock, IComparable<IBlock>, IComparable<Block>, IEquatable<Block>, IEquatable<IBlock>
     {
         public BlockHash Id { get; }

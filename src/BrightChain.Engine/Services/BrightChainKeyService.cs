@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Security.Cryptography;
     using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Keys;
     using Microsoft.IdentityModel.Tokens;
     using Org.BouncyCastle.Asn1.Sec;
 
@@ -16,19 +17,19 @@
         public const string CurveKeyName = "secp256r1";
         public const string Issuer = "BrightChain";
 
-        public static ECDsa LoadPrivateKeyFromBlock(BlockCacheManager blockCacheManager, BlockHash id)
+        public static BrightChainKey LoadPrivateKeyFromBlock(BlockCacheManager blockCacheManager, BlockHash id)
         {
             var brightChainKeyBlock = blockCacheManager.Get(id);
             // get data from block
             throw new NotImplementedException();
         }
 
-        public static ECDsa LoadPrivateKey(string hexKeyString)
+        public static BrightChainKey LoadPrivateKey(string hexKeyString)
         {
             return LoadPrivateKey(FromHexString(hexKeyString));
         }
 
-        public static ECDsa LoadPrivateKey(byte[] key)
+        public static BrightChainKey LoadPrivateKey(byte[] key)
         {
             var privKeyInt = new Org.BouncyCastle.Math.BigInteger(+1, key);
             var parameters = SecNamedCurves.GetByName(CurveKeyName);
@@ -36,7 +37,7 @@
             var privKeyX = ecPoint.Normalize().XCoord.ToBigInteger().ToByteArrayUnsigned();
             var privKeyY = ecPoint.Normalize().YCoord.ToBigInteger().ToByteArrayUnsigned();
 
-            return ECDsa.Create(new ECParameters
+            return BrightChainKey.Create(new ECParameters
             {
                 Curve = ECCurve.NamedCurves.nistP256,
                 D = privKeyInt.ToByteArrayUnsigned(),
@@ -48,17 +49,17 @@
             });
         }
 
-        public static ECDsa LoadPublicKey(string hexKeyString)
+        public static BrightChainKey LoadPublicKey(string hexKeyString)
         {
             return LoadPublicKey(FromHexString(hexKeyString));
         }
 
-        public static ECDsa LoadPublicKey(byte[] key)
+        public static BrightChainKey LoadPublicKey(byte[] key)
         {
             var pubKeyX = key.Skip(1).Take(32).ToArray();
             var pubKeyY = key.Skip(33).ToArray();
 
-            return ECDsa.Create(new ECParameters
+            return BrightChainKey.Create(new ECParameters
             {
                 Curve = ECCurve.NamedCurves.nistP256,
                 Q = new ECPoint
@@ -69,7 +70,7 @@
             });
         }
 
-        public static string CreateSignedJwt(ECDsa eCDsa, string audience)
+        public static string CreateSignedJwt(BrightChainKey eCDsa, string audience)
         {
             var now = DateTime.UtcNow;
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -88,7 +89,7 @@
             return tokenHandler.WriteToken(jwtToken);
         }
 
-        public static bool VerifySignedJwt(ECDsa eCDsa, string token, string audience)
+        public static bool VerifySignedJwt(BrightChainKey eCDsa, string token, string audience)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 

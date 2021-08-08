@@ -1,10 +1,11 @@
-﻿using BrightChain.Engine.Models.Keys;
-
-namespace BrightChain.Engine.Models.Agents
+﻿namespace BrightChain.Engine.Models.Agents
 {
+    using System;
+    using BrightChain.Engine.Models.Keys;
+
     public class BrightChainAgent
     {
-        public object Id { get; }
+        public Guid Id { get; }
 
         private BrightChainKey AgentKey { get; }
     }
