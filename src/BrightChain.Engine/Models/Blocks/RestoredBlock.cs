@@ -5,9 +5,8 @@
 
     public class RestoredBlock : Block
     {
-        public RestoredBlock(BlockParams blockParams, ReadOnlyMemory<byte> data) : base(
-            blockParams: blockParams,
-            data: data)
+        public RestoredBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
+            : base(blockParams: blockParams, data: data)
         {
         }
 

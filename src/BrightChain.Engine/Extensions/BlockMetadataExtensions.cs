@@ -112,6 +112,18 @@ namespace BrightChain.Engine.Extensions
             return false;
         }
 
+        public static Dictionary<string, object> GetMetadataDictionaryFromBytes(ReadOnlyMemory<byte> metadataBytes)
+        {
+            var jsonString = new string(metadataBytes.ToArray().Select(c => (char)c).ToArray());
+            object metaDataObject = JsonSerializer.Deserialize(jsonString, typeof(Dictionary<string, object>), NewSerializerOptions());
+            return (Dictionary<string, object>)metaDataObject;
+        }
+
+        public static Dictionary<string, object> GetMetadataDictionary(this Block block)
+        {
+            return GetMetadataDictionaryFromBytes(block.Metadata);
+        }
+
         /// <summary>
         /// Takes a json blob with the serialized metadata and restores it to the block.
         /// Metadata by definition are not part of the block hash.
@@ -123,27 +135,24 @@ namespace BrightChain.Engine.Extensions
         /// <returns></returns>
         private static bool RestoreMetadataFromBytes(this Block block, ReadOnlyMemory<byte> metadataBytes)
         {
-            var jsonString = new string(metadataBytes.ToArray().Select(c => (char)c).ToArray());
             try
             {
-                object metaDataObject = JsonSerializer.Deserialize(jsonString, typeof(Dictionary<string, object>), NewSerializerOptions());
+                Dictionary<string, object> metadataDictionary = GetMetadataDictionaryFromBytes(metadataBytes);
 
-                Dictionary<string, object> metadataDictionary = (Dictionary<string, object>)metaDataObject;
+                block.OriginalType = ((JsonElement)metadataDictionary["_t"]).ToObject<string>();
+                block.AssemblyVersion = ((JsonElement)metadataDictionary["_v"]).ToObject<string>();
+                var originalType = Type.GetType(block.OriginalType);
+
                 foreach (string key in metadataDictionary.Keys)
                 {
-                    if (key == "_t")
+                    if (!key.StartsWith("_", false, culture: System.Globalization.CultureInfo.InvariantCulture))
                     {
-                        block.OriginalType = ((JsonElement)metadataDictionary[key]).ToObject<string>();
-                        // TODO: validate compatible types and assembly versions
-                    }
-                    else if (key == "_v")
-                    {
-                        block.AssemblyVersion = ((JsonElement)metadataDictionary[key]).ToObject<string>();
-                        // TODO: validate compatible types and assembly versions
-                    }
-                    else if (!key.StartsWith("_", false, culture: System.Globalization.CultureInfo.InvariantCulture))
-                    {
-                        var keyProperty = block.GetType().GetProperty(key);
+                        var keyProperty = originalType.GetProperty(key);
+                        if (keyProperty is null)
+                        {
+                            return false;
+                        }
+
                         var valueObject = metadataDictionary[key];
                         var keyValue = (valueObject is null) ? null : ((JsonElement)valueObject).ToObject(keyProperty.PropertyType, NewSerializerOptions());
                         Exception reloadException = null;

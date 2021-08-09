@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Text.Json;
 using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Exceptions;
+using BrightChain.Engine.Extensions;
+using BrightChain.Engine.Factories;
 using BrightChain.Engine.Helpers;
 using BrightChain.Engine.Interfaces;
 using BrightChain.Engine.Models.Blocks;
@@ -257,6 +260,9 @@ namespace BrightChain.Engine.Services
                 0,
                 dataLength);
 
+            var metaDict = BlockMetadataExtensions.GetMetadataDictionaryFromBytes(metadataBytes);
+            var blockType = ((JsonElement)metaDict["_t"]).ToObject<string>();
+
             // these initial values will be overwritten during the restore
             var block = new RestoredBlock(
                 new BlockParams(
@@ -265,18 +271,17 @@ namespace BrightChain.Engine.Services
                     keepUntilAtLeast: DateTime.MinValue,
                     redundancy: RedundancyContractType.Unknown,
                     privateEncrypted: false,
-                    originalType: typeof(RestoredBlock)),
+                    originalType: Type.GetType(blockType)),
                 blockBytes);
 
-            if (!block.TryRestoreMetadataFromBytesAndValidate(metadataBytes))
+            var typedBlock = BlockFactory.ConvertRestored(block, this);
+
+            if (!typedBlock.TryRestoreMetadataFromBytesAndValidate(metadataBytes))
             {
                 throw new BrightChainException("Invalid block metadata, restore failed");
             }
 
-            return new TransactableBlock(
-                this,
-                block,
-                true);
+            return typedBlock;
         }
 
         /// <summary>

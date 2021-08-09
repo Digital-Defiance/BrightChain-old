@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Exceptions;
-using BrightChain.Engine.Interfaces;
-using BrightChain.Engine.Models.Blocks;
-using BrightChain.Engine.Models.Nodes;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-
-namespace BrightChain.Engine.Services
+﻿namespace BrightChain.Engine.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Interfaces;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Nodes;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
+
     /// <summary>
     ///     Block Cache Manager.
     /// </summary>

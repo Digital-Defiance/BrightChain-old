@@ -1,7 +1,6 @@
 ﻿namespace BrightChain.Engine.Services
 {
     using System;
-    using System.Collections.Generic;
     using System.IdentityModel.Tokens.Jwt;
     using System.IO;
     using System.Security.Cryptography;

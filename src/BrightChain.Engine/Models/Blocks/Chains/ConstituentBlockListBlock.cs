@@ -162,6 +162,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
                         message: "Previous object must be a CBL."));
                 }
             }
+
             // TODO: perform additional validation as described above
             return true;
         }
