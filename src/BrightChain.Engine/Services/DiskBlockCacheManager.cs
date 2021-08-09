@@ -262,6 +262,7 @@ namespace BrightChain.Engine.Services
 
             var metaDict = BlockMetadataExtensions.GetMetadataDictionaryFromBytes(metadataBytes);
             var blockType = ((JsonElement)metaDict["_t"]).ToObject<string>();
+            var fullType = Type.GetType(blockType);
 
             // these initial values will be overwritten during the restore
             var block = new RestoredBlock(
@@ -271,7 +272,7 @@ namespace BrightChain.Engine.Services
                     keepUntilAtLeast: DateTime.MinValue,
                     redundancy: RedundancyContractType.Unknown,
                     privateEncrypted: false,
-                    originalType: Type.GetType(blockType)),
+                    originalType: fullType),
                 blockBytes);
 
             var typedBlock = BlockFactory.ConvertRestored(block, this);

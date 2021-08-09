@@ -50,7 +50,7 @@
             } else if (originalType.IsAssignableFrom(typeof(global::BrightChain.Engine.Models.Blocks.Chains.ConstituentBlockListBlock)))
             {
                 throw new NotImplementedException();
-            } else if (originalType.IsAssignableFrom(typeof(ChainLinqObjectBlock<>).MakeGenericType(originalType.GetGenericArguments())))
+            } else if (originalType.IsGenericType && originalType.IsAssignableFrom(typeof(ChainLinqObjectBlock<>).MakeGenericType(originalType.GetGenericArguments())))
             {
                 throw new NotImplementedException();
             }

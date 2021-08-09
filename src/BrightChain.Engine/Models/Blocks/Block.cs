@@ -152,7 +152,7 @@ namespace BrightChain.Engine.Models.Blocks
             this.SignatureVerified = false;
             this.RevocationCertificates = new List<RevocationCertificate>();
             this.originalType = blockParams.OriginalType;
-            this.OriginalType = this.originalType.FullName;
+            this.OriginalType = this.originalType.AssemblyQualifiedName;
             this.AssemblyVersion = versionAttribute.InformationalVersion;
             this.HashVerified = this.Validate(); // also fills in any validation errors in the array
         }

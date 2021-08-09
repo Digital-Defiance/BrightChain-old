@@ -56,7 +56,7 @@
             Type blockType = this._blocks.First().GetType();
             foreach (var block in this._blocks)
             {
-                if ((block.OriginalType != blockType.FullName) || (block.BlockSize != this._blockParams.BlockSize))
+                if ((block.OriginalType != blockType.AssemblyQualifiedName) || (block.BlockSize != this._blockParams.BlockSize))
                 {
                     throw new BrightChainException("Block type mismatch");
                 }

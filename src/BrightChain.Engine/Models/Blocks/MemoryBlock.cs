@@ -22,7 +22,7 @@ namespace BrightChain.Engine.Models.Blocks
             }
 
             this.CacheManager.Set(this);
-            this.OriginalType = typeof(MemoryBlock).FullName;
+            this.OriginalType = typeof(MemoryBlock).AssemblyQualifiedName;
         }
 
         public override MemoryBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)

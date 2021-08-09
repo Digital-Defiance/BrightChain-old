@@ -27,7 +27,7 @@
                 data: Helpers.RandomDataHelper.DataFiller(default(ReadOnlyMemory<byte>), blockSize))
         {
             this.Guid = databaseGuid;
-            this.OriginalType = typeof(RootBlock).FullName;
+            this.OriginalType = typeof(RootBlock).AssemblyQualifiedName;
         }
 
         [BrightChainMetadata]

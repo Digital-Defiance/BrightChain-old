@@ -22,7 +22,7 @@ namespace BrightChain.Engine.Models.Blocks
                 blockParams: blockParams,
                 data: NewEmptyBlockData(blockParams.BlockSize))
         {
-            this.OriginalType = typeof(EmptyDummyBlock).FullName;
+            this.OriginalType = typeof(EmptyDummyBlock).AssemblyQualifiedName;
         }
 
         /// <summary>

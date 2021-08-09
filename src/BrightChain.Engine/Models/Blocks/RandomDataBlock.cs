@@ -13,7 +13,7 @@ namespace BrightChain.Engine.Models.Blocks
             base(blockParams: blockParams,
                 data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockParams.BlockSize)))
         {
-            this.OriginalType = typeof(RandomDataBlock).FullName;
+            this.OriginalType = typeof(RandomDataBlock).AssemblyQualifiedName;
         }
 
         /// <summary>

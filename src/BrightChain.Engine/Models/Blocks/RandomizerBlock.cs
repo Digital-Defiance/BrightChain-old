@@ -15,7 +15,7 @@ namespace BrightChain.Engine.Models.Blocks
                 data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockParams.BlockSize)))
         {
             this.CacheManager.Set(this);
-            this.OriginalType = typeof(RandomizerBlock).FullName;
+            this.OriginalType = typeof(RandomizerBlock).AssemblyQualifiedName;
         }
 
         /// <summary>

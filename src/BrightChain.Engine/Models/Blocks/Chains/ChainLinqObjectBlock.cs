@@ -38,7 +38,7 @@
 
             var dictionary = new Dictionary<string, object>()
             {
-                { "_t", typeof(T).FullName },
+                { "_t", typeof(T).AssemblyQualifiedName },
                 { "Data", objectData },
                 { "Next", next },
             };

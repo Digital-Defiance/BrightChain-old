@@ -18,7 +18,7 @@
                 data: data)
         {
             this.ConstituentBlocks = constituentBlocks;
-            this.OriginalType = typeof(BrightenedBlock).FullName;
+            this.OriginalType = typeof(BrightenedBlock).AssemblyQualifiedName;
         }
 
         public override BrightenedBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
