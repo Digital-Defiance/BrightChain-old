@@ -24,8 +24,15 @@
         /// </summary>
         public BlockHash Id { get; }
 
-        public ECDiffieHellmanCngPublicKey PublicKey { get; }
+        /// <summary>
+        /// Gets the node agent's public key. Shortcut.
+        /// </summary>
+        public ECDiffieHellmanCngPublicKey PublicKey =>
+            this.NodeAgent.PublicKey;
 
+        /// <summary>
+        /// Entity with keys to perform actions on behalf of the node.
+        /// </summary>
         public BrightChainAgent NodeAgent { get; }
 
         public BrightChainNodeInfo NodeInfo { get; }

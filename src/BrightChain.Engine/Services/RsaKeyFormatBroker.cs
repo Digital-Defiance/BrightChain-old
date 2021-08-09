@@ -1,8 +1,12 @@
 ﻿namespace BrightChain.Engine.Services
 {
     using System;
+    using System.Collections.Generic;
+    using System.IdentityModel.Tokens.Jwt;
     using System.IO;
     using System.Security.Cryptography;
+    using System.Text;
+    using Microsoft.IdentityModel.Tokens;
     using Org.BouncyCastle.Crypto;
     using Org.BouncyCastle.Crypto.Parameters;
     using Org.BouncyCastle.OpenSsl;
@@ -13,6 +17,37 @@
     /// </summary>
     public static class RsaKeyFormatBroker
     {
+        public static JwtSecurityToken GenerateJWTToken(SigningCredentials rsaPrivateKey, string audience)
+        {
+            return new System.IdentityModel.Tokens.Jwt.JwtSecurityToken(
+                issuer: "BrightChain",
+                audience: audience,
+                claims: null,
+                notBefore: null,
+                expires: null,
+                signingCredentials: rsaPrivateKey);
+        }
+
+        private static SecurityKey GetSymmetricSecurityKey(byte[] symmetricKey)
+        {
+            return new SymmetricSecurityKey(symmetricKey);
+        }
+
+        private static RSAParameters GetRsaParameters(string rsaPrivateKey)
+        {
+            var byteArray = Encoding.ASCII.GetBytes(rsaPrivateKey);
+            using (var ms = new MemoryStream(byteArray))
+            {
+                using (var sr = new StreamReader(ms))
+                {
+                    // use Bouncy Castle to convert the private key to RSA parameters
+                    var pemReader = new PemReader(sr);
+                    var keyPair = pemReader.ReadObject() as AsymmetricCipherKeyPair;
+                    return DotNetUtilities.ToRSAParameters(keyPair.Private as RsaPrivateCrtKeyParameters);
+                }
+            }
+        }
+
         /// <summary>
         /// Import OpenSSH PEM private key string into MS RSACryptoServiceProvider.
         /// </summary>
