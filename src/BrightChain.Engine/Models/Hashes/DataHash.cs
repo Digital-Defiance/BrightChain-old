@@ -2,7 +2,9 @@
 namespace BrightChain.Engine.Models.Blocks
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Security.Cryptography;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Helpers;
@@ -23,7 +25,6 @@ namespace BrightChain.Engine.Models.Blocks
         /// </summary>
         public const int HashSizeBytes = HashSize / 8;
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DataHash"/> class.
         /// </summary>
@@ -37,6 +38,21 @@ namespace BrightChain.Engine.Models.Blocks
 
             this.Computed = true;
             this.SourceDataLength = dataBytes.Length;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataHash"/> class.
+        /// </summary>
+        /// <param name="dataBytes">Data to compute hash from.</param>
+        public DataHash(IEnumerable<byte> dataBytes)
+        {
+            using (SHA256 mySHA256 = SHA256.Create())
+            {
+                this.HashBytes = mySHA256.ComputeHash((byte[])dataBytes);
+            }
+
+            this.Computed = true;
+            this.SourceDataLength = dataBytes.Count();
         }
 
         public DataHash(Stream stream)

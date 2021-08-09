@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Headers;
 
@@ -11,6 +12,7 @@ namespace BrightChain.Engine.Exceptions
     {
         public BrightChainException(string message) : base(message)
         {
+            this.StackTrace = new StackTrace().ToString();
         }
 
         //

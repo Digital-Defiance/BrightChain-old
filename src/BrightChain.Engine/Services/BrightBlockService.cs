@@ -13,7 +13,6 @@ namespace BrightChain.Engine.Services
     using System.Threading.Tasks;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
-    using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
@@ -80,7 +79,7 @@ namespace BrightChain.Engine.Services
 
             if (!dbNameConfigured)
             {
-                global::BrightChain.Engine.Helpers.ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", Utilities.HashToFormattedString(serviceUnifiedStoreGuid.ToByteArray()));
+                //global::BrightChain.Engine.Helpers.ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", Utilities.HashToFormattedString(serviceUnifiedStoreGuid.ToByteArray()));
             }
 
             var rootBlock = new RootBlock(
@@ -188,25 +187,16 @@ namespace BrightChain.Engine.Services
                             }
                         }
 
-                        Block[] randomizersUsed;
                         var brightenedBlock = this.blockBrightener.Brighten(
                             block: new SourceBlock(
                                 blockParams: blockParams,
                                 data: buffer),
-                            randomizersUsed: out randomizersUsed);
+                            randomizersUsed: out _);
 
                         this.blockMemoryCache.Set(new TransactableBlock(
                                 cacheManager: this.blockMemoryCache,
                                 sourceBlock: brightenedBlock,
                                 allowCommit: true));
-
-                        foreach (var block in randomizersUsed)
-                        {
-                            this.blockMemoryCache.Set(block: new TransactableBlock(
-                                cacheManager: this.blockMemoryCache,
-                                sourceBlock: block,
-                                allowCommit: true));
-                        }
 
                         yield return brightenedBlock;
                     } // end while
@@ -454,7 +444,7 @@ namespace BrightChain.Engine.Services
             return restoredSourceInfo;
         }
 
-        public async Task<Block> TryFindBlockByIdAsync(BlockHash id)
+        public async Task<TransactableBlock> TryFindBlockByIdAsync(BlockHash id)
         {
             if (this.blockMemoryCache.Contains(id))
             {
@@ -487,10 +477,9 @@ namespace BrightChain.Engine.Services
         public async Task<T> TryFindBlockByIdAsync<T>(BlockHash id, bool useAsBlock)
             where T : class
         {
-            var firstBlock = await this.TryFindBlockByIdAsync(id)
+            var retrievedBlock = await this.TryFindBlockByIdAsync(id)
                 .ConfigureAwait(false);
-            var temp = firstBlock.OriginalType;
-            var block = useAsBlock ? firstBlock.AsBlock as T : firstBlock as T;
+            var block = useAsBlock ? retrievedBlock.AsBlock as T : retrievedBlock as T;
             if (block is null)
             {
                 throw new BrightChainException("Unable to cast from unrelated type");
@@ -601,50 +590,55 @@ namespace BrightChain.Engine.Services
             }
         }
 
-        public BrightChain BrightenBlocks(IEnumerable<SourceBlock> sourceBlocks)
+        public async IAsyncEnumerable<BrightenedBlock> BrightenBlocks(IAsyncEnumerable<SourceBlock> sourceBlocks)
         {
-            BrightenedBlock[] brightenedBlocks = new BrightenedBlock[sourceBlocks.Count()];
-            long i = 0;
-            foreach (var sourceBlock in sourceBlocks)
+            await foreach (var sourceBlock in sourceBlocks)
             {
-                Block[] randomizersUsed;
-
                 var brightenedBlock = this.blockBrightener.Brighten(
                     block: sourceBlock,
-                    randomizersUsed: out randomizersUsed);
+                    randomizersUsed: out Block[] randomizersUsed);
 
-                this.blockMemoryCache.Set(new TransactableBlock(
-                        cacheManager: this.blockMemoryCache,
-                        sourceBlock: brightenedBlock,
-                        allowCommit: true));
+                brightenedBlock.MakeTransactable(
+                    cacheManager: this.blockMemoryCache,
+                    allowCommit: true);
 
-                foreach (var randomizer in randomizersUsed)
-                {
-                    this.blockMemoryCache.Set(block: new TransactableBlock(
-                        cacheManager: this.blockMemoryCache,
-                        sourceBlock: randomizer,
-                        allowCommit: true));
-                }
+                yield return brightenedBlock;
+            }
+        }
 
-                brightenedBlocks[i++] = brightenedBlock;
+        public async Task<BrightChain> MakeChain(IAsyncEnumerable<BrightenedBlock> brightenedBlocks)
+        {
+            var hashes = new List<BlockHash>();
+            var awaitedBlocks = new List<BrightenedBlock>();
+            await foreach (var block in brightenedBlocks)
+            {
+                hashes.Add(block.Id);
+                awaitedBlocks.Add(block);
             }
 
-            var segmentBytes = brightenedBlocks.SelectMany(b => b.Id.HashBytes.ToArray()).ToArray();
+            var segmentBytes = hashes.SelectMany(h => h.HashBytes.ToArray()).ToArray();
+
+            var firstBlock = awaitedBlocks.First();
 
             return new BrightChain(
                 blockParams: new ConstituentBlockListBlockParams(
                     blockParams: new TransactableBlockParams(
                         cacheManager: this.blockMemoryCache,
                         allowCommit: true,
-                        blockParams: sourceBlocks.First().BlockParams),
-                    sourceId: brightenedBlocks[0].Id,
+                        blockParams: firstBlock.BlockParams),
+                    sourceId: firstBlock.Id,
                     segmentId: new SegmentHash(
                         dataBytes: new ReadOnlyMemory<byte>(segmentBytes)),
-                    totalLength: BlockSizeMap.BlockSize(brightenedBlocks[0].BlockSize) * brightenedBlocks.Length,
-                    constituentBlocks: brightenedBlocks.Select(b => b.Id),
+                    totalLength: BlockSizeMap.BlockSize(firstBlock.BlockSize) * awaitedBlocks.Count,
+                    constituentBlocks: hashes,
                     previous: null,
                     next: null),
-                sourceBlocks: brightenedBlocks);
+                sourceBlocks: awaitedBlocks);
+        }
+
+        public void PersistCBL(ConstituentBlockListBlock cblBlock)
+        {
+            this.blockDiskCache.Set(cblBlock);
         }
     }
 }

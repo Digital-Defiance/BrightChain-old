@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Blocks.DataObjects;
 
@@ -37,16 +36,11 @@ namespace BrightChain.Engine.Services
                 // TODO: select or generate pre-generated random blocks (determine mixing)
                 // for now just generate on demand, but these can be pre-seeded
                 randomizersUsed[i] = new RandomizerBlock(
-                    new TransactableBlockParams(
-                    cacheManager: this.pregeneratedRandomizerCache,
-                    allowCommit: true,
-                    blockParams: new BlockParams(
-                        blockSize: block.BlockSize,
-                        requestTime: DateTime.Now,
-                        keepUntilAtLeast: block.StorageContract.KeepUntilAtLeast,
-                        redundancy: block.StorageContract.RedundancyContractType,
-                        privateEncrypted: false, // randomizers are never "private encrypted"
-                        originalType: typeof(RandomizerBlock))));
+                    destinationCache: this.resultCache,
+                    blockSize: block.BlockSize,
+                    keepUntilAtLeast: block.StorageContract.KeepUntilAtLeast,
+                    redundancyContractType: block.StorageContract.RedundancyContractType,
+                    requestTime: block.StorageContract.RequestTime);
             }
 
             var xorBlock = block.XOR(randomizersUsed);
@@ -54,13 +48,7 @@ namespace BrightChain.Engine.Services
                 blockParams: new TransactableBlockParams(
                     cacheManager: this.resultCache,
                     allowCommit: true,
-                    blockParams: new BlockParams(
-                        blockSize: block.BlockSize,
-                        requestTime: block.StorageContract.RequestTime,
-                        keepUntilAtLeast: block.StorageContract.KeepUntilAtLeast,
-                        redundancy: block.StorageContract.RedundancyContractType,
-                        privateEncrypted: block.StorageContract.PrivateEncrypted,
-                        originalType: Type.GetType(block.OriginalType))),
+                    blockParams: block.BlockParams),
                 data: xorBlock.Data,
                 constituentBlocks: randomizersUsed.Select(b => b.Id).ToArray());
         }

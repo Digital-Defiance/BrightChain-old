@@ -7,6 +7,7 @@
     using BrightChain.Engine.Extensions;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Services;
 
     /// <summary>
@@ -53,12 +54,20 @@
             {
                 throw new NotImplementedException();
             }
-            else if (originalType.IsGenericType && originalType.IsAssignableFrom(typeof(ChainLinqObjectBlock<>).MakeGenericType(originalType.GetGenericArguments())))
+            else if (originalType.IsGenericType)
             {
-                throw new NotImplementedException();
+                Type chainLinqType = typeof(ChainLinqObjectBlock<>).GetGenericTypeDefinition();
+                if (originalType.GetGenericTypeDefinition().Equals(chainLinqType))
+                {
+                    var p = new object[] { new ChainLinqBlockParams(block.BlockParams), block.Data };
+                    object i = Activator.CreateInstance(originalType, p);
+                    return (TransactableBlock)i;
+                }
             }
 
-            throw new NotImplementedException();
+            return block.MakeTransactable(
+                cacheManager: cacheManager,
+                allowCommit: true);
         }
     }
 }

@@ -67,7 +67,7 @@ namespace BrightChain.Engine.Services
 
             if (configuredDbName is null)
             {
-                ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", this.databaseName);
+                //ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", this.databaseName);
             }
             else
             {

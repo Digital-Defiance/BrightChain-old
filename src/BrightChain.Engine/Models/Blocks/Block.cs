@@ -14,6 +14,7 @@ namespace BrightChain.Engine.Models.Blocks
     using BrightChain.Engine.Models.Contracts;
     using BrightChain.Engine.Models.Entities;
     using BrightChain.Engine.Models.Nodes;
+    using BrightChain.Engine.Services;
 
     /// <summary>
     /// The block is the base unit persisted to disk.
@@ -294,6 +295,14 @@ namespace BrightChain.Engine.Models.Blocks
         {
             throw new NotImplementedException();
             return false;
+        }
+
+        public TransactableBlock MakeTransactable(BlockCacheManager cacheManager, bool allowCommit)
+        {
+            return new TransactableBlock(
+                cacheManager: cacheManager,
+                sourceBlock: this,
+                allowCommit: allowCommit);
         }
 
         /// <summary>

@@ -16,7 +16,7 @@
             : base(
                 blockParams: new TransactableBlockParams(
                     cacheManager: null,
-                    allowCommit: true,
+                    allowCommit: false,
                     blockParams: new BlockParams(
                         blockSize: blockSize,
                         requestTime: DateTime.Now,

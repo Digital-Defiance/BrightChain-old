@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
+    using System.Threading.Tasks;
     using global::BrightChain.Engine.Exceptions;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
     using global::BrightChain.Engine.Services;
@@ -22,10 +23,10 @@
             }
 
             SetNextLinks(blocks);
-            this.Blocks = (ChainLinqObjectBlock<T>[])blocks;
+            this.ObjectBlocks = blocks;
         }
 
-        public ChainLinqObjectBlock<T>[] Blocks { get; }
+        public IEnumerable<ChainLinqObjectBlock<T>> ObjectBlocks { get; }
 
         public static IEnumerable<ChainLinqObjectBlock<T>> SetNextLinks(IEnumerable<ChainLinqObjectBlock<T>> blocks)
         {
@@ -39,40 +40,37 @@
             return blocks;
         }
 
-        public static BrightChain MakeChain(BrightBlockService brightBlockService, ChainLinqBlockParams blockParams, IEnumerable<T> blockObjects)
+        public static ChainLinq<T> ForgeChainLinq(ChainLinqBlockParams blockParams, IEnumerable<T> objects)
         {
-            int i = 0;
-            ChainLinqObjectBlock<T>[] blocks = new ChainLinqObjectBlock<T>[blockObjects.Count()];
-            foreach (var blockObject in blockObjects)
+            List<ChainLinqObjectBlock<T>> blocks = new List<ChainLinqObjectBlock<T>>();
+            foreach (var o in objects)
             {
-                blocks[i++] = ChainLinqObjectBlock<T>.MakeBlock(
+                blocks.Add(ChainLinqObjectBlock<T>.MakeBlock(
                     blockParams: blockParams,
-                    blockObject: blockObject);
+                    blockObject: o));
             }
 
-            var brightChain = BrightenAll(brightBlockService, blocks);
-            brightChain.CacheSet();
-            return brightChain;
+            return new ChainLinq<T>(blocks);
         }
 
         public long Count()
         {
-            return this.Blocks.LongLength;
+            return this.ObjectBlocks.LongCount();
         }
 
         public ChainLinqObjectBlock<T> First()
         {
-            return this.Blocks[0];
+            return this.ObjectBlocks.First();
         }
 
         public ChainLinqObjectBlock<T> Last()
         {
-            return this.Blocks[this.Blocks.Length - 1];
+            return this.ObjectBlocks.Last();
         }
 
         public IEnumerable<T> All()
         {
-            return this.Blocks.Select(b => b.BlockObject);
+            return this.ObjectBlocks.Select(b => b.BlockObject);
         }
 
         public async IAsyncEnumerable<T> AllAsync()
@@ -83,6 +81,14 @@
             }
         }
 
+        public async IAsyncEnumerable<ChainLinqObjectBlock<T>> ObjectBlocksAsync()
+        {
+            foreach (var objectBlock in this.ObjectBlocks)
+            {
+                yield return objectBlock;
+            }
+        }
+
         /// <summary>
         /// Technically the "Id" field of the blocks, but as these are unbrightened source blocks, the Id will change and not be used.
         /// Do NOT rely on the Id of these blocks for anything other than comparison of whether the contents have changed, prior to being brightened into a BrightChain.
@@ -90,7 +96,7 @@
         /// <returns></returns>
         public IEnumerable<BlockHash> Hashes()
         {
-            return this.Blocks.Select(b => b.Id);
+            return this.ObjectBlocks.Select(b => b.Id);
         }
 
         public async IAsyncEnumerable<BlockHash> HashesAsync()
@@ -101,14 +107,20 @@
             }
         }
 
-        public BrightChain BrightenAll(BrightBlockService brightBlockService)
+        public async Task<BrightChain> BrightenAllAsync(BrightBlockService brightBlockService)
         {
-            return brightBlockService.BrightenBlocks(sourceBlocks: SetNextLinks(this.Blocks));
+            return await BrightenAll(brightBlockService, this.ObjectBlocksAsync())
+.ConfigureAwait(false);
         }
 
-        public static BrightChain BrightenAll(BrightBlockService brightBlockService, IEnumerable<ChainLinqObjectBlock<T>> sourceBlocks)
+        public static async Task<BrightChain> BrightenAll(BrightBlockService brightBlockService, IAsyncEnumerable<ChainLinqObjectBlock<T>> objectBlocks)
         {
-            return brightBlockService.BrightenBlocks(sourceBlocks: SetNextLinks(sourceBlocks));
+            var brightBlocks = brightBlockService
+                .BrightenBlocks(
+                    sourceBlocks: objectBlocks);
+
+            return await brightBlockService.MakeChain(brightBlocks)
+                .ConfigureAwait(false);
         }
     }
 }

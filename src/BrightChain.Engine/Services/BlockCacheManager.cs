@@ -144,11 +144,23 @@
 
             if (value is RootBlock rootBlock)
             {
-                // only allow the known root block ID to persist to cache
-                if (rootBlock.Id != this.RootBlock.Id)
-                {
-                    throw new BrightChainException(nameof(rootBlock.Id));
-                }
+                throw new BrightChainException(nameof(rootBlock.Id));
+            }
+        }
+
+        public void SetAll(IEnumerable<TransactableBlock> items)
+        {
+            foreach (var item in items)
+            {
+                this.Set(item);
+            }
+        }
+
+        public async void SetAllAsync(IAsyncEnumerable<TransactableBlock> items)
+        {
+            await foreach (var item in items)
+            {
+                this.Set(item);
             }
         }
 

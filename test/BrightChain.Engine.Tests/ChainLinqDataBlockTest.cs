@@ -53,7 +53,7 @@
             this.cacheManager = DiskCacheTestBlock.CacheManager;
         }
 
-        public BrightChain MakeChain(BrightBlockService brightBlockService, BlockSize blockSize, int objectCount, out IEnumerable<ChainLinqExampleSerializable> datas)
+        public async Task<BrightChain> ForgeChainAsync(BrightBlockService brightBlockService, BlockSize blockSize, int objectCount)
         {
             var requestParams = new Models.Blocks.DataObjects.ChainLinqBlockParams(
                     blockParams: new Models.Blocks.DataObjects.BlockParams(
@@ -64,14 +64,16 @@
                         privateEncrypted: false,
                         originalType: typeof(ChainLinqObjectBlock<ChainLinqExampleSerializable>)));
 
-            datas = ChainLinqExampleSerializable.MakeMultiple(objectCount);
+            var datas = ChainLinqExampleSerializable.MakeMultiple(objectCount);
             Assert.AreEqual(objectCount, datas.Count());
 
-            var brightChain = ChainLinq<ChainLinqExampleSerializable>.MakeChain(
-                brightBlockService: brightBlockService,
+            var chainLinq = ChainLinq<ChainLinqExampleSerializable>.ForgeChainLinq(
                 blockParams: requestParams,
-                blockObjects: datas);
-            Assert.AreEqual(objectCount, brightChain.Count());
+                objects: datas);
+            Assert.AreEqual(objectCount, chainLinq.Count());
+
+            var brightChain = await chainLinq.BrightenAllAsync(
+                brightBlockService: brightBlockService);
 
             return brightChain;
         }
@@ -88,14 +90,24 @@
                 logger: this.loggerFactory.Object,
                 configuration: this.configuration.Object);
 
-            IEnumerable<ChainLinqExampleSerializable> datas;
-            var brightChain = this.MakeChain(
+            var brightChain = await this.ForgeChainAsync(
                 brightBlockService: brightBlockService,
                 blockSize: blockSize,
-                objectCount: objectCount,
-                out datas);
+                objectCount: objectCount);
 
             await brightBlockService.PersistMemoryCacheAsync(clearAfter: true);
+
+            Assert.ThrowsException<KeyNotFoundException>(async () =>
+            {
+                var retrievedChainNull = await brightBlockService.TryFindBlockByIdAsync(brightChain.Id);
+                Assert.IsNull(retrievedChainNull);
+            });
+
+            brightBlockService.PersistCBL(brightChain);
+
+            // in order to get our original blocks back, first get the chain head
+            var retrievedChain = await brightBlockService.TryFindBlockByIdAsync(brightChain.Id);
+            Assert.IsNotNull(retrievedChain);
 
             // how do we validate this?
         }
@@ -112,18 +124,33 @@
                 logger: this.loggerFactory.Object,
                 configuration: this.configuration.Object);
 
-            IEnumerable<ChainLinqExampleSerializable> datas;
-            var brightChain = this.MakeChain(
+            var brightChain = await this.ForgeChainAsync(
                 brightBlockService: brightBlockService,
                 blockSize: blockSize,
-                objectCount: objectCount,
-                out datas);
+                objectCount: objectCount);
 
             await brightBlockService.PersistMemoryCacheAsync(clearAfter: true);
+
+            Assert.ThrowsException<KeyNotFoundException>(async () =>
+            {
+                var retrievedChainNull = await brightBlockService.TryFindBlockByIdAsync(brightChain.Id);
+                Assert.IsNull(retrievedChainNull);
+            });
+
+            brightBlockService.PersistCBL(brightChain);
 
             // in order to get our original blocks back, first get the chain head
             var retrievedChain = await brightBlockService.TryFindBlockByIdAsync(brightChain.Id);
             Assert.IsNotNull(retrievedChain);
+
+            if (retrievedChain is BrightChain retrievedBrightChain)
+            {
+                Assert.AreEqual(brightChain.Crc32, retrievedBrightChain.Crc32);
+            }
+            else
+            {
+                Assert.Fail();
+            }
         }
     }
 }

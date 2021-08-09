@@ -77,14 +77,6 @@
             return !a.Equals(b);
         }
 
-        /// <summary>
-        /// Sets the block in its cache.
-        /// </summary>
-        public void CacheSet()
-        {
-            this.CacheManager.Set(this);
-        }
-
         public void SetCacheManager(ICacheManager<BlockHash, TransactableBlock> cacheManager)
         {
             if (this.CacheManager is not null)
