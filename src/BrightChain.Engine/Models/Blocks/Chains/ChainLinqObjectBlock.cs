@@ -11,6 +11,10 @@
     using global::BrightChain.Engine.Factories;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
 
+    /// <summary>
+    /// Data container for serialization of objects into BrightChain.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class ChainLinqObjectBlock<T>
         : SourceBlock
         where T : ISerializable

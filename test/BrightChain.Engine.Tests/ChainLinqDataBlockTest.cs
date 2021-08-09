@@ -97,33 +97,7 @@
 
             await brightBlockService.PersistMemoryCacheAsync(clearAfter: true);
 
-            var id = brightChain.First().Id;
-
-            // V1
-            var firstBlock = (await brightBlockService.TryFindBlockByIdAsync(id)).AsBlock;
-            var typedBlock = firstBlock as ChainLinqObjectBlock<ChainLinqExampleSerializable>;
-            Assert.IsNotNull(typedBlock);
-            var block = typedBlock;
-
-            // V2
-            var block2 = await brightBlockService
-                .TryFindBlockByIdAsync<ChainLinqObjectBlock<ChainLinqExampleSerializable>>(id, true);
-            Assert.IsNotNull(block2);
-
-            var j = 0;
-            while (block is not null)
-            {
-                var next = block.Next;
-                if (next is null)
-                {
-                    break;
-                }
-
-                block = await brightBlockService
-                    .TryFindBlockByIdAsync<ChainLinqObjectBlock<ChainLinqExampleSerializable>>(next, false);
-                Assert.IsNotNull(block);
-                Assert.AreEqual(datas.ElementAt(j++), block.BlockObject);
-            }
+            // how do we validate this?
         }
 
         [DataTestMethod]
@@ -146,6 +120,10 @@
                 out datas);
 
             await brightBlockService.PersistMemoryCacheAsync(clearAfter: true);
+
+            // in order to get our original blocks back, first get the chain head
+            var retrievedChain = await brightBlockService.TryFindBlockByIdAsync(brightChain.Id);
+            Assert.IsNotNull(retrievedChain);
         }
     }
 }

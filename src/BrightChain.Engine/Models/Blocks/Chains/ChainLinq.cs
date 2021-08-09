@@ -50,7 +50,9 @@
                     blockObject: blockObject);
             }
 
-            return BrightenAll(brightBlockService, blocks);
+            var brightChain = BrightenAll(brightBlockService, blocks);
+            brightChain.CacheSet();
+            return brightChain;
         }
 
         public long Count()
