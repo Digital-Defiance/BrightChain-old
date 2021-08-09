@@ -4,10 +4,10 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.Json;
-    using BrightChain.Engine.Models.Blocks;
-    using BrightChain.Engine.Services;
     using BrightChain.Engine.Extensions;
+    using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
+    using BrightChain.Engine.Services;
 
     /// <summary>
     /// The block factory will upcast the deserialized blocks from storage into the correct types
@@ -44,13 +44,16 @@
             if (originalType.IsAssignableFrom(typeof(global::BrightChain.Engine.Models.Blocks.Chains.BrightChain)))
             {
                 throw new NotImplementedException();
-            } else if (originalType.IsAssignableFrom(typeof(global::BrightChain.Engine.Models.Blocks.Chains.SuperConstituentBlockListBlock)))
+            }
+            else if (originalType.IsAssignableFrom(typeof(global::BrightChain.Engine.Models.Blocks.Chains.SuperConstituentBlockListBlock)))
             {
                 throw new NotImplementedException();
-            } else if (originalType.IsAssignableFrom(typeof(global::BrightChain.Engine.Models.Blocks.Chains.ConstituentBlockListBlock)))
+            }
+            else if (originalType.IsAssignableFrom(typeof(global::BrightChain.Engine.Models.Blocks.Chains.ConstituentBlockListBlock)))
             {
                 throw new NotImplementedException();
-            } else if (originalType.IsGenericType && originalType.IsAssignableFrom(typeof(ChainLinqObjectBlock<>).MakeGenericType(originalType.GetGenericArguments())))
+            }
+            else if (originalType.IsGenericType && originalType.IsAssignableFrom(typeof(ChainLinqObjectBlock<>).MakeGenericType(originalType.GetGenericArguments())))
             {
                 throw new NotImplementedException();
             }

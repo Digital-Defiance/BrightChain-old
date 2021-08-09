@@ -5,7 +5,6 @@
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Extensions;
-    using BrightChain.Engine.Factories;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.DataObjects;
