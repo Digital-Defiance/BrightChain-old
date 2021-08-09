@@ -147,7 +147,7 @@ namespace BrightChain.Engine.Extensions
                 {
                     if (!key.StartsWith("_", false, culture: System.Globalization.CultureInfo.InvariantCulture))
                     {
-                        var keyProperty = originalType.GetProperty(key);
+                        var keyProperty = block.GetType().GetProperty(key);
                         if (keyProperty is null)
                         {
                             return false;

@@ -13,10 +13,5 @@
         {
             throw new System.NotImplementedException();
         }
-
-        public static BrightChainKey Create(ECParameters parameters)
-        {
-            return ECDsa.Create(parameters) as BrightChainKey;
-        }
     }
 }
