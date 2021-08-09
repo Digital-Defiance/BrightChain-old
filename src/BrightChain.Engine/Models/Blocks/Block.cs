@@ -319,7 +319,7 @@ namespace BrightChain.Engine.Models.Blocks
 
         public override int GetHashCode()
         {
-            return this.Data.GetHashCode();
+            return (int)this.Crc32;
         }
 
         public int CompareTo(IBlock other)

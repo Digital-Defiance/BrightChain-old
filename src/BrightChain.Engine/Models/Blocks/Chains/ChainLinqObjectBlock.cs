@@ -106,8 +106,7 @@
                 next: next);
 
             return new ChainLinqObjectBlock<T>(
-                blockParams: new Models.Blocks.DataObjects.ChainLinqBlockParams(
-                    blockParams: blockParams),
+                blockParams: blockParams,
                 serializedData: serialized,
                 blockObject: blockObject);
         }

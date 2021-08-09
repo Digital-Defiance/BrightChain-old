@@ -130,7 +130,7 @@ namespace BrightChain.Engine.Models.Blocks
 
         public override int GetHashCode()
         {
-            return this.HashBytes.ToArray().GetHashCode();
+            return (int)Crc32.ComputeNewChecksum(this.HashBytes.ToArray());
         }
     }
 }

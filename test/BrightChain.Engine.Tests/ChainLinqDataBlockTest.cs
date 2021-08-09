@@ -95,9 +95,6 @@
                 objectCount: objectCount,
                 out datas);
 
-            var chainType = brightChain.BlockParams.OriginalType;
-            Assert.AreEqual(chainType, typeof(ChainLinqObjectBlock<ChainLinqExampleSerializable>));
-
             await brightBlockService.PersistMemoryCacheAsync(clearAfter: true);
 
             var id = brightChain.First().Id;

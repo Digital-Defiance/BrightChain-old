@@ -123,7 +123,7 @@ namespace BrightChain.Engine.Services
         {
             await foreach (var key in this.KeysAsync())
             {
-                destinationCache.Set(this.blocks[key]);
+                destinationCache.Set(this.Get(key));
             }
         }
 

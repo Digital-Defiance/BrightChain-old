@@ -17,7 +17,6 @@
                 blockParams: blockParams,
                 data: data)
         {
-            this.OriginalType = typeof(SourceBlock).FullName;
         }
 
         public override SourceBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)

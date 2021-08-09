@@ -509,8 +509,9 @@ namespace BrightChain.Engine.Services
 
         public async Task PersistMemoryCacheAsync(bool clearAfter)
         {
-            await this.blockMemoryCache.CopyContentAsync(this.blockDiskCache)
-                .ConfigureAwait(false);
+            await this.blockMemoryCache.CopyContentAsync(
+                destinationCache: this.blockDiskCache)
+                    .ConfigureAwait(false);
 
             if (clearAfter)
             {
@@ -635,7 +636,7 @@ namespace BrightChain.Engine.Services
                     blockParams: new TransactableBlockParams(
                         cacheManager: this.blockMemoryCache,
                         allowCommit: true,
-                        blockParams: brightenedBlocks[0].BlockParams),
+                        blockParams: sourceBlocks.First().BlockParams),
                     sourceId: brightenedBlocks[0].Id,
                     segmentId: new SegmentHash(
                         dataBytes: new ReadOnlyMemory<byte>(segmentBytes)),
