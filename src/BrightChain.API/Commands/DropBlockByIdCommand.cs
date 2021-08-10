@@ -24,7 +24,7 @@
             public async Task<BlockHash> Handle(DropBlockByIdCommand command, CancellationToken cancellationToken)
             {
                 var chainBlock = await this._brightChain
-                    .TryDropBlockAsync(command.Id)
+                    .DropBlockByIdAsync(command.Id)
                         .ConfigureAwait(false);
 
                 return chainBlock is Block ? chainBlock.Id : command.Id;

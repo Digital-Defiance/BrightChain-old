@@ -99,14 +99,14 @@
 
             Assert.ThrowsException<KeyNotFoundException>(async () =>
             {
-                var retrievedChainNull = await brightBlockService.TryFindBlockByIdAsync(brightChain.Id);
+                var retrievedChainNull = await brightBlockService.FindBlockByIdAsync(brightChain.Id);
                 Assert.IsNull(retrievedChainNull);
             });
 
             brightBlockService.PersistCBL(brightChain);
 
             // in order to get our original blocks back, first get the chain head
-            var retrievedChain = await brightBlockService.TryFindBlockByIdAsync(brightChain.Id);
+            var retrievedChain = await brightBlockService.FindBlockByIdAsync(brightChain.Id);
             Assert.IsNotNull(retrievedChain);
 
             // how do we validate this?
@@ -133,14 +133,14 @@
 
             Assert.ThrowsException<KeyNotFoundException>(async () =>
             {
-                var retrievedChainNull = await brightBlockService.TryFindBlockByIdAsync(brightChain.Id);
+                var retrievedChainNull = await brightBlockService.FindBlockByIdAsync(brightChain.Id);
                 Assert.IsNull(retrievedChainNull);
             });
 
             brightBlockService.PersistCBL(brightChain);
 
             // in order to get our original blocks back, first get the chain head
-            var retrievedChain = await brightBlockService.TryFindBlockByIdAsync(brightChain.Id);
+            var retrievedChain = await brightBlockService.FindBlockByIdAsync(brightChain.Id);
             Assert.IsNotNull(retrievedChain);
 
             if (retrievedChain is BrightChain retrievedBrightChain)

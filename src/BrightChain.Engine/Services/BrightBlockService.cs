@@ -444,7 +444,7 @@ namespace BrightChain.Engine.Services
             return restoredSourceInfo;
         }
 
-        public async Task<TransactableBlock> TryFindBlockByIdAsync(BlockHash id)
+        public async Task<TransactableBlock> FindBlockByIdAsync(BlockHash id)
         {
             if (this.blockMemoryCache.Contains(id))
             {
@@ -460,11 +460,11 @@ namespace BrightChain.Engine.Services
             throw new KeyNotFoundException(id.ToString());
         }
 
-        public async IAsyncEnumerable<Block> TryFindBlocksByIdAsync(IAsyncEnumerable<BlockHash> blockIdSource)
+        public async IAsyncEnumerable<Block> FindBlocksByIdAsync(IAsyncEnumerable<BlockHash> blockIdSource)
         {
             await foreach (var id in blockIdSource)
             {
-                var block = await this.TryFindBlockByIdAsync(id)
+                var block = await this.FindBlockByIdAsync(id)
                     .ConfigureAwait(false);
 
                 if (block is Block && block.Validate())
@@ -474,10 +474,10 @@ namespace BrightChain.Engine.Services
             }
         }
 
-        public async Task<T> TryFindBlockByIdAsync<T>(BlockHash id, bool useAsBlock)
+        public async Task<T> FindBlockByIdAsync<T>(BlockHash id, bool useAsBlock)
             where T : class
         {
-            var retrievedBlock = await this.TryFindBlockByIdAsync(id)
+            var retrievedBlock = await this.FindBlockByIdAsync(id)
                 .ConfigureAwait(false);
             var block = useAsBlock ? retrievedBlock.AsBlock as T : retrievedBlock as T;
             if (block is null)
@@ -509,9 +509,9 @@ namespace BrightChain.Engine.Services
             }
         }
 
-        public async Task<Block> TryDropBlockAsync(BlockHash id, object? ownershipToken = null)
+        public async Task<Block> DropBlockByIdAsync(BlockHash id, object? ownershipToken = null)
         {
-            var block = await this.TryFindBlockByIdAsync(id: id)
+            var block = await this.FindBlockByIdAsync(id: id)
                 .ConfigureAwait(false);
 
             // verify pernmission/ownership/date, etc
@@ -535,18 +535,18 @@ namespace BrightChain.Engine.Services
             return block;
         }
 
-        public async IAsyncEnumerable<Tuple<BlockHash, Block?>> TryDropBlocksAsync(IAsyncEnumerable<BlockHash> idSource, object ownershipToken = null)
+        public async IAsyncEnumerable<Tuple<BlockHash, Block?>> DropBlocksByIdAsync(IAsyncEnumerable<BlockHash> idSource, object ownershipToken = null)
         {
             await foreach (var id in idSource)
             {
-                var dropped = await this.TryDropBlockAsync(id, ownershipToken)
+                var dropped = await this.DropBlockByIdAsync(id, ownershipToken)
                     .ConfigureAwait(false);
 
                 yield return new Tuple<BlockHash, Block?>(id, dropped);
             }
         }
 
-        public async Task<Block> TryStoreBlockAsync(Block block)
+        public async Task<Block> StoreBlockAsync(Block block)
         {
             if (!block.Validate())
             {
@@ -569,14 +569,14 @@ namespace BrightChain.Engine.Services
             return block;
         }
 
-        public async IAsyncEnumerable<Tuple<Block, IEnumerable<BrightChainValidationException>>> TryStoreBlocksAsync(IAsyncEnumerable<Block> blockSource)
+        public async IAsyncEnumerable<Tuple<Block, IEnumerable<BrightChainValidationException>>> StoreBlocksAsync(IAsyncEnumerable<Block> blockSource)
         {
             await foreach (var block in blockSource)
             {
                 Tuple<Block, IEnumerable<BrightChainValidationException>> response;
                 try
                 {
-                    var storedBlock = await this.TryStoreBlockAsync(block)
+                    var storedBlock = await this.StoreBlockAsync(block)
                     .ConfigureAwait(false);
 
                     response = new Tuple<Block, IEnumerable<BrightChainValidationException>>(block, new BrightChainValidationException[] { });

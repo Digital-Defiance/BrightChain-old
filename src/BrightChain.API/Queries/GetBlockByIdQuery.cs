@@ -21,7 +21,7 @@ namespace BrightChain.API.Queries
 
             public async Task<Block> Handle(GetBlockByIdQuery query, CancellationToken cancellationToken)
             {
-                return await this._brightChain.TryFindBlockByIdAsync(query.Id)
+                return await this._brightChain.FindBlockByIdAsync(query.Id)
                     .ConfigureAwait(false);
             }
         }

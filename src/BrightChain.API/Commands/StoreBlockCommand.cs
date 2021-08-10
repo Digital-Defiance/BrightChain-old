@@ -21,7 +21,7 @@
 
             public async Task<BlockHash> Handle(StoreBlockCommand command, CancellationToken cancellationToken)
             {
-                var storedBlock = await this._brightChain.TryStoreBlockAsync(command.Block)
+                var storedBlock = await this._brightChain.StoreBlockAsync(command.Block)
                     .ConfigureAwait(false);
 
                 return storedBlock.Id;
