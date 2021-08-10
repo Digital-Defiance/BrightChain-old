@@ -33,11 +33,6 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.0-2.final" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0-preview.6.21352.12" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0-preview.6.21352.12" />
-    <PackageReference Include="Dapr.Actors" Version="1.3.0" />
-    <PackageReference Include="Dapr.Actors.AspNetCore" Version="1.3.0" />
-    <PackageReference Include="Dapr.AspNetCore" Version="1.3.0" />
-    <PackageReference Include="Dapr.Client" Version="1.3.0" />
-    <PackageReference Include="Dapr.Extensions.Configuration" Version="1.3.0" />
     <PackageReference Include="docfx" Version="2.58.0" />
     <PackageReference Include="Microsoft.CodeCoverage" Version="16.11.0-release-20210626-04" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-preview.6.21352.12" />
@@ -45,6 +40,7 @@
     <PackageReference Include="Microsoft.IdentityModel" Version="7.0.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.12.0" />
     <PackageReference Include="Microsoft.Data.OData" Version="5.8.4" />
+    <PackageReference Include="Microsoft.Orleans.Core" Version="3.4.3" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -5,6 +5,7 @@ All the benefits of blockchain dApps and contracts without the mining and waste.
 Unlimited storage for everyone, and a mathematically reinforced and moderated community that will last for the ages.
 
 - BrightChain Engine in C#/.Net 6 (Currently requires VS 2022 Preview, or IntelliJ Rider)
+- Uses Microsoft's FASTER & Orleans
 - BrightNet BlockStore and API for BrightChain: The Revolution(ary) Network
 - The new wiki: https://github.com/The-Revolution-Network/BrightChain/wiki (old will be rewritten/migrated)
 - The old wiki: https://github.com/The-Revolution-Network/brightChainAPI/wiki/Introduction
@@ -16,7 +17,6 @@ Recent thoughts:
  - I think calling BrightChain a LightChain makes sense. it's a lightweight blockchain. It's got blockchain features people want, but without the actual overhead of blockchain, which is unnecessary.
  - If you haven't noticed- BrightChain is almost BrightChainS with an S. It's a pool of chains. Each with its own value.
  - Something I was implementing in the old code but haven't yet gotten to is also a deduplication for public blocks. Basically any chain that has its CBL block committed to the network will have the hash of the overall chain checked for deduplication.
- - Likely to use https://dapr.io https://github.com/dapr for node sync in the near future.
  - API throttle will continue as planned to be mathematically rate limited by minimal proof of works for bad actors and an algorithm to determine the maximum request r/w rates.
  - Block consensus will be proof of stake
  - its more of a brightnet blockstore and an ethos... what it needs still is some math and a little more vision in the areas I'm not seeing.
@@ -37,4 +37,4 @@ Recent thoughts:
 * This software is open source, and offered as a "best-effort" thereoetical construct at this time and it may well lose all your data at this point in time.
 
 <!-- this timestamp is updated by a pre-commit hook in git-hooks/pre-commit then added to .git/hooks -->
-Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-07-22T01:35:19-0700</time>
+Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-08-10T17:00:32-0700</time>
