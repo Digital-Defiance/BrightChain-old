@@ -17,12 +17,25 @@ namespace BrightChain.Engine.Models.Blocks
             return new ReadOnlyMemory<byte>(zeroBytes);
         }
 
-        public EmptyDummyBlock(BlockParams blockParams) :
-            base(
+        public EmptyDummyBlock(BlockParams blockParams)
+            : base(
                 blockParams: blockParams,
                 data: NewEmptyBlockData(blockParams.BlockSize))
         {
             this.OriginalType = typeof(EmptyDummyBlock).AssemblyQualifiedName;
+        }
+
+        public EmptyDummyBlock(BlockSize blockSize)
+            : base(
+                  blockParams: new BlockParams(
+                    blockSize: blockSize,
+                    requestTime: DateTime.Now,
+                    keepUntilAtLeast: DateTime.MaxValue,
+                    redundancy: RedundancyContractType.Unknown,
+                    privateEncrypted: false,
+                    originalType: typeof(EmptyDummyBlock)),
+                  data: NewEmptyBlockData(blockSize))
+        {
         }
 
         /// <summary>

@@ -3,6 +3,7 @@
     using System;
     using System.Globalization;
     using System.IO;
+    using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Faster;
     using BrightChain.Engine.Faster.Serializers;
@@ -117,7 +118,7 @@
                     CheckpointDir = this.GetDiskCacheDirectory().FullName,
                 },
                 serializerSettings: serializerSettings,
-                comparer: null);
+                comparer: new EmptyDummyBlock(BlockSize.Message).Id);
         }
 
         /// <summary>
