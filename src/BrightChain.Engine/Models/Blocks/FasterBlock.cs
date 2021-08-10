@@ -6,25 +6,24 @@ namespace BrightChain.Engine.Models.Blocks
     using BrightChain.Engine.Services;
 
     /// <summary>
-    /// Block that can be contained in a DiskBlockCacheManager / Btree
+    /// Block that can be contained in a FasterBlockCacheManager / Btree
     /// </summary>
-    public class DiskBlock : TransactableBlock, IBlock
+    public class FasterBlock : TransactableBlock, IBlock
     {
-        public new DiskBlockCacheManager CacheManager { get; internal set; }
+        public new FasterBlockCacheManager CacheManager { get; internal set; }
 
-        public DiskBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data)
+        public FasterBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data)
             : base(
                 blockParams: blockParams,
                 data: data)
         {
             this.CacheManager.Set(this);
-            //var blockpath = this.CacheManager.GetBlockPath(this.Id);
-            this.OriginalType = typeof(DiskBlock).AssemblyQualifiedName;
+            this.OriginalType = typeof(FasterBlock).AssemblyQualifiedName;
         }
 
-        public override DiskBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
+        public override FasterBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
-            return new DiskBlock(
+            return new FasterBlock(
                 blockParams: new TransactableBlockParams(
                     cacheManager: this.CacheManager,
                     allowCommit: this.AllowCommit,

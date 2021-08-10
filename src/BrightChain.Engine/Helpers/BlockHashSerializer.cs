@@ -10,6 +10,7 @@ namespace BrightChain.Engine.Helpers
     /// </summary>
     /// <typeparam name="T">Type of the block being serialized.</typeparam>
     public class BlockHashSerializer<T> : IBrightChainSerializer<BlockHash>
+        where T : IBlock
     {
         public BlockHash ReadFrom(Stream stream)
         {

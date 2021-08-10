@@ -1,24 +1,22 @@
-﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Text.Json;
-using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Exceptions;
-using BrightChain.Engine.Extensions;
-using BrightChain.Engine.Helpers;
-using BrightChain.Engine.Interfaces;
-using BrightChain.Engine.Models.Blocks;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using static BrightChain.Engine.Extensions.BlockMetadataExtensions;
-
-namespace BrightChain.Engine.Services
+﻿namespace BrightChain.Engine.Services
 {
+    using System;
+    using System.Globalization;
+    using System.IO;
+    using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Faster;
+    using BrightChain.Engine.Faster.Serializers;
+    using BrightChain.Engine.Helpers;
+    using BrightChain.Engine.Interfaces;
+    using BrightChain.Engine.Models.Blocks;
+    using FASTER.core;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
+
     /// <summary>
     ///     Relatively naive Disk Based Block Cache Manager.
     /// </summary>
-    public class DiskBlockCacheManager : BlockCacheManager
+    public class FasterBlockCacheManager : BlockCacheManager, IDisposable
     {
         /// <summary>
         ///     Directory where the block tree root will be placed.
@@ -30,13 +28,29 @@ namespace BrightChain.Engine.Services
         /// </summary>
         private readonly string databaseName;
 
+        private readonly IDevice logDevice;
+
+        // Whether we enable a read cache
+        static readonly bool useReadCache = false;
+
         /// <summary>
-        ///     Initializes a new instance of the <see cref="DiskBlockCacheManager" /> class.
+        /// Backing storage device.
+        /// </summary>
+        private readonly IDevice blocksDevice;
+
+        private readonly FasterKV<BlockHash, IBlock> blocksKV;
+
+        private void Temp()
+        {
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
         /// </summary>
         /// <param name="logger">Instance of the logging provider.</param>
         /// <param name="configuration">Instance of the configuration provider.</param>
         /// <param name="databaseName">Database/directory name for the store.</param>
-        public DiskBlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
+        public FasterBlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
             : base(logger, configuration, rootBlock)
         {
             this.databaseName = Utilities.HashToFormattedString(this.RootBlock.Guid.ToByteArray());
@@ -77,21 +91,40 @@ namespace BrightChain.Engine.Services
                 }
             }
 
-            foreach (var subDir in new[] { "blocks", "indices" })
+            this.logDevice = this.OpenDevice("core");
+            this.blocksDevice = this.OpenDevice("blocks");
+
+            var logSettings = new LogSettings // log settings (devices, page size, memory size, etc.)
             {
-                var info = this.GetDiskCacheSubdirectory(subDir);
-                if (!info.Exists)
+                LogDevice = this.blocksDevice,
+                ObjectLogDevice = this.blocksDevice,
+                ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
+            };
+
+            // Define serializers; otherwise FASTER will use the slower DataContract
+            // Needed only for class keys/values
+            var serializerSettings = new SerializerSettings<BlockHash, IBlock>
+            {
+                keySerializer = () => new FasterBlockHashSerializer<FasterBlock>(),
+                valueSerializer = () => new FasterBlockSerializer(),
+            };
+
+            this.blocksKV = new FasterKV<BlockHash, IBlock>(
+                size: 1L << 20, // hash table size (number of 64-byte buckets)
+                logSettings: logSettings,
+                checkpointSettings: new CheckpointSettings
                 {
-                    throw new BrightChainException(string.Format("Failed to create blockstore directory '{0}'.", subDir));
-                }
-            }
+                    CheckpointDir = this.GetDiskCacheDirectory().FullName,
+                },
+                serializerSettings: serializerSettings,
+                comparer: null);
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="DiskBlockCacheManager" /> class.
+        ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
         ///     Can not build a cache manager with no logger.
         /// </summary>
-        private DiskBlockCacheManager()
+        private FasterBlockCacheManager()
         {
             throw new NotImplementedException();
         }
@@ -113,47 +146,25 @@ namespace BrightChain.Engine.Services
                         this.databaseName)));
         }
 
-        protected DirectoryInfo GetDiskCacheSubdirectory(string path)
+        protected string GetDevicePath(string nameSpace, out DirectoryInfo cacheDirectoryInfo)
         {
-            return Directory.CreateDirectory(
-                Path.Combine(
-                    this.GetDiskCacheDirectory().FullName,
-                    path));
+            cacheDirectoryInfo = this.GetDiskCacheDirectory();
+
+            return Path.Combine(
+                    cacheDirectoryInfo.FullName,
+                    string.Format(
+                        provider: System.Globalization.CultureInfo.InvariantCulture,
+                        format: "brightchain-{0}-{1}.log",
+                        this.databaseName,
+                        nameSpace));
         }
 
-        public DirectoryInfo GetBlocksDirectory()
+        protected IDevice OpenDevice(string nameSpace)
         {
-            return this.GetDiskCacheSubdirectory("blocks");
-        }
+            var devicePath = this.GetDevicePath(nameSpace, out DirectoryInfo _);
 
-        public FileInfo GetBlockPath(BlockHash id)
-        {
-            var keyString = id.ToString();
-            var keySub1 = keyString.Substring(0, 2);
-            var keySub2 = keyString.Substring(2, 2);
-
-            var blockSubDir = Path.Combine(
-                this.GetBlocksDirectory().FullName,
-                keySub1,
-                keySub2);
-
-            Directory.CreateDirectory(blockSubDir);
-
-            return new FileInfo(Path.Combine(
-                blockSubDir,
-                id.ToString()));
-        }
-
-        public DirectoryInfo GetIndicesPath()
-        {
-            return this.GetDiskCacheSubdirectory("indices");
-        }
-
-        public FileInfo GetIndexPath(BlockHash id)
-        {
-            return new FileInfo(Path.Combine(
-                this.GetIndicesPath().FullName,
-                id.ToString()));
+            return Devices.CreateLogDevice(
+                logPath: devicePath);
         }
 
         /// <summary>
@@ -183,7 +194,9 @@ namespace BrightChain.Engine.Services
         /// <returns>boolean with whether key is present.</returns>
         public override bool Contains(BlockHash key)
         {
-            return File.Exists(this.GetBlockPath(key).FullName);
+            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, IBlock, CacheContext>());
+            var resultTuple = session.Read(key);
+            return resultTuple.status == Status.OK;
         }
 
         /// <summary>
@@ -199,16 +212,9 @@ namespace BrightChain.Engine.Services
                 return false;
             }
 
-            var fileInfo = this.GetBlockPath(key);
-            try
-            {
-                File.Delete(fileInfo.FullName);
-                return true;
-            }
-            catch (Exception _)
-            {
-                return false;
-            }
+            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, IBlock, CacheContext>());
+            var resultStatus = session.Delete(key);
+            return resultStatus == Status.OK;
         }
 
         /// <summary>
@@ -218,70 +224,16 @@ namespace BrightChain.Engine.Services
         /// <returns>returns requested block or throws.</returns>
         public override TransactableBlock Get(BlockHash key)
         {
-            var fileInfo = this.GetBlockPath(key);
-            if (!fileInfo.Exists)
+            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, IBlock, CacheContext>());
+            var resultTuple = session.Read(key);
+
+            if (resultTuple.status != Status.OK)
             {
-                throw new IndexOutOfRangeException(nameof(key));
+                throw new IndexOutOfRangeException();
             }
 
-            var rawBlockData = File.ReadAllBytes(fileInfo.FullName);
-            var metadataLength = -1;
-            for (var i = 0; i < rawBlockData.Length; i++)
-            {
-                if (rawBlockData[i] == 0)
-                {
-                    metadataLength = i;
-                    break;
-                }
-            }
-
-            if (metadataLength == -1)
-            {
-                throw new BrightChainException("Error reading block metadata");
-            }
-
-            // extra char for \0 terminator
-            var dataLength = rawBlockData.Length - metadataLength - 1;
-            var metadataBytes = new byte[metadataLength];
-            var blockBytes = new byte[dataLength];
-
-            Array.Copy(
-                rawBlockData,
-                0,
-                metadataBytes,
-                0,
-                metadataLength);
-
-            Array.Copy(
-                rawBlockData,
-                metadataLength + 1,
-                blockBytes,
-                0,
-                dataLength);
-
-            var metaDict = BlockMetadataExtensions.GetMetadataDictionaryFromBytes(metadataBytes);
-            var blockType = ((JsonElement)metaDict["_t"]).ToObject<string>();
-            var fullType = Type.GetType(blockType);
-
-            // these initial values will be overwritten during the restore
-            var block = new RestoredBlock(
-                new BlockParams(
-                    blockSize: BlockSize.Unknown,
-                    requestTime: DateTime.MinValue,
-                    keepUntilAtLeast: DateTime.MinValue,
-                    redundancy: RedundancyContractType.Unknown,
-                    privateEncrypted: false,
-                    originalType: fullType),
-                blockBytes);
-
-            var typedBlock = block.FactoryConvert(this);
-
-            if (!typedBlock.TryRestoreMetadataFromBytesAndValidate(metadataBytes))
-            {
-                throw new BrightChainException("Invalid block metadata, restore failed");
-            }
-
-            return typedBlock;
+            return new RestoredBlock(sourceBlock: resultTuple.output)
+                .FactoryConvert(blockCacheManager: this);
         }
 
         /// <summary>
@@ -291,18 +243,19 @@ namespace BrightChain.Engine.Services
         public override void Set(TransactableBlock block)
         {
             base.Set(block);
-            var fileInfo = this.GetBlockPath(block.Id);
-
-            if (fileInfo.Exists)
+            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, IBlock, CacheContext>());
+            var blockHash = block.Id;
+            var iBlock = block.AsIBlock;
+            var resultStatus = session.Upsert(ref blockHash, ref iBlock);
+            if (resultStatus != Status.OK)
             {
-                throw new BrightChainException("Key already exists");
+                throw new BrightChainException("Unable to store block");
             }
+        }
 
-            var file = File.OpenWrite(fileInfo.FullName);
-            file.Write(new ReadOnlySpan<byte>(block.Metadata.ToArray()));
-            file.WriteByte(0);
-            file.Write(new ReadOnlySpan<byte>(block.Data.ToArray()));
-            file.Close();
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -9,11 +9,12 @@ namespace BrightChain.Engine.Models.Blocks
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
+    using FASTER.core;
 
     /// <summary>
     /// Type box for the sha hashes.
     /// </summary>
-    public class DataHash : IDataHash, IComparable<DataHash>, IEquatable<DataHash>
+    public class DataHash : IDataHash, IComparable<DataHash>, IEquatable<DataHash>, IFasterEqualityComparer<DataHash>
     {
         /// <summary>
         /// Size in bits of the hash.
@@ -119,12 +120,12 @@ namespace BrightChain.Engine.Models.Blocks
 
         public static bool operator ==(DataHash a, DataHash b)
         {
-            return a.SourceDataLength == b.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;
+            return a.SourceDataLength == b.SourceDataLength && Helpers.ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;
         }
 
         public static bool operator ==(ReadOnlyMemory<byte> b, DataHash a)
         {
-            return a.SourceDataLength == b.Length && ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b) == 0;
+            return a.SourceDataLength == b.Length && Helpers.ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b) == 0;
         }
 
         public static bool operator !=(ReadOnlyMemory<byte> b, DataHash a)
@@ -164,7 +165,7 @@ namespace BrightChain.Engine.Models.Blocks
         /// <returns>Returns a boolean indicating whether the bytes are the same in both objects.</returns>
         public override bool Equals(object obj)
         {
-            return obj is IDataHash iDataHash ? iDataHash.SourceDataLength == this.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, iDataHash.HashBytes) == 0 : false;
+            return obj is IDataHash iDataHash ? iDataHash.SourceDataLength == this.SourceDataLength && Helpers.ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, iDataHash.HashBytes) == 0 : false;
         }
 
         /// <summary>
@@ -184,7 +185,7 @@ namespace BrightChain.Engine.Models.Blocks
         /// TODO: verify -1/1 correctness
         public int CompareTo(DataHash other)
         {
-            return other.SourceDataLength == this.SourceDataLength ? ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) : (other.SourceDataLength > this.SourceDataLength ? -1 : 1);
+            return other.SourceDataLength == this.SourceDataLength ? Helpers.ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) : (other.SourceDataLength > this.SourceDataLength ? -1 : 1);
         }
 
         /// <summary>
@@ -194,7 +195,17 @@ namespace BrightChain.Engine.Models.Blocks
         /// <returns>Returns the standard comparison result, -1, 0, 1 for less than, equal, greater than.</returns>
         public bool Equals(DataHash other)
         {
-            return !(other is null) ? other.SourceDataLength == this.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) == 0 : false;
+            return !(other is null) ? other.SourceDataLength == this.SourceDataLength && Helpers.ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) == 0 : false;
+        }
+
+        public long GetHashCode64(ref DataHash k)
+        {
+            return Crc32.ComputeNewChecksum(k.HashBytes.ToArray());
+        }
+
+        public bool Equals(ref DataHash k1, ref DataHash k2)
+        {
+            return !(k2 is null) ? k2.SourceDataLength == k1.SourceDataLength && Helpers.ReadOnlyMemoryComparer<byte>.Compare(k1.HashBytes, k2.HashBytes) == 0 : false;
         }
     }
 }

@@ -41,6 +41,7 @@
     <PackageReference Include="docfx" Version="2.58.0" />
     <PackageReference Include="Microsoft.CodeCoverage" Version="16.11.0-release-20210626-04" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-preview.6.21352.12" />
+    <PackageReference Include="Microsoft.FASTER.Core" Version="1.9.5" />
     <PackageReference Include="Microsoft.IdentityModel" Version="7.0.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.12.0" />
     <PackageReference Include="Microsoft.Data.OData" Version="5.8.4" />

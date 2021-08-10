@@ -22,14 +22,14 @@ namespace BrightChain.Engine.Services
     /// <summary>
     /// Core service for BrightChain used by the webservice to retrieve and store blocks.
     /// </summary>
-    public class BrightBlockService
+    public class BrightBlockService : IDisposable
     {
         private readonly ILogger logger;
         private readonly IConfiguration configuration;
 
         private readonly MemoryDictionaryBlockCacheManager blockMemoryCache;
         private readonly MemoryDictionaryBlockCacheManager randomizerBlockMemoryCache;
-        private readonly DiskBlockCacheManager blockDiskCache;
+        private readonly FasterBlockCacheManager blockDiskCache;
         private readonly BlockBrightener blockBrightener;
         //private readonly BrightChainNode brightChainNodeAuthority;
 
@@ -90,7 +90,7 @@ namespace BrightChain.Engine.Services
                 configuration: this.configuration,
                 rootBlock: rootBlock);
 
-            this.blockDiskCache = new DiskBlockCacheManager(
+            this.blockDiskCache = new FasterBlockCacheManager(
                 logger: this.logger,
                 configuration: this.configuration,
                 rootBlock: rootBlock);
@@ -639,6 +639,11 @@ namespace BrightChain.Engine.Services
         public void PersistCBL(ConstituentBlockListBlock cblBlock)
         {
             this.blockDiskCache.Set(cblBlock);
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }
