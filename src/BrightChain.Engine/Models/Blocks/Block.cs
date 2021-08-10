@@ -273,6 +273,36 @@ namespace BrightChain.Engine.Models.Blocks
         }
 
         /// <summary>
+        /// Returns a boolean indicating whether the assembly qualified type name was resolved. Optional type to compare against.
+        /// </summary>
+        /// <param name="typeName"></param>
+        /// <param name="compareTo"></param>
+        /// <returns></returns>
+        public static bool ValidateType(string typeName, Type compareTo = null)
+        {
+            try
+            {
+                var type = Type.GetType(typeName);
+
+                if (type is null)
+                {
+                    return false;
+                }
+
+                return (compareTo is null) || type.Equals(compareTo);
+            }
+            catch (Exception _)
+            {
+                return false;
+            }
+        }
+
+        public bool ValidateType(Type compareTo = null)
+        {
+            return ValidateType(this.OriginalType, compareTo is null ? this.originalType : compareTo);
+        }
+
+        /// <summary>
         /// Sign the block/metadata.
         /// </summary>
         /// <param name="user"></param>

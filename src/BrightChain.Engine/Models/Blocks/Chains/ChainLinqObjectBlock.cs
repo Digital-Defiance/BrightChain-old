@@ -10,11 +10,12 @@
     using global::BrightChain.Engine.Exceptions;
     using global::BrightChain.Engine.Factories;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
+using static System.Net.Mime.MediaTypeNames;
 
-    /// <summary>
-    /// Data container for serialization of objects into BrightChain.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
+/// <summary>
+/// Data container for serialization of objects into BrightChain.
+/// </summary>
+/// <typeparam name="T"></typeparam>
     public class ChainLinqObjectBlock<T>
         : SourceBlock
         where T : ISerializable
@@ -30,7 +31,7 @@
             };
         }
 
-        public static ReadOnlyMemory<byte> SerializeObjectThroughDictionaryToMemory(T objectData, BlockHash next = null)
+        public static ReadOnlyMemory<byte> SerializeObjectThroughDictionaryToMemory(T objectData, out int length, BlockHash next = null)
         {
             SerializationInfo info = new SerializationInfo(typeof(StrongNameKeyPair), new FormatterConverter());
             StreamingContext context = new StreamingContext();
@@ -45,12 +46,16 @@
 
             string jsonData = JsonSerializer.Serialize(dictionary, NewSerializerOptions());
             var readonlyChars = jsonData.AsMemory();
-            return new ReadOnlyMemory<byte>(readonlyChars.ToArray().Select(c => (byte)c).ToArray());
+            var data = new ReadOnlyMemory<byte>(readonlyChars.ToArray().Select(c => (byte)c).ToArray());
+            length = data.Length;
+            return data;
         }
 
         public bool ValidateBlockDictionary(Dictionary<string, object> dictionary)
         {
-            if (!dictionary.ContainsKey("_t") || (string)dictionary["_t"] != typeof(T).FullName)
+            var type = (string)dictionary["_t"];
+
+            if (!dictionary.ContainsKey("_t") || type != typeof(T).AssemblyQualifiedName || !Block.ValidateType(type, typeof(T)))
             {
                 return false;
             }
@@ -68,18 +73,35 @@
             return true;
         }
 
-        public ChainLinqObjectBlock(ChainLinqBlockParams blockParams, T blockObject, ReadOnlyMemory<byte> serializedData)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChainLinqObjectBlock{T}"/> class.
+        /// TODO: are we using this?
+        /// </summary>
+        /// <param name="blockParams">Desired block parameters.</param>
+        /// <param name="blockObject">Object serialized into this block.</param>
+        /// <param name="serializedData">Data of serialized object.</param>
+        /// <param name="next">Id of next block in chain.</param>
+        public ChainLinqObjectBlock(ChainLinqBlockParams blockParams, T blockObject, BlockHash? next = null)
             : base(
                   blockParams: blockParams,
                   data: global::BrightChain.Engine.Helpers.RandomDataHelper.DataFiller(
-                    inputData: serializedData,
+                    inputData: SerializeObjectThroughDictionaryToMemory(
+                        objectData: blockObject,
+                        length: out int dataLength,
+                        next: next),
                     blockSize: blockParams.BlockSize))
         {
             this._blockObject = blockObject;
             this._next = null;
-            this._length = serializedData.Length;
+            this._length = dataLength;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChainLinqObjectBlock{T}"/> class.
+        /// Constructor for deserialization from storage.
+        /// </summary>
+        /// <param name="blockParams"></param>
+        /// <param name="persistedData"></param>
         public ChainLinqObjectBlock(ChainLinqBlockParams blockParams, ReadOnlyMemory<byte> persistedData)
             : base(blockParams, persistedData)
         {
@@ -105,13 +127,8 @@
 
         public static ChainLinqObjectBlock<T> MakeBlock(ChainLinqBlockParams blockParams, T blockObject, BlockHash next = null)
         {
-            var serialized = SerializeObjectThroughDictionaryToMemory(
-                objectData: blockObject,
-                next: next);
-
             return new ChainLinqObjectBlock<T>(
                 blockParams: blockParams,
-                serializedData: serialized,
                 blockObject: blockObject);
         }
 
