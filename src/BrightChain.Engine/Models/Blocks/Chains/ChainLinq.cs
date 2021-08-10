@@ -53,6 +53,19 @@
             return new ChainLinq<T>(blocks);
         }
 
+        public static async Task<ChainLinq<T>> ForgeChainLinqAsync(ChainLinqBlockParams blockParams, IAsyncEnumerable<T> objects)
+        {
+            List<ChainLinqObjectBlock<T>> blocks = new List<ChainLinqObjectBlock<T>>();
+            await foreach (var o in objects)
+            {
+                blocks.Add(ChainLinqObjectBlock<T>.MakeBlock(
+                    blockParams: blockParams,
+                    blockObject: o));
+            }
+
+            return new ChainLinq<T>(blocks);
+        }
+
         public long Count()
         {
             return this.ObjectBlocks.LongCount();
@@ -109,17 +122,17 @@
 
         public async Task<BrightChain> BrightenAllAsync(BrightBlockService brightBlockService)
         {
-            return await BrightenAll(brightBlockService, this.ObjectBlocksAsync())
+            return await BrightenAllAsync(brightBlockService, this.ObjectBlocksAsync())
 .ConfigureAwait(false);
         }
 
-        public static async Task<BrightChain> BrightenAll(BrightBlockService brightBlockService, IAsyncEnumerable<ChainLinqObjectBlock<T>> objectBlocks)
+        public static async Task<BrightChain> BrightenAllAsync(BrightBlockService brightBlockService, IAsyncEnumerable<ChainLinqObjectBlock<T>> objectBlocks)
         {
             var brightBlocks = brightBlockService
                 .BrightenBlocks(
                     sourceBlocks: objectBlocks);
 
-            return await brightBlockService.MakeChain(brightBlocks)
+            return await brightBlockService.ForgeChainAsync(brightBlocks)
                 .ConfigureAwait(false);
         }
     }

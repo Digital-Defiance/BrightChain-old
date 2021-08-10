@@ -606,7 +606,7 @@ namespace BrightChain.Engine.Services
             }
         }
 
-        public async Task<BrightChain> MakeChain(IAsyncEnumerable<BrightenedBlock> brightenedBlocks)
+        public async Task<BrightChain> ForgeChainAsync(IAsyncEnumerable<BrightenedBlock> brightenedBlocks)
         {
             var hashes = new List<BlockHash>();
             var awaitedBlocks = new List<BrightenedBlock>();
