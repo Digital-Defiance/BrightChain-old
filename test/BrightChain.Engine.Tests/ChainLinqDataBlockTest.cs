@@ -98,7 +98,7 @@
 
             await brightBlockService.PersistMemoryCacheAsync(clearAfter: true);
 
-            Assert.ThrowsException<KeyNotFoundException>(async () =>
+            await Assert.ThrowsExceptionAsync<KeyNotFoundException>(async () =>
             {
                 var retrievedChainNull = await brightBlockService.FindBlockByIdAsync(brightChain.Id);
                 Assert.IsNull(retrievedChainNull);
@@ -132,7 +132,7 @@
 
             await brightBlockService.PersistMemoryCacheAsync(clearAfter: true);
 
-            Assert.ThrowsException<KeyNotFoundException>(async () =>
+            await Assert.ThrowsExceptionAsync<KeyNotFoundException>(async () =>
             {
                 var retrievedChainNull = await brightBlockService.FindBlockByIdAsync(brightChain.Id);
                 Assert.IsNull(retrievedChainNull);
