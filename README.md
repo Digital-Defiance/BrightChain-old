@@ -1,5 +1,7 @@
 # BrightChain
 ## (pre-alpha work in progress. Limited alpha testing coming soon!) 
+[![.NET](https://github.com/The-Revolution-Network/BrightChain/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/The-Revolution-Network/BrightChain/actions/workflows/dotnet.yml)
+
 A Lightweight BlockChain- LightChain based on a Brightnet Blockstore- BrightChain.
 All the benefits of blockchain dApps and contracts without the mining and waste.
 Unlimited storage for everyone, and a mathematically reinforced and moderated community that will last for the ages.
