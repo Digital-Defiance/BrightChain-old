@@ -6,17 +6,14 @@ Logging:
 NodeOptions:
   BasePath: 'C:\BrightChain'
   DatabaseName: '84791a2e97b642Dab7e404ff645d601b'
-  Caches:
-    - Memory
-    - Disk
   BlockTypes:
-    Memory:
+    Read:
       - Message
       - Tiny
       - Small
       - Medium
       - Large
-    Disk:
+    Write:
       - Message
       - Tiny
       - Small

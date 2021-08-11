@@ -17,6 +17,7 @@ namespace BrightChain.Engine.Services
     using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
+    using BrightChain.Engine.Models.Nodes;
     using BrightChain.Engine.Services.CacheManagers;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
@@ -35,7 +36,7 @@ namespace BrightChain.Engine.Services
         private readonly MemoryDictionaryBlockCacheManager randomizerBlockMemoryCache;
         private readonly FasterBlockCacheManager blockDiskCache;
         private readonly BlockBrightenerService blockBrightener;
-        //private readonly BrightChainNode brightChainNodeAuthority;
+        private readonly BrightChainNode brightChainNodeAuthority;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BrightBlockService"/> class.
@@ -107,8 +108,7 @@ namespace BrightChain.Engine.Services
             this.logger.LogInformation(string.Format("<{0}>: caches initialized", nameof(BrightBlockService)));
             this.blockBrightener = new BlockBrightenerService(
                 resultCache: this.blockMemoryCache);
-            //this.brightChainNodeAuthority = default(BrightChainNode);
-            //this.brightChainNodeAuthority = BrightChainKeyService.LoadPrivateKeyFromBlock(this.blockDiskCache.Get(_));
+            this.brightChainNodeAuthority = new BrightChainNode(this.configuration);
         }
 
         /// <summary>
@@ -176,6 +176,7 @@ namespace BrightChain.Engine.Services
                             }
 
                             fileHasher.TransformFinalBlock(buffer, 0, bytesToRead); // notably only takes the last bytes of the file not counting filler.
+
                             // fill in the rest of the block with random data
                             buffer = Helpers.RandomDataHelper.DataFiller(
                                 inputData: new ReadOnlyMemory<byte>(buffer),

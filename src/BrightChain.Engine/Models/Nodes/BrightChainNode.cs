@@ -3,6 +3,7 @@
     using System.Security.Cryptography;
     using BrightChain.Engine.Models.Agents;
     using BrightChain.Engine.Models.Hashes;
+    using Microsoft.Extensions.Configuration;
 
     /// <summary>
     /// Representation of a bright chain participartory node.
@@ -12,7 +13,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BrightChainNode"/> class.
         /// </summary>
-        public BrightChainNode()
+        public BrightChainNode(IConfiguration configuration)
         {
         }
 
