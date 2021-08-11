@@ -8,12 +8,12 @@ using SendGrid.Helpers.Mail;
 namespace BrightChain.API.Services
 {
 
-    public class EmailSender : IEmailSender
+    public class BrightChainEmailSender : IEmailSender
     {
         public const string SenderEmailAddress = "noreply@brightchain.net";
         public const string SenderName = "BrightChain";
 
-        public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor)
+        public BrightChainEmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor)
         {
             this.Options = optionsAccessor.Value;
         }

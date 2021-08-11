@@ -52,7 +52,7 @@ namespace BrightChain.API
             // requires
             // using Microsoft.AspNetCore.Identity.UI.Services;
             // using WebPWrecover.Services;
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IEmailSender, BrightChainEmailSender>();
             services.Configure<AuthMessageSenderOptions>(this.Configuration);
         }
 
