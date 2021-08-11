@@ -2,13 +2,16 @@
 {
     using System;
     using System.Collections.Generic;
-using System.IO;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters.Binary;
+    using System.Text;
     using System.Text.Json;
+    using System.Text.Json.Serialization;
     using global::BrightChain.Engine.Attributes;
+    using global::BrightChain.Engine.Enumerations;
     using global::BrightChain.Engine.Exceptions;
     using global::BrightChain.Engine.Factories;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
@@ -20,54 +23,65 @@ using System.IO;
     /// <typeparam name="T"></typeparam>
     public class ChainLinqObjectBlock<T>
         : SourceBlock
-        where T : ISerializable
+        where T : new()
     {
-        public static JsonSerializerOptions NewSerializerOptions()
+        /// <summary>
+        /// Convert an object to a Byte Array.
+        /// </summary>
+        public static byte[] ObjectToByteArray(object objectData, BlockSize blockSize)
         {
-            return new JsonSerializerOptions
+            if (objectData == null)
             {
+                return default;
+            }
+
+            var finalBytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(objectData, GetJsonSerializerOptions()));
+            if (finalBytes.Length >= BlockSizeMap.BlockSize(blockSize))
+            {
+                throw new Exception("Serialized data is too long for block. Use a larger block size.");
+            }
+
+            var newLength = finalBytes.Length + 1;
+            Array.Resize(ref finalBytes, newLength);
+            finalBytes[newLength - 1] = 0; // null term
+
+            return finalBytes;
+        }
+
+        /// <summary>
+        /// Convert a byte array to an Object of T.
+        /// </summary>
+        public static T ByteArrayToObject<T>(byte[] byteArray)
+        {
+            if (byteArray == null || !byteArray.Any())
+            {
+                return default;
+            }
+
+            var nullIndex = Array.IndexOf(byteArray, 0);
+            if (nullIndex <= 0)
+            {
+                throw new BrightChainException("Null terminator not found");
+            }
+
+            Array.Resize(ref byteArray, nullIndex);
+
+            return JsonSerializer.Deserialize<T>(byteArray, GetJsonSerializerOptions());
+        }
+
+        private static JsonSerializerOptions GetJsonSerializerOptions()
+        {
+            return new JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = null,
+                WriteIndented = false,
+                AllowTrailingCommas = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                 Converters =
                 {
                     new HashJsonFactory(),
                 },
             };
-        }
-
-        public static ReadOnlyMemory<byte> SerializeObjectThroughDictionaryToMemory(T objectData, out int length, BlockHash next = null)
-        {
-            var dictionary = new Dictionary<string, object>()
-            {
-                { "_t", typeof(T).AssemblyQualifiedName },
-                { "Data", objectData },
-                { "Next", next },
-            };
-
-            string jsonData = JsonSerializer.Serialize(dictionary, NewSerializerOptions());
-            var data = new ReadOnlyMemory<byte>(jsonData.Select(c => (byte)c).ToArray());
-            length = data.Length;
-            return data;
-        }
-
-        public bool ValidateBlockDictionary(Dictionary<string, object> dictionary)
-        {
-            var type = (string)dictionary["_t"];
-
-            if (!dictionary.ContainsKey("_t") || type != typeof(T).AssemblyQualifiedName || !Block.ValidateType(type, typeof(T)))
-            {
-                return false;
-            }
-
-            if (!dictionary.ContainsKey("Data") || dictionary["Data"].GetType().IsAssignableFrom(this.GetType()))
-            {
-                return false;
-            }
-
-            if (!dictionary.ContainsKey("Previous") || (dictionary["Previous"] is not null && dictionary["Previous"] is not BlockHash))
-            {
-                return false;
-            }
-
-            return true;
         }
 
         /// <summary>
@@ -76,21 +90,18 @@ using System.IO;
         /// </summary>
         /// <param name="blockParams">Desired block parameters.</param>
         /// <param name="blockObject">Object serialized into this block.</param>
-        /// <param name="serializedData">Data of serialized object.</param>
         /// <param name="next">Id of next block in chain.</param>
         public ChainLinqObjectBlock(ChainLinqBlockParams blockParams, T blockObject, BlockHash? next = null)
             : base(
                   blockParams: blockParams,
                   data: global::BrightChain.Engine.Helpers.RandomDataHelper.DataFiller(
-                    inputData: SerializeObjectThroughDictionaryToMemory(
+                    inputData: ObjectToByteArray(
                         objectData: blockObject,
-                        length: out int dataLength,
-                        next: next),
+                        blockSize: blockParams.BlockSize),
                     blockSize: blockParams.BlockSize))
         {
-            this._blockObject = blockObject;
-            this._next = null;
-            this._length = dataLength;
+            this.BlockObject = blockObject;
+            this.Next = next;
         }
 
         /// <summary>
@@ -102,24 +113,11 @@ using System.IO;
         public ChainLinqObjectBlock(ChainLinqBlockParams blockParams, ReadOnlyMemory<byte> persistedData)
             : base(blockParams, persistedData)
         {
-            this._length = persistedData.Length;
-
-            var jsonString = new string(persistedData.ToArray().Select(c => (char)c).ToArray());
-            object blockDataObject = JsonSerializer.Deserialize(jsonString, typeof(Dictionary<string, object>), NewSerializerOptions());
-
-            Dictionary<string, object> blockDictionary = (Dictionary<string, object>)blockDataObject;
-            if (!this.ValidateBlockDictionary(blockDictionary))
-            {
-                throw new BrightChainException("Block deserialization error");
-            }
-
-            this._blockObject = (T)blockDictionary["Data"];
-            this._next = (BlockHash)blockDictionary["Next"];
+            this.BlockObject = ByteArrayToObject<T>(persistedData.ToArray());
         }
 
         public override void Dispose()
         {
-            this._next = null;
         }
 
         public static ChainLinqObjectBlock<T> MakeBlock(ChainLinqBlockParams blockParams, T blockObject, BlockHash next = null)
@@ -137,20 +135,12 @@ blockParams: blockParams),
 persistedData: data);
         }
 
+        public readonly T BlockObject;
+
         /// <summary>
-        /// Loaded block data.
+        /// Gets or sets the hash of the next CBL in this CBL Chain.
         /// </summary>
-        public T BlockObject => this._blockObject;
-
-        private readonly T _blockObject;
-        private BlockHash _next;
-        private readonly long _length;
-
-        [BrightChainBlockData]
-        public BlockHash Next
-        {
-            get => this._next;
-            set => this._next = value;
-        }
+        [BrightChainMetadata]
+        public BlockHash Next { get; set; }
     }
 }

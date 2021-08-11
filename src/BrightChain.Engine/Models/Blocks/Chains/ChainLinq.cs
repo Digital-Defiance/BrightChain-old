@@ -14,7 +14,7 @@
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class ChainLinq<T>
-        where T : ISerializable
+        where T : new()
     {
         public ChainLinq(IEnumerable<ChainLinqObjectBlock<T>> blocks)
         {

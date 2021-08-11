@@ -2,25 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Runtime.Serialization;
 
-    [Serializable]
     public class ChainLinqExampleSerializable
-        : ISerializable, IDisposable
+        : IDisposable
     {
         public ChainLinqExampleSerializable()
         {
-            this.TestData = new Bogus.DataSets.Lorem().Text();
-        }
-
-        protected ChainLinqExampleSerializable(SerializationInfo info, StreamingContext context)
-        {
-            if (info is null)
-            {
-                throw new ArgumentNullException("info");
-            }
-
-            this.TestData = (string)info.GetValue("TestData", typeof(string));
+            this.PublicData = new Bogus.DataSets.Lorem().Text();
+            this.PrivateData = new Bogus.DataSets.Lorem().Text();
         }
 
         public static IEnumerable<ChainLinqExampleSerializable> MakeMultiple(int count)
@@ -39,21 +28,8 @@
             throw new NotImplementedException();
         }
 
-        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("TestData", this.TestData);
-        }
+        public string PublicData { get; }
 
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info is null)
-            {
-                throw new ArgumentNullException("info");
-            }
-
-            this.GetObjectData(info, context);
-        }
-
-        public string TestData { get; }
+        private string PrivateData { get; }
     }
 }
