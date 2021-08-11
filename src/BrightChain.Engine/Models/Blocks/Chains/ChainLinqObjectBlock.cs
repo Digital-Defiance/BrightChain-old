@@ -2,9 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
+    using System.Runtime.Serialization.Formatters.Binary;
     using System.Text.Json;
     using global::BrightChain.Engine.Attributes;
     using global::BrightChain.Engine.Exceptions;
@@ -33,10 +35,6 @@
 
         public static ReadOnlyMemory<byte> SerializeObjectThroughDictionaryToMemory(T objectData, out int length, BlockHash next = null)
         {
-            SerializationInfo info = new SerializationInfo(typeof(StrongNameKeyPair), new FormatterConverter());
-            StreamingContext context = new StreamingContext();
-            objectData.GetObjectData(info, context);
-
             var dictionary = new Dictionary<string, object>()
             {
                 { "_t", typeof(T).AssemblyQualifiedName },
@@ -45,8 +43,7 @@
             };
 
             string jsonData = JsonSerializer.Serialize(dictionary, NewSerializerOptions());
-            var readonlyChars = jsonData.AsMemory();
-            var data = new ReadOnlyMemory<byte>(readonlyChars.ToArray().Select(c => (byte)c).ToArray());
+            var data = new ReadOnlyMemory<byte>(jsonData.Select(c => (byte)c).ToArray());
             length = data.Length;
             return data;
         }

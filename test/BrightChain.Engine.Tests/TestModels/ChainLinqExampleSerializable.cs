@@ -20,7 +20,7 @@
                 throw new ArgumentNullException("info");
             }
 
-            this.TestData = info.GetString("TestData");
+            this.TestData = (string)info.GetValue("TestData", typeof(string));
         }
 
         public static IEnumerable<ChainLinqExampleSerializable> MakeMultiple(int count)
