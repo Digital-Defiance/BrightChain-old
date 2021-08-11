@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using BrightChain.Engine.Enumerations;
+﻿using BrightChain.Engine.Enumerations;
 
 namespace BrightChain.Engine.Models.Units
 {

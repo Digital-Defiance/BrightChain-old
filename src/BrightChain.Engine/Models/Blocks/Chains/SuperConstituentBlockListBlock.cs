@@ -1,5 +1,4 @@
-﻿using System;
-using BrightChain.Engine.Interfaces;
+﻿using BrightChain.Engine.Interfaces;
 using BrightChain.Engine.Models.Blocks.DataObjects;
 
 namespace BrightChain.Engine.Models.Blocks.Chains

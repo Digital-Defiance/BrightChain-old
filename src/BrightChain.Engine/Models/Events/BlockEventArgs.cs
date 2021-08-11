@@ -1,5 +1,4 @@
-﻿using System;
-using BrightChain.Engine.Models.Blocks;
+﻿using BrightChain.Engine.Models.Blocks;
 
 namespace BrightChain.Engine.Models.Events
 {

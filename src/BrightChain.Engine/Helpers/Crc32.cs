@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BrightChain.Engine.Helpers
+﻿namespace BrightChain.Engine.Helpers
 {
     public class Crc32
     {

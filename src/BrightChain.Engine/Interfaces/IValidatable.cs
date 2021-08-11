@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using BrightChain.Engine.Exceptions;
+﻿using BrightChain.Engine.Exceptions;
 
 namespace BrightChain.Engine.Interfaces
 {

@@ -54,7 +54,7 @@
         public static readonly Dictionary<BlockSize, int> HashesPerBlockMap = new()
         {
             { Enumerations.BlockSize.Unknown, -1 },
-            { Enumerations.BlockSize.Micro, MicroSize/ DataHash.HashSizeBytes },
+            { Enumerations.BlockSize.Micro, MicroSize / DataHash.HashSizeBytes },
             { Enumerations.BlockSize.Message, MessageSize / DataHash.HashSizeBytes },
             { Enumerations.BlockSize.Tiny, TinySize / DataHash.HashSizeBytes },
             { Enumerations.BlockSize.Small, SmallSize / DataHash.HashSizeBytes },

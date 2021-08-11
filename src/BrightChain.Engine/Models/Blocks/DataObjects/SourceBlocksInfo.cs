@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using BrightChain.Engine.Exceptions;
+﻿using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Models.Hashes;
 
 namespace BrightChain.Engine.Models.Blocks.DataObjects

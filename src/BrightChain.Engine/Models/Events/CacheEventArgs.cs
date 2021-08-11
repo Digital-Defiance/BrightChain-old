@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BrightChain.Engine.Models.Events
+﻿namespace BrightChain.Engine.Models.Events
 {
     /// <summary>
     /// Any cache event will have these args

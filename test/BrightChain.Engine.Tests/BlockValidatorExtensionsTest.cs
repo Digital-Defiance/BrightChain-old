@@ -1,5 +1,4 @@
-﻿using System;
-using BrightChain.Engine.Enumerations;
+﻿using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Blocks.DataObjects;
 using BrightChain.Engine.Services.CacheManagers;

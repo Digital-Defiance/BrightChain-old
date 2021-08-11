@@ -2,8 +2,6 @@
 // Copyright (c) BrightChain. All rights reserved.
 // </copyright>
 
-using Microsoft.AspNetCore.Hosting;
-
 [assembly: HostingStartup(typeof(BrightChain.API.Areas.Identity.IdentityHostingStartup))]
 
 namespace BrightChain.API.Areas.Identity

@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace BrightChain.Engine.Interfaces
+﻿namespace BrightChain.Engine.Interfaces
 {
     public interface IBrightChainSerializer<T> where T : class
     {

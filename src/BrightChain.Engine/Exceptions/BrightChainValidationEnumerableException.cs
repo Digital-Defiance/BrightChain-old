@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace BrightChain.Engine.Exceptions
+﻿namespace BrightChain.Engine.Exceptions
 {
     /// <summary>
     /// Base class for all BrightChain exceptions

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Helpers;
 using BrightChain.Engine.Interfaces;

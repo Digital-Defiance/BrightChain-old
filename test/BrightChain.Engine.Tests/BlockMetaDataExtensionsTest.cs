@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
+﻿using System.Text.Json;
 using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Extensions;
+using BrightChain.Engine.Models;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Blocks.Chains;
 using BrightChain.Engine.Models.Blocks.DataObjects;
 using BrightChain.Engine.Models.Contracts;
 using BrightChain.Engine.Models.Hashes;
 using BrightChain.Engine.Services.CacheManagers;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -111,7 +108,7 @@ namespace BrightChain.Engine.Tests
                                 blockParams: new TransactableBlockParams(
                                     cacheManager: new MemoryDictionaryBlockCacheManager(
                                         logger: this.logger,
-                                        configuration: new Configuration(),
+                                        configuration: new BrightChainConfiguration(),
                                         rootBlock: rootBlock),
                                     allowCommit: true,
                                     blockParams: dummyBlock.BlockParams),
@@ -236,7 +233,7 @@ namespace BrightChain.Engine.Tests
                                 blockParams: new TransactableBlockParams(
                                     cacheManager: new MemoryDictionaryBlockCacheManager(
                                         logger: this.logger,
-                                        configuration: new Configuration(),
+                                        configuration: new BrightChainConfiguration(),
                                         rootBlock: rootBlock),
                                     allowCommit: true,
                                     blockParams: dummyBlock.BlockParams),

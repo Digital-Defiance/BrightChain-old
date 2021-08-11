@@ -1,5 +1,4 @@
-﻿using System;
-using BrightChain.Engine.Models.Events;
+﻿using BrightChain.Engine.Models.Events;
 
 namespace BrightChain.Engine.Interfaces
 {

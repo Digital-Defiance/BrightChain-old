@@ -1,5 +1,4 @@
-﻿using System.IO;
-using BrightChain.Engine.Enumerations;
+﻿using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Models.Hashes;
 

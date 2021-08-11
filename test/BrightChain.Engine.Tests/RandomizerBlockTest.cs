@@ -1,9 +1,8 @@
-﻿using System;
-using BrightChain.Engine.Enumerations;
+﻿using BrightChain.Engine.Enumerations;
+using BrightChain.Engine.Models;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Blocks.DataObjects;
 using BrightChain.Engine.Services.CacheManagers;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -30,7 +29,7 @@ namespace BrightChain.Engine.Tests
             var rootBlock = new RootBlock(databaseGuid: Guid.NewGuid(), blockSize: BlockSize.Large);
             this.cacheManager = new MemoryDictionaryBlockCacheManager(
                 logger: this.logger,
-                configuration: new Configuration(),
+                configuration: new BrightChainConfiguration(),
                 rootBlock: rootBlock);
         }
 
