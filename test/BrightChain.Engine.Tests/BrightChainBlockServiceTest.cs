@@ -1,21 +1,22 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Helpers;
-using BrightChain.Engine.Models.Blocks;
-using BrightChain.Engine.Models.Blocks.Chains;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-using BrightChain.Engine.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using static BrightChain.Engine.Helpers.Utilities;
-
-namespace BrightChain.Engine.Tests
+﻿namespace BrightChain.Engine.Tests
 {
+    using System;
+    using System.IO;
+    using System.Threading.Tasks;
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Helpers;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.Chains;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
+    using BrightChain.Engine.Models.Hashes;
+    using BrightChain.Engine.Services;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Moq;
+    using static BrightChain.Engine.Helpers.Utilities;
+
     /// <summary>
     /// Exercises the core API service
     /// </summary>

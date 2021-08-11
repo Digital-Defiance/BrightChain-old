@@ -9,6 +9,7 @@
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Services;
+    using BrightChain.Engine.Services.CacheManagers;
     using BrightChain.Engine.Tests.TestModels;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;

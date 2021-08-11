@@ -4,7 +4,7 @@
     using BrightChain.Engine.Factories;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Services;
+    using BrightChain.Engine.Services.CacheManagers;
 
     public class RestoredBlock : Block
     {

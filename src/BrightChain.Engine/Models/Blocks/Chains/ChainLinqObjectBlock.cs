@@ -10,6 +10,7 @@
     using global::BrightChain.Engine.Exceptions;
     using global::BrightChain.Engine.Factories;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
+    using global::BrightChain.Engine.Models.Hashes;
 
     /// <summary>
     /// Data container for serialization of objects into BrightChain.

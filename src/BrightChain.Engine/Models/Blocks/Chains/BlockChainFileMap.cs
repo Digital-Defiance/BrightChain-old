@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using global::BrightChain.Engine.Exceptions;
-    using global::BrightChain.Engine.Services;
+    using global::BrightChain.Engine.Services.CacheManagers;
 
     /// <summary>
     /// Represents a virtual map of all the contituent tuple-sets/blocks in a given source/reconstructed file. These cannot themselves be committed to disk

@@ -16,11 +16,15 @@ namespace BrightChain.Engine.Services
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
+    using BrightChain.Engine.Models.Hashes;
+    using BrightChain.Engine.Services.CacheManagers;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Core service for BrightChain used by the webservice to retrieve and store blocks.
+    /// TODO: Eventually needs to contain blockhash indices for things like expiration (grouped by ulong expiration second),
+    /// lists by block type, etc.
     /// </summary>
     public class BrightBlockService : IDisposable
     {
@@ -30,7 +34,7 @@ namespace BrightChain.Engine.Services
         private readonly MemoryDictionaryBlockCacheManager blockMemoryCache;
         private readonly MemoryDictionaryBlockCacheManager randomizerBlockMemoryCache;
         private readonly FasterBlockCacheManager blockDiskCache;
-        private readonly BlockBrightener blockBrightener;
+        private readonly BlockBrightenerService blockBrightener;
         //private readonly BrightChainNode brightChainNodeAuthority;
 
         /// <summary>
@@ -101,8 +105,7 @@ namespace BrightChain.Engine.Services
                 rootBlock: rootBlock);
 
             this.logger.LogInformation(string.Format("<{0}>: caches initialized", nameof(BrightBlockService)));
-            this.blockBrightener = new BlockBrightener(
-                pregeneratedRandomizerCache: this.randomizerBlockMemoryCache,
+            this.blockBrightener = new BlockBrightenerService(
                 resultCache: this.blockMemoryCache);
             //this.brightChainNodeAuthority = default(BrightChainNode);
             //this.brightChainNodeAuthority = BrightChainKeyService.LoadPrivateKeyFromBlock(this.blockDiskCache.Get(_));
@@ -302,7 +305,7 @@ namespace BrightChain.Engine.Services
             return cblsEmitted;
         }
 
-        public async Task<SuperConstituentBlockListBlock> MakeSuperCBLFromCBLChain(BlockParams blockParams, IEnumerable<ConstituentBlockListBlock> chainedCbls)
+        public async Task<SuperConstituentBlockListBlock> MakeSuperCBLFromCBLChainAsync(BlockParams blockParams, IEnumerable<ConstituentBlockListBlock> chainedCbls)
         {
             var hashBytes = chainedCbls
                     .SelectMany(c => c.Id.HashBytes.ToArray())
@@ -348,7 +351,7 @@ namespace BrightChain.Engine.Services
             }
 
             return await
-                this.MakeSuperCBLFromCBLChain(
+                this.MakeSuperCBLFromCBLChainAsync(
                     blockParams: blockParams,
                     chainedCbls: firstPass)
                         .ConfigureAwait(false);
@@ -638,6 +641,7 @@ namespace BrightChain.Engine.Services
 
         public void PersistCBL(ConstituentBlockListBlock cblBlock)
         {
+            // TODO: update indices
             this.blockDiskCache.Set(cblBlock);
         }
 

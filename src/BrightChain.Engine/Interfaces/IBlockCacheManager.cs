@@ -1,6 +1,7 @@
 ﻿namespace BrightChain.Engine.Interfaces
 {
     using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Hashes;
     using BrightChain.Engine.Models.Nodes;
 
     /// <summary>

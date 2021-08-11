@@ -1,4 +1,4 @@
-﻿namespace BrightChain.Engine.Services
+﻿namespace BrightChain.Engine.Services.CacheManagers
 {
     using System;
     using System.Globalization;
@@ -10,6 +10,7 @@
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Hashes;
     using FASTER.core;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;

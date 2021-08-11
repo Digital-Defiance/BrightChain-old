@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Models.Hashes;
 
     /// <summary>
     ///     Map of the block size enumeration values to their actual sizes.

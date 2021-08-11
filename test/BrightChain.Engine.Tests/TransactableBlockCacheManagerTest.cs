@@ -1,5 +1,6 @@
 ﻿using BrightChain.Engine.Interfaces;
 using BrightChain.Engine.Models.Blocks;
+using BrightChain.Engine.Models.Hashes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BrightChain.Engine.Tests

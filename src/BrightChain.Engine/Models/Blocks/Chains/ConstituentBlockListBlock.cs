@@ -5,6 +5,7 @@ using BrightChain.Engine.Attributes;
 using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Interfaces;
 using BrightChain.Engine.Models.Blocks.DataObjects;
+using BrightChain.Engine.Models.Hashes;
 using BrightChain.Engine.Services;
 
 namespace BrightChain.Engine.Models.Blocks.Chains
@@ -37,7 +38,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
             this.ConstituentBlocks = blockParams.ConstituentBlocks;
             this.Previous = blockParams.Previous;
             this.Next = blockParams.Next;
-            this.TupleCount = BlockBrightener.TupleCount;
+            this.TupleCount = BlockBrightenerService.TupleCount;
         }
 
         /// <summary>

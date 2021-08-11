@@ -3,6 +3,7 @@ using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Contracts;
 using BrightChain.Engine.Models.Entities;
+using BrightChain.Engine.Models.Hashes;
 using BrightChain.Engine.Models.Nodes;
 
 namespace BrightChain.Engine.Interfaces

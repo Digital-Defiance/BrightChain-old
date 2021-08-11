@@ -4,7 +4,7 @@ namespace BrightChain.Engine.Models.Blocks
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Services;
+    using BrightChain.Engine.Services.CacheManagers;
 
     /// <summary>
     /// Block that can be contained in a MemoryBlockCacheManager / Btree

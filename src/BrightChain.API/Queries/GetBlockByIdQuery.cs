@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using BrightChain.Engine.Models.Blocks;
+using BrightChain.Engine.Models.Hashes;
 using BrightChain.Engine.Services;
 using MediatR;
 

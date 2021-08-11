@@ -6,6 +6,7 @@
     using System.Linq;
     using global::BrightChain.Engine.Exceptions;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
+    using global::BrightChain.Engine.Models.Hashes;
 
     /// <summary>
     /// Brightened data chain, can be composed of file-based CBLs or ChainLinq based data blocks.

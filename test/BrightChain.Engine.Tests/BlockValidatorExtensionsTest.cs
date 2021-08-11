@@ -2,7 +2,7 @@
 using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Blocks.DataObjects;
-using BrightChain.Engine.Services;
+using BrightChain.Engine.Services.CacheManagers;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;

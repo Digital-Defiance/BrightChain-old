@@ -2,7 +2,7 @@
 {
     using System.Security.Cryptography;
     using BrightChain.Engine.Models.Agents;
-    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Hashes;
 
     /// <summary>
     /// Representation of a bright chain participartory node.

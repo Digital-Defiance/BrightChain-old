@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using global::BrightChain.Engine.Exceptions;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
+    using global::BrightChain.Engine.Models.Hashes;
     using global::BrightChain.Engine.Services;
 
     /// <summary>

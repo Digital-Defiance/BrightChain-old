@@ -1,24 +1,27 @@
-﻿using System.Linq;
-using BrightChain.Engine.Models.Blocks;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-
-namespace BrightChain.Engine.Services
+﻿namespace BrightChain.Engine.Services
 {
+    using System.Linq;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
+    using BrightChain.Engine.Services.CacheManagers;
+
     /// <summary>
     /// This tiny little class is actually the lynchpin of the owner free filesystem.
     /// It is responsible for XORing blocks with random data blocks in order to correlate
     /// the user data with random data and other user blocks.
     /// </summary>
-    public class BlockBrightener
+    public class BlockBrightenerService
     {
-        public static byte TupleCount { get; } = 5;
+        /// <summary>
+        /// This value that determines how many blocks get XOR'd with a given input block.
+        /// TupleCount-1. Setting TupleCount = 5 will XOR input with 4 randomizers.
+        /// </summary>
+        public const byte TupleCount = 5;
 
-        private readonly MemoryDictionaryBlockCacheManager pregeneratedRandomizerCache;
         private readonly BlockCacheManager resultCache;
 
-        public BlockBrightener(MemoryDictionaryBlockCacheManager pregeneratedRandomizerCache, BlockCacheManager resultCache)
+        public BlockBrightenerService(BlockCacheManager resultCache)
         {
-            this.pregeneratedRandomizerCache = pregeneratedRandomizerCache;
             this.resultCache = resultCache;
         }
 
@@ -34,7 +37,8 @@ namespace BrightChain.Engine.Services
             for (int i = 0; i < randomizersUsed.Length; i++)
             {
                 // TODO: select or generate pre-generated random blocks (determine mixing)
-                // for now just generate on demand, but these can be pre-seeded
+                // for now just generate on demand, but these can be pre-seeded, and
+                // technically any block in cache we haven't already used within a chain can be used.
                 randomizersUsed[i] = new RandomizerBlock(
                     destinationCache: this.resultCache,
                     blockSize: block.BlockSize,

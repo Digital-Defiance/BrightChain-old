@@ -1,5 +1,6 @@
 ﻿using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Interfaces;
+using BrightChain.Engine.Models.Hashes;
 
 namespace BrightChain.Engine.Models.Blocks.DataObjects
 {

@@ -1,22 +1,24 @@
-﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Text.Json;
-using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Exceptions;
-using BrightChain.Engine.Extensions;
-using BrightChain.Engine.Helpers;
-using BrightChain.Engine.Interfaces;
-using BrightChain.Engine.Models.Blocks;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using static BrightChain.Engine.Extensions.BlockMetadataExtensions;
-
-namespace BrightChain.Engine.Services
+﻿namespace BrightChain.Engine.Services.CacheManagers
 {
+    using System;
+    using System.Globalization;
+    using System.IO;
+    using System.Text.Json;
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Extensions;
+    using BrightChain.Engine.Helpers;
+    using BrightChain.Engine.Interfaces;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
+    using BrightChain.Engine.Models.Hashes;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
+    using static BrightChain.Engine.Extensions.BlockMetadataExtensions;
+
     /// <summary>
-    ///     Relatively naive Disk Based Block Cache Manager.
+    /// Relatively naive Disk Based Block Cache Manager.
+    /// Deprecated in favor of FASTER.
     /// </summary>
     public class DiskBlockCacheManager : BlockCacheManager
     {

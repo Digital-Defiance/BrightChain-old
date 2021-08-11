@@ -5,6 +5,7 @@
     using BrightChain.Engine.Extensions;
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Models.Blocks.DataObjects;
+    using BrightChain.Engine.Models.Hashes;
 
     /// <summary>
     /// User data that must be whitened with the block whitener before being persisted. These blocks must never be stored directly.

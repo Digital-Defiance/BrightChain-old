@@ -6,7 +6,8 @@
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Services;
+    using BrightChain.Engine.Models.Hashes;
+    using BrightChain.Engine.Services.CacheManagers;
 
     /// <summary>
     /// Block that is able to be stored, rolled back, committed, or prevented from being stored.

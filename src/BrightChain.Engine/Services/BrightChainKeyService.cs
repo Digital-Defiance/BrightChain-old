@@ -4,7 +4,8 @@
     using System.IdentityModel.Tokens.Jwt;
     using System.Linq;
     using System.Security.Cryptography;
-    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Hashes;
+    using BrightChain.Engine.Services.CacheManagers;
     using Microsoft.IdentityModel.Tokens;
     using Org.BouncyCastle.Asn1.Sec;
 

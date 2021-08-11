@@ -1,15 +1,16 @@
-namespace BrightChain.Engine.Models.Blocks
+namespace BrightChain.Engine.Models.Hashes
 {
     using System;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
-using FASTER.core;
+    using BrightChain.Engine.Models.Blocks;
+    using FASTER.core;
 
-/// <summary>
-/// Type box for the sha hashes.
-/// </summary>
+    /// <summary>
+    /// Type box for the sha hashes.
+    /// </summary>
     public class BlockHash : DataHash, IDataHash, IComparable<BlockHash>, IEquatable<BlockHash>, IFasterEqualityComparer<BlockHash>
     {
         /// <summary>

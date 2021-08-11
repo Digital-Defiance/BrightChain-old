@@ -3,6 +3,7 @@ namespace BrightChain.Engine.Models.Blocks
     using System;
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
+    using BrightChain.Engine.Models.Hashes;
 
     /// <summary>
     /// Type box for the sha hashes.

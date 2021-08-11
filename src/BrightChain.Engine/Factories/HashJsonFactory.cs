@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using BrightChain.Engine.Models.Blocks;
+using BrightChain.Engine.Models.Hashes;
 
 namespace BrightChain.Engine.Factories
 {

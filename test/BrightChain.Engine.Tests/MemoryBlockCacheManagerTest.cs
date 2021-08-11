@@ -5,7 +5,8 @@
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Services;
+    using BrightChain.Engine.Models.Hashes;
+    using BrightChain.Engine.Services.CacheManagers;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
     using Microsoft.VisualStudio.TestTools.UnitTesting;

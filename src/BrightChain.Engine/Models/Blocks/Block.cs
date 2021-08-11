@@ -13,8 +13,9 @@ namespace BrightChain.Engine.Models.Blocks
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Contracts;
     using BrightChain.Engine.Models.Entities;
+    using BrightChain.Engine.Models.Hashes;
     using BrightChain.Engine.Models.Nodes;
-    using BrightChain.Engine.Services;
+    using BrightChain.Engine.Services.CacheManagers;
 
     /// <summary>
     /// The block is the base unit persisted to disk.

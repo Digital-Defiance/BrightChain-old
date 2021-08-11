@@ -2,6 +2,7 @@
 using BrightChain.API.Commands;
 using BrightChain.API.Queries;
 using BrightChain.Engine.Models.Blocks;
+using BrightChain.Engine.Models.Hashes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BrightChain.API.Controllers

@@ -8,7 +8,7 @@
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Services;
+    using BrightChain.Engine.Services.CacheManagers;
 
     /// <summary>
     /// The block factory will upcast the deserialized blocks from storage into the correct types
@@ -41,6 +41,7 @@
 
         public static TransactableBlock ConvertRestored(RestoredBlock block, BlockCacheManager cacheManager)
         {
+            // TODO: Most of these will be easy to implement.
             var originalType = Type.GetType(block.OriginalType);
             if (originalType.IsAssignableFrom(typeof(global::BrightChain.Engine.Models.Blocks.Chains.BrightChain)))
             {

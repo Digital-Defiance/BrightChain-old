@@ -5,6 +5,7 @@
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Hashes;
 
     public static class Utilities
     {
