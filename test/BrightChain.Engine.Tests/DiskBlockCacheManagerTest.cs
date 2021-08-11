@@ -26,22 +26,6 @@
         {
         }
 
-        internal DiskCacheTestBlock()
-            : base(
-                blockParams: new TransactableBlockParams(
-                    cacheManager: DiskCacheTestBlock.CacheManager,
-                    allowCommit: true,
-                    blockParams: new BlockParams(
-                    blockSize: BlockSize.Message,
-                    requestTime: DateTime.Now,
-                    keepUntilAtLeast: DateTime.MaxValue,
-                    redundancy: RedundancyContractType.HeapAuto,
-                    privateEncrypted: false,
-                    originalType: typeof(DiskCacheTestBlock))),
-                data: NewRandomData())
-        {
-        }
-
         public static ReadOnlyMemory<byte> NewRandomData()
         {
             var random = new Random(Guid.NewGuid().GetHashCode());
@@ -116,7 +100,7 @@
                         keepUntilAtLeast: DateTime.MaxValue,
                         redundancy: Enumerations.RedundancyContractType.LocalNone,
                         privateEncrypted: false,
-                    originalType: typeof(DiskCacheTestBlock))),
+                        originalType: typeof(DiskCacheTestBlock))),
                 data: data);
 
             return new KeyValuePair<BlockHash, TransactableBlock>(block.Id, block);
