@@ -12,7 +12,7 @@
         Unknown,
 
         /// <summary>
-        /// Tiniest message size, for extremely small messages. 128b
+        /// Tiniest message size, for extremely small messages. 256b
         /// </summary>
         Micro,
 

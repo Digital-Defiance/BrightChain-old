@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Models.Hashes;
 
     /// <summary>
@@ -11,9 +12,9 @@
     public static class BlockSizeMap
     {
         /// <summary>
-        /// Smallest block size. Best for extreneky small payloads. 128 bytes.
+        /// Smallest block size. Best for extreneky small payloads. 256 bytes.
         /// </summary>
-        public const int MicroSize = 128;
+        public const int MicroSize = 256;
 
         /// <summary>
         /// Best for small payloads like messages. 512 bytes.
@@ -60,6 +61,18 @@
             { Enumerations.BlockSize.Small, SmallSize / DataHash.HashSizeBytes },
             { Enumerations.BlockSize.Medium, MediumSize / DataHash.HashSizeBytes },
             { Enumerations.BlockSize.Large, LargeSize / DataHash.HashSizeBytes },
+        };
+
+        public static readonly Dictionary<BlockSize, BlockHash> ZeroVectorMap = new()
+        {
+            { Enumerations.BlockSize.Unknown, null }, // Impossible
+            //{ Enumerations.BlockSize.Nano, new BlockHash(blockType: typeof(Block), originalBlockSize: Enumerations.BlockSize.Micro, providedHashBytes: Convert.FromHexString("38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca"), true) },
+            { Enumerations.BlockSize.Micro, new BlockHash(blockType: typeof(Block), originalBlockSize: Enumerations.BlockSize.Micro, providedHashBytes: Convert.FromHexString("5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1"), true) },
+            { Enumerations.BlockSize.Tiny, new BlockHash(blockType: typeof(Block), originalBlockSize: Enumerations.BlockSize.Tiny, providedHashBytes: Convert.FromHexString("5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"), true) },
+            { Enumerations.BlockSize.Small, new BlockHash(blockType: typeof(Block), originalBlockSize: Enumerations.BlockSize.Small, providedHashBytes: Convert.FromHexString("ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7"), true) },
+            { Enumerations.BlockSize.Message, new BlockHash(blockType: typeof(Block), originalBlockSize: Enumerations.BlockSize.Message, providedHashBytes: Convert.FromHexString("076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"), true) },
+            { Enumerations.BlockSize.Medium, new BlockHash(blockType: typeof(Block), originalBlockSize: Enumerations.BlockSize.Medium, providedHashBytes: Convert.FromHexString("30e14955ebf1352266dc2ff8067e68104607e750abb9d3b36582b8af909fcb58"), true) },
+            { Enumerations.BlockSize.Large, new BlockHash(blockType: typeof(Block), originalBlockSize: Enumerations.BlockSize.Large, providedHashBytes: Convert.FromHexString("bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8"), true) },
         };
 
         /// <summary>
@@ -127,6 +140,18 @@
             }
 
             throw new KeyNotFoundException(nameof(blockSize));
+        }
+
+        public static BlockHash ZeroVector(BlockSize blockSize)
+        {
+            BlockHash expectedVector;
+            var b = BlockSizeMap.ZeroVectorMap.TryGetValue(blockSize, out expectedVector);
+            if (!b)
+            {
+                throw new BrightChainException(nameof(blockSize));
+            }
+
+            return expectedVector;
         }
     }
 }

@@ -159,7 +159,7 @@ namespace BrightChain.Engine.Tests
             var sourceId = sourceIdObj.ToObject<BlockHash>(BlockMetadataExtensions.NewSerializerOptions());
             Assert.AreEqual(block.BlockSize, sourceId.BlockSize);
             Assert.AreEqual(
-                HashToFormattedString(GetZeroVector(sourceId.BlockSize).HashBytes.ToArray()),
+                HashToFormattedString(BlockSizeMap.ZeroVector(sourceId.BlockSize).HashBytes.ToArray()),
                 HashToFormattedString(sourceId.HashBytes.ToArray()));
         }
 

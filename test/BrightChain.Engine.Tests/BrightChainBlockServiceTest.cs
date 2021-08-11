@@ -84,7 +84,7 @@
         [DataRow(BlockSize.Large)]
         public void ItHasCorrectHashSizesTest(BlockSize blockSize)
         {
-            var expectedVector = GetZeroVector(blockSize);
+            var expectedVector = BlockSizeMap.ZeroVector(blockSize);
             BlockHash zeroVector;
             GenerateZeroVectorAndVerify(blockSize, out zeroVector);
             Assert.IsNotNull(zeroVector);

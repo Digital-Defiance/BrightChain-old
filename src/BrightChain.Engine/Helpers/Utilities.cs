@@ -73,28 +73,5 @@
                 throw new BrightChainException("BlockHash size mismatch.");
             }
         }
-
-        public static Dictionary<BlockSize, BlockHash> ZeroVectorLookup = new Dictionary<BlockSize, BlockHash>()
-        {
-            { BlockSize.Unknown, null }, // Impossible
-            { BlockSize.Micro, new BlockHash(blockType: typeof(Block), originalBlockSize: BlockSize.Micro, providedHashBytes: Convert.FromHexString("38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca"), true) },
-            { BlockSize.Tiny,  new BlockHash(blockType: typeof(Block), originalBlockSize: BlockSize.Tiny, providedHashBytes: Convert.FromHexString("5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"), true) },
-            { BlockSize.Small, new BlockHash(blockType: typeof(Block), originalBlockSize: BlockSize.Small, providedHashBytes: Convert.FromHexString("ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7"), true) },
-            { BlockSize.Message, new BlockHash(blockType: typeof(Block), originalBlockSize: BlockSize.Message, providedHashBytes: Convert.FromHexString("076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"), true) },
-            { BlockSize.Medium, new BlockHash(blockType: typeof(Block), originalBlockSize: BlockSize.Medium, providedHashBytes: Convert.FromHexString("30e14955ebf1352266dc2ff8067e68104607e750abb9d3b36582b8af909fcb58"), true) },
-            { BlockSize.Large, new BlockHash(blockType: typeof(Block), originalBlockSize: BlockSize.Large, providedHashBytes: Convert.FromHexString("bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8"), true) },
-        };
-
-        public static BlockHash GetZeroVector(BlockSize blockSize)
-        {
-            BlockHash expectedVector;
-            var b = ZeroVectorLookup.TryGetValue(blockSize, out expectedVector);
-            if (!b)
-            {
-                throw new BrightChainException(nameof(blockSize));
-            }
-
-            return expectedVector;
-        }
     }
 }
