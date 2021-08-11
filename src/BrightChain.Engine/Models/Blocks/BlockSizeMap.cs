@@ -11,7 +11,12 @@
     public static class BlockSizeMap
     {
         /// <summary>
-        /// Smallest block size. Best for small payloads like messages. 512 bytes.
+        /// Smallest block size. Best for extreneky small payloads. 128 bytes.
+        /// </summary>
+        public const int MicroSize = 128;
+
+        /// <summary>
+        /// Best for small payloads like messages. 512 bytes.
         /// </summary>
         public const int MessageSize = 512;
 
@@ -38,6 +43,7 @@
         public static readonly Dictionary<BlockSize, int> Map = new()
         {
             { Enumerations.BlockSize.Unknown, -1 },
+            { Enumerations.BlockSize.Micro, MicroSize },
             { Enumerations.BlockSize.Message, MessageSize },
             { Enumerations.BlockSize.Tiny, TinySize },
             { Enumerations.BlockSize.Small, SmallSize },
@@ -48,6 +54,7 @@
         public static readonly Dictionary<BlockSize, int> HashesPerBlockMap = new()
         {
             { Enumerations.BlockSize.Unknown, -1 },
+            { Enumerations.BlockSize.Micro, MicroSize/ DataHash.HashSizeBytes },
             { Enumerations.BlockSize.Message, MessageSize / DataHash.HashSizeBytes },
             { Enumerations.BlockSize.Tiny, TinySize / DataHash.HashSizeBytes },
             { Enumerations.BlockSize.Small, SmallSize / DataHash.HashSizeBytes },

@@ -25,12 +25,14 @@ namespace BrightChain.Engine.Tests
     public class BlockMetaDataExtensionsTest
     {
         protected readonly ILogger logger;
+
         public BlockMetaDataExtensionsTest()
         {
             this.logger = new Moq.Mock<ILogger>().Object;
         }
 
         [DataTestMethod]
+        [DataRow(BlockSize.Micro)]
         [DataRow(BlockSize.Message)]
         [DataRow(BlockSize.Tiny)]
         [DataRow(BlockSize.Small)]
@@ -86,6 +88,7 @@ namespace BrightChain.Engine.Tests
         }
 
         [DataTestMethod]
+        [DataRow(BlockSize.Micro)]
         [DataRow(BlockSize.Message)]
         [DataRow(BlockSize.Tiny)]
         [DataRow(BlockSize.Small)]
@@ -164,6 +167,7 @@ namespace BrightChain.Engine.Tests
         }
 
         [DataTestMethod]
+        [DataRow(BlockSize.Micro)]
         [DataRow(BlockSize.Message)]
         [DataRow(BlockSize.Tiny)]
         [DataRow(BlockSize.Small)]
@@ -207,6 +211,7 @@ namespace BrightChain.Engine.Tests
         }
 
         [DataTestMethod]
+        [DataRow(BlockSize.Micro)]
         [DataRow(BlockSize.Message)]
         [DataRow(BlockSize.Tiny)]
         [DataRow(BlockSize.Small)]

@@ -76,6 +76,7 @@
         /// TODO: move to BlockHashTests.
         /// </summary>
         [DataTestMethod]
+        [DataRow(BlockSize.Micro)]
         [DataRow(BlockSize.Message)]
         [DataRow(BlockSize.Tiny)]
         [DataRow(BlockSize.Small)]
@@ -91,6 +92,7 @@
         }
 
         [DataTestMethod]
+        [DataRow(BlockSize.Micro)]
         [DataRow(BlockSize.Message)]
         [DataRow(BlockSize.Tiny)]
         [DataRow(BlockSize.Small)]
@@ -162,6 +164,7 @@
         }
 
         [DataTestMethod]
+        [DataRow(BlockSize.Micro)]
         [DataRow(BlockSize.Message)]
         [DataRow(BlockSize.Tiny)]
         [DataRow(BlockSize.Small)]

@@ -9,11 +9,12 @@ namespace BrightChain.Engine.Models.Units
     public static class ByteStorageRedundancyDurationCostMap
     {
         public static readonly Dictionary<BlockSize, double> SizeMap = new Dictionary<BlockSize, double> {
-            { global::BrightChain.Engine.Enumerations.BlockSize.Message,   0 },          // 512B
-            { global::BrightChain.Engine.Enumerations.BlockSize.Tiny,      0 },         // 1K
-            { global::BrightChain.Engine.Enumerations.BlockSize.Small,     0},       // 4K
-            { global::BrightChain.Engine.Enumerations.BlockSize.Medium,    0},    // 1M
-            { global::BrightChain.Engine.Enumerations.BlockSize.Large,     0 },  // 4M
+            { global::BrightChain.Engine.Enumerations.BlockSize.Micro,     0 }, // 128B
+            { global::BrightChain.Engine.Enumerations.BlockSize.Message,   0 }, // 512B
+            { global::BrightChain.Engine.Enumerations.BlockSize.Tiny,      0 }, // 1K
+            { global::BrightChain.Engine.Enumerations.BlockSize.Small,     0 }, // 4K
+            { global::BrightChain.Engine.Enumerations.BlockSize.Medium,    0 }, // 1M
+            { global::BrightChain.Engine.Enumerations.BlockSize.Large,     0 }, // 4M
         };
 
         public static readonly Dictionary<RedundancyContractType, double> RedundancyMap = new Dictionary<RedundancyContractType, double> {

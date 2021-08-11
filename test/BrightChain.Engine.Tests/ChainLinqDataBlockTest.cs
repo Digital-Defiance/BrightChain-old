@@ -80,6 +80,7 @@
         }
 
         [DataTestMethod]
+        [DataRow(BlockSize.Micro, 4)]
         [DataRow(BlockSize.Message, 4)]
         [DataRow(BlockSize.Tiny, 4)]
         [DataRow(BlockSize.Small, 4)]
@@ -114,6 +115,7 @@
         }
 
         [DataTestMethod]
+        [DataRow(BlockSize.Micro, 4)]
         [DataRow(BlockSize.Message, 4)]
         [DataRow(BlockSize.Tiny, 4)]
         [DataRow(BlockSize.Small, 4)]

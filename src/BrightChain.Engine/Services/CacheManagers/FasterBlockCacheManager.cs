@@ -119,7 +119,7 @@
                     CheckpointDir = this.GetDiskCacheDirectory().FullName,
                 },
                 serializerSettings: serializerSettings,
-                comparer: new EmptyDummyBlock(BlockSize.Message).Id);
+                comparer: new EmptyDummyBlock(BlockSize.Micro).Id);
         }
 
         /// <summary>
