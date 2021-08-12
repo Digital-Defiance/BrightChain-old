@@ -19,6 +19,7 @@ Unlimited storage for everyone, and a mathematically reinforced and moderated co
 # One-Pager
 The BrightChain "One-Pager" is about 3 pages at the moment, but pending some slimming down is about as concise a document as I've put together.
 - https://apertureimagingcom-my.sharepoint.com/:w:/g/personal/jessica_mulein_com/EYoQU8qG_xlGpD0_A-mxhvoBqv3OylrfjeRAohvoC0gDQg?e=0U2XDa
+  - PDF https://github.com/The-Revolution-Network/BrightChain/raw/main/BrightChain-One-Pager.pdf as of 08/12/21 00:44 Pacfic time.
   - Feedback welcome.
 
 Recent thoughts:
@@ -45,4 +46,4 @@ Recent thoughts:
 * This software is open source, and offered as a "best-effort" thereoetical construct at this time and it may well lose all your data at this point in time.
 
 <!-- this timestamp is updated by a pre-commit hook in git-hooks/pre-commit then added to .git/hooks -->
-Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-08-12T07:42:24-0700</time>
+Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-08-12T10:48:24-0700</time>
