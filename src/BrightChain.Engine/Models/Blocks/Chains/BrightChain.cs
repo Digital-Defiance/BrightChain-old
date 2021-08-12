@@ -12,6 +12,7 @@
     /// Brightened data chain, can be composed of file-based CBLs or ChainLinq based data blocks.
     /// TODO: improve memory usage. Don't keep full copy, do all on async enumeration?
     /// </summary>
+    [Serializable]
     public class BrightChain : ConstituentBlockListBlock, IEnumerable<BrightenedBlock>
     {
         private readonly IEnumerable<BrightenedBlock> _blocks;

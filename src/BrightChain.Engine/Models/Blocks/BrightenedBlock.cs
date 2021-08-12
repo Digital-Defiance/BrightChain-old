@@ -11,6 +11,7 @@
     /// User data that must be whitened with the block whitener before being persisted. These blocks must never be stored directly.
     /// *** CBLs are considered user data ***
     /// </summary>
+    [Serializable]
     public class BrightenedBlock : SourceBlock, IComparable<BrightenedBlock>, IComparable<Block>
     {
         public BrightenedBlock(BlockParams blockParams, ReadOnlyMemory<byte> data, IEnumerable<BlockHash> constituentBlocks)

@@ -9,6 +9,7 @@ namespace BrightChain.Engine.Models.Blocks
     /// <summary>
     /// Input blocks to the whitener service that consist of purely CSPRNG data of the specified block size
     /// </summary>
+    [Serializable]
     public class RandomizerBlock : TransactableBlock, IComparable<RandomizerBlock>
     {
         public RandomizerBlock(BlockCacheManager destinationCache, BlockSize blockSize, DateTime keepUntilAtLeast, RedundancyContractType redundancyContractType, DateTime? requestTime = null)

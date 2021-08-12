@@ -6,6 +6,7 @@ namespace BrightChain.Engine.Models.Blocks.DataObjects
     /// <summary>
     /// Simple data object for passing block parameters
     /// </summary>
+    [Serializable]
     public class BlockParams
     {
         public readonly BlockSize BlockSize;

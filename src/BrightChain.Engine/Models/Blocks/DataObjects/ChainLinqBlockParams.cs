@@ -2,6 +2,7 @@
 {
     using BrightChain.Engine.Exceptions;
 
+    [Serializable]
     public class ChainLinqBlockParams : BlockParams
     {
         public ChainLinqBlockParams(BlockParams blockParams)

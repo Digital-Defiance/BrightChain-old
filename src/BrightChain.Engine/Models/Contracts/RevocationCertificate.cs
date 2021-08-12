@@ -7,6 +7,7 @@
     /// <summary>
     /// Type box for the revocation certificates/tokens to delete private/encrypted blocks.
     /// </summary>
+    [Serializable]
     public class RevocationCertificate : DataSignature, IComparable<RevocationCertificate>
     {
         public RevocationCertificate(BrightenedBlock block)

@@ -8,6 +8,7 @@ namespace BrightChain.Engine.Models.Blocks
     /// <summary>
     /// Input blocks to the whitener service that consist of purely CSPRNG data of the specified block size
     /// </summary>
+    [Serializable]
     public class EmptyDummyBlock : Block, IComparable<EmptyDummyBlock>
     {
         public static ReadOnlyMemory<byte> NewEmptyBlockData(BlockSize blockSize)

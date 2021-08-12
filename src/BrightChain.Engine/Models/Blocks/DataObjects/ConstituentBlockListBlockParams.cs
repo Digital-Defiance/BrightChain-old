@@ -3,6 +3,7 @@ using BrightChain.Engine.Models.Hashes;
 
 namespace BrightChain.Engine.Models.Blocks.DataObjects
 {
+    [Serializable]
     public class ConstituentBlockListBlockParams : TransactableBlockParams
     {
         public readonly DataHash SourceId;

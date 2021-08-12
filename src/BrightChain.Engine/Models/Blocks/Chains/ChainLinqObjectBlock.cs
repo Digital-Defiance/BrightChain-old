@@ -16,6 +16,7 @@
     /// Data container for serialization of objects into BrightChain.
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [Serializable]
     public class ChainLinqObjectBlock<T>
         : SourceBlock
         where T : new()

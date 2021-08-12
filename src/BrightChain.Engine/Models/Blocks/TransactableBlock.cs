@@ -14,6 +14,7 @@
     /// TODO: Currently heavily associated with underlying BPlusTree. Abstract
     /// TODO: base off TransactedCompoundFile?
     /// </summary>
+    [Serializable]
     public class TransactableBlock : Block, IDisposable, ITransactable, ITransactableBlock, IComparable<TransactableBlock>, IComparable<ITransactableBlock>, IEquatable<IBlock>
     {
         public TransactableBlock(BlockCacheManager cacheManager, Block sourceBlock, bool allowCommit)

@@ -10,6 +10,7 @@
     /// The root block is the key / control node for the cache. Everything gets signed from here.
     /// There can only be one.
     /// </summary>
+    [Serializable]
     public class RootBlock : TransactableBlock, IBlock, IComparable<IBlock>
     {
         public RootBlock(Guid databaseGuid, BlockSize blockSize = BlockSize.Large)

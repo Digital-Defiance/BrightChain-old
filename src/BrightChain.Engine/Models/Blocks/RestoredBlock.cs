@@ -6,6 +6,7 @@
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Services.CacheManagers;
 
+    [Serializable]
     public class RestoredBlock : Block
     {
         public RestoredBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)

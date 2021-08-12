@@ -12,6 +12,7 @@
     /// ChainLinq is the un-brightened/source array. ChainLinq helps build BrightChains.
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [Serializable]
     public class ChainLinq<T>
         where T : new()
     {

@@ -8,6 +8,7 @@ namespace BrightChain.Engine.Models.Blocks
     /// <summary>
     /// Block that can be contained in a FasterBlockCacheManager
     /// </summary>
+    [Serializable]
     public class FasterBlock : TransactableBlock, IBlock
     {
         public new FasterBlockCacheManager CacheManager { get; internal set; }

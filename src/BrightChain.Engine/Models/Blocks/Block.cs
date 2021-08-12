@@ -20,6 +20,7 @@ namespace BrightChain.Engine.Models.Blocks
     /// <summary>
     /// The block is the base unit persisted to disk.
     /// </summary>
+    [Serializable]
     public abstract class Block : IBlock, IComparable<IBlock>, IComparable<Block>, IEquatable<Block>, IEquatable<IBlock>
     {
         public BlockHash Id { get; }

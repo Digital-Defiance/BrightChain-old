@@ -9,6 +9,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
     /// TODO: Ensure that the hash of the source file
     /// TODO: Validate constituent blocks can recompose into that data (break up by tuple size), validate all blocks are same length
     /// </summary>
+    [Serializable]
     public class SuperConstituentBlockListBlock : ConstituentBlockListBlock, IBlock, IDisposable, IValidatable
     {
         public SuperConstituentBlockListBlock(ConstituentBlockListBlockParams blockParams, ReadOnlyMemory<byte> data)

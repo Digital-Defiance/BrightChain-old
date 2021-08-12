@@ -1,39 +1,41 @@
-﻿using System.Text.Json.Serialization;
-using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Models.Units;
-
-namespace BrightChain.Engine.Models.Contracts
+﻿namespace BrightChain.Engine.Models.Contracts
 {
+    using System.Text.Json.Serialization;
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Models.Units;
+
     /// <summary>
-    /// Contract for the minimum amount of time required to store a given block
+    /// Contract for the minimum amount of time required to store a given block.
     /// </summary>
+    [Serializable]
     public struct StorageContract
     {
         /// <summary>
-        /// Date/Time the block was received by the network
+        /// Gets the Date/Time the block was received by the network.
         /// </summary>
         public DateTime RequestTime { get; internal set; }
 
         /// <summary>
-        /// Minimum date the block will be preserved until
+        /// Gets the Minimum date the block will be preserved until.
         /// </summary>
         public DateTime KeepUntilAtLeast { get; internal set; }
 
         /// <summary>
-        /// Number of bytes stored in this block
+        /// Gets the Number of bytes stored in this block.
         /// </summary>
         public int ByteCount { get; internal set; }
 
         /// <summary>
-        /// Whether the data is being stored for public use.
+        /// Gets a value indicating whether the data is being stored for public use.
         /// Factors into cost and other matters later on.
         /// </summary>
         public bool PrivateEncrypted { get; internal set; }
 
-        public RedundancyContractType RedundancyContractType { get; set; }
+        /// <summary>
+        /// Gets the contracted durability requirements.
+        /// </summary>
+        public RedundancyContractType RedundancyContractType { get; internal set; }
 
-
-        [JsonConstructor]
         public StorageContract(DateTime RequestTime, DateTime KeepUntilAtLeast, int ByteCount, bool PrivateEncrypted, RedundancyContractType redundancyContractType)
         {
             this.RequestTime = RequestTime;
@@ -57,18 +59,14 @@ namespace BrightChain.Engine.Models.Contracts
             return !(a == b);
         }
 
-        [JsonIgnore]
         public double Duration => this.KeepUntilAtLeast.Subtract(this.RequestTime).TotalSeconds;
 
-        [JsonIgnore]
         public ByteStorageDuration ByteStorageDuration => new ByteStorageDuration(
                 byteCount: this.ByteCount,
                 durationSeconds: (ulong)this.Duration);
 
-        [JsonIgnore]
         public readonly bool DoNotStore => this.KeepUntilAtLeast.Equals(DateTime.MinValue);
 
-        [JsonIgnore]
         public readonly bool NonExpiring => this.KeepUntilAtLeast.Equals(DateTime.MaxValue);
 
         public bool Equals(StorageContract other)

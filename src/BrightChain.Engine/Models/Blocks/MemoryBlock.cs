@@ -9,6 +9,7 @@ namespace BrightChain.Engine.Models.Blocks
     /// <summary>
     /// Block that can be contained in a MemoryBlockCacheManager / Btree
     /// </summary>
+    [Serializable]
     public class MemoryBlock : TransactableBlock, IBlock
     {
         public MemoryBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data)

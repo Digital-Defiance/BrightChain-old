@@ -8,6 +8,7 @@ namespace BrightChain.Engine.Models.Blocks
     /// <summary>
     /// Block that can be contained in a DiskBlockCacheManager / Btree
     /// </summary>
+    [Serializable]
     public class DiskBlock : TransactableBlock, IBlock
     {
         public new DiskBlockCacheManager CacheManager { get; internal set; }

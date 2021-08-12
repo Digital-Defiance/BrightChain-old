@@ -1,9 +1,10 @@
-﻿using BrightChain.Engine.Exceptions;
-using BrightChain.Engine.Interfaces;
-using BrightChain.Engine.Models.Hashes;
-
-namespace BrightChain.Engine.Models.Blocks.DataObjects
+﻿namespace BrightChain.Engine.Models.Blocks.DataObjects
 {
+    using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Interfaces;
+    using BrightChain.Engine.Models.Hashes;
+
+    [Serializable]
     public class TransactableBlockParams : BlockParams
     {
         public ICacheManager<BlockHash, TransactableBlock> CacheManager;

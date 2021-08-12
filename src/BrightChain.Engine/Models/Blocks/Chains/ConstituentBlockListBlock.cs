@@ -13,6 +13,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
     /// TODO: Ensure that the hash of the source file
     /// TODO: Validate constituent blocks can recompose into that data (break up by tuple size), validate all blocks are same length
     /// </summary>
+    [Serializable]
     public class ConstituentBlockListBlock : TransactableBlock, IBlock, IDisposable, IValidatable
     {
         /// <summary>
