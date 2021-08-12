@@ -6,7 +6,7 @@
           "files": [
             "**.csproj"
           ],
-          "src": "../src/BrightChain.API"
+          "src": "../src"
         }
       ],
       "dest": "api",
