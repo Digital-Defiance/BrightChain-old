@@ -7,6 +7,10 @@ A Lightweight BlockChain- LightChain based on a Brightnet Blockstore- BrightChai
 All the benefits of blockchain dApps and contracts without the mining and waste.
 Unlimited storage for everyone, and a mathematically reinforced and moderated community that will last for the ages.
 
+# One-Pager
+The BrightChain "One-Pager" is about 3 pages at the moment, but pending some slimming down is about as concise a document as I've put together.
+- https://apertureimagingcom-my.sharepoint.com/:w:/g/personal/jessica_mulein_com/EYoQU8qG_xlGpD0_A-mxhvoBC7Jz2l-jGbezPKmqQFx4AA?e=ie5hPZ
+  - Feedback welcome.
 - BrightChain Engine in C#/.Net 6 (Currently requires VS 2022 Preview, or IntelliJ Rider)
 - Uses Microsoft's FASTER & Orleans
 - BrightNet BlockStore and API for BrightChain: The Revolution(ary) Network
@@ -14,7 +18,6 @@ Unlimited storage for everyone, and a mathematically reinforced and moderated co
 - The old wiki: https://github.com/The-Revolution-Network/brightChainAPI/wiki/Introduction
 - Auto-generated documentation: http://apidocs.therevolution.network/api/index.html
   - Note that some of the classes don't have docblocks yet, but I've gotten many. The "TODO/example" text is in place as well, but if you click into the sections the content is there.
-- Coming soon (GitHub Pages): https://the-revolution-network.github.io/gh-pages/
 
 Recent thoughts:
  - I think calling BrightChain a LightChain makes sense. it's a lightweight blockchain. It's got blockchain features people want, but without the actual overhead of blockchain, which is unnecessary.
