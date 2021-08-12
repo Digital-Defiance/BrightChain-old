@@ -643,6 +643,8 @@ namespace BrightChain.Engine.Services
         public void PersistCBL(ConstituentBlockListBlock cblBlock)
         {
             // TODO: update indices
+            // TODO: CBLs may be a server option to disable
+            // TODO: in the future just return a magnet URL with the N block hashes for the final CBL tuple.
             this.blockDiskCache.Set(cblBlock);
         }
 
