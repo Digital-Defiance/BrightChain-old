@@ -16,7 +16,7 @@
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    ///     Relatively naive Disk Based Block Cache Manager.
+    ///     Disk/Memory hybrid Block Cache Manager based on Microsoft FASTER KV.
     /// </summary>
     public class FasterBlockCacheManager : BlockCacheManager, IDisposable
     {
@@ -41,10 +41,6 @@
         private readonly IDevice blocksDevice;
 
         private readonly FasterKV<BlockHash, IBlock> blocksKV;
-
-        private void Temp()
-        {
-        }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
