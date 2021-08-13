@@ -9,7 +9,7 @@ All the benefits of blockchain dApps and contracts without the mining and waste.
 Unlimited storage for everyone, and a mathematically reinforced and moderated community that will last for the ages.
 
 - BrightChain Engine in C#/.Net 6 (Currently requires VS 2022 Preview, or IntelliJ Rider)
-- Uses Microsoft's FASTER & Orleans
+- Uses Microsoft's FASTER
 - BrightNet BlockStore and API for BrightChain: The Revolution(ary) Network
 - The new wiki: https://github.com/The-Revolution-Network/BrightChain/wiki (old will be rewritten/migrated)
 - The old wiki: https://github.com/The-Revolution-Network/brightChainAPI/wiki/Introduction
@@ -46,4 +46,4 @@ Recent thoughts:
 * This software is open source, and offered as a "best-effort" thereoetical construct at this time and it may well lose all your data at this point in time.
 
 <!-- this timestamp is updated by a pre-commit hook in git-hooks/pre-commit then added to .git/hooks -->
-Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-08-12T10:48:24-0700</time>
+Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-08-13T09:42:17-0700</time>

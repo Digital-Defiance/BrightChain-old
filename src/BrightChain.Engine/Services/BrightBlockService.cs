@@ -535,7 +535,7 @@ namespace BrightChain.Engine.Services
                 this.blockMemoryCache.Drop(id);
             }
 
-            // TODO: orleans broadcast
+            // TODO: broadcast
             return block;
         }
 
