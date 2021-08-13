@@ -36,6 +36,7 @@
         /// </summary>
         public RedundancyContractType RedundancyContractType { get; internal set; }
 
+        [JsonConstructor]
         public StorageContract(DateTime RequestTime, DateTime KeepUntilAtLeast, int ByteCount, bool PrivateEncrypted, RedundancyContractType redundancyContractType)
         {
             this.RequestTime = RequestTime;
@@ -59,14 +60,18 @@
             return !(a == b);
         }
 
+        [JsonIgnore]
         public double Duration => this.KeepUntilAtLeast.Subtract(this.RequestTime).TotalSeconds;
 
+        [JsonIgnore]
         public ByteStorageDuration ByteStorageDuration => new ByteStorageDuration(
                 byteCount: this.ByteCount,
                 durationSeconds: (ulong)this.Duration);
 
+        [JsonIgnore]
         public readonly bool DoNotStore => this.KeepUntilAtLeast.Equals(DateTime.MinValue);
 
+        [JsonIgnore]
         public readonly bool NonExpiring => this.KeepUntilAtLeast.Equals(DateTime.MaxValue);
 
         public bool Equals(StorageContract other)
