@@ -4,10 +4,12 @@
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Hashes;
+    using ProtoBuf;
 
     /// <summary>
     /// Type box for the sha hashes.
     /// </summary>
+    [ProtoContract]
     public class BlockSignature : DataSignature, IDataSignature, IComparable<BlockSignature>
     {
         public BlockSignature(IBlock block)

@@ -12,7 +12,12 @@
     public static class BlockSizeMap
     {
         /// <summary>
-        /// Smallest block size. Best for extreneky small payloads. 256 bytes.
+        /// Smallest block size. Best for encryption keys, etc.
+        /// </summary>
+        public const int NanoSize = 128;
+
+        /// <summary>
+        /// Best for extremely small payloads. 256 bytes.
         /// </summary>
         public const int MicroSize = 256;
 
@@ -22,12 +27,12 @@
         public const int MessageSize = 512;
 
         /// <summary>
-        /// Tiny block size. Best for small payloads larger than basic messages. 1024 bytes. 1K.
+        /// Best for small payloads larger than basic messages. 1024 bytes. 1K.
         /// </summary>
         public const int TinySize = 1024;
 
         /// <summary>
-        /// Small block size. Best for small files. 4024 bytes. 4K.
+        /// Best for small files. 4024 bytes. 4K.
         /// </summary>
         public const int SmallSize = 4 * 1024;
 
@@ -44,6 +49,7 @@
         public static readonly Dictionary<BlockSize, int> Map = new()
         {
             { Enumerations.BlockSize.Unknown, -1 },
+            { Enumerations.BlockSize.Nano, NanoSize },
             { Enumerations.BlockSize.Micro, MicroSize },
             { Enumerations.BlockSize.Message, MessageSize },
             { Enumerations.BlockSize.Tiny, TinySize },
@@ -55,6 +61,7 @@
         public static readonly Dictionary<BlockSize, int> HashesPerBlockMap = new()
         {
             { Enumerations.BlockSize.Unknown, -1 },
+            { Enumerations.BlockSize.Nano, NanoSize / DataHash.HashSizeBytes },
             { Enumerations.BlockSize.Micro, MicroSize / DataHash.HashSizeBytes },
             { Enumerations.BlockSize.Message, MessageSize / DataHash.HashSizeBytes },
             { Enumerations.BlockSize.Tiny, TinySize / DataHash.HashSizeBytes },
@@ -66,7 +73,7 @@
         public static readonly Dictionary<BlockSize, BlockHash> ZeroVectorMap = new()
         {
             { Enumerations.BlockSize.Unknown, null }, // Impossible
-            //{ Enumerations.BlockSize.Nano, new BlockHash(blockType: typeof(Block), originalBlockSize: Enumerations.BlockSize.Micro, providedHashBytes: Convert.FromHexString("38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca"), true) },
+            { Enumerations.BlockSize.Nano, new BlockHash(blockType: typeof(Block), originalBlockSize: Enumerations.BlockSize.Nano, providedHashBytes: Convert.FromHexString("38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca"), true) },
             { Enumerations.BlockSize.Micro, new BlockHash(blockType: typeof(Block), originalBlockSize: Enumerations.BlockSize.Micro, providedHashBytes: Convert.FromHexString("5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1"), true) },
             { Enumerations.BlockSize.Tiny, new BlockHash(blockType: typeof(Block), originalBlockSize: Enumerations.BlockSize.Tiny, providedHashBytes: Convert.FromHexString("5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"), true) },
             { Enumerations.BlockSize.Small, new BlockHash(blockType: typeof(Block), originalBlockSize: Enumerations.BlockSize.Small, providedHashBytes: Convert.FromHexString("ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7"), true) },

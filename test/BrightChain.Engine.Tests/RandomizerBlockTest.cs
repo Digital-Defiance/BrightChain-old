@@ -1,14 +1,15 @@
-﻿using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Models;
-using BrightChain.Engine.Models.Blocks;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-using BrightChain.Engine.Services.CacheManagers;
-using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-
-namespace BrightChain.Engine.Tests
+﻿namespace BrightChain.Engine.Tests
 {
+    using System;
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Models;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
+    using BrightChain.Engine.Services.CacheManagers;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Moq;
+
     /// <summary>
     /// Verifies random blocks are random, generated correctly and are inserted into the cache
     /// </summary>
@@ -34,6 +35,7 @@ namespace BrightChain.Engine.Tests
         }
 
         [DataTestMethod]
+        [DataRow(BlockSize.Nano)]
         [DataRow(BlockSize.Micro)]
         [DataRow(BlockSize.Message)]
         [DataRow(BlockSize.Tiny)]

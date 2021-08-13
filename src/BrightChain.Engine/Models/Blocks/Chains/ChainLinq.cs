@@ -7,12 +7,13 @@
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
     using global::BrightChain.Engine.Models.Hashes;
     using global::BrightChain.Engine.Services;
+    using ProtoBuf;
 
     /// <summary>
     /// ChainLinq is the un-brightened/source array. ChainLinq helps build BrightChains.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [Serializable]
+    [ProtoContract]
     public class ChainLinq<T>
         where T : new()
     {
@@ -41,7 +42,7 @@
             return blocks;
         }
 
-        public static ChainLinq<T> ForgeChainLinq(ChainLinqBlockParams blockParams, IEnumerable<T> objects)
+        public static ChainLinq<T> ForgeChainLinq(BlockParams blockParams, IEnumerable<T> objects)
         {
             List<ChainLinqObjectBlock<T>> blocks = new List<ChainLinqObjectBlock<T>>();
             foreach (var o in objects)
@@ -54,7 +55,7 @@
             return new ChainLinq<T>(blocks);
         }
 
-        public static async Task<ChainLinq<T>> ForgeChainLinqAsync(ChainLinqBlockParams blockParams, IAsyncEnumerable<T> objects)
+        public static async Task<ChainLinq<T>> ForgeChainLinqAsync(BlockParams blockParams, IAsyncEnumerable<T> objects)
         {
             List<ChainLinqObjectBlock<T>> blocks = new List<ChainLinqObjectBlock<T>>();
             await foreach (var o in objects)

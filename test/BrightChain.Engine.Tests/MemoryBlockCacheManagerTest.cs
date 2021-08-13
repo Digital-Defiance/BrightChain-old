@@ -11,10 +11,12 @@
     using Microsoft.Extensions.Logging;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
+    using ProtoBuf;
 
     /// <summary>
     /// Serializable testable test block class
     /// </summary>
+    [ProtoContract]
     public class MemoryDictionaryCacheTestBlock : TransactableBlock
     {
         public static new MemoryDictionaryBlockCacheManager CacheManager;

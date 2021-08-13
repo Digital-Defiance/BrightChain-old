@@ -10,10 +10,13 @@ namespace BrightChain.Engine.Models.Hashes
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
     using FASTER.core;
+    using ProtoBuf;
 
     /// <summary>
     /// Type box for the sha hashes.
     /// </summary>
+    [ProtoContract]
+    [ProtoInclude(0, typeof(BlockHash))]
     public class DataHash : IDataHash, IComparable<DataHash>, IEquatable<DataHash>, IFasterEqualityComparer<DataHash>
     {
         /// <summary>
@@ -106,16 +109,19 @@ namespace BrightChain.Engine.Models.Hashes
         /// <summary>
         /// Gets a ReadOnlyMemory<byte> containing the raw hash result bytes.
         /// </summary>
+        [ProtoMember(1)]
         public ReadOnlyMemory<byte> HashBytes { get; }
 
         /// <summary>
         /// Gets a long containing the length of the source data the hash was computed on.
         /// </summary>
+        [ProtoMember(2)]
         public long SourceDataLength { get; }
 
         /// <summary>
         /// Gets a value indicating whether trusted code calculated this hash.
         /// </summary>
+        [ProtoMember(3)]
         public bool Computed { get; }
 
         public static bool operator ==(DataHash a, DataHash b)

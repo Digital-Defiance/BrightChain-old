@@ -1,22 +1,22 @@
 ﻿namespace BrightChain.Engine.Models.Blocks.Chains
 {
     using System;
+    using System.Buffers;
+    using System.IO;
     using System.Linq;
     using System.Text;
-    using System.Text.Json;
-    using System.Text.Json.Serialization;
-    using global::BrightChain.Engine.Attributes;
     using global::BrightChain.Engine.Enumerations;
     using global::BrightChain.Engine.Exceptions;
-    using global::BrightChain.Engine.Factories;
+    using global::BrightChain.Engine.Helpers;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
     using global::BrightChain.Engine.Models.Hashes;
+    using ProtoBuf;
 
     /// <summary>
     /// Data container for serialization of objects into BrightChain.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [Serializable]
+    [ProtoContract]
     public class ChainLinqObjectBlock<T>
         : SourceBlock
         where T : new()
@@ -24,60 +24,61 @@
         /// <summary>
         /// Convert an object to a Byte Array.
         /// </summary>
-        public static byte[] ObjectToByteArray(object objectData, BlockSize blockSize)
+        public static ReadOnlyMemory<byte> ObjectToByteArray(T objectData, BlockSize blockSize, out int totalLength)
         {
             if (objectData == null)
             {
+                totalLength = -1;
                 return default;
             }
 
-            var finalBytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(objectData, GetJsonSerializerOptions()));
+            var memoryStream = new MemoryStream();
+            Serializer.Serialize<T>(destination: memoryStream, instance: objectData);
+            memoryStream.Position = 0;
+            var finalBytes = Encoding.UTF8.GetBytes(chars: memoryStream.GetBuffer().Select(c => (char)c).ToArray());
             if (finalBytes.Length >= BlockSizeMap.BlockSize(blockSize))
             {
                 throw new Exception("Serialized data is too long for block. Use a larger block size.");
             }
 
-            var newLength = finalBytes.Length + 1;
-            Array.Resize(ref finalBytes, newLength);
-            finalBytes[newLength - 1] = 0; // null term
+            totalLength = finalBytes.Length;
 
-            return finalBytes;
+            return Helpers.RandomDataHelper.DataFiller(
+                inputData: new ReadOnlyMemory<byte>(finalBytes),
+                blockSize: blockSize);
         }
 
-        /// <summary>
-        /// Convert a byte array to an Object of T.
-        /// </summary>
-        public static T ByteArrayToObject<T>(byte[] byteArray)
+        public static T ByteArrayToObject(Type t, byte[] byteArray, int originalDataLength)
         {
             if (byteArray == null || !byteArray.Any())
             {
                 return default;
             }
 
-            var nullIndex = Array.IndexOf(byteArray, 0);
-            if (nullIndex <= 0)
+            if (originalDataLength > 0 && originalDataLength < byteArray.Length)
             {
-                throw new BrightChainException("Null terminator not found");
+                Array.Resize(ref byteArray, originalDataLength);
             }
 
-            Array.Resize(ref byteArray, nullIndex);
-
-            return JsonSerializer.Deserialize<T>(byteArray, GetJsonSerializerOptions());
+            return (T)Serializer.Deserialize(type: t, new MemoryStream(byteArray));
         }
 
-        private static JsonSerializerOptions GetJsonSerializerOptions()
+        /// <summary>
+        /// Convert a byte array to an Object of T.
+        /// </summary>
+        public static T ByteArrayToObject<T>(byte[] byteArray, int originalDataLength)
         {
-            return new JsonSerializerOptions()
+            if (byteArray == null || !byteArray.Any())
             {
-                PropertyNamingPolicy = null,
-                WriteIndented = false,
-                AllowTrailingCommas = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                Converters =
-                {
-                    new HashJsonFactory(),
-                },
-            };
+                return default;
+            }
+
+            if (originalDataLength > 0 && originalDataLength < byteArray.Length)
+            {
+                Array.Resize(ref byteArray, originalDataLength);
+            }
+
+            return Serializer.Deserialize<T>(new MemoryStream(byteArray));
         }
 
         /// <summary>
@@ -87,36 +88,36 @@
         /// <param name="blockParams">Desired block parameters.</param>
         /// <param name="blockObject">Object serialized into this block.</param>
         /// <param name="next">Id of next block in chain.</param>
-        public ChainLinqObjectBlock(ChainLinqBlockParams blockParams, T blockObject, BlockHash? next = null)
+        public ChainLinqObjectBlock(BlockParams blockParams, T blockObject, BlockHash? next = null)
             : base(
                   blockParams: blockParams,
-                  data: global::BrightChain.Engine.Helpers.RandomDataHelper.DataFiller(
+                  data: RandomDataHelper.DataFiller(
                     inputData: ObjectToByteArray(
                         objectData: blockObject,
-                        blockSize: blockParams.BlockSize),
+                        blockSize: blockParams.BlockSize,
+                        totalLength: out int totalLength),
                     blockSize: blockParams.BlockSize))
         {
             this.BlockObject = blockObject;
+            this.ObjectDataLength = totalLength;
             this.Next = next;
+            if (this.OriginalType != this.GetType().AssemblyQualifiedName)
+            {
+                throw new BrightChainException("Original type mismatch.");
+            }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ChainLinqObjectBlock{T}"/> class.
-        /// Constructor for deserialization from storage.
-        /// </summary>
-        /// <param name="blockParams"></param>
-        /// <param name="persistedData"></param>
-        public ChainLinqObjectBlock(ChainLinqBlockParams blockParams, ReadOnlyMemory<byte> persistedData)
-            : base(blockParams, persistedData)
+        internal ChainLinqObjectBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
+            : base(blockParams: blockParams, data: data)
         {
-            this.BlockObject = ByteArrayToObject<T>(persistedData.ToArray());
+            this.BlockObject = ByteArrayToObject<T>(data.ToArray(), this.ObjectDataLength);
         }
 
         public override void Dispose()
         {
         }
 
-        public static ChainLinqObjectBlock<T> MakeBlock(ChainLinqBlockParams blockParams, T blockObject, BlockHash next = null)
+        public static ChainLinqObjectBlock<T> MakeBlock(BlockParams blockParams, T blockObject, BlockHash next = null)
         {
             return new ChainLinqObjectBlock<T>(
                 blockParams: blockParams,
@@ -125,18 +126,18 @@
 
         public override ChainLinqObjectBlock<T> NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
-            return new ChainLinqObjectBlock<T>(
-blockParams: new ChainLinqBlockParams(
-blockParams: blockParams),
-persistedData: data);
+            throw new NotImplementedException();
         }
 
         public readonly T BlockObject;
 
+        [ProtoMember(50)]
+        public int ObjectDataLength;
+
         /// <summary>
         /// Gets or sets the hash of the next CBL in this CBL Chain.
         /// </summary>
-        [BrightChainMetadata]
+        [ProtoMember(51)]
         public BlockHash Next { get; set; }
     }
 }

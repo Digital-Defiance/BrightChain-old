@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using ProtoBuf;
 
+    [ProtoContract]
     public class ChainLinqExampleSerializable
         : IDisposable
     {
@@ -28,8 +30,10 @@
             throw new NotImplementedException();
         }
 
+        [ProtoMember(1)]
         public string PublicData { get; }
 
+        [ProtoMember(2)]
         private string PrivateData { get; }
     }
 }

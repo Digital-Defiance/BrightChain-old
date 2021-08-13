@@ -1,19 +1,23 @@
-﻿using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Exceptions;
-
-namespace BrightChain.Engine.Models.Blocks.DataObjects
+﻿namespace BrightChain.Engine.Models.Blocks.DataObjects
 {
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Exceptions;
+
     /// <summary>
     /// Simple data object for passing block parameters
     /// </summary>
-    [Serializable]
     public class BlockParams
     {
         public readonly BlockSize BlockSize;
+
         public readonly DateTime RequestTime;
+
         public readonly DateTime KeepUntilAtLeast;
+
         public readonly RedundancyContractType Redundancy;
+
         public readonly bool PrivateEncrypted;
+
         public readonly Type OriginalType;
 
         public BlockParams(BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, bool privateEncrypted, Type originalType)

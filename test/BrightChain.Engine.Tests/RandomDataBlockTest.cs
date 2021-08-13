@@ -26,6 +26,7 @@ namespace BrightChain.Engine.Tests
         }
 
         [DataTestMethod]
+        [DataRow(BlockSize.Nano)]
         [DataRow(BlockSize.Micro)]
         [DataRow(BlockSize.Message)]
         [DataRow(BlockSize.Tiny)]
@@ -34,14 +35,14 @@ namespace BrightChain.Engine.Tests
         [DataRow(BlockSize.Large)]
         public void ItCreatesValidRandomDataBlocksTest(BlockSize blockSize)
         {
-            var block = new RandomDataBlock(
+            var block = new EmptyDummyBlock(
                 blockParams: new BlockParams(
                 blockSize: blockSize,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
                 privateEncrypted: false,
-                originalType: typeof(RandomDataBlock)));
+                originalType: typeof(EmptyDummyBlock)));
 
             Assert.IsTrue(block.Validate());
 

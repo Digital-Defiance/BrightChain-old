@@ -39,6 +39,7 @@
                 // TODO: select or generate pre-generated random blocks (determine mixing)
                 // for now just generate on demand, but these can be pre-seeded, and
                 // technically any block in cache we haven't already used within a chain can be used.
+                // TODO: add a mixing ratio and re-use blocks as appropriately as possible
                 randomizersUsed[i] = new RandomizerBlock(
                     destinationCache: this.resultCache,
                     blockSize: block.BlockSize,

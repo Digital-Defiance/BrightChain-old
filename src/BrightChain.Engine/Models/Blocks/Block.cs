@@ -4,30 +4,42 @@ namespace BrightChain.Engine.Models.Blocks
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using BrightChain.Engine.Attributes;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Extensions;
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
+    using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Contracts;
     using BrightChain.Engine.Models.Entities;
     using BrightChain.Engine.Models.Hashes;
     using BrightChain.Engine.Models.Nodes;
     using BrightChain.Engine.Services.CacheManagers;
+    using ProtoBuf;
 
     /// <summary>
     /// The block is the base unit persisted to disk.
     /// </summary>
-    [Serializable]
+    [ProtoContract]
+    [ProtoInclude(1, typeof(BrightenedBlock))]
+    [ProtoInclude(2, typeof(MemoryBlock))]
+    [ProtoInclude(3, typeof(RootBlock))]
+    [ProtoInclude(4, typeof(PrivateEncryptedSourceBlock))]
+    [ProtoInclude(5, typeof(RandomizerBlock))]
+    [ProtoInclude(6, typeof(TransactableBlock))]
+    [ProtoInclude(7, typeof(ConstituentBlockListBlock))]
+    [ProtoInclude(8, typeof(SuperConstituentBlockListBlock))]
+    [ProtoInclude(9, typeof(ChainLinq<>))]
     public abstract class Block : IBlock, IComparable<IBlock>, IComparable<Block>, IEquatable<Block>, IEquatable<IBlock>
     {
+        [ProtoMember(1)]
         public BlockHash Id { get; }
 
-        [BrightChainMetadata]
+        [ProtoMember(2)]
         public StorageContract StorageContract { get; set; }
 
+        [ProtoMember(3)]
         public ReadOnlyMemory<byte> Data { get; protected set; }
 
         public BlockSize BlockSize { get; }
@@ -37,26 +49,28 @@ namespace BrightChain.Engine.Models.Blocks
         /// <summary>
         /// Gets a BlockSignature containing a signature of the block's hash and all other contents of metadata except signature.
         /// </summary>
-        [BrightChainMetadata]
+        [ProtoMember(4)]
         public BlockSignature Signature { get; internal set; }
 
         public bool Signed => (this.Signature is not null);
 
         public bool SignatureVerified { get; internal set; }
 
-        [BrightChainMetadata]
-        public BrightChainNode SourceNode { get; internal set; }
+        [ProtoMember(5)]
+        public BrightChainNode OriginatingNode { get; internal set; }
 
+        [ProtoMember(6)]
         public string OriginalType { get; internal set; }
 
-        private readonly Type originalType;
+        protected readonly Type originalType;
 
+        [ProtoMember(7)]
         public string AssemblyVersion { get; internal set; }
 
         /// <summary>
         /// For private encrypted files, a special token encrypted with the original user's key will allow revocation
         /// </summary>
-        [BrightChainMetadata]
+        [ProtoMember(8)]
         public IEnumerable<RevocationCertificate> RevocationCertificates { get; internal set; }
 
         /// <summary>
@@ -69,12 +83,6 @@ namespace BrightChain.Engine.Models.Blocks
         /// Generally only used during construction of a chain
         /// </summary>
         public IEnumerable<BlockHash> ConstituentBlocks { get; protected set; }
-
-        /// <summary>
-        /// Gets the serialization of the block minus data and any ignored attributes (including itself).
-        /// </summary>
-        public ReadOnlyMemory<byte> Metadata =>
-            this.GetMetadataBytes();
 
         public abstract Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data);
 
@@ -89,12 +97,6 @@ namespace BrightChain.Engine.Models.Blocks
         /// </summary>
         public uint Crc32 =>
             Helpers.Crc32.ComputeNewChecksum(this.Data.ToArray());
-
-        /// <summary>
-        /// Gets a uint with the CRC32 of the block's data.
-        /// </summary>
-        public uint MetadataCrc32 =>
-            Helpers.Crc32.ComputeNewChecksum(this.GetMetadataBytes().ToArray());
 
         /// <summary>
         /// Compares the data hashes only.
@@ -150,7 +152,7 @@ namespace BrightChain.Engine.Models.Blocks
             this.Data = data;
             this.Id = new BlockHash(this); // must happen after data is in place
             this.ConstituentBlocks = new BlockHash[] { };
-            this.SourceNode = null;
+            this.OriginatingNode = null;
             this.Signature = null;
             this.SignatureVerified = false;
             this.RevocationCertificates = new List<RevocationCertificate>();

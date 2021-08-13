@@ -1,29 +1,26 @@
 ﻿namespace BrightChain.Engine.Faster.Serializers
 {
-    using BrightChain.Engine.Helpers;
-    using BrightChain.Engine.Interfaces;
+    using BrightChain.Engine.Models.Blocks;
     using FASTER.core;
+    using ProtoBuf;
 
     /// <summary>
     /// Serializer for CacheValue - used if CacheValue is changed from struct to class.
     /// </summary>
-    public class FasterBlockSerializer : BinaryObjectSerializer<IBlock>
+    public class FasterBlockSerializer : BinaryObjectSerializer<TransactableBlock>
     {
-        private readonly BlockSerializer internalSerializer;
-
         public FasterBlockSerializer()
         {
-            this.internalSerializer = new BlockSerializer();
         }
 
-        public override void Deserialize(out IBlock obj)
+        public override void Deserialize(out TransactableBlock obj)
         {
-            obj = this.internalSerializer.ReadFrom(this.reader.BaseStream);
+            obj = Serializer.Deserialize<TransactableBlock>(source: this.reader.BaseStream);
         }
 
-        public override void Serialize(ref IBlock obj)
+        public override void Serialize(ref TransactableBlock obj)
         {
-            this.internalSerializer.WriteTo(obj, this.writer.BaseStream);
+            Serializer.Serialize(destination: this.writer.BaseStream, instance: obj);
         }
     }
 }

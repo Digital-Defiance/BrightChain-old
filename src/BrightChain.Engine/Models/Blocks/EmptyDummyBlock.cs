@@ -4,11 +4,12 @@ namespace BrightChain.Engine.Models.Blocks
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Models.Blocks.DataObjects;
+    using ProtoBuf;
 
     /// <summary>
     /// Input blocks to the whitener service that consist of purely CSPRNG data of the specified block size
     /// </summary>
-    [Serializable]
+    [ProtoContract]
     public class EmptyDummyBlock : Block, IComparable<EmptyDummyBlock>
     {
         public static ReadOnlyMemory<byte> NewEmptyBlockData(BlockSize blockSize)

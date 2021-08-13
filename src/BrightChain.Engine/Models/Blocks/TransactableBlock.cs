@@ -8,13 +8,14 @@
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
     using BrightChain.Engine.Services.CacheManagers;
+    using ProtoBuf;
 
     /// <summary>
     /// Block that is able to be stored, rolled back, committed, or prevented from being stored.
     /// TODO: Currently heavily associated with underlying BPlusTree. Abstract
     /// TODO: base off TransactedCompoundFile?
     /// </summary>
-    [Serializable]
+    [ProtoContract]
     public class TransactableBlock : Block, IDisposable, ITransactable, ITransactableBlock, IComparable<TransactableBlock>, IComparable<ITransactableBlock>, IEquatable<IBlock>
     {
         public TransactableBlock(BlockCacheManager cacheManager, Block sourceBlock, bool allowCommit)
@@ -52,6 +53,8 @@
                 data: new ReadOnlyMemory<byte>() { })
         {
         }
+
+        public TransactableBlock AsTransactableBlock => this;
 
         /// <summary>
         /// Gets a bool indicating whether the block's data has been loaded from the attached cache, or kept after persisting to cache.

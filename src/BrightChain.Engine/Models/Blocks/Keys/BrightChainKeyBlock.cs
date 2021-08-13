@@ -1,6 +1,8 @@
 ﻿namespace BrightChain.Engine.Models.Blocks.Keys
 {
-    [Serializable]
+    using ProtoBuf;
+
+    [ProtoContract]
     public class BrightChainKeyBlock : TransactableBlock
     {
     }

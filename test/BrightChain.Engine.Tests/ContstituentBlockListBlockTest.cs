@@ -1,9 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace BrightChain.Engine.Tests
+﻿namespace BrightChain.Engine.Tests
 {
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     /// <summary>
-    /// Tests the CBL blocks for their ability to represent a file
+    /// Tests the CBL blocks for their ability to represent a file.
     /// </summary>
     [TestClass]
     public class ContstituentBlockListBlockTest

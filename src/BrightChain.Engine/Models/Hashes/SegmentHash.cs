@@ -1,9 +1,8 @@
-namespace BrightChain.Engine.Models.Blocks
+namespace BrightChain.Engine.Models.Hashes
 {
     using System;
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
-    using BrightChain.Engine.Models.Hashes;
 
     /// <summary>
     /// Type box for the sha hashes.

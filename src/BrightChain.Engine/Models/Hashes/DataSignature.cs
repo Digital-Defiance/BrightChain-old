@@ -1,13 +1,19 @@
-﻿using System.Security.Cryptography;
-using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Helpers;
-using BrightChain.Engine.Interfaces;
-
-namespace BrightChain.Engine.Models.Hashes
+﻿namespace BrightChain.Engine.Models.Hashes
 {
+    using System.Security.Cryptography;
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Helpers;
+    using BrightChain.Engine.Interfaces;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Contracts;
+    using ProtoBuf;
+
     /// <summary>
-    /// Type box for the sha hashes of signatures
+    /// Type box for the sha hashes of signatures.
     /// </summary>
+    [ProtoContract]
+    [ProtoInclude(0, typeof(BlockSignature))]
+    [ProtoInclude(1, typeof(RevocationCertificate))]
     public class DataSignature : IDataSignature, IComparable<DataSignature>
     {
         /// <summary>
@@ -20,8 +26,10 @@ namespace BrightChain.Engine.Models.Hashes
         /// </summary>
         public const int SignatureHashSizeBytes = SignatureHashSize / 8;
 
+        [ProtoMember(1)]
         public ReadOnlyMemory<byte> SignatureHashBytes { get; protected set; }
 
+        [ProtoMember(2)]
         public bool Computed { get; }
 
         public DataSignature(IBlock block)
@@ -52,6 +60,7 @@ namespace BrightChain.Engine.Models.Hashes
             {
                 throw new NotImplementedException();
             }
+
             this.Computed = true;
         }
 

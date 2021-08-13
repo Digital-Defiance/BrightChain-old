@@ -7,10 +7,12 @@ namespace BrightChain.Engine.Models.Hashes
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;
     using FASTER.core;
+    using ProtoBuf;
 
     /// <summary>
     /// Type box for the sha hashes.
     /// </summary>
+    [ProtoContract]
     public class BlockHash : DataHash, IDataHash, IComparable<BlockHash>, IEquatable<BlockHash>, IFasterEqualityComparer<BlockHash>
     {
         /// <summary>
@@ -73,11 +75,13 @@ namespace BrightChain.Engine.Models.Hashes
         /// <summary>
         /// Gets a value indicating the block type of the underlying block.
         /// </summary>
+        [ProtoMember(20)]
         public Type BlockType { get; }
 
         /// <summary>
         /// Gets a BlockSize enum of the source block.
         /// </summary>
+        [ProtoMember(21)]
         public BlockSize BlockSize { get; }
 
         public static bool operator ==(BlockHash a, BlockHash b)

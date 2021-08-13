@@ -34,7 +34,7 @@ namespace BrightChain.Engine.Services
 
         private readonly MemoryDictionaryBlockCacheManager blockMemoryCache;
         private readonly MemoryDictionaryBlockCacheManager randomizerBlockMemoryCache;
-        private readonly FasterBlockCacheManager blockDiskCache;
+        private readonly FasterBlockCacheManager blockFasterCache;
         private readonly BlockBrightenerService blockBrightener;
         private readonly BrightChainNode brightChainNodeAuthority;
 
@@ -95,7 +95,7 @@ namespace BrightChain.Engine.Services
                 configuration: this.configuration,
                 rootBlock: rootBlock);
 
-            this.blockDiskCache = new FasterBlockCacheManager(
+            this.blockFasterCache = new FasterBlockCacheManager(
                 logger: this.logger,
                 configuration: this.configuration,
                 rootBlock: rootBlock);
@@ -455,9 +455,9 @@ namespace BrightChain.Engine.Services
                 return this.blockMemoryCache.Get(id);
             }
 
-            if (this.blockDiskCache.Contains(id))
+            if (this.blockFasterCache.Contains(id))
             {
-                return this.blockDiskCache.Get(id);
+                return this.blockFasterCache.Get(id);
             }
 
             // TODO: Dapr
@@ -503,7 +503,7 @@ namespace BrightChain.Engine.Services
         public async Task PersistMemoryCacheAsync(bool clearAfter)
         {
             await this.blockMemoryCache.CopyContentAsync(
-                destinationCache: this.blockDiskCache)
+                destinationCache: this.blockFasterCache)
                     .ConfigureAwait(false);
 
             if (clearAfter)
@@ -525,9 +525,9 @@ namespace BrightChain.Engine.Services
                 throw new BrightChainException("Permission denied!");
             }
 
-            if (this.blockDiskCache.Contains(id))
+            if (this.blockFasterCache.Contains(id))
             {
-                this.blockDiskCache.Drop(id);
+                this.blockFasterCache.Drop(id);
             }
 
             if (this.blockMemoryCache.Contains(id))
@@ -564,8 +564,8 @@ namespace BrightChain.Engine.Services
                 sourceBlock: block,
                 allowCommit: true));
 
-            this.blockDiskCache.Set(new TransactableBlock(
-                cacheManager: this.blockDiskCache,
+            this.blockFasterCache.Set(new TransactableBlock(
+                cacheManager: this.blockFasterCache,
                 sourceBlock: block,
                 allowCommit: true));
 
@@ -645,7 +645,7 @@ namespace BrightChain.Engine.Services
             // TODO: update indices
             // TODO: CBLs may be a server option to disable
             // TODO: in the future just return a magnet URL with the N block hashes for the final CBL tuple.
-            this.blockDiskCache.Set(cblBlock);
+            this.blockFasterCache.Set(cblBlock);
         }
 
         public void Dispose()

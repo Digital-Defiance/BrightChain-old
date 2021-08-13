@@ -1,8 +1,7 @@
-﻿using System.Net;
-using System.Text.Json.Serialization;
-
-namespace BrightChain.Engine.Client
+﻿namespace BrightChain.Engine.Client
 {
+    using System.Net;
+
     //
     // Summary:
     //     Defines all the configurable options that the CosmosClient requires.
@@ -49,7 +48,6 @@ namespace BrightChain.Engine.Client
         //
         // Summary:
         //     (Gateway/Https) Get or set the proxy information used for web requests.
-        [JsonIgnore]
         public IWebProxy WebProxy { get; set; }
         public TimeSpan? OpenTcpConnectionTimeout { get; set; }
         //
@@ -203,7 +201,6 @@ namespace BrightChain.Engine.Client
         //     For .NET core applications the default GatewayConnectionLimit will be ignored.
         //     It must be set on the HttpClientHandler.MaxConnectionsPerServer to limit the
         //     number of connections
-        [JsonIgnore]
         public Func<HttpClient> HttpClientFactory { get; set; }
     }
 }

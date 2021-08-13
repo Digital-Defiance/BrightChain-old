@@ -1,11 +1,11 @@
-﻿using BrightChain.Engine.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-
-namespace BrightChain.Engine.Tests
+﻿namespace BrightChain.Engine.Tests
 {
+    using BrightChain.Engine.Services;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Moq;
+
     [TestClass]
     public class BrightChainKeyServiceTest
     {

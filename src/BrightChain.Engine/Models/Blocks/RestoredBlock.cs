@@ -5,8 +5,9 @@
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Services.CacheManagers;
+    using ProtoBuf;
 
-    [Serializable]
+    [ProtoContract]
     public class RestoredBlock : Block
     {
         public RestoredBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
@@ -35,11 +36,6 @@
         public override Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
             return new RestoredBlock(blockParams, data);
-        }
-
-        public TransactableBlock FactoryConvert(BlockCacheManager blockCacheManager)
-        {
-            return BlockFactory.ConvertRestored(this, blockCacheManager);
         }
     }
 }

@@ -29,18 +29,18 @@
     <PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0-preview.7.21378.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.0.0-2.final" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.0-2.final" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.0.0-3.final" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.0-3.final" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0-preview.7.21377.19" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0-preview.7.21377.19" />
     <PackageReference Include="docfx" Version="2.58.0" />
-    <PackageReference Include="Microsoft.CodeCoverage" Version="16.11.0-release-20210626-04" />
+    <PackageReference Include="Microsoft.CodeCoverage" Version="16.11.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-preview.7.21377.19" />
     <PackageReference Include="Microsoft.FASTER.Core" Version="1.9.5" />
     <PackageReference Include="Microsoft.IdentityModel" Version="7.0.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.12.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.12.1" />
     <PackageReference Include="Microsoft.Data.OData" Version="5.8.4" />
-    <PackageReference Include="Microsoft.Orleans.OrleansGoogleUtils" Version="3.4.3" />
+    <PackageReference Include="Microsoft.Orleans.ProtobufNet" Version="3.4.3" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

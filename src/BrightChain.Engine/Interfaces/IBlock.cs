@@ -1,14 +1,14 @@
-using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Models.Blocks;
-using BrightChain.Engine.Models.Contracts;
-using BrightChain.Engine.Models.Entities;
-using BrightChain.Engine.Models.Hashes;
-using BrightChain.Engine.Models.Nodes;
-
 namespace BrightChain.Engine.Interfaces
 {
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Contracts;
+    using BrightChain.Engine.Models.Entities;
+    using BrightChain.Engine.Models.Hashes;
+    using BrightChain.Engine.Models.Nodes;
+
     /// <summary>
-    /// Basic description for a block
+    /// Basic description for a block.
     /// </summary>
     public interface IBlock : IDisposable, IComparable<IBlock>, IValidatable
     {
@@ -44,11 +44,6 @@ namespace BrightChain.Engine.Interfaces
         StorageContract StorageContract { get; set; }
 
         /// <summary>
-        /// Gets the serialized MetaData pulled from attributes.
-        /// </summary>
-        ReadOnlyMemory<byte> Metadata { get; }
-
-        /// <summary>
         /// Gets only the raw data for the block and none of the metadata. The hash is based only on this.
         /// </summary>
         ReadOnlyMemory<byte> Data { get; }
@@ -56,7 +51,7 @@ namespace BrightChain.Engine.Interfaces
         /// <summary>
         /// Gets the node that originated the block.
         /// </summary>
-        BrightChainNode SourceNode { get; }
+        BrightChainNode OriginatingNode { get; }
 
         /// <summary>
         /// Gets the signature hash of the data by the committer.

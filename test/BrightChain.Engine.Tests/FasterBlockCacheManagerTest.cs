@@ -116,7 +116,7 @@
                         keepUntilAtLeast: DateTime.MaxValue,
                         redundancy: Enumerations.RedundancyContractType.LocalNone,
                         privateEncrypted: false,
-                    originalType: typeof(FasterCacheTestBlock))),
+                        originalType: typeof(FasterCacheTestBlock))),
                 data: data);
 
             return new KeyValuePair<BlockHash, TransactableBlock>(block.Id, block);

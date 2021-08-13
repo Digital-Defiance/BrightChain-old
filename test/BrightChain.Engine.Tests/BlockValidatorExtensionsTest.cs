@@ -1,13 +1,14 @@
-﻿using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Models.Blocks;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-using BrightChain.Engine.Services.CacheManagers;
-using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-
-namespace BrightChain.Engine.Tests
+﻿namespace BrightChain.Engine.Tests
 {
+    using System;
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
+    using BrightChain.Engine.Services.CacheManagers;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Moq;
+
     [TestClass]
     public class BlockValidatorExtensionsTest
     {
@@ -20,6 +21,7 @@ namespace BrightChain.Engine.Tests
         }
 
         [DataTestMethod]
+        [DataRow(BlockSize.Nano)]
         [DataRow(BlockSize.Micro)]
         [DataRow(BlockSize.Message)]
         [DataRow(BlockSize.Tiny)]
@@ -28,14 +30,14 @@ namespace BrightChain.Engine.Tests
         [DataRow(BlockSize.Large)]
         public void ItValidatesValidBlocksTest(BlockSize blockSize)
         {
-            Assert.IsTrue(new RandomDataBlock(
+            Assert.IsTrue(new EmptyDummyBlock(
                 blockParams: new BlockParams(
                     blockSize: blockSize,
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.MaxValue,
                     redundancy: Enumerations.RedundancyContractType.HeapAuto,
                     privateEncrypted: false,
-                    originalType: typeof(RandomDataBlock)))
+                    originalType: typeof(EmptyDummyBlock)))
                 .Validate());
 
             var loggerMock = Mock.Get(this.logger);

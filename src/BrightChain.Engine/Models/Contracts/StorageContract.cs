@@ -1,42 +1,47 @@
 ﻿namespace BrightChain.Engine.Models.Contracts
 {
-    using System.Text.Json.Serialization;
+    using System;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Models.Units;
+    using ProtoBuf;
 
     /// <summary>
     /// Contract for the minimum amount of time required to store a given block.
     /// </summary>
-    [Serializable]
+    [ProtoContract]
     public struct StorageContract
     {
         /// <summary>
         /// Gets the Date/Time the block was received by the network.
         /// </summary>
+        [ProtoMember(1)]
         public DateTime RequestTime { get; internal set; }
 
         /// <summary>
         /// Gets the Minimum date the block will be preserved until.
         /// </summary>
+        [ProtoMember(2)]
         public DateTime KeepUntilAtLeast { get; internal set; }
 
         /// <summary>
         /// Gets the Number of bytes stored in this block.
         /// </summary>
+        [ProtoMember(3)]
         public int ByteCount { get; internal set; }
 
         /// <summary>
         /// Gets a value indicating whether the data is being stored for public use.
         /// Factors into cost and other matters later on.
         /// </summary>
+        [ProtoMember(4)]
         public bool PrivateEncrypted { get; internal set; }
 
         /// <summary>
         /// Gets the contracted durability requirements.
         /// </summary>
+        [ProtoMember(5)]
         public RedundancyContractType RedundancyContractType { get; internal set; }
 
-        [JsonConstructor]
         public StorageContract(DateTime RequestTime, DateTime KeepUntilAtLeast, int ByteCount, bool PrivateEncrypted, RedundancyContractType redundancyContractType)
         {
             this.RequestTime = RequestTime;
@@ -60,18 +65,14 @@
             return !(a == b);
         }
 
-        [JsonIgnore]
         public double Duration => this.KeepUntilAtLeast.Subtract(this.RequestTime).TotalSeconds;
 
-        [JsonIgnore]
         public ByteStorageDuration ByteStorageDuration => new ByteStorageDuration(
                 byteCount: this.ByteCount,
                 durationSeconds: (ulong)this.Duration);
 
-        [JsonIgnore]
         public readonly bool DoNotStore => this.KeepUntilAtLeast.Equals(DateTime.MinValue);
 
-        [JsonIgnore]
         public readonly bool NonExpiring => this.KeepUntilAtLeast.Equals(DateTime.MaxValue);
 
         public bool Equals(StorageContract other)

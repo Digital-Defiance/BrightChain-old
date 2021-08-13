@@ -8,6 +8,7 @@
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Services;
     using BrightChain.Engine.Services.CacheManagers;
     using BrightChain.Engine.Tests.TestModels;
@@ -47,23 +48,21 @@
             this.configuration.Setup(x => x.GetSection(It.Is<string>(k => k == "NodeOptions"))).Returns(mockNodeSection.Object);
 
             var rootBlock = new RootBlock(databaseGuid: Guid.NewGuid(), blockSize: BlockSize.Large);
-            DiskCacheTestBlock.CacheManager = new DiskBlockCacheManager(
+            this.cacheManager = new FasterBlockCacheManager(
                 logger: this.logger.Object,
                 configuration: this.configuration.Object,
                 rootBlock: rootBlock);
-            this.cacheManager = DiskCacheTestBlock.CacheManager;
         }
 
         public async Task<BrightChain> ForgeChainAsync(BrightBlockService brightBlockService, BlockSize blockSize, int objectCount)
         {
-            var requestParams = new Models.Blocks.DataObjects.ChainLinqBlockParams(
-                    blockParams: new Models.Blocks.DataObjects.BlockParams(
+            var requestParams = new BlockParams(
                         blockSize: blockSize,
                         requestTime: DateTime.Now,
                         keepUntilAtLeast: DateTime.MaxValue,
                         redundancy: RedundancyContractType.HeapAuto,
                         privateEncrypted: false,
-                        originalType: typeof(ChainLinqObjectBlock<ChainLinqExampleSerializable>)));
+                        originalType: typeof(ChainLinqObjectBlock<ChainLinqExampleSerializable>));
 
             var datas = ChainLinqExampleSerializable.MakeMultiple(objectCount);
             Assert.AreEqual(objectCount, datas.Count());
@@ -80,7 +79,8 @@
         }
 
         [DataTestMethod]
-        //[DataRow(BlockSize.Micro, 2)] // TODO: BROKEN
+        //[DataRow(BlockSize.Nano, 2)]
+        //[DataRow(BlockSize.Micro, 2)]
         [DataRow(BlockSize.Message, 4)]
         [DataRow(BlockSize.Tiny, 4)]
         [DataRow(BlockSize.Small, 4)]
@@ -115,7 +115,8 @@
         }
 
         [DataTestMethod]
-        //[DataRow(BlockSize.Micro, 2)] // TODO: BROKEN
+        //[DataRow(BlockSize.Nano, 2)]
+        //[DataRow(BlockSize.Micro, 2)]
         [DataRow(BlockSize.Message, 4)]
         [DataRow(BlockSize.Tiny, 4)]
         [DataRow(BlockSize.Small, 4)]

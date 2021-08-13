@@ -5,11 +5,12 @@ namespace BrightChain.Engine.Models.Blocks
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Services.CacheManagers;
+    using ProtoBuf;
 
     /// <summary>
     /// Block that can be contained in a MemoryBlockCacheManager / Btree
     /// </summary>
-    [Serializable]
+    [ProtoContract]
     public class MemoryBlock : TransactableBlock, IBlock
     {
         public MemoryBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data)

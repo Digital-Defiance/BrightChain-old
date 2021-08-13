@@ -1,12 +1,27 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using BrightChain.Engine.Models.Blocks;
-using BrightChain.Engine.Models.Hashes;
-
-namespace BrightChain.Engine.Factories
+﻿namespace BrightChain.Engine.Factories
 {
+    using System.Text.Json;
+    using System.Text.Json.Serialization;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Hashes;
+
     public class HashJsonFactory : JsonConverterFactory
     {
+        public static JsonSerializerOptions NewSerializerOptions()
+        {
+            return new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = null,
+                AllowTrailingCommas = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                WriteIndented = false,
+                Converters =
+                {
+                    new HashJsonFactory(),
+                },
+            };
+        }
+
         private static byte[] StringToByteArray(string hex)
         {
             return Enumerable.Range(0, hex.Length)

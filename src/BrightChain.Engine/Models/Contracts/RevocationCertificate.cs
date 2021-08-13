@@ -3,11 +3,12 @@
     using System;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Hashes;
+    using ProtoBuf;
 
     /// <summary>
     /// Type box for the revocation certificates/tokens to delete private/encrypted blocks.
     /// </summary>
-    [Serializable]
+    [ProtoContract]
     public class RevocationCertificate : DataSignature, IComparable<RevocationCertificate>
     {
         public RevocationCertificate(BrightenedBlock block)

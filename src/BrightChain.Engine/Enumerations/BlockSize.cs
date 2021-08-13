@@ -7,32 +7,37 @@
     public enum BlockSize
     {
         /// <summary>
-        /// Invalid/indeterminate/unknown block size
+        /// Invalid/indeterminate/unknown block size.
         /// </summary>
         Unknown,
 
         /// <summary>
-        /// Tiniest message size, for extremely small messages. 256b
+        /// Tiniest block size, best for keys. 128b.
+        /// </summary>
+        Nano,
+
+        /// <summary>
+        /// Best for extremely small messages. 256b.
         /// </summary>
         Micro,
 
         /// <summary>
-        /// Message size, such as  a small data blob, currently 512b
+        /// Message size, such as a small data blob, currently 512b.
         /// </summary>
         Message,
 
         /// <summary>
-        /// Tiny size, such as smaller messages and configs, currently 1K
+        /// Tiny size, such as smaller messages and configs, currently 1K.
         /// </summary>
         Tiny,
 
         /// <summary>
-        /// Small size, such as small data files up to a mb or so depending on desired block count, currently 4K 
+        /// Small size, such as small data files up to a mb or so depending on desired block count, currently 4K.
         /// </summary>
         Small,
 
         /// <summary>
-        /// Medium size, such as medium data files up to 5-100mb, currently 1M
+        /// Medium size, such as medium data files up to 5-100mb, currently 1M.
         /// </summary>
         Medium,
 

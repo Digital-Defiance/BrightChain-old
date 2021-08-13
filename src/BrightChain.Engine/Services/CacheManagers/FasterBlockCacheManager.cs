@@ -40,7 +40,7 @@
         /// </summary>
         private readonly IDevice blocksDevice;
 
-        private readonly FasterKV<BlockHash, IBlock> blocksKV;
+        private readonly FasterKV<BlockHash, TransactableBlock> blocksKV;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
@@ -101,13 +101,13 @@
 
             // Define serializers; otherwise FASTER will use the slower DataContract
             // Needed only for class keys/values
-            var serializerSettings = new SerializerSettings<BlockHash, IBlock>
+            var serializerSettings = new SerializerSettings<BlockHash, TransactableBlock>
             {
-                keySerializer = () => new FasterBlockHashSerializer<FasterBlock>(),
+                keySerializer = () => new FasterBlockHashSerializer<TransactableBlock>(),
                 valueSerializer = () => new FasterBlockSerializer(),
             };
 
-            this.blocksKV = new FasterKV<BlockHash, IBlock>(
+            this.blocksKV = new FasterKV<BlockHash, TransactableBlock>(
                 size: 1L << 20, // hash table size (number of 64-byte buckets)
                 logSettings: logSettings,
                 checkpointSettings: new CheckpointSettings
@@ -192,7 +192,7 @@
         /// <returns>boolean with whether key is present.</returns>
         public override bool Contains(BlockHash key)
         {
-            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, IBlock, CacheContext>());
+            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
             var resultTuple = session.Read(key);
             return resultTuple.status == Status.OK;
         }
@@ -210,7 +210,7 @@
                 return false;
             }
 
-            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, IBlock, CacheContext>());
+            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
             var resultStatus = session.Delete(key);
             return resultStatus == Status.OK;
         }
@@ -222,7 +222,7 @@
         /// <returns>returns requested block or throws.</returns>
         public override TransactableBlock Get(BlockHash key)
         {
-            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, IBlock, CacheContext>());
+            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
             var resultTuple = session.Read(key);
 
             if (resultTuple.status != Status.OK)
@@ -230,8 +230,7 @@
                 throw new IndexOutOfRangeException();
             }
 
-            return new RestoredBlock(sourceBlock: resultTuple.output)
-                .FactoryConvert(blockCacheManager: this);
+            return resultTuple.output;
         }
 
         /// <summary>
@@ -241,10 +240,9 @@
         public override void Set(TransactableBlock block)
         {
             base.Set(block);
-            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, IBlock, CacheContext>());
+            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
             var blockHash = block.Id;
-            var iBlock = block.AsIBlock;
-            var resultStatus = session.Upsert(ref blockHash, ref iBlock);
+            var resultStatus = session.Upsert(ref blockHash, ref block);
             if (resultStatus != Status.OK)
             {
                 throw new BrightChainException("Unable to store block");

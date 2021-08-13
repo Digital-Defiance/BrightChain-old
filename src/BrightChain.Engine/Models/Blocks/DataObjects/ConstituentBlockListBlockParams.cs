@@ -1,20 +1,23 @@
-﻿using BrightChain.Engine.Exceptions;
-using BrightChain.Engine.Models.Hashes;
-
-namespace BrightChain.Engine.Models.Blocks.DataObjects
+﻿namespace BrightChain.Engine.Models.Blocks.DataObjects
 {
-    [Serializable]
+    using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Models.Hashes;
+
     public class ConstituentBlockListBlockParams : TransactableBlockParams
     {
         public readonly DataHash SourceId;
+
         public readonly long TotalLength;
+
         public readonly IEnumerable<BlockHash> ConstituentBlocks;
 
         /// <summary>
         /// Hash of the sum bytes of the segment of the file contained in this CBL when assembled in order.
         /// </summary>
         public SegmentHash SegmentId;
+
         public readonly BlockHash Previous = null;
+
         public readonly BlockHash Next = null;
 
         public ConstituentBlockListBlockParams(TransactableBlockParams blockParams, DataHash sourceId, SegmentHash segmentId, long totalLength, IEnumerable<BlockHash> constituentBlocks, BlockHash previous = null, BlockHash next = null)

@@ -1,11 +1,13 @@
-﻿using System.Security.Cryptography;
-using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Exceptions;
-using BrightChain.Engine.Models.Blocks;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-
-namespace BrightChain.Engine.Helpers
+﻿namespace BrightChain.Engine.Helpers
 {
+    using System;
+    using System.Linq;
+    using System.Security.Cryptography;
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
+
     public static class RandomDataHelper
     {
         public static byte[] RandomBytes(int length)

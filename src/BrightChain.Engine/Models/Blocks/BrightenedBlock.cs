@@ -6,12 +6,13 @@
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
+    using ProtoBuf;
 
     /// <summary>
     /// User data that must be whitened with the block whitener before being persisted. These blocks must never be stored directly.
     /// *** CBLs are considered user data ***
     /// </summary>
-    [Serializable]
+    [ProtoContract]
     public class BrightenedBlock : SourceBlock, IComparable<BrightenedBlock>, IComparable<Block>
     {
         public BrightenedBlock(BlockParams blockParams, ReadOnlyMemory<byte> data, IEnumerable<BlockHash> constituentBlocks)

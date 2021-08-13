@@ -1,16 +1,16 @@
 ﻿namespace BrightChain.Engine.Models.Blocks
 {
     using System;
-    using BrightChain.Engine.Attributes;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks.DataObjects;
+    using ProtoBuf;
 
     /// <summary>
     /// The root block is the key / control node for the cache. Everything gets signed from here.
     /// There can only be one.
     /// </summary>
-    [Serializable]
+    [ProtoContract]
     public class RootBlock : TransactableBlock, IBlock, IComparable<IBlock>
     {
         public RootBlock(Guid databaseGuid, BlockSize blockSize = BlockSize.Large)
@@ -31,7 +31,7 @@
             this.OriginalType = typeof(RootBlock).AssemblyQualifiedName;
         }
 
-        [BrightChainMetadata]
+        [ProtoMember(30)]
         public Guid Guid { get; set; }
     }
 }

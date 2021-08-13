@@ -7,12 +7,13 @@
     using global::BrightChain.Engine.Exceptions;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
     using global::BrightChain.Engine.Models.Hashes;
+    using ProtoBuf;
 
     /// <summary>
     /// Brightened data chain, can be composed of file-based CBLs or ChainLinq based data blocks.
     /// TODO: improve memory usage. Don't keep full copy, do all on async enumeration?
     /// </summary>
-    [Serializable]
+    [ProtoContract]
     public class BrightChain : ConstituentBlockListBlock, IEnumerable<BrightenedBlock>
     {
         private readonly IEnumerable<BrightenedBlock> _blocks;

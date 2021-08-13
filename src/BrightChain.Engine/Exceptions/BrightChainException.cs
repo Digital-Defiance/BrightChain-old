@@ -1,9 +1,10 @@
-﻿using System.Diagnostics;
-using System.Net;
-using System.Net.Http.Headers;
-
-namespace BrightChain.Engine.Exceptions
+﻿namespace BrightChain.Engine.Exceptions
 {
+    using System;
+    using System.Diagnostics;
+    using System.Net;
+    using System.Net.Http.Headers;
+
     /// <summary>
     /// Base class for all BrightChain exceptions
     /// </summary>

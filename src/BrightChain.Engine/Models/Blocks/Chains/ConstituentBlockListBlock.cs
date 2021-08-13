@@ -1,9 +1,9 @@
-﻿using BrightChain.Engine.Attributes;
-using BrightChain.Engine.Exceptions;
+﻿using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Interfaces;
 using BrightChain.Engine.Models.Blocks.DataObjects;
 using BrightChain.Engine.Models.Hashes;
 using BrightChain.Engine.Services;
+using ProtoBuf;
 
 namespace BrightChain.Engine.Models.Blocks.Chains
 {
@@ -13,7 +13,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
     /// TODO: Ensure that the hash of the source file
     /// TODO: Validate constituent blocks can recompose into that data (break up by tuple size), validate all blocks are same length
     /// </summary>
-    [Serializable]
+    [ProtoContract]
     public class ConstituentBlockListBlock : TransactableBlock, IBlock, IDisposable, IValidatable
     {
         /// <summary>
@@ -32,7 +32,6 @@ namespace BrightChain.Engine.Models.Blocks.Chains
             // TODO : if finalBlockHash is null, reconstitute and compute- or accept the validation result's hash essentially?
             this.SourceId = blockParams.SourceId;
             this.TotalLength = blockParams.TotalLength;
-            this.PrivateEncrypted = blockParams.PrivateEncrypted;
             this.ConstituentBlocks = blockParams.ConstituentBlocks;
             this.Previous = blockParams.Previous;
             this.Next = blockParams.Next;
@@ -63,51 +62,44 @@ namespace BrightChain.Engine.Models.Blocks.Chains
         /// <summary>
         /// Gets or sets the hash of the sum bytes of the file when assembled in order.
         /// </summary>
-        [BrightChainMetadata]
+        [ProtoMember(60)]
         public DataHash SourceId { get; set; }
 
         /// <summary>
         /// Gets or sets the total length of bytes in the user data section.
         /// </summary>
-        [BrightChainMetadata]
+        [ProtoMember(61)]
         public long TotalLength { get; set; }
 
         /// <summary>
         /// Gets or sets an int with the TupleCount at the time of creation.
         /// </summary>
-        [BrightChainMetadata]
+        [ProtoMember(62)]
         public int TupleCount { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this "file" is encrypted or for public use.
-        /// </summary>
-        [BrightChainMetadata]
-        public bool PrivateEncrypted { get; set; }
 
         /// <summary>
         /// Gets or sets the hash of the sum bytes of the segment of the file contained in this CBL when assembled in order.
         /// If the segment does not fill the the final block, the hash does not include the remainder of the data.
         /// </summary>
-        [BrightChainMetadata]
+        [ProtoMember(63)]
         public SegmentHash SegmentId { get; set; }
 
         /// <summary>
         /// Gets or sets the BlockHash of the previous CBL in this CBL Chain.
         /// </summary>
-        [BrightChainMetadata]
-
+        [ProtoMember(64)]
         public BlockHash Previous { get; set; }
 
         /// <summary>
         /// Gets or sets the hash of the next CBL in this CBL Chain.
         /// </summary>
-        [BrightChainMetadata]
+        [ProtoMember(65)]
         public BlockHash Next { get; set; }
 
         /// <summary>
         /// Gets or sets the BrightChainID of the block's creator.
         /// </summary>
-        [BrightChainMetadata]
+        [ProtoMember(66)]
         public BrokeredAnonymityIdentifier CreatorId { get; set; }
 
         /// <summary>
@@ -122,6 +114,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
         /// <summary>
         /// Gets a value indicating the computed cost of storing this contract.
         /// </summary>
+        [ProtoMember(67)]
         public double TotalCost { get; set; }
 
         /// <summary>
