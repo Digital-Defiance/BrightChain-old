@@ -32,7 +32,6 @@ namespace BrightChain.Engine.Services
         private readonly ILogger logger;
         private readonly IConfiguration configuration;
 
-        private readonly MemoryDictionaryBlockCacheManager blockMemoryCache;
         private readonly MemoryDictionaryBlockCacheManager randomizerBlockMemoryCache;
         private readonly FasterBlockCacheManager blockFasterCache;
         private readonly BlockBrightenerService blockBrightener;
@@ -90,11 +89,6 @@ namespace BrightChain.Engine.Services
             var rootBlock = new RootBlock(
                 databaseGuid: serviceUnifiedStoreGuid);
 
-            this.blockMemoryCache = new MemoryDictionaryBlockCacheManager(
-                logger: this.logger,
-                configuration: this.configuration,
-                rootBlock: rootBlock);
-
             this.blockFasterCache = new FasterBlockCacheManager(
                 logger: this.logger,
                 configuration: this.configuration,
@@ -107,7 +101,7 @@ namespace BrightChain.Engine.Services
 
             this.logger.LogInformation(string.Format("<{0}>: caches initialized", nameof(BrightBlockService)));
             this.blockBrightener = new BlockBrightenerService(
-                resultCache: this.blockMemoryCache);
+                resultCache: this.blockFasterCache);
             this.brightChainNodeAuthority = new BrightChainNode(this.configuration);
         }
 
@@ -197,8 +191,8 @@ namespace BrightChain.Engine.Services
                                 data: buffer),
                             randomizersUsed: out _);
 
-                        this.blockMemoryCache.Set(new TransactableBlock(
-                                cacheManager: this.blockMemoryCache,
+                        this.blockFasterCache.Set(new TransactableBlock(
+                                cacheManager: this.blockFasterCache,
                                 sourceBlock: brightenedBlock,
                                 allowCommit: true));
 
@@ -260,7 +254,7 @@ namespace BrightChain.Engine.Services
                         var cbl = new ConstituentBlockListBlock(
                             blockParams: new ConstituentBlockListBlockParams(
                                 blockParams: new TransactableBlockParams(
-                                    cacheManager: this.blockMemoryCache,
+                                    cacheManager: this.blockFasterCache,
                                     allowCommit: true,
                                     blockParams: blockParams),
                                 sourceId: sourceInfo.SourceId,
@@ -315,7 +309,7 @@ namespace BrightChain.Engine.Services
             return new SuperConstituentBlockListBlock(
                     blockParams: new ConstituentBlockListBlockParams(
                         blockParams: new TransactableBlockParams(
-                            cacheManager: this.blockMemoryCache,
+                            cacheManager: this.blockFasterCache,
                             allowCommit: true,
                             blockParams: blockParams),
                         sourceId: chainedCbls.First().SourceId,
@@ -395,7 +389,7 @@ namespace BrightChain.Engine.Services
                 using (SHA256 sha = SHA256.Create())
                 {
                     StreamWriter streamWriter = new StreamWriter(stream);
-                    var cacheManager = this.blockMemoryCache.AsBlockCacheManager;
+                    var cacheManager = this.blockFasterCache.AsBlockCacheManager;
                     await foreach (Block block in blockMap.ConsolidateTuplesToChainAsync(cacheManager))
                     {
                         var bytesLeft = constituentBlockListBlock.TotalLength - bytesWritten;
@@ -450,17 +444,12 @@ namespace BrightChain.Engine.Services
 
         public async Task<TransactableBlock> FindBlockByIdAsync(BlockHash id)
         {
-            if (this.blockMemoryCache.Contains(id))
-            {
-                return this.blockMemoryCache.Get(id);
-            }
-
             if (this.blockFasterCache.Contains(id))
             {
                 return this.blockFasterCache.Get(id);
             }
 
-            // TODO: Dapr
+            // TODO: look to other nodes
             throw new KeyNotFoundException(id.ToString());
         }
 
@@ -492,27 +481,6 @@ namespace BrightChain.Engine.Services
             return block;
         }
 
-        protected async Task ClearAllBlocks()
-        {
-            await foreach (var blockHash in this.blockMemoryCache.KeysAsync())
-            {
-                this.blockMemoryCache.Drop(blockHash);
-            }
-        }
-
-        public async Task PersistMemoryCacheAsync(bool clearAfter)
-        {
-            await this.blockMemoryCache.CopyContentAsync(
-                destinationCache: this.blockFasterCache)
-                    .ConfigureAwait(false);
-
-            if (clearAfter)
-            {
-                await this.ClearAllBlocks()
-                    .ConfigureAwait(false);
-            }
-        }
-
         public async Task<Block> DropBlockByIdAsync(BlockHash id, object? ownershipToken = null)
         {
             var block = await this.FindBlockByIdAsync(id: id)
@@ -528,11 +496,6 @@ namespace BrightChain.Engine.Services
             if (this.blockFasterCache.Contains(id))
             {
                 this.blockFasterCache.Drop(id);
-            }
-
-            if (this.blockMemoryCache.Contains(id))
-            {
-                this.blockMemoryCache.Drop(id);
             }
 
             // TODO: broadcast
@@ -558,11 +521,6 @@ namespace BrightChain.Engine.Services
                     exceptions: block.ValidationExceptions,
                     message: "Can not store invalid block");
             }
-
-            this.blockMemoryCache.Set(new TransactableBlock(
-                cacheManager: this.blockMemoryCache,
-                sourceBlock: block,
-                allowCommit: true));
 
             this.blockFasterCache.Set(new TransactableBlock(
                 cacheManager: this.blockFasterCache,
@@ -603,7 +561,7 @@ namespace BrightChain.Engine.Services
                     randomizersUsed: out Block[] randomizersUsed);
 
                 brightenedBlock.MakeTransactable(
-                    cacheManager: this.blockMemoryCache,
+                    cacheManager: this.blockFasterCache,
                     allowCommit: true);
 
                 yield return brightenedBlock;
@@ -627,7 +585,7 @@ namespace BrightChain.Engine.Services
             return new BrightChain(
                 blockParams: new ConstituentBlockListBlockParams(
                     blockParams: new TransactableBlockParams(
-                        cacheManager: this.blockMemoryCache,
+                        cacheManager: this.blockFasterCache,
                         allowCommit: true,
                         blockParams: firstBlock.BlockParams),
                     sourceId: firstBlock.Id,

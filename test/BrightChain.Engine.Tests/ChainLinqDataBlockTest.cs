@@ -97,8 +97,6 @@
                 blockSize: blockSize,
                 objectCount: objectCount);
 
-            await brightBlockService.PersistMemoryCacheAsync(clearAfter: true);
-
             await Assert.ThrowsExceptionAsync<KeyNotFoundException>(async () =>
             {
                 var retrievedChainNull = await brightBlockService.FindBlockByIdAsync(brightChain.Id);
@@ -133,8 +131,6 @@
                 blockSize: blockSize,
                 objectCount: objectCount);
 
-            await brightBlockService.PersistMemoryCacheAsync(clearAfter: true);
-
             await Assert.ThrowsExceptionAsync<KeyNotFoundException>(async () =>
             {
                 var retrievedChainNull = await brightBlockService.FindBlockByIdAsync(brightChain.Id);
@@ -155,6 +151,8 @@
             {
                 Assert.Fail();
             }
+
+            Assert.AreEqual(brightChain.ConstituentBlocks.Count(), brightChain.Count());
         }
     }
 }

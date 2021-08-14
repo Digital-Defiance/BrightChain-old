@@ -161,8 +161,6 @@
                 It.IsAny<Exception>(),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(2));
             loggerMock.VerifyNoOtherCalls();
-
-            await brightChainService.PersistMemoryCacheAsync(true);
         }
 
         [DataTestMethod]
@@ -209,8 +207,6 @@
                 It.IsAny<Exception>(),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(2));
             loggerMock.VerifyNoOtherCalls();
-
-            await brightChainService.PersistMemoryCacheAsync(true);
         }
     }
 }
