@@ -16,7 +16,7 @@ namespace BrightChain.Engine.Models.Hashes
     /// Type box for the sha hashes.
     /// </summary>
     [ProtoContract]
-    [ProtoInclude(0, typeof(BlockHash))]
+    [ProtoInclude(1, typeof(BlockHash))]
     public class DataHash : IDataHash, IComparable<DataHash>, IEquatable<DataHash>, IFasterEqualityComparer<DataHash>
     {
         /// <summary>

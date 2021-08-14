@@ -6,13 +6,6 @@
       "Microsoft.Hosting.Lifetime": "Information"
     }
   },
-  "AllowedHosts": "*",
-  "ConnectionStrings": {
-    "BrightChainAPIContextConnection": "Server=(localdb)\\mssqllocaldb;Database=BrightChain.API;Trusted_Connection=True;MultipleActiveResultSets=true"
-  },
-  "SENDGRID_APIKEY": "{SendGrid apikey}",
-  "SenderEmail": "noreply@BrightChain.net",
-  "SenderEmailFriendlyName": "BrightChain",
   "NodeOptions": {
     "BasePath": "C:\\BrightChain",
     "DatabaseName": "84791a2e97b642Dab7e404ff645d601b",

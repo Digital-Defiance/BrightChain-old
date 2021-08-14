@@ -13,6 +13,7 @@ namespace BrightChain.Engine.Services
     using System.Threading.Tasks;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
@@ -51,26 +52,16 @@ namespace BrightChain.Engine.Services
 
             this.logger.LogInformation(string.Format("<{0}>: logging initialized", nameof(BrightBlockService)));
 
-            var nodeOptions = configuration.GetSection("NodeOptions");
-            if (nodeOptions is null)
-            {
-                var builder = new ConfigurationBuilder()
-                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                    .AddYamlFile(
-                        path: "brightChainSettings.yaml",
-                        optional: false,
-                        reloadOnChange: true)
-                    .AddEnvironmentVariables();
+            this.configuration = configuration;
 
-                this.configuration = builder.Build();
+            var nodeOptions = configuration.GetSection("NodeOptions");
+            if (nodeOptions is null || !nodeOptions.Exists())
+            {
+                this.configuration = ConfigurationHelper.LoadConfiguration();
                 nodeOptions = this.configuration.GetSection("NodeOptions");
             }
-            else
-            {
-                this.configuration = configuration;
-            }
 
-            if (nodeOptions is null)
+            if (nodeOptions is null || !nodeOptions.Exists())
             {
                 throw new BrightChainException(string.Format(format: "'NodeOptions' config section must be defined, but is not"));
             }
@@ -78,7 +69,7 @@ namespace BrightChain.Engine.Services
             var configuredDbName
                 = nodeOptions.GetSection("DatabaseName");
 
-            var dbNameConfigured = configuredDbName is not null;
+            var dbNameConfigured = configuredDbName is not null && configuredDbName.Value is not null;
             Guid serviceUnifiedStoreGuid = dbNameConfigured ? Guid.Parse(configuredDbName.Value) : Guid.NewGuid();
 
             if (!dbNameConfigured)
@@ -104,6 +95,8 @@ namespace BrightChain.Engine.Services
                 resultCache: this.blockFasterCache);
             this.brightChainNodeAuthority = new BrightChainNode(this.configuration);
         }
+
+        public RootBlock RootBlock => this.blockFasterCache.RootBlock;
 
         /// <summary>
         /// Creates a descriptor block for a given input file, found on disk.

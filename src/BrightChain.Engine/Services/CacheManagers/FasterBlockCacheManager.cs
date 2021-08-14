@@ -60,7 +60,7 @@
             }
 
             var configOption = nodeOptions.GetSection("BasePath");
-            if (configOption is null)
+            if (configOption is null || configOption.Value is null)
             {
                 throw new BrightChainException("'BasePath' config option must be set, but is not");
             }

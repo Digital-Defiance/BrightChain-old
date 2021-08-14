@@ -12,8 +12,8 @@
     /// Type box for the sha hashes of signatures.
     /// </summary>
     [ProtoContract]
-    [ProtoInclude(0, typeof(BlockSignature))]
-    [ProtoInclude(1, typeof(RevocationCertificate))]
+    [ProtoInclude(1, typeof(BlockSignature))]
+    [ProtoInclude(2, typeof(RevocationCertificate))]
     public class DataSignature : IDataSignature, IComparable<DataSignature>
     {
         /// <summary>

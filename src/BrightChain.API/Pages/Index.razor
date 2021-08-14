@@ -1,5 +1,7 @@
 ﻿@page "/"
+@using BrightChain.Engine.Services
 @using Stardate;
+@inject BrightBlockService BrightBlockService
 
 <h1>BrightChain: The Revolution(ary) Network</h1>
 
@@ -10,3 +12,4 @@ BrightChain is coming online soon.
 }
 <p>Birthday: Stardate @OldStardate.BrightChainBirthDay.Double</p>
 <p>Stardate: @currentStardate.Double</p>
+<p>Database GUID: @BrightBlockService.RootBlock.Guid.ToString()</p>

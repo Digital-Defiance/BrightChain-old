@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.31423.177
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.API", "src\BrightChain.API\BrightChain.API.csproj", "{CA544D08-926B-4C3F-B7D9-2327D6384A99}"
+	ProjectSection(ProjectDependencies) = postProject
+		{59D16F55-CC2F-441F-BDBE-06ECAD51F66D} = {59D16F55-CC2F-441F-BDBE-06ECAD51F66D}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "docs", "docs\docs.csproj", "{A1A13294-9595-468D-964C-2281EAB05A7A}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -30,6 +33,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.Engine.Client.Tests", "test\BrightChain.Engine.Client.Tests\BrightChain.Engine.Client.Tests.csproj", "{613E76A1-9C75-4A6B-AB09-4DD316EA0515}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.Engine", "src\BrightChain.Engine\BrightChain.Engine.csproj", "{E5DDC909-4F18-47F6-B4C8-517EF29B748E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{40D7FD2C-A822-428C-8F7B-CF1A343D243D} = {40D7FD2C-A822-428C-8F7B-CF1A343D243D}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "entropy", "src\ENT\entropy.csproj", "{59D16F55-CC2F-441F-BDBE-06ECAD51F66D}"
 EndProject
