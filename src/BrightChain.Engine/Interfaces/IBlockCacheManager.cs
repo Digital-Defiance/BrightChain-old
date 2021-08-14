@@ -5,14 +5,15 @@
     using BrightChain.Engine.Models.Nodes;
 
     /// <summary>
-    /// Basic guaranteed members of the cache system. Notably the system is heavily dependent on the BPlusTree caches which have transaction support.
+    /// Basic guaranteed members of the cache system.
     /// </summary>
     public interface IBlockCacheManager : ICacheManager<BlockHash, TransactableBlock>
     {
         /// <summary>
-        /// Gets a value indicating whether to only accept blocks from trusted nodes.
+        /// Adds a key to the cache if it is not already present
         /// </summary>
-        bool OnlyAcceptBlocksFromTrustedNodes { get; }
+        /// <param name="key">key to palce in the cache</param>
+        void Set(TransactableBlock value);
 
         /// <summary>
         /// Add a node that the cache manager should trust.

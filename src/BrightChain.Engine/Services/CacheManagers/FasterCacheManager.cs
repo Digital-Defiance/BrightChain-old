@@ -9,26 +9,30 @@
     using BrightChain.Engine.Faster.Serializers;
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
-    using BrightChain.Engine.Models.Blocks;
-    using BrightChain.Engine.Models.Hashes;
     using FASTER.core;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    ///     Disk/Memory hybrid Block Cache Manager based on Microsoft FASTER KV.
+    ///     Disk/Memory hybrid Cache Manager based on Microsoft FASTER KV.
     /// </summary>
-    public class FasterBlockCacheManager : BlockCacheManager, IDisposable
+    public class FasterCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer>
+        : ICacheManager<Tkey, Tvalue>, IDisposable
+        where Tkey : IComparable<Tkey>
+        where TkeySerializer : BinaryObjectSerializer<Tkey>, new()
+        where TvalueSerializer : BinaryObjectSerializer<Tvalue>, new()
     {
+        /// <summary>
+        ///     Full to the config file.
+        /// </summary>
+        protected readonly string configFile;
+
+        protected readonly string databaseName;
+
         /// <summary>
         ///     Directory where the block tree root will be placed.
         /// </summary>
         private readonly string baseDirectory;
-
-        /// <summary>
-        ///     Database/directory name for this instance's tree root.
-        /// </summary>
-        private readonly string databaseName;
 
         private readonly IDevice logDevice;
 
@@ -38,20 +42,19 @@
         /// <summary>
         /// Backing storage device.
         /// </summary>
-        private readonly IDevice blocksDevice;
+        private readonly IDevice fasterDevice;
 
-        private readonly FasterKV<BlockHash, TransactableBlock> blocksKV;
+        private readonly FasterKV<Tkey, Tvalue> fasterKV;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
+        ///     Initializes a new instance of the <see cref="FasterCacheManager" /> class.
         /// </summary>
         /// <param name="logger">Instance of the logging provider.</param>
         /// <param name="configuration">Instance of the configuration provider.</param>
         /// <param name="databaseName">Database/directory name for the store.</param>
-        public FasterBlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
-            : base(logger, configuration, rootBlock)
+        public FasterCacheManager(ILogger logger, IConfiguration configuration, string databaseName)
         {
-            this.databaseName = Utilities.HashToFormattedString(this.RootBlock.Guid.ToByteArray());
+            this.databaseName = databaseName;
 
             var nodeOptions = configuration.GetSection("NodeOptions");
             if (nodeOptions is null)
@@ -73,41 +76,25 @@
 
             this.baseDirectory = Path.GetFullPath(dir);
 
-            var configuredDbName
-                = nodeOptions.GetSection("DatabaseName");
-
-            if (configuredDbName is null)
-            {
-                //ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", this.databaseName);
-            }
-            else
-            {
-                var expectedGuid = Guid.Parse(configuredDbName.Value);
-                if (expectedGuid != this.RootBlock.Guid)
-                {
-                    throw new BrightChainException("Provided root block does not match configured root block guid");
-                }
-            }
-
-            this.logDevice = this.OpenDevice("core");
-            this.blocksDevice = this.OpenDevice("blocks");
+            this.logDevice = this.OpenDevice(string.Format("{0}-log", typeof(Tkey).Name));
+            this.fasterDevice = this.OpenDevice(string.Format("{0}-data", typeof(Tkey).Name));
 
             var logSettings = new LogSettings // log settings (devices, page size, memory size, etc.)
             {
-                LogDevice = this.blocksDevice,
-                ObjectLogDevice = this.blocksDevice,
+                LogDevice = this.fasterDevice,
+                ObjectLogDevice = this.fasterDevice,
                 ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
             };
 
             // Define serializers; otherwise FASTER will use the slower DataContract
             // Needed only for class keys/values
-            var serializerSettings = new SerializerSettings<BlockHash, TransactableBlock>
+            var serializerSettings = new SerializerSettings<Tkey, Tvalue>
             {
-                keySerializer = () => new FasterBlockHashSerializer(),
-                valueSerializer = () => new FasterBlockSerializer(),
+                keySerializer = () => new TkeySerializer(),
+                valueSerializer = () => new TvalueSerializer(),
             };
 
-            this.blocksKV = new FasterKV<BlockHash, TransactableBlock>(
+            this.fasterKV = new FasterKV<Tkey, Tvalue>(
                 size: 1L << 20, // hash table size (number of 64-byte buckets)
                 logSettings: logSettings,
                 checkpointSettings: new CheckpointSettings
@@ -115,14 +102,14 @@
                     CheckpointDir = this.GetDiskCacheDirectory().FullName,
                 },
                 serializerSettings: serializerSettings,
-                comparer: new EmptyDummyBlock(BlockSize.Micro).Id);
+                comparer: null);
         }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
         ///     Can not build a cache manager with no logger.
         /// </summary>
-        private FasterBlockCacheManager()
+        private FasterCacheManager()
         {
             throw new NotImplementedException();
         }
@@ -168,31 +155,31 @@
         /// <summary>
         ///     Fired whenever a block is added to the cache
         /// </summary>
-        public override event ICacheManager<BlockHash, TransactableBlock>.KeyAddedEventHandler KeyAdded;
+        public event ICacheManager<Tkey, Tvalue>.KeyAddedEventHandler KeyAdded;
 
         /// <summary>
         ///     Fired whenever a block is expired from the cache
         /// </summary>
-        public override event ICacheManager<BlockHash, TransactableBlock>.KeyExpiredEventHandler KeyExpired;
+        public event ICacheManager<Tkey, Tvalue>.KeyExpiredEventHandler KeyExpired;
 
         /// <summary>
         ///     Fired whenever a block is removed from the collection
         /// </summary>
-        public override event ICacheManager<BlockHash, TransactableBlock>.KeyRemovedEventHandler KeyRemoved;
+        public event ICacheManager<Tkey, Tvalue>.KeyRemovedEventHandler KeyRemoved;
 
         /// <summary>
         ///     Fired whenever a block is requested from the cache but is not present.
         /// </summary>
-        public override event ICacheManager<BlockHash, TransactableBlock>.CacheMissEventHandler CacheMiss;
+        public event ICacheManager<Tkey, Tvalue>.CacheMissEventHandler CacheMiss;
 
         /// <summary>
         ///     Returns whether the cache manager has the given key and it is not expired.
         /// </summary>
         /// <param name="key">key to check the collection for.</param>
         /// <returns>boolean with whether key is present.</returns>
-        public override bool Contains(BlockHash key)
+        public bool Contains(Tkey key)
         {
-            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
+            using var session = this.fasterKV.NewSession(functions: new SimpleFunctions<Tkey, Tvalue, CacheContext>());
             var resultTuple = session.Read(key);
             return resultTuple.status == Status.OK;
         }
@@ -203,14 +190,9 @@
         /// <param name="key">key to drop from the collection.</param>
         /// <param name="noCheckContains">Skips the contains check for performance.</param>
         /// <returns>whether requested key was present and actually dropped.</returns>
-        public override bool Drop(BlockHash key, bool noCheckContains = true)
+        public bool Drop(Tkey key, bool noCheckContains = true)
         {
-            if (!base.Drop(key, noCheckContains))
-            {
-                return false;
-            }
-
-            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
+            using var session = this.fasterKV.NewSession(functions: new SimpleFunctions<Tkey, Tvalue, CacheContext>());
             var resultStatus = session.Delete(key);
             return resultStatus == Status.OK;
         }
@@ -220,14 +202,14 @@
         /// </summary>
         /// <param name="key">key to retrieve.</param>
         /// <returns>returns requested block or throws.</returns>
-        public override TransactableBlock Get(BlockHash key)
+        public Tvalue Get(Tkey key)
         {
-            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
+            using var session = this.fasterKV.NewSession(functions: new SimpleFunctions<Tkey, Tvalue, CacheContext>());
             var resultTuple = session.Read(key);
 
             if (resultTuple.status != Status.OK)
             {
-                throw new IndexOutOfRangeException(message: key.ToString());
+                throw new IndexOutOfRangeException();
             }
 
             return resultTuple.output;
@@ -237,54 +219,16 @@
         ///     Adds a key to the cache if it is not already present.
         /// </summary>
         /// <param name="block">block to palce in the cache.</param>
-        public override void Set(TransactableBlock block)
+        public void Set(Tkey key, Tvalue value)
         {
-            base.Set(block);
-            block.SetCacheManager(this);
-            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
-            var blockHash = block.Id;
-            var resultStatus = session.Upsert(ref blockHash, ref block);
+            var functions = new SimpleFunctions<Tkey, Tvalue, CacheContext>();
+            using var session = this.fasterKV.NewSession(functions: functions);
+            var resultStatus = session.Upsert(ref key, ref value);
             if (resultStatus != Status.OK)
             {
                 throw new BrightChainException("Unable to store block");
             }
         }
-
-        public override void SetAll(IEnumerable<TransactableBlock> items)
-        {
-            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
-            TransactableBlock[] blocks = (TransactableBlock[])items;
-
-            for (int i = 0; i < blocks.Length; i++)
-            {
-                base.Set(blocks[i]);
-                blocks[i].SetCacheManager(this);
-                var blockHash = blocks[i].Id;
-                var resultStatus = session.Upsert(ref blockHash, ref blocks[i]);
-                if (resultStatus != Status.OK)
-                {
-                    throw new BrightChainException("Unable to store block");
-                }
-            }
-        }
-
-        public async override void SetAllAsync(IAsyncEnumerable<TransactableBlock> items)
-        {
-            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
-            await foreach (var block in items)
-            {
-                TransactableBlock t = block;
-                base.Set(t);
-                t.SetCacheManager(this);
-                var blockHash = t.Id;
-                var resultStatus = session.Upsert(ref blockHash, ref t);
-                if (resultStatus != Status.OK)
-                {
-                    throw new BrightChainException("Unable to store block");
-                }
-            }
-        }
-
 
         public void Dispose()
         {

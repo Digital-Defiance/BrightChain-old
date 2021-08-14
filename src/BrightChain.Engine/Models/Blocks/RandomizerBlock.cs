@@ -27,7 +27,7 @@ namespace BrightChain.Engine.Models.Blocks
                         originalType: typeof(RandomizerBlock))),
                  data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockSize)))
         {
-            this.CacheManager.Set(this);
+            this.CacheManager.Set(this.Id, this);
             this.OriginalType = typeof(RandomizerBlock).AssemblyQualifiedName;
         }
 
@@ -36,7 +36,7 @@ namespace BrightChain.Engine.Models.Blocks
                 blockParams: blockParams,
                 data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockParams.BlockSize)))
         {
-            this.CacheManager.Set(this);
+            this.CacheManager.Set(this.Id, this);
             this.OriginalType = typeof(RandomizerBlock).AssemblyQualifiedName;
         }
 

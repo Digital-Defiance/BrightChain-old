@@ -23,14 +23,13 @@ namespace BrightChain.Engine.Models.Blocks
     /// </summary>
     [ProtoContract]
     [ProtoInclude(1, typeof(BrightenedBlock))]
-    [ProtoInclude(2, typeof(MemoryBlock))]
-    [ProtoInclude(3, typeof(RootBlock))]
-    [ProtoInclude(4, typeof(PrivateEncryptedSourceBlock))]
-    [ProtoInclude(5, typeof(RandomizerBlock))]
-    [ProtoInclude(6, typeof(TransactableBlock))]
-    [ProtoInclude(7, typeof(ConstituentBlockListBlock))]
-    [ProtoInclude(8, typeof(SuperConstituentBlockListBlock))]
-    [ProtoInclude(9, typeof(ChainLinq<>))]
+    [ProtoInclude(2, typeof(RootBlock))]
+    [ProtoInclude(3, typeof(PrivateEncryptedSourceBlock))]
+    [ProtoInclude(4, typeof(RandomizerBlock))]
+    [ProtoInclude(5, typeof(TransactableBlock))]
+    [ProtoInclude(6, typeof(ConstituentBlockListBlock))]
+    [ProtoInclude(7, typeof(SuperConstituentBlockListBlock))]
+    [ProtoInclude(8, typeof(ChainLinq<>))]
     public abstract class Block : IBlock, IComparable<IBlock>, IComparable<Block>, IEquatable<Block>, IEquatable<IBlock>
     {
         [ProtoMember(1)]

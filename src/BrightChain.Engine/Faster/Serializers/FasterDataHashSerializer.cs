@@ -7,20 +7,20 @@
     /// <summary>
     /// Serializer for CacheKey - used if CacheKey is changed from struct to class
     /// </summary>
-    public class FasterBlockHashSerializer
-        : BinaryObjectSerializer<BlockHash>
+    public class FasterDataHashSerializer
+        : BinaryObjectSerializer<DataHash>
     {
 
-        public FasterBlockHashSerializer()
+        public FasterDataHashSerializer()
         {
         }
 
-        public override void Deserialize(out BlockHash obj)
+        public override void Deserialize(out DataHash obj)
         {
-            obj = Serializer.Deserialize<BlockHash>(source: this.reader.BaseStream);
+            obj = Serializer.Deserialize<DataHash>(source: this.reader.BaseStream);
         }
 
-        public override void Serialize(ref BlockHash obj)
+        public override void Serialize(ref DataHash obj)
         {
             if (obj is null)
             {

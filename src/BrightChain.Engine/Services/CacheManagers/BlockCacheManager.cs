@@ -29,8 +29,8 @@
         protected readonly string databaseName;
 
         private readonly ILogger logger;
-        private readonly List<BlockSize> supportedReadBlockSizes;
-        private readonly List<BlockSize> supportedWriteBlockSizes;
+        private readonly Dictionary<BlockSize, bool> supportedReadBlockSizes;
+        private readonly Dictionary<BlockSize, bool> supportedWriteBlockSizes;
         private readonly List<BrightChainNode> trustedNodes;
 
         /// <summary>
@@ -84,11 +84,6 @@
         ///     Fired whenever a block is requested from the cache but is not present.
         /// </summary>
         public abstract event ICacheManager<BlockHash, TransactableBlock>.CacheMissEventHandler CacheMiss;
-
-        /// <summary>
-        ///     Gets a value indicating whether to only accept blocks from trusted nodes.
-        /// </summary>
-        public bool OnlyAcceptBlocksFromTrustedNodes { get; }
 
         /// <summary>
         ///     Returns whether the cache manager has the given key and it is not expired
@@ -149,7 +144,17 @@
             }
         }
 
-        public void SetAll(IEnumerable<TransactableBlock> items)
+        public virtual void Set(BlockHash key, TransactableBlock value)
+        {
+            if (value.Id != key)
+            {
+                throw new BrightChainException("Can not store transactable block with different key");
+            }
+
+            this.Set(value);
+        }
+
+        public virtual void SetAll(IEnumerable<TransactableBlock> items)
         {
             foreach (var item in items)
             {
@@ -157,7 +162,7 @@
             }
         }
 
-        public async void SetAllAsync(IAsyncEnumerable<TransactableBlock> items)
+        public async virtual void SetAllAsync(IAsyncEnumerable<TransactableBlock> items)
         {
             await foreach (var item in items)
             {

@@ -12,8 +12,6 @@
 
     /// <summary>
     /// Block that is able to be stored, rolled back, committed, or prevented from being stored.
-    /// TODO: Currently heavily associated with underlying BPlusTree. Abstract
-    /// TODO: base off TransactedCompoundFile?
     /// </summary>
     [ProtoContract]
     public class TransactableBlock : Block, IDisposable, ITransactable, ITransactableBlock, IComparable<TransactableBlock>, IComparable<ITransactableBlock>, IEquatable<IBlock>
@@ -84,11 +82,6 @@
 
         public void SetCacheManager(ICacheManager<BlockHash, TransactableBlock> cacheManager)
         {
-            if (this.CacheManager is not null)
-            {
-                throw new BrightChainException("CacheManager already set");
-            }
-
             this.CacheManager = cacheManager;
         }
 

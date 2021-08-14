@@ -1,7 +1,7 @@
-﻿using BrightChain.Engine.Models.Events;
-
-namespace BrightChain.Engine.Interfaces
+﻿namespace BrightChain.Engine.Interfaces
 {
+    using BrightChain.Engine.Models.Events;
+
     /// <summary>
     /// Basic guaranteed members of the cache system. Notably the system is heavily dependent on the BPlusTree caches which have transaction support.
     /// </summary>
@@ -9,7 +9,6 @@ namespace BrightChain.Engine.Interfaces
     /// <typeparam name="Tvalue"></typeparam>
     public interface ICacheManager<Tkey, Tvalue>
         where Tkey : IComparable<Tkey>
-        where Tvalue : IComparable<Tvalue>
     {
         /// <summary>
         /// Retrieves an object from the cache if it is present
@@ -22,7 +21,7 @@ namespace BrightChain.Engine.Interfaces
         /// Adds a key to the cache if it is not already present
         /// </summary>
         /// <param name="key">key to palce in the cache</param>
-        void Set(Tvalue key);
+        void Set(Tkey key, Tvalue value);
 
         /// <summary>
         /// 
@@ -41,8 +40,11 @@ namespace BrightChain.Engine.Interfaces
         bool Drop(Tkey key, bool noCheckContains = false);
 
         delegate void KeyAddedEventHandler(object sender, CacheEventArgs<Tkey, Tvalue> cacheEventArgs);
+
         delegate void KeyExpiredEventHandler(object sender, CacheEventArgs<Tkey, Tvalue> cacheEventArgs);
+
         delegate void KeyRemovedEventHandler(object sender, CacheEventArgs<Tkey, Tvalue> cacheEventArgs);
+
         delegate void CacheMissEventHandler(object sender, CacheEventArgs<Tkey, Tvalue> cacheEventArgs);
 
         event KeyAddedEventHandler KeyAdded;

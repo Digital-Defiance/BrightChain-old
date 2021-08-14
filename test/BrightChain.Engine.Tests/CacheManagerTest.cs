@@ -86,7 +86,7 @@
             // pre-setup
 
             // Act
-            this.cacheManager.Set(this.testPair.Value);
+            this.cacheManager.Set(this.testPair.Key, this.testPair.Value);
 
             // Assert
             Assert.IsNotNull(this.testPair.Key);
@@ -110,7 +110,7 @@
             Tvalue newData = this.NewNullData();
 
             // Act
-            this.cacheManager.Set(newData);
+            this.cacheManager.Set(this.testPair.Key, newData);
 
             // Assert
             Assert.IsNull(newData);
@@ -132,7 +132,7 @@
         {
             // Arrange
             var expectation = this.testPair.Value;
-            this.cacheManager.Set(expectation);
+            this.cacheManager.Set(this.testPair.Key, expectation);
             Assert.IsTrue(this.cacheManager.Contains(this.testPair.Key));
 
             // Act
@@ -181,7 +181,7 @@
         public void ItDropsCachKeysTest()
         {
             // Arrange
-            this.cacheManager.Set(this.testPair.Value);
+            this.cacheManager.Set(this.testPair.Key, this.testPair.Value);
             // verify that the key tests good before we drop
             Assert.IsTrue(this.cacheManager.Contains(this.testPair.Key));
 
@@ -207,7 +207,7 @@
         public void ItExpiresCacheKeysTest()
         {
             var expectation = this.testPair.Value;
-            this.cacheManager.Set(expectation);
+            this.cacheManager.Set(this.testPair.Key, expectation);
             Assert.IsTrue(this.cacheManager.Contains(this.testPair.Key));
             // TODO: System.Threading.Thread.Sleep((cacheManager.TTL * 1000) + 1);
             Assert.IsFalse(this.cacheManager.Contains(this.testPair.Key));
@@ -230,7 +230,7 @@
         {
             // Arrange
             var expectation = this.testPair.Value;
-            this.cacheManager.Set(expectation);
+            this.cacheManager.Set(this.testPair.Key, expectation);
 
             // Act
             Tvalue result = this.cacheManager.Get(this.testPair.Key);

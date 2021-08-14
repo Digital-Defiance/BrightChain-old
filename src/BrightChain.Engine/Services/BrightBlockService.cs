@@ -13,6 +13,7 @@ namespace BrightChain.Engine.Services
     using System.Threading.Tasks;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Faster.Serializers;
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
@@ -331,7 +332,7 @@ namespace BrightChain.Engine.Services
             }
             else if (count > BlockSizeMap.HashesPerBlock(blockParams.BlockSize))
             {
-                throw new NotImplementedException("Super-Super-CBLs not yet implemented");
+                throw new NotImplementedException("Uber-CBLs not yet implemented");
             }
             else if (count == 0)
             {

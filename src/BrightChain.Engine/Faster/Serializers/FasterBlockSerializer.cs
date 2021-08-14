@@ -20,6 +20,11 @@
 
         public override void Serialize(ref TransactableBlock obj)
         {
+            if (obj is null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+
             Serializer.Serialize(destination: this.writer.BaseStream, instance: obj);
         }
     }

@@ -1,10 +1,8 @@
 ﻿namespace BrightChain.Engine.Models.Blocks
 {
     using System;
-    using BrightChain.Engine.Factories;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Services.CacheManagers;
     using ProtoBuf;
 
     [ProtoContract]
