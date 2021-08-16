@@ -38,6 +38,10 @@ namespace BrightChain.Engine.Models.Blocks
         [ProtoMember(2)]
         public StorageContract StorageContract { get; set; }
 
+        /// <summary>
+        /// Gets the bytes associated with this block.
+        /// Notably, the StoredData is NOT part of the proto contract.
+        /// </summary>
         public BlockData StoredData { get; internal set; }
 
         public ReadOnlyMemory<byte> Bytes => this.StoredData.Bytes;
