@@ -108,17 +108,17 @@
                     serializerSettings: blockDataSerializerSettings,
                     comparer: new EmptyDummyBlock(BlockSize.Micro).Id); // gets an arbitrary BlockHash object which has the IFasterEqualityComparer on the class.
             }
-    }
+        }
 
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
-    /// </summary>
-    /// <param name="logger">Instance of the logging provider.</param>
-    /// <param name="configuration">Instance of the configuration provider.</param>
-    /// <param name="databaseName">Database/directory name for the store.</param>
-    public FasterBlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
-            : base(logger, configuration, rootBlock)
-    {
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
+        /// </summary>
+        /// <param name="logger">Instance of the logging provider.</param>
+        /// <param name="configuration">Instance of the configuration provider.</param>
+        /// <param name="databaseName">Database/directory name for the store.</param>
+        public FasterBlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
+                : base(logger, configuration, rootBlock)
+        {
             this.databaseName = Utilities.HashToFormattedString(this.RootBlock.Guid.ToByteArray());
 
             var nodeOptions = configuration.GetSection("NodeOptions");

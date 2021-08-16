@@ -25,7 +25,7 @@ The BrightChain "One-Pager" is about 3 pages at the moment, but pending some sli
 # "Long-Paper"
 The BrightChain "LongPaper" is longer and a work in progress, but goes into plain language detail on all aspects.
 - https://apertureimagingcom-my.sharepoint.com/:w:/g/personal/jessica_mulein_com/EQGi-tzRmL9KotpkENN0OXcB5LQwpT7ox3vFo3eIJZrqcg?e=MZOanw
-  - PDF https://github.com/The-Revolution-Network/BrightChain/blob/main/BrightChain-LongPager.pdf as of 08/16/21 13:00 Pacfic time.
+  - PDF https://github.com/The-Revolution-Network/BrightChain/blob/main/BrightChain-LongPaper.pdf as of 08/16/21 13:00 Pacfic time.
   - Feedback welcome of course.
 
 Recent thoughts:
@@ -52,4 +52,4 @@ Recent thoughts:
 * This software is open source, and offered as a "best-effort" thereoetical construct at this time and it may well lose all your data at this point in time.
 
 <!-- this timestamp is updated by a pre-commit hook in git-hooks/pre-commit then added to .git/hooks -->
-Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-08-16T13:11:25-0700</time>
+Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-08-16T14:42:35-0700</time>
