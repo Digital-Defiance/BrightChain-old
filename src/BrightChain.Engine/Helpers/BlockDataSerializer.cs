@@ -15,14 +15,18 @@
 
         public override void Deserialize(out BlockData obj)
         {
-            var assumedByteLength = (int)this.reader.BaseStream.Length;
-            byte[] buffer = new byte[assumedByteLength];
-            this.reader.BaseStream.Read(buffer: buffer, offset: 0, count: assumedByteLength);
-            obj = new BlockData(new ReadOnlyMemory<byte>(buffer));
+            var bytesr = new byte[4];
+            this.reader.Read(bytesr, 0, 4);
+            var sizet = BitConverter.ToInt32(bytesr);
+            var bytes = new byte[sizet];
+            this.reader.Read(bytes, 0, sizet);
+            obj = new BlockData(new ReadOnlyMemory<byte>(bytes));
         }
 
         public override void Serialize(ref BlockData obj)
         {
+            var sizet = BitConverter.GetBytes(obj.Bytes.Length);
+            this.writer.BaseStream.Write(sizet, 0, sizet.Length);
             this.writer.BaseStream.Write(obj.Bytes.ToArray(), 0, obj.Bytes.Length);
         }
     }
