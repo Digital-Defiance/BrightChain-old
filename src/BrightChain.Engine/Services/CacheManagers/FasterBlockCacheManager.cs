@@ -244,9 +244,20 @@
             }
 
             using var metadataSession = this.blockMetadataKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
+            if (!(metadataSession.Delete(key) == Status.OK))
+            {
+                return false;
+            }
+
             using var dataSession = this.blockDataKV.NewSession(functions: new SimpleFunctions<BlockHash, BlockData, CacheContext>());
-            return (metadataSession.Delete(key) == Status.OK) &&
-                        (dataSession.Delete(key) == Status.OK);
+            if (!(dataSession.Delete(key) == Status.OK))
+            {
+                return false;
+            }
+
+            metadataSession.CompletePending(wait: true);
+            dataSession.CompletePending(wait: true);
+            return true;
         }
 
         /// <summary>
@@ -307,6 +318,9 @@
             {
                 throw new BrightChainException("Unable to store block");
             }
+
+            metadataSession.CompletePending(wait: true);
+            dataSession.CompletePending(wait: true);
         }
 
         public override void SetAll(IEnumerable<TransactableBlock> items)
@@ -333,6 +347,9 @@
                     throw new BrightChainException("Unable to store block");
                 }
             }
+
+            metadataSession.CompletePending(wait: true);
+            dataSession.CompletePending(wait: true);
         }
 
         public async override void SetAllAsync(IAsyncEnumerable<TransactableBlock> items)
@@ -358,11 +375,13 @@
                     throw new BrightChainException("Unable to store block");
                 }
             }
+
+            metadataSession.CompletePending(wait: true);
+            dataSession.CompletePending(wait: true);
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
     }
 }
