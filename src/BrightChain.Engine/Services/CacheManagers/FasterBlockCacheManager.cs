@@ -226,6 +226,9 @@
             this.blockDataKV.For(functions: new SimpleFunctions<BlockHash, BlockData, CacheContext>())
             .NewSession<SimpleFunctions<BlockHash, BlockData, CacheContext>>();
 
+        public BlockSessionContext NewSessionContext =>
+            new BlockSessionContext(this.NewMetadataSession, this.NewDataSession);
+
         /// <summary>
         ///     Returns whether the cache manager has the given key and it is not expired.
         /// </summary>
@@ -251,20 +254,18 @@
                 return false;
             }
 
-            using var metadataSession = this.NewMetadataSession;
-            if (!(metadataSession.Delete(key) == Status.OK))
+            using var sessionContext = this.NewSessionContext;
+            if (!(sessionContext.MetadataSession.Delete(key) == Status.OK))
             {
                 return false;
             }
 
-            using var dataSession = this.NewDataSession;
-            if (!(dataSession.Delete(key) == Status.OK))
+            if (!(sessionContext.DataSession.Delete(key) == Status.OK))
             {
                 return false;
             }
 
-            metadataSession.CompletePending(wait: true);
-            dataSession.CompletePending(wait: true);
+            sessionContext.CompletePending(wait: true);
             return true;
         }
 
@@ -275,8 +276,8 @@
         /// <returns>returns requested block or throws.</returns>
         public override TransactableBlock Get(BlockHash key)
         {
-            using var metadataSession = this.NewMetadataSession;
-            var metadataResultTuple = metadataSession.Read(key);
+            using var sessionContext = this.NewSessionContext;
+            var metadataResultTuple = sessionContext.MetadataSession.Read(key);
 
             if (metadataResultTuple.status != Status.OK)
             {
@@ -285,8 +286,7 @@
 
             var block = metadataResultTuple.output;
 
-            using var dataSession = this.NewDataSession;
-            var dataResultTuple = dataSession.Read(key);
+            var dataResultTuple = sessionContext.DataSession.Read(key);
 
             if (dataResultTuple.status != Status.OK)
             {
@@ -300,6 +300,8 @@
                 throw new BrightChainValidationEnumerableException(block.ValidationExceptions, "Failed to reload block from store");
             }
 
+            sessionContext.CompletePending(wait: true);
+
             return block;
         }
 
@@ -311,30 +313,27 @@
         {
             base.Set(block);
             block.SetCacheManager(this);
-            using var metadataSession = this.NewMetadataSession;
+            using var sessionContext = this.NewSessionContext;
             var blockHash = block.Id;
-            var resultStatus = metadataSession.Upsert(ref blockHash, ref block);
+            var resultStatus = sessionContext.MetadataSession.Upsert(ref blockHash, ref block);
             if (resultStatus != Status.OK)
             {
                 throw new BrightChainException("Unable to store block");
             }
 
-            using var dataSession = this.NewDataSession;
             var blockData = block.StoredData;
-            resultStatus = dataSession.Upsert(ref blockHash, ref blockData);
+            resultStatus = sessionContext.DataSession.Upsert(ref blockHash, ref blockData);
             if (resultStatus != Status.OK)
             {
                 throw new BrightChainException("Unable to store block");
             }
 
-            metadataSession.CompletePending(wait: true);
-            dataSession.CompletePending(wait: true);
+            sessionContext.CompletePending(wait: true);
         }
 
         public override void SetAll(IEnumerable<TransactableBlock> items)
         {
-            using var metadataSession = this.NewMetadataSession;
-            using var dataSession = this.NewDataSession;
+            using var sessionContext = this.NewSessionContext;
             TransactableBlock[] blocks = (TransactableBlock[])items;
 
             for (int i = 0; i < blocks.Length; i++)
@@ -342,50 +341,47 @@
                 base.Set(blocks[i]);
                 blocks[i].SetCacheManager(this);
                 var blockHash = blocks[i].Id;
-                var resultStatus = metadataSession.Upsert(ref blockHash, ref blocks[i]);
+                var resultStatus = sessionContext.MetadataSession.Upsert(ref blockHash, ref blocks[i]);
                 if (resultStatus != Status.OK)
                 {
                     throw new BrightChainException("Unable to store block");
                 }
 
                 var blockData = blocks[i].StoredData;
-                resultStatus = dataSession.Upsert(ref blockHash, ref blockData);
+                resultStatus = sessionContext.DataSession.Upsert(ref blockHash, ref blockData);
                 if (resultStatus != Status.OK)
                 {
                     throw new BrightChainException("Unable to store block");
                 }
             }
 
-            metadataSession.CompletePending(wait: true);
-            dataSession.CompletePending(wait: true);
+            sessionContext.CompletePending(wait: true);
         }
 
         public async override void SetAllAsync(IAsyncEnumerable<TransactableBlock> items)
         {
-            using var metadataSession = this.NewMetadataSession;
-            using var dataSession = this.NewDataSession;
+            using var sessionContext = this.NewSessionContext;
             await foreach (var block in items)
             {
                 TransactableBlock t = block;
                 base.Set(t);
                 t.SetCacheManager(this);
                 var blockHash = t.Id;
-                var resultStatus = metadataSession.Upsert(ref blockHash, ref t);
+                var resultStatus = sessionContext.MetadataSession.Upsert(ref blockHash, ref t);
                 if (resultStatus != Status.OK)
                 {
                     throw new BrightChainException("Unable to store block");
                 }
 
                 var blockData = t.StoredData;
-                resultStatus = dataSession.Upsert(ref blockHash, ref blockData);
+                resultStatus = sessionContext.DataSession.Upsert(ref blockHash, ref blockData);
                 if (resultStatus != Status.OK)
                 {
                     throw new BrightChainException("Unable to store block");
                 }
             }
 
-            metadataSession.CompletePending(wait: true);
-            dataSession.CompletePending(wait: true);
+            sessionContext.CompletePending(wait: true);
         }
 
         public void Dispose()
