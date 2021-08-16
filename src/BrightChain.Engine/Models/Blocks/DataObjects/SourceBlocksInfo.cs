@@ -16,7 +16,7 @@ namespace BrightChain.Engine.Models.Blocks.DataObjects
         public SourceBlocksInfo(IEnumerable<Block> blocks)
         {
             var first = blocks.First();
-            this.SourceId = new DataHash(blocks.SelectMany(b => b.Data.ToArray()));
+            this.SourceId = new DataHash(blocks.SelectMany(b => b.Bytes.ToArray()));
             this.BytesPerBlock = BlockSizeMap.BlockSize(first.BlockSize);
             var length = this.BytesPerBlock * blocks.Count();
             this.TotalBlocksExpected = length / this.BytesPerBlock + ((length % this.BytesPerBlock) > 0 ? 1 : 0);

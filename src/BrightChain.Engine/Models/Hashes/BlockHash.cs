@@ -24,12 +24,12 @@ namespace BrightChain.Engine.Models.Hashes
         /// Initializes a new instance of the <see cref="BlockHash"/> class.
         /// </summary>
         /// <param name="block">Source block to compute data hash from.</param>
-        public BlockHash(IBlock block)
-            : base(dataBytes: block.Data)
+        public BlockHash(Block block)
+            : base(dataBytes: block.Bytes)
         {
             if (block is not RootBlock)
             {
-                var detectedSize = BlockSizeMap.BlockSize(block.Data.Length);
+                var detectedSize = BlockSizeMap.BlockSize(block.Bytes.Length);
                 if (detectedSize != block.BlockSize)
                 {
                     throw new BrightChainValidationException(

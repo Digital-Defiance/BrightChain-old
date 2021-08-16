@@ -19,7 +19,7 @@
         public TransactableBlock(BlockCacheManager cacheManager, Block sourceBlock, bool allowCommit)
             : base(
                 blockParams: sourceBlock.BlockParams,
-                data: sourceBlock.Data)
+                data: sourceBlock.Bytes)
         {
             this.CacheManager = cacheManager;
             this.AllowCommit = allowCommit;
@@ -72,7 +72,7 @@
 
         public static bool operator ==(TransactableBlock a, TransactableBlock b)
         {
-            return a.BlockSize == b.BlockSize && ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;
+            return a.BlockSize == b.BlockSize && a.StoredData.Equals(b.StoredData);
         }
 
         public static bool operator !=(TransactableBlock a, TransactableBlock b)
@@ -123,22 +123,22 @@
 
         public override bool Equals(object obj)
         {
-            return obj is Block block ? block.BlockSize == this.BlockSize && ReadOnlyMemoryComparer<byte>.Compare(this.Data, block.Data) == 0 : false;
+            return obj is TransactableBlock blockObj ? this.StoredData.Equals(blockObj.StoredData) : false;
         }
 
         public override int GetHashCode()
         {
-            return this.Data.GetHashCode();
+            return this.StoredData.GetHashCode();
         }
 
         public int CompareTo(TransactableBlock other)
         {
-            return other.BlockSize == this.BlockSize ? ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data) : (other.Data.Length > this.Data.Length ? -1 : 1);
+            return this.StoredData.CompareTo(other.StoredData);
         }
 
         public int CompareTo(ITransactableBlock other)
         {
-            return other.BlockSize == this.BlockSize ? ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data) : other.Data.Length > this.Data.Length ? -1 : 1;
+            return this.StoredData.CompareTo(other.StoredData);
         }
 
         // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
@@ -172,7 +172,6 @@
                 }
 
                 this.Rollback();
-                this.Data = null;
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer
                 // TODO: set large fields to null

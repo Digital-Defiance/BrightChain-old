@@ -46,7 +46,7 @@
                 result = result.XOR(blocks[i]);
             }
 
-            return new SourceBlock(result.BlockParams, result.Data);
+            return new SourceBlock(result.BlockParams, result.Bytes);
         }
     }
 }

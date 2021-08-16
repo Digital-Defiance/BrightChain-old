@@ -54,7 +54,7 @@
                     cacheManager: this.resultCache,
                     allowCommit: true,
                     blockParams: block.BlockParams),
-                data: xorBlock.Data,
+                data: xorBlock.Bytes,
                 constituentBlocks: randomizersUsed.Select(b => b.Id).ToArray());
         }
     }

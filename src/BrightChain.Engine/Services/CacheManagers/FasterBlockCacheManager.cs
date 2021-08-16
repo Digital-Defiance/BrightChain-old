@@ -10,6 +10,7 @@
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
     using FASTER.core;
     using Microsoft.Extensions.Configuration;
@@ -38,9 +39,11 @@
         /// <summary>
         /// Backing storage device.
         /// </summary>
-        private readonly IDevice blocksDevice;
+        private readonly IDevice blockMetadataDevice;
+        private readonly IDevice blockDataDevice;
 
-        private readonly FasterKV<BlockHash, TransactableBlock> blocksKV;
+        private readonly FasterKV<BlockHash, TransactableBlock> blockMetadataKV;
+        private readonly FasterKV<BlockHash, BlockData> blockDataKV;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
@@ -90,31 +93,55 @@
             }
 
             this.logDevice = this.OpenDevice("core");
-            this.blocksDevice = this.OpenDevice("blocks");
+            this.blockMetadataDevice = this.OpenDevice("metadata");
+            this.blockDataDevice = this.OpenDevice("data");
 
-            var logSettings = new LogSettings // log settings (devices, page size, memory size, etc.)
+            var blockMetadataLogSettings = new LogSettings // log settings (devices, page size, memory size, etc.)
             {
-                LogDevice = this.blocksDevice,
-                ObjectLogDevice = this.blocksDevice,
+                LogDevice = this.logDevice,
+                ObjectLogDevice = this.blockMetadataDevice,
                 ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
             };
 
             // Define serializers; otherwise FASTER will use the slower DataContract
             // Needed only for class keys/values
-            var serializerSettings = new SerializerSettings<BlockHash, TransactableBlock>
+            var metadataSerializerSettings = new SerializerSettings<BlockHash, TransactableBlock>
             {
                 keySerializer = () => new FasterBlockHashSerializer(),
-                valueSerializer = () => new FasterBlockSerializer(),
+                valueSerializer = () => new DataContractObjectSerializer<TransactableBlock>(),
             };
 
-            this.blocksKV = new FasterKV<BlockHash, TransactableBlock>(
+            this.blockMetadataKV = new FasterKV<BlockHash, TransactableBlock>(
                 size: 1L << 20, // hash table size (number of 64-byte buckets)
-                logSettings: logSettings,
+                logSettings: blockMetadataLogSettings,
                 checkpointSettings: new CheckpointSettings
                 {
                     CheckpointDir = this.GetDiskCacheDirectory().FullName,
                 },
-                serializerSettings: serializerSettings,
+                serializerSettings: metadataSerializerSettings,
+                comparer: new EmptyDummyBlock(BlockSize.Micro).Id);
+
+            var blockDataLogSettings = new LogSettings // log settings (devices, page size, memory size, etc.)
+            {
+                LogDevice = this.logDevice,
+                ObjectLogDevice = this.blockDataDevice,
+                ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
+            };
+
+            var blockDataSerializerSettings = new SerializerSettings<BlockHash, BlockData>
+            {
+                keySerializer = () => new FasterBlockHashSerializer(),
+                valueSerializer = () => new DataContractObjectSerializer<BlockData>(),
+            };
+
+            this.blockDataKV = new FasterKV<BlockHash, BlockData>(
+                size: 1L << 20, // hash table size (number of 64-byte buckets)
+                logSettings: blockDataLogSettings,
+                checkpointSettings: new CheckpointSettings
+                {
+                    CheckpointDir = this.GetDiskCacheDirectory().FullName,
+                },
+                serializerSettings: blockDataSerializerSettings,
                 comparer: new EmptyDummyBlock(BlockSize.Micro).Id);
         }
 
@@ -149,12 +176,12 @@
             cacheDirectoryInfo = this.GetDiskCacheDirectory();
 
             return Path.Combine(
-                    cacheDirectoryInfo.FullName,
-                    string.Format(
-                        provider: System.Globalization.CultureInfo.InvariantCulture,
-                        format: "brightchain-{0}-{1}.log",
-                        this.databaseName,
-                        nameSpace));
+                cacheDirectoryInfo.FullName,
+                string.Format(
+                    provider: System.Globalization.CultureInfo.InvariantCulture,
+                    format: "brightchain-{0}-{1}.log",
+                    this.databaseName,
+                    nameSpace));
         }
 
         protected IDevice OpenDevice(string nameSpace)
@@ -192,7 +219,7 @@
         /// <returns>boolean with whether key is present.</returns>
         public override bool Contains(BlockHash key)
         {
-            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
+            using var session = this.blockMetadataKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
             var resultTuple = session.Read(key);
             return resultTuple.status == Status.OK;
         }
@@ -210,9 +237,10 @@
                 return false;
             }
 
-            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
-            var resultStatus = session.Delete(key);
-            return resultStatus == Status.OK;
+            using var metadataSession = this.blockMetadataKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
+            using var dataSession = this.blockDataKV.NewSession(functions: new SimpleFunctions<BlockHash, BlockData, CacheContext>());
+            return (metadataSession.Delete(key) == Status.OK) &&
+                        (dataSession.Delete(key) == Status.OK);
         }
 
         /// <summary>
@@ -222,15 +250,32 @@
         /// <returns>returns requested block or throws.</returns>
         public override TransactableBlock Get(BlockHash key)
         {
-            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
-            var resultTuple = session.Read(key);
+            using var metadataSession = this.blockMetadataKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
+            var metadataResultTuple = metadataSession.Read(key);
 
-            if (resultTuple.status != Status.OK)
+            if (metadataResultTuple.status != Status.OK)
             {
                 throw new IndexOutOfRangeException(message: key.ToString());
             }
 
-            return resultTuple.output;
+            var block = metadataResultTuple.output;
+
+            using var dataSession = this.blockDataKV.NewSession(functions: new SimpleFunctions<BlockHash, BlockData, CacheContext>());
+            var dataResultTuple = dataSession.Read(key);
+
+            if (dataResultTuple.status != Status.OK)
+            {
+                throw new IndexOutOfRangeException(message: key.ToString());
+            }
+
+            block.StoredData = dataResultTuple.output;
+
+            if (!block.Validate())
+            {
+                throw new BrightChainValidationEnumerableException(block.ValidationExceptions, "Failed to reload block from store");
+            }
+
+            return block;
         }
 
         /// <summary>
@@ -241,9 +286,17 @@
         {
             base.Set(block);
             block.SetCacheManager(this);
-            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
+            using var metadataSession = this.blockMetadataKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
             var blockHash = block.Id;
-            var resultStatus = session.Upsert(ref blockHash, ref block);
+            var resultStatus = metadataSession.Upsert(ref blockHash, ref block);
+            if (resultStatus != Status.OK)
+            {
+                throw new BrightChainException("Unable to store block");
+            }
+
+            using var dataSession = this.blockDataKV.NewSession(functions: new SimpleFunctions<BlockHash, BlockData, CacheContext>());
+            var blockData = block.StoredData;
+            resultStatus = dataSession.Upsert(ref blockHash, ref blockData);
             if (resultStatus != Status.OK)
             {
                 throw new BrightChainException("Unable to store block");
@@ -252,7 +305,8 @@
 
         public override void SetAll(IEnumerable<TransactableBlock> items)
         {
-            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
+            using var metadataSession = this.blockMetadataKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
+            using var dataSession = this.blockDataKV.NewSession(functions: new SimpleFunctions<BlockHash, BlockData, CacheContext>());
             TransactableBlock[] blocks = (TransactableBlock[])items;
 
             for (int i = 0; i < blocks.Length; i++)
@@ -260,7 +314,14 @@
                 base.Set(blocks[i]);
                 blocks[i].SetCacheManager(this);
                 var blockHash = blocks[i].Id;
-                var resultStatus = session.Upsert(ref blockHash, ref blocks[i]);
+                var resultStatus = metadataSession.Upsert(ref blockHash, ref blocks[i]);
+                if (resultStatus != Status.OK)
+                {
+                    throw new BrightChainException("Unable to store block");
+                }
+
+                var blockData = blocks[i].StoredData;
+                resultStatus = dataSession.Upsert(ref blockHash, ref blockData);
                 if (resultStatus != Status.OK)
                 {
                     throw new BrightChainException("Unable to store block");
@@ -270,21 +331,28 @@
 
         public async override void SetAllAsync(IAsyncEnumerable<TransactableBlock> items)
         {
-            using var session = this.blocksKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
+            using var metadataSession = this.blockMetadataKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
+            using var dataSession = this.blockDataKV.NewSession(functions: new SimpleFunctions<BlockHash, BlockData, CacheContext>());
             await foreach (var block in items)
             {
                 TransactableBlock t = block;
                 base.Set(t);
                 t.SetCacheManager(this);
                 var blockHash = t.Id;
-                var resultStatus = session.Upsert(ref blockHash, ref t);
+                var resultStatus = metadataSession.Upsert(ref blockHash, ref t);
+                if (resultStatus != Status.OK)
+                {
+                    throw new BrightChainException("Unable to store block");
+                }
+
+                var blockData = t.StoredData;
+                resultStatus = dataSession.Upsert(ref blockHash, ref blockData);
                 if (resultStatus != Status.OK)
                 {
                     throw new BrightChainException("Unable to store block");
                 }
             }
         }
-
 
         public void Dispose()
         {

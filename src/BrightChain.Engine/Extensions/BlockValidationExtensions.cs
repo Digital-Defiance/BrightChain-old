@@ -23,14 +23,14 @@ namespace BrightChain.Engine.Extensions
                     string.Format("{0} is invalid: {1}", nameof(block.BlockSize), block.BlockSize.ToString())));
             }
 
-            if (!BlockSizeMap.LengthIsValid(block.Data.Length))
+            if (!BlockSizeMap.LengthIsValid(block.Bytes.Length))
             {
                 exceptions.Add(new BrightChainValidationException(
-                    nameof(block.Data.Length),
-                    string.Format("{0} is not a valid data length", nameof(block.Data.Length))));
+                    nameof(block.Bytes.Length),
+                    string.Format("{0} is not a valid data length", nameof(block.Bytes.Length))));
             }
 
-            if (block.BlockSize != BlockSizeMap.BlockSize(block.Data.Length))
+            if (block.BlockSize != BlockSizeMap.BlockSize(block.Bytes.Length))
             {
                 exceptions.Add(new BrightChainValidationException(
                     nameof(block.BlockSize),
@@ -38,7 +38,7 @@ namespace BrightChain.Engine.Extensions
                         "{0} is invalid: {1}, actual {2} bytes",
                         nameof(block.BlockSize),
                         block.BlockSize.ToString(),
-                        block.Data.Length)));
+                        block.Bytes.Length)));
             }
 
             var recomputedHash = new BlockHash(block);
@@ -49,12 +49,12 @@ namespace BrightChain.Engine.Extensions
                     string.Format("{0} is invalid: {1}, actual {2}", nameof(block.Id), block.Id.ToString(), recomputedHash.ToString())));
             }
 
-            if (block.StorageContract.ByteCount != block.Data.Length)
+            if (block.StorageContract.ByteCount != block.Bytes.Length)
             {
                 exceptions.Add(new BrightChainValidationException(
                     nameof(block.StorageContract.ByteCount),
                     string.Format("{0} length {1} does not match data length of {2} bytes", nameof(block.StorageContract.ByteCount),
-                        block.StorageContract.ByteCount, block.Data.Length)));
+                        block.StorageContract.ByteCount, block.Bytes.Length)));
             }
 
             if (!block.StorageContract.Equals(block.StorageContract))

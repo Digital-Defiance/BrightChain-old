@@ -34,7 +34,7 @@
 
         public int CompareTo(BrightenedBlock other)
         {
-            return other.Data.Length == this.Data.Length ? ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data) : (other.Data.Length > this.Data.Length ? -1 : 1);
+            return this.StoredData.CompareTo(other.StoredData);
         }
 
         public override void Dispose()

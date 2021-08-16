@@ -103,7 +103,7 @@
                     throw new BrightChainValidationEnumerableException(block.ValidationExceptions, block.Id.ToString());
                 }
 
-                foreach (byte b in block.Data.ToArray())
+                foreach (byte b in block.Bytes.ToArray())
                 {
                     yield return b;
                 }

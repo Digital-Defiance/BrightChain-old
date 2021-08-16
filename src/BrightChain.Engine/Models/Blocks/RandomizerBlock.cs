@@ -60,7 +60,7 @@ namespace BrightChain.Engine.Models.Blocks
 
         public int CompareTo(RandomizerBlock other)
         {
-            return ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
+            return this.StoredData.CompareTo(other.StoredData);
         }
 
         public override void Dispose()

@@ -13,7 +13,7 @@
         {
         }
 
-        public RestoredBlock(IBlock sourceBlock)
+        public RestoredBlock(Block sourceBlock)
             : base(
                 blockParams: new BlockParams(
                     blockSize: sourceBlock.BlockSize,
@@ -22,7 +22,7 @@
                     redundancy: sourceBlock.StorageContract.RedundancyContractType,
                     privateEncrypted: sourceBlock.StorageContract.PrivateEncrypted,
                     originalType: Type.GetType(sourceBlock.OriginalType)),
-                data: sourceBlock.Data)
+                data: sourceBlock.Bytes)
         {
         }
 

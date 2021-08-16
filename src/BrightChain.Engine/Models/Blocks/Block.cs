@@ -38,8 +38,9 @@ namespace BrightChain.Engine.Models.Blocks
         [ProtoMember(2)]
         public StorageContract StorageContract { get; set; }
 
-        [ProtoMember(3)]
-        public ReadOnlyMemory<byte> Data { get; protected set; }
+        public BlockData StoredData { get; internal set; }
+
+        public ReadOnlyMemory<byte> Bytes => this.StoredData.Bytes;
 
         public BlockSize BlockSize { get; }
 
@@ -95,7 +96,10 @@ namespace BrightChain.Engine.Models.Blocks
         /// Gets a uint with the CRC32 of the block's data.
         /// </summary>
         public uint Crc32 =>
-            Helpers.Crc32.ComputeNewChecksum(this.Data.ToArray());
+            this.StoredData.Crc32;
+
+        public ulong Crc64 =>
+            this.StoredData.Crc64;
 
         /// <summary>
         /// Compares the data hashes only.
@@ -105,12 +109,12 @@ namespace BrightChain.Engine.Models.Blocks
         /// <returns></returns>
         public static bool operator ==(Block a, Block b)
         {
-            return ReadOnlyMemoryComparer<byte>.Compare(a.Data, b.Data) == 0;
+            return a.StoredData == b.StoredData;
         }
 
         public static bool operator !=(Block a, Block b)
         {
-            return !a.Equals(b);
+            return a.StoredData != b.StoredData;
         }
 
         /// <summary>
@@ -148,7 +152,7 @@ namespace BrightChain.Engine.Models.Blocks
                 ByteCount: data.Length,
                 PrivateEncrypted: blockParams.PrivateEncrypted,
                 redundancyContractType: blockParams.Redundancy);
-            this.Data = data;
+            this.StoredData = new BlockData(data);
             this.Id = new BlockHash(this); // must happen after data is in place
             this.ConstituentBlocks = new BlockHash[] { };
             this.OriginatingNode = null;
@@ -166,14 +170,14 @@ namespace BrightChain.Engine.Models.Blocks
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public Block XOR(IBlock other)
+        public Block XOR(Block other)
         {
             if (other is SourceBlock)
             {
                 throw new BrightChainException("Unexpected SourceBlock");
             }
 
-            if (this.Data.Length != other.Data.Length)
+            if (this.Bytes.Length != other.Bytes.Length)
             {
                 throw new BrightChainException("BlockSize mismatch");
             }
@@ -193,7 +197,7 @@ namespace BrightChain.Engine.Models.Blocks
                     redundancy: redundancy,
                     privateEncrypted: this.StorageContract.PrivateEncrypted,
                     originalType: this.originalType),
-                data: Utilities.ParallelReadOnlyMemoryXOR(this.Data, other.Data));
+                data: Utilities.ParallelReadOnlyMemoryXOR(this.Bytes, other.Bytes));
 
             var newList = new List<BlockHash>(this.ConstituentBlocks);
             if (this is not SourceBlock)
@@ -215,7 +219,7 @@ namespace BrightChain.Engine.Models.Blocks
         /// </summary>
         /// <param name="others"></param>
         /// <returns></returns>
-        public Block XOR(IBlock[] others)
+        public Block XOR(Block[] others)
         {
             DateTime keepUntil = this.StorageContract.KeepUntilAtLeast;
             RedundancyContractType redundancy = this.StorageContract.RedundancyContractType;
@@ -226,7 +230,7 @@ namespace BrightChain.Engine.Models.Blocks
                 newList.Add(this.Id);
             }
 
-            byte[] xorData = this.Data.ToArray();
+            byte[] xorData = this.Bytes.ToArray();
 
             foreach (Block b in others)
             {
@@ -247,7 +251,7 @@ namespace BrightChain.Engine.Models.Blocks
 
                 keepUntil = (b.StorageContract.KeepUntilAtLeast > keepUntil) ? b.StorageContract.KeepUntilAtLeast : keepUntil;
                 redundancy = (b.StorageContract.RedundancyContractType > redundancy) ? b.StorageContract.RedundancyContractType : redundancy;
-                byte[] xorWith = b.Data.ToArray();
+                byte[] xorWith = b.Bytes.ToArray();
                 for (int i = 0; i < blockSize; i++)
                 {
                     xorData[i] = (byte)(xorData[i] ^ xorWith[i]);
@@ -361,22 +365,22 @@ namespace BrightChain.Engine.Models.Blocks
 
         public override int GetHashCode()
         {
-            return (int)this.Crc32;
+            return (int)this.StoredData.Crc32;
         }
 
         public int CompareTo(IBlock other)
         {
-            return other is null ? -1 : ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
+            return this.StoredData.CompareTo(other.StoredData);
         }
 
         public int CompareTo(Block other)
         {
-            return other is null ? -1 : ReadOnlyMemoryComparer<byte>.Compare(this.Data, other.Data);
+            return this.StoredData.CompareTo(other.StoredData);
         }
 
         public override bool Equals(object obj)
         {
-            return obj is Block ? ReadOnlyMemoryComparer<byte>.Compare(this.Data, (obj as Block).Data) == 0 : false;
+            return obj is Block blockObj ? this.Equals(blockObj) : false;
         }
 
         public bool Equals(IBlock other)

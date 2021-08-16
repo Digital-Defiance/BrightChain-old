@@ -2,6 +2,7 @@ namespace BrightChain.Engine.Interfaces
 {
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Contracts;
     using BrightChain.Engine.Models.Entities;
     using BrightChain.Engine.Models.Hashes;
@@ -27,14 +28,14 @@ namespace BrightChain.Engine.Interfaces
         /// </summary>
         /// <param name="other">Block to XOR with.</param>
         /// <returns>Returns resultant block with its constituent blocks.</returns>
-        Block XOR(IBlock other);
+        Block XOR(Block other);
 
         /// <summary>
         /// Function to XOR this block's data with an array of others.
         /// </summary>
         /// <param name="others"></param>
         /// <returns></returns>
-        Block XOR(IBlock[] others);
+        Block XOR(Block[] others);
 
         BlockSignature Sign(Agent user, string password);
 
@@ -46,7 +47,7 @@ namespace BrightChain.Engine.Interfaces
         /// <summary>
         /// Gets only the raw data for the block and none of the metadata. The hash is based only on this.
         /// </summary>
-        ReadOnlyMemory<byte> Data { get; }
+        BlockData StoredData { get; }
 
         /// <summary>
         /// Gets the node that originated the block.

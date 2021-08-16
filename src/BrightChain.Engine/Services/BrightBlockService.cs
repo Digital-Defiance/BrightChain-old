@@ -232,7 +232,7 @@ namespace BrightChain.Engine.Services
                 // last block is always full of random data
                 await foreach (BrightenedBlock brightenedBlock in this.StreamCreatedBrightenedBlocksFromFileAsync(sourceInfo: sourceInfo, blockParams: blockParams))
                 {
-                    sourceBytesThisSegment += (int)(sourceBytesRemaining < sourceInfo.BytesPerBlock ? sourceBytesRemaining : brightenedBlock.Data.Length);
+                    sourceBytesThisSegment += (int)(sourceBytesRemaining < sourceInfo.BytesPerBlock ? sourceBytesRemaining : brightenedBlock.Bytes.Length);
                     blocksUsedThisSegment.Add(brightenedBlock.Id);
                     blocksUsedThisSegment.AddRange(brightenedBlock.ConstituentBlocks);
                     var cblFullAfterThisBlock = ++blocksThisSegment == sourceInfo.HashesPerBlock;
@@ -243,7 +243,7 @@ namespace BrightChain.Engine.Services
                     {
                         var sourceBytesThisBlock = sourceBytesRemaining > sourceInfo.BytesPerBlock ? sourceInfo.BytesPerBlock : sourceBytesRemaining;
 
-                        segmentHasher.TransformFinalBlock(brightenedBlock.Data.ToArray(), 0, (int)sourceBytesThisBlock);
+                        segmentHasher.TransformFinalBlock(brightenedBlock.Bytes.ToArray(), 0, (int)sourceBytesThisBlock);
 
                         var cbl = new ConstituentBlockListBlock(
                             blockParams: new ConstituentBlockListBlockParams(
@@ -277,7 +277,7 @@ namespace BrightChain.Engine.Services
                     else
                     {
                         segmentHasher.TransformBlock(
-                            inputBuffer: brightenedBlock.Data.ToArray(),
+                            inputBuffer: brightenedBlock.Bytes.ToArray(),
                             inputOffset: 0,
                             inputCount: sourceInfo.BytesPerBlock,
                             outputBuffer: null,
@@ -391,14 +391,14 @@ namespace BrightChain.Engine.Services
                         var length = lastBlock ? bytesLeft : iBlockSize;
                         if (lastBlock)
                         {
-                            sha.TransformFinalBlock(block.Data.ToArray(), 0, (int)length);
+                            sha.TransformFinalBlock(block.Bytes.ToArray(), 0, (int)length);
                         }
                         else
                         {
-                            sha.TransformBlock(block.Data.ToArray(), 0, (int)length, null, 0);
+                            sha.TransformBlock(block.Bytes.ToArray(), 0, (int)length, null, 0);
                         }
 
-                        await stream.WriteAsync(buffer: block.Data.ToArray(), offset: 0, count: (int)length)
+                        await stream.WriteAsync(buffer: block.Bytes.ToArray(), offset: 0, count: (int)length)
                             .ConfigureAwait(false);
                         bytesWritten += length;
                     }
