@@ -1,7 +1,6 @@
 ﻿namespace BrightChain.Engine.Models.Blocks
 {
     using System;
-    using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using ProtoBuf;
 

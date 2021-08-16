@@ -3,11 +3,8 @@
     using System;
     using System.Globalization;
     using System.IO;
-    using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Faster;
-    using BrightChain.Engine.Faster.Serializers;
-    using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
     using FASTER.core;
     using Microsoft.Extensions.Configuration;

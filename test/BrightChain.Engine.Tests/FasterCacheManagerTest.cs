@@ -27,11 +27,13 @@
             return randomString;
         }
 
-        internal override FasterCacheManager<string, ProtoContractTestObject, BinaryStringSerializer, DataContractObjectSerializer<ProtoContractTestObject>> NewCacheManager(ILogger logger, IConfiguration configuration) =>
-            new FasterCacheManager<string, ProtoContractTestObject, BinaryStringSerializer, DataContractObjectSerializer<ProtoContractTestObject>>(
-                logger: this.logger.Object,
-                configuration: this.configuration.Object,
-                databaseName: Guid.NewGuid().ToString());
+        internal override FasterCacheManager<string, ProtoContractTestObject, BinaryStringSerializer, DataContractObjectSerializer<ProtoContractTestObject>> NewCacheManager(ILogger logger, IConfiguration configuration)
+        {
+            return new FasterCacheManager<string, ProtoContractTestObject, BinaryStringSerializer, DataContractObjectSerializer<ProtoContractTestObject>>(
+logger: this.logger.Object,
+configuration: this.configuration.Object,
+databaseName: Guid.NewGuid().ToString());
+        }
 
         internal override KeyValuePair<string, ProtoContractTestObject> NewKeyValue()
         {
@@ -40,7 +42,10 @@
             return new KeyValuePair<string, ProtoContractTestObject>(testKey, testValue);
         }
 
-        internal override ProtoContractTestObject NewNullData() => null;
+        internal override ProtoContractTestObject NewNullData()
+        {
+            return null;
+        }
 
         [TestMethod]
         public void TestSetGetIntegrity()

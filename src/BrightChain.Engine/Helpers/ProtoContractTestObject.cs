@@ -13,16 +13,34 @@ namespace BrightChain.Engine.Helpers
         [ProtoMember(1)]
         public string id;
 
-        public ProtoContractTestObject(string id) => this.id = id;
+        public ProtoContractTestObject(string id)
+        {
+            this.id = id;
+        }
 
-        public ProtoContractTestObject() => this.id = Guid.NewGuid().ToString();
+        public ProtoContractTestObject()
+        {
+            this.id = Guid.NewGuid().ToString();
+        }
 
-        public void Commit() => throw new NotImplementedException();
+        public void Commit()
+        {
+            throw new NotImplementedException();
+        }
 
-        public void Rollback() => throw new NotImplementedException();
+        public void Rollback()
+        {
+            throw new NotImplementedException();
+        }
 
-        public void Dispose() => this.id = null;
+        public void Dispose()
+        {
+            this.id = null;
+        }
 
-        public int CompareTo(ProtoContractTestObject other) => string.Compare(this.id, other.id, StringComparison.Ordinal);
+        public int CompareTo(ProtoContractTestObject other)
+        {
+            return string.Compare(this.id, other.id, StringComparison.Ordinal);
+        }
     }
 }

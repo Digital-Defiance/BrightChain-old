@@ -33,39 +33,44 @@ namespace DamienG.Security.Cryptography
         public Crc64(ulong polynomial, ulong seed)
         {
             if (!BitConverter.IsLittleEndian)
+            {
                 throw new PlatformNotSupportedException("Not supported on Big Endian processors");
+            }
 
-            table = InitializeTable(polynomial);
-            this.seed = hash = seed;
+            this.table = InitializeTable(polynomial);
+            this.seed = this.hash = seed;
         }
 
         public override void Initialize()
         {
-            hash = seed;
+            this.hash = this.seed;
         }
 
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
-            hash = CalculateHash(hash, table, array, ibStart, cbSize);
+            this.hash = CalculateHash(this.hash, this.table, array, ibStart, cbSize);
         }
 
         protected override byte[] HashFinal()
         {
-            var hashBuffer = UInt64ToBigEndianBytes(hash);
-            HashValue = hashBuffer;
+            var hashBuffer = UInt64ToBigEndianBytes(this.hash);
+            this.HashValue = hashBuffer;
             return hashBuffer;
         }
 
-        public override int HashSize { get { return 64; } }
+        public override int HashSize => 64;
 
         protected static ulong CalculateHash(ulong seed, ulong[] table, IList<byte> buffer, int start, int size)
         {
             var hash = seed;
             for (var i = start; i < start + size; i++)
+            {
                 unchecked
                 {
                     hash = (hash >> 8) ^ table[(buffer[i] ^ hash) & 0xff];
                 }
+            }
+
             return hash;
         }
 
@@ -74,7 +79,9 @@ namespace DamienG.Security.Cryptography
             var result = BitConverter.GetBytes(value);
 
             if (BitConverter.IsLittleEndian)
+            {
                 Array.Reverse(result);
+            }
 
             return result;
         }
@@ -82,12 +89,16 @@ namespace DamienG.Security.Cryptography
         static ulong[] InitializeTable(ulong polynomial)
         {
             if (polynomial == Crc64Iso.Iso3309Polynomial && Crc64Iso.Table != null)
+            {
                 return Crc64Iso.Table;
+            }
 
             var createTable = CreateTable(polynomial);
 
             if (polynomial == Crc64Iso.Iso3309Polynomial)
+            {
                 Crc64Iso.Table = createTable;
+            }
 
             return createTable;
         }
@@ -99,10 +110,17 @@ namespace DamienG.Security.Cryptography
             {
                 var entry = (ulong)i;
                 for (var j = 0; j < 8; ++j)
+                {
                     if ((entry & 1) == 1)
+                    {
                         entry = (entry >> 1) ^ polynomial;
+                    }
                     else
+                    {
                         entry >>= 1;
+                    }
+                }
+
                 createTable[i] = entry;
             }
             return createTable;
@@ -133,7 +151,9 @@ namespace DamienG.Security.Cryptography
         public static ulong Compute(ulong seed, byte[] buffer)
         {
             if (Table == null)
+            {
                 Table = CreateTable(Iso3309Polynomial);
+            }
 
             return CalculateHash(seed, Table, buffer, 0, buffer.Length);
         }

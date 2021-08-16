@@ -3,7 +3,6 @@
     using System;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
-    using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;

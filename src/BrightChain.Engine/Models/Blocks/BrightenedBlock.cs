@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using BrightChain.Engine.Extensions;
-    using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
     using ProtoBuf;

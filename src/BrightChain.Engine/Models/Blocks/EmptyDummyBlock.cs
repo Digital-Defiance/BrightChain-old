@@ -2,7 +2,6 @@ namespace BrightChain.Engine.Models.Blocks
 {
     using System;
     using BrightChain.Engine.Enumerations;
-    using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using ProtoBuf;
 

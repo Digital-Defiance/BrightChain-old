@@ -2,7 +2,6 @@
 {
     using System;
     using global::BrightChain.Engine.Extensions;
-    using global::BrightChain.Engine.Helpers;
     using global::BrightChain.Engine.Interfaces;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
 

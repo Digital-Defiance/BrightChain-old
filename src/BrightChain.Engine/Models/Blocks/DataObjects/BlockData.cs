@@ -3,8 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using BrightChain.Engine.Enumerations;
-    using BrightChain.Engine.Helpers;
     using FASTER.core;
 
     public struct BlockData : IComparable<BlockData>, IEquatable<BlockData>, IEqualityComparer<BlockData>, IFasterEqualityComparer<BlockData>

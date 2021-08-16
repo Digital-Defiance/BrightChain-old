@@ -13,7 +13,6 @@ namespace BrightChain.Engine.Services
     using System.Threading.Tasks;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
-    using BrightChain.Engine.Faster.Serializers;
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
