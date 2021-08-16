@@ -50,15 +50,75 @@
         private readonly FasterKV<BlockHash, TransactableBlock> blockMetadataKV;
         private readonly FasterKV<BlockHash, BlockData> blockDataKV;
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
-        /// </summary>
-        /// <param name="logger">Instance of the logging provider.</param>
-        /// <param name="configuration">Instance of the configuration provider.</param>
-        /// <param name="databaseName">Database/directory name for the store.</param>
-        public FasterBlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
-            : base(logger, configuration, rootBlock)
+        private FasterKV<BlockHash, TransactableBlock> NewMetdataKV
         {
+            get
+            {
+                var blockMetadataLogSettings = new LogSettings // log settings (devices, page size, memory size, etc.)
+                {
+                    LogDevice = this.logDevice,
+                    ObjectLogDevice = this.blockMetadataDevice,
+                    ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
+                };
+
+                // Define serializers; otherwise FASTER will use the slower DataContract
+                // Needed only for class keys/values
+                var metadataSerializerSettings = new SerializerSettings<BlockHash, TransactableBlock>
+                {
+                    keySerializer = () => new FasterBlockHashSerializer(),
+                    valueSerializer = () => new DataContractObjectSerializer<TransactableBlock>(),
+                };
+
+                return new FasterKV<BlockHash, TransactableBlock>(
+                    size: HashTableBuckets,
+                    logSettings: blockMetadataLogSettings,
+                    checkpointSettings: new CheckpointSettings
+                    {
+                        CheckpointDir = this.GetDiskCacheDirectory().FullName, // TODO: can these be in the same dir?
+                    },
+                    serializerSettings: metadataSerializerSettings,
+                    comparer: new EmptyDummyBlock(BlockSize.Micro).Id); // gets an arbitrary BlockHash object which has the IFasterEqualityComparer on the class.
+            }
+        }
+
+        private FasterKV<BlockHash, BlockData> NewDataFasterKV
+        {
+            get
+            {
+                var blockDataLogSettings = new LogSettings
+                {
+                    LogDevice = this.logDevice,
+                    ObjectLogDevice = this.blockDataDevice,
+                    ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
+                };
+
+                var blockDataSerializerSettings = new SerializerSettings<BlockHash, BlockData>
+                {
+                    keySerializer = () => new FasterBlockHashSerializer(),
+                    valueSerializer = () => new DataContractObjectSerializer<BlockData>(),
+                };
+
+                return new FasterKV<BlockHash, BlockData>(
+                    size: HashTableBuckets,
+                    logSettings: blockDataLogSettings,
+                    checkpointSettings: new CheckpointSettings
+                    {
+                        CheckpointDir = this.GetDiskCacheDirectory().FullName,
+                    },
+                    serializerSettings: blockDataSerializerSettings,
+                    comparer: new EmptyDummyBlock(BlockSize.Micro).Id); // gets an arbitrary BlockHash object which has the IFasterEqualityComparer on the class.
+            }
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
+    /// </summary>
+    /// <param name="logger">Instance of the logging provider.</param>
+    /// <param name="configuration">Instance of the configuration provider.</param>
+    /// <param name="databaseName">Database/directory name for the store.</param>
+    public FasterBlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
+            : base(logger, configuration, rootBlock)
+    {
             this.databaseName = Utilities.HashToFormattedString(this.RootBlock.Guid.ToByteArray());
 
             var nodeOptions = configuration.GetSection("NodeOptions");
@@ -97,58 +157,12 @@
                 }
             }
 
-            // TODO: this section screams of refactoring, at least two big blocks can be reduced
             this.logDevice = this.OpenDevice("core");
             this.blockMetadataDevice = this.OpenDevice("metadata");
             this.blockDataDevice = this.OpenDevice("data");
 
-            var blockMetadataLogSettings = new LogSettings // log settings (devices, page size, memory size, etc.)
-            {
-                LogDevice = this.logDevice,
-                ObjectLogDevice = this.blockMetadataDevice,
-                ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
-            };
-
-            // Define serializers; otherwise FASTER will use the slower DataContract
-            // Needed only for class keys/values
-            var metadataSerializerSettings = new SerializerSettings<BlockHash, TransactableBlock>
-            {
-                keySerializer = () => new FasterBlockHashSerializer(),
-                valueSerializer = () => new DataContractObjectSerializer<TransactableBlock>(),
-            };
-
-            this.blockMetadataKV = new FasterKV<BlockHash, TransactableBlock>(
-                size: HashTableBuckets,
-                logSettings: blockMetadataLogSettings,
-                checkpointSettings: new CheckpointSettings
-                {
-                    CheckpointDir = this.GetDiskCacheDirectory().FullName, // TODO: can these be in the same dir?
-                },
-                serializerSettings: metadataSerializerSettings,
-                comparer: new EmptyDummyBlock(BlockSize.Micro).Id); // gets an arbitrary BlockHash object which has the IFasterEqualityComparer on the class.
-
-            var blockDataLogSettings = new LogSettings
-            {
-                LogDevice = this.logDevice,
-                ObjectLogDevice = this.blockDataDevice,
-                ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
-            };
-
-            var blockDataSerializerSettings = new SerializerSettings<BlockHash, BlockData>
-            {
-                keySerializer = () => new FasterBlockHashSerializer(),
-                valueSerializer = () => new DataContractObjectSerializer<BlockData>(),
-            };
-
-            this.blockDataKV = new FasterKV<BlockHash, BlockData>(
-                size: HashTableBuckets,
-                logSettings: blockDataLogSettings,
-                checkpointSettings: new CheckpointSettings
-                {
-                    CheckpointDir = this.GetDiskCacheDirectory().FullName,
-                },
-                serializerSettings: blockDataSerializerSettings,
-                comparer: new EmptyDummyBlock(BlockSize.Micro).Id); // gets an arbitrary BlockHash object which has the IFasterEqualityComparer on the class.
+            this.blockMetadataKV = this.NewMetdataKV;
+            this.blockDataKV = this.NewDataFasterKV;
         }
 
         /// <summary>
