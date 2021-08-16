@@ -218,6 +218,14 @@
         /// </summary>
         public override event ICacheManager<BlockHash, TransactableBlock>.CacheMissEventHandler CacheMiss;
 
+        public ClientSession<BlockHash, TransactableBlock, TransactableBlock, TransactableBlock, CacheContext, SimpleFunctions<BlockHash, TransactableBlock, CacheContext>> NewMetadataSession =>
+            this.blockMetadataKV.For(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>())
+            .NewSession<SimpleFunctions<BlockHash, TransactableBlock, CacheContext>>();
+
+        public ClientSession<BlockHash, BlockData, BlockData, BlockData, CacheContext, SimpleFunctions<BlockHash, BlockData, CacheContext>> NewDataSession =>
+            this.blockDataKV.For(functions: new SimpleFunctions<BlockHash, BlockData, CacheContext>())
+            .NewSession<SimpleFunctions<BlockHash, BlockData, CacheContext>>();
+
         /// <summary>
         ///     Returns whether the cache manager has the given key and it is not expired.
         /// </summary>
@@ -225,7 +233,7 @@
         /// <returns>boolean with whether key is present.</returns>
         public override bool Contains(BlockHash key)
         {
-            using var session = this.blockMetadataKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
+            using var session = this.NewMetadataSession;
             var resultTuple = session.Read(key);
             return resultTuple.status == Status.OK;
         }
@@ -243,13 +251,13 @@
                 return false;
             }
 
-            using var metadataSession = this.blockMetadataKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
+            using var metadataSession = this.NewMetadataSession;
             if (!(metadataSession.Delete(key) == Status.OK))
             {
                 return false;
             }
 
-            using var dataSession = this.blockDataKV.NewSession(functions: new SimpleFunctions<BlockHash, BlockData, CacheContext>());
+            using var dataSession = this.NewDataSession;
             if (!(dataSession.Delete(key) == Status.OK))
             {
                 return false;
@@ -267,7 +275,7 @@
         /// <returns>returns requested block or throws.</returns>
         public override TransactableBlock Get(BlockHash key)
         {
-            using var metadataSession = this.blockMetadataKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
+            using var metadataSession = this.NewMetadataSession;
             var metadataResultTuple = metadataSession.Read(key);
 
             if (metadataResultTuple.status != Status.OK)
@@ -277,7 +285,7 @@
 
             var block = metadataResultTuple.output;
 
-            using var dataSession = this.blockDataKV.NewSession(functions: new SimpleFunctions<BlockHash, BlockData, CacheContext>());
+            using var dataSession = this.NewDataSession;
             var dataResultTuple = dataSession.Read(key);
 
             if (dataResultTuple.status != Status.OK)
@@ -303,7 +311,7 @@
         {
             base.Set(block);
             block.SetCacheManager(this);
-            using var metadataSession = this.blockMetadataKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
+            using var metadataSession = this.NewMetadataSession;
             var blockHash = block.Id;
             var resultStatus = metadataSession.Upsert(ref blockHash, ref block);
             if (resultStatus != Status.OK)
@@ -311,7 +319,7 @@
                 throw new BrightChainException("Unable to store block");
             }
 
-            using var dataSession = this.blockDataKV.NewSession(functions: new SimpleFunctions<BlockHash, BlockData, CacheContext>());
+            using var dataSession = this.NewDataSession;
             var blockData = block.StoredData;
             resultStatus = dataSession.Upsert(ref blockHash, ref blockData);
             if (resultStatus != Status.OK)
@@ -325,8 +333,8 @@
 
         public override void SetAll(IEnumerable<TransactableBlock> items)
         {
-            using var metadataSession = this.blockMetadataKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
-            using var dataSession = this.blockDataKV.NewSession(functions: new SimpleFunctions<BlockHash, BlockData, CacheContext>());
+            using var metadataSession = this.NewMetadataSession;
+            using var dataSession = this.NewDataSession;
             TransactableBlock[] blocks = (TransactableBlock[])items;
 
             for (int i = 0; i < blocks.Length; i++)
@@ -354,8 +362,8 @@
 
         public async override void SetAllAsync(IAsyncEnumerable<TransactableBlock> items)
         {
-            using var metadataSession = this.blockMetadataKV.NewSession(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>());
-            using var dataSession = this.blockDataKV.NewSession(functions: new SimpleFunctions<BlockHash, BlockData, CacheContext>());
+            using var metadataSession = this.NewMetadataSession;
+            using var dataSession = this.NewDataSession;
             await foreach (var block in items)
             {
                 TransactableBlock t = block;
