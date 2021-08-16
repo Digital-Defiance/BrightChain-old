@@ -6,6 +6,7 @@
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Hashes;
     using BrightChain.Engine.Models.Nodes;
     using Microsoft.Extensions.Configuration;
@@ -114,6 +115,18 @@
         /// <param name="key">key to retrieve.</param>
         /// <returns>returns requested block or throws.</returns>
         public abstract TransactableBlock Get(BlockHash key);
+
+        public TupleStripe GetFromBlockIDs(BlockHash[] blockHashes)
+        {
+            int i = 0;
+            Block[] blocks = new Block[blockHashes.Length];
+            foreach (var hash in blockHashes)
+            {
+                blocks[i++] = this.Get(hash);
+            }
+
+            return new TupleStripe(BlockBrightenerService.TupleCount, blocks[0].BlockSize, blocks);
+        }
 
         /// <summary>
         ///     Adds a key to the cache if it is not already present.

@@ -6,6 +6,7 @@
 
     /// <summary>
     /// A tuple stripe is a representation of the blocks used to brighten or recover a source block.
+    /// In each row, only the last block is expected to be the non-randomizer block, but order doesn't matter within a stripe.
     /// </summary>
     public struct TupleStripe
     {

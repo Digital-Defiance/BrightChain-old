@@ -99,23 +99,24 @@ namespace BrightChain.Engine.Models.Blocks
         public IEnumerable<BrightChainValidationException> ValidationExceptions { get; private set; }
 
         /// <summary>
+        /// Gets an EntCalcResult.
         /// Uses ENT Chi Square monte-carlo calculator/estimator.
         /// </summary>
         public EntCalcResult EntropyEstimate
         {
             get
             {
-                MemoryStream inStream = new MemoryStream(this.Bytes.ToArray());
-                inStream.Position = 0;
+                MemoryStream memoryStream = new MemoryStream(this.Bytes.ToArray());
+                memoryStream.Position = 0;
                 EntCalc entCalc = new EntCalc(false);
-                while (inStream.Position < inStream.Length)
+                while (memoryStream.Position < memoryStream.Length)
                 {
-                    entCalc.AddSample((byte)inStream.ReadByte(), false);
+                    entCalc.AddSample((byte)memoryStream.ReadByte(), false);
                 }
 
-                EntCalc.EntCalcResult tmpRes = entCalc.EndCalculation();
-                inStream.Close();
-                return tmpRes;
+                EntCalc.EntCalcResult calculationResult = entCalc.EndCalculation();
+                memoryStream.Close();
+                return calculationResult;
             }
         }
 

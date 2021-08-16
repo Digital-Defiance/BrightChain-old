@@ -596,6 +596,7 @@ namespace BrightChain.Engine.Services
             // TODO: update indices
             // TODO: CBLs may be a server option to disable
             // TODO: in the future just return a magnet URL with the N block hashes for the final CBL tuple.
+            // CBL should itself be brightened before entering the cache!
             this.blockFasterCache.Set(cblBlock);
         }
 
