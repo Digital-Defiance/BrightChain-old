@@ -44,30 +44,41 @@
         [DataRow(BlockSize.Large)]
         public void ItCreatesValidRandomDataBlocksTest(BlockSize blockSize)
         {
-            var block = new RandomizerBlock(
-                new TransactableBlockParams(
-                    cacheManager: this.cacheManager,
-                    allowCommit: true,
-                    blockParams: new BlockParams(
-                        blockSize: blockSize,
-                        requestTime: DateTime.Now,
-                        keepUntilAtLeast: DateTime.Now.AddDays(1),
-                        redundancy: Enumerations.RedundancyContractType.HeapAuto,
-                        privateEncrypted: false,
-                        originalType: typeof(RandomizerBlock))));
+            var zeroBlock = new ZeroVectorBlock(
+                blockParams: new BlockParams(
+                blockSize: blockSize,
+                requestTime: DateTime.Now,
+                keepUntilAtLeast: DateTime.Now.AddDays(1),
+                redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                privateEncrypted: false,
+                originalType: typeof(ZeroVectorBlock)));
 
-            Assert.IsTrue(block.Validate());
-            Assert.IsTrue(this.cacheManager.Contains(block.Id));
+            Assert.IsTrue(zeroBlock.Validate());
 
-            // TODO verify not all zeros, some level of randomness
+            var randomBlock = new RandomizerBlock(
+                destinationCache: this.cacheManager,
+                blockSize: blockSize,
+                keepUntilAtLeast: DateTime.Now.AddDays(1),
+                redundancyContractType: Enumerations.RedundancyContractType.HeapAuto);
+
+            Assert.IsTrue(randomBlock.Validate());
+            Assert.IsTrue(this.cacheManager.Contains(randomBlock.Id));
+
+            var zeroBlockEntResult = zeroBlock.EntropyEstimate;
+            Assert.AreEqual(0, zeroBlockEntResult.Entropy);
+
+            var randomBlockEntResult = randomBlock.EntropyEstimate;
+            Assert.IsTrue(randomBlockEntResult.Entropy > 6.0D);
 
             var mockLogger = Mock.Get(this.logger);
-            mockLogger.Verify(l => l.Log(
-                LogLevel.Information,
-                It.IsAny<EventId>(),
-                It.IsAny<It.IsAnyType>(),
-                It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(0));
+            mockLogger.Verify(
+                l => l.Log(
+                    LogLevel.Information,
+                    It.IsAny<EventId>(),
+                    It.IsAny<It.IsAnyType>(),
+                    It.IsAny<Exception>(),
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                Times.Exactly(0));
             mockLogger.VerifyNoOtherCalls();
         }
     }

@@ -16,7 +16,9 @@ namespace BrightChain.Engine.Models.Blocks
     using BrightChain.Engine.Models.Hashes;
     using BrightChain.Engine.Models.Nodes;
     using BrightChain.Engine.Services.CacheManagers;
+    using Ent;
     using ProtoBuf;
+    using static Ent.EntCalc;
 
     /// <summary>
     /// The block is the base unit persisted to disk.
@@ -95,6 +97,27 @@ namespace BrightChain.Engine.Models.Blocks
         public IBlock AsIBlock => this;
 
         public IEnumerable<BrightChainValidationException> ValidationExceptions { get; private set; }
+
+        /// <summary>
+        /// Uses ENT Chi Square monte-carlo calculator/estimator.
+        /// </summary>
+        public EntCalcResult EntropyEstimate
+        {
+            get
+            {
+                MemoryStream inStream = new MemoryStream(this.Bytes.ToArray());
+                inStream.Position = 0;
+                EntCalc entCalc = new EntCalc(false);
+                while (inStream.Position < inStream.Length)
+                {
+                    entCalc.AddSample((byte)inStream.ReadByte(), false);
+                }
+
+                EntCalc.EntCalcResult tmpRes = entCalc.EndCalculation();
+                inStream.Close();
+                return tmpRes;
+            }
+        }
 
         /// <summary>
         /// Gets a uint with the CRC32 of the block's data.
