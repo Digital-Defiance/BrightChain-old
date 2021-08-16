@@ -1,8 +1,8 @@
-﻿using BrightChain.Engine.Exceptions;
-using BrightChain.Engine.Models.Hashes;
-
-namespace BrightChain.Engine.Models.Blocks.DataObjects
+﻿namespace BrightChain.Engine.Models.Blocks.DataObjects
 {
+    using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Models.Hashes;
+
     public struct SourceBlocksInfo
     {
         public readonly DataHash SourceId;

@@ -1,12 +1,20 @@
 ﻿namespace BrightChain.Engine.Models.Blocks.DataObjects
 {
+    using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Helpers;
     using FASTER.core;
 
     public struct BlockData : IComparable<BlockData>, IEquatable<BlockData>, IEqualityComparer<BlockData>, IFasterEqualityComparer<BlockData>
     {
         public readonly ReadOnlyMemory<byte> Bytes;
+
+        public BlockData(ReadOnlyMemory<byte> data)
+        {
+            this.Bytes = data;
+        }
 
         public uint Crc32 =>
             Helpers.Crc32.ComputeNewChecksum(this.Bytes.ToArray());
@@ -23,9 +31,6 @@
         {
             return Helpers.ReadOnlyMemoryComparer<byte>.Compare(a.Bytes, b.Bytes) != 0;
         }
-
-        public BlockData(ReadOnlyMemory<byte> data) =>
-            this.Bytes = data;
 
         public int CompareTo(BlockData other)
         {

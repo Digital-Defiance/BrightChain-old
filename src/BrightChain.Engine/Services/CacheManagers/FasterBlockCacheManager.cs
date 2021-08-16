@@ -22,6 +22,11 @@
     public class FasterBlockCacheManager : BlockCacheManager, IDisposable
     {
         /// <summary>
+        /// hash table size (number of 64-byte buckets).
+        /// </summary>
+        private const long HashTableBuckets = 1L << 20;
+
+        /// <summary>
         ///     Directory where the block tree root will be placed.
         /// </summary>
         private readonly string baseDirectory;
@@ -92,6 +97,7 @@
                 }
             }
 
+            // TODO: this section screams of refactoring, at least two big blocks can be reduced
             this.logDevice = this.OpenDevice("core");
             this.blockMetadataDevice = this.OpenDevice("metadata");
             this.blockDataDevice = this.OpenDevice("data");
@@ -112,16 +118,16 @@
             };
 
             this.blockMetadataKV = new FasterKV<BlockHash, TransactableBlock>(
-                size: 1L << 20, // hash table size (number of 64-byte buckets)
+                size: HashTableBuckets,
                 logSettings: blockMetadataLogSettings,
                 checkpointSettings: new CheckpointSettings
                 {
-                    CheckpointDir = this.GetDiskCacheDirectory().FullName,
+                    CheckpointDir = this.GetDiskCacheDirectory().FullName, // TODO: can these be in the same dir?
                 },
                 serializerSettings: metadataSerializerSettings,
-                comparer: new EmptyDummyBlock(BlockSize.Micro).Id);
+                comparer: new EmptyDummyBlock(BlockSize.Micro).Id); // gets an arbitrary BlockHash object which has the IFasterEqualityComparer on the class.
 
-            var blockDataLogSettings = new LogSettings // log settings (devices, page size, memory size, etc.)
+            var blockDataLogSettings = new LogSettings
             {
                 LogDevice = this.logDevice,
                 ObjectLogDevice = this.blockDataDevice,
@@ -135,14 +141,14 @@
             };
 
             this.blockDataKV = new FasterKV<BlockHash, BlockData>(
-                size: 1L << 20, // hash table size (number of 64-byte buckets)
+                size: HashTableBuckets,
                 logSettings: blockDataLogSettings,
                 checkpointSettings: new CheckpointSettings
                 {
                     CheckpointDir = this.GetDiskCacheDirectory().FullName,
                 },
                 serializerSettings: blockDataSerializerSettings,
-                comparer: new EmptyDummyBlock(BlockSize.Micro).Id);
+                comparer: new EmptyDummyBlock(BlockSize.Micro).Id); // gets an arbitrary BlockHash object which has the IFasterEqualityComparer on the class.
         }
 
         /// <summary>

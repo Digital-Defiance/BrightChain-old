@@ -6,6 +6,7 @@ namespace BrightChain.Engine.Models.Hashes
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;
+    using DamienG.Security.Cryptography;
     using FASTER.core;
     using ProtoBuf;
 
@@ -141,7 +142,7 @@ namespace BrightChain.Engine.Models.Hashes
 
         public long GetHashCode64(ref BlockHash k)
         {
-            return Crc32.ComputeNewChecksum(this.HashBytes.ToArray());
+            return (long)Crc64Iso.Compute(this.HashBytes.ToArray());
         }
 
         public bool Equals(ref BlockHash k1, ref BlockHash k2)
