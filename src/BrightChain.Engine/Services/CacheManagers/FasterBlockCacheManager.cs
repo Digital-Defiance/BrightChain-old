@@ -77,7 +77,7 @@
                         CheckpointDir = this.GetDiskCacheDirectory().FullName, // TODO: can these be in the same dir?
                     },
                     serializerSettings: metadataSerializerSettings,
-                    comparer: new EmptyDummyBlock(BlockSize.Micro).Id); // gets an arbitrary BlockHash object which has the IFasterEqualityComparer on the class.
+                    comparer: BlockSizeMap.ZeroVectorHash(BlockSize.Micro)); // gets an arbitrary BlockHash object which has the IFasterEqualityComparer on the class.
             }
         }
 
@@ -106,7 +106,7 @@
                         CheckpointDir = this.GetDiskCacheDirectory().FullName,
                     },
                     serializerSettings: blockDataSerializerSettings,
-                    comparer: new EmptyDummyBlock(BlockSize.Micro).Id); // gets an arbitrary BlockHash object which has the IFasterEqualityComparer on the class.
+                    comparer: BlockSizeMap.ZeroVectorHash(BlockSize.Micro)); // gets an arbitrary BlockHash object which has the IFasterEqualityComparer on the class.
             }
         }
 

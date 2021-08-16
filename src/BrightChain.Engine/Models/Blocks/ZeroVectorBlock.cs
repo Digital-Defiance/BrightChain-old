@@ -9,24 +9,24 @@ namespace BrightChain.Engine.Models.Blocks
     /// Input blocks to the whitener service that consist of purely CSPRNG data of the specified block size
     /// </summary>
     [ProtoContract]
-    public class EmptyDummyBlock : Block, IComparable<EmptyDummyBlock>
+    public class ZeroVectorBlock : Block, IComparable<ZeroVectorBlock>
     {
-        public static ReadOnlyMemory<byte> NewEmptyBlockData(BlockSize blockSize)
+        public static ReadOnlyMemory<byte> NewZeroVectorBlockData(BlockSize blockSize)
         {
             var zeroBytes = new byte[BlockSizeMap.BlockSize(blockSize)];
             Array.Fill<byte>(array: zeroBytes, value: 0);
             return new ReadOnlyMemory<byte>(zeroBytes);
         }
 
-        public EmptyDummyBlock(BlockParams blockParams)
+        public ZeroVectorBlock(BlockParams blockParams)
             : base(
                 blockParams: blockParams,
-                data: NewEmptyBlockData(blockParams.BlockSize))
+                data: NewZeroVectorBlockData(blockParams.BlockSize))
         {
-            this.OriginalType = typeof(EmptyDummyBlock).AssemblyQualifiedName;
+            this.OriginalType = typeof(ZeroVectorBlock).AssemblyQualifiedName;
         }
 
-        public EmptyDummyBlock(BlockSize blockSize)
+        public ZeroVectorBlock(BlockSize blockSize)
             : base(
                   blockParams: new BlockParams(
                     blockSize: blockSize,
@@ -34,8 +34,8 @@ namespace BrightChain.Engine.Models.Blocks
                     keepUntilAtLeast: DateTime.MaxValue,
                     redundancy: RedundancyContractType.Unknown,
                     privateEncrypted: false,
-                    originalType: typeof(EmptyDummyBlock)),
-                  data: NewEmptyBlockData(blockSize))
+                    originalType: typeof(ZeroVectorBlock)),
+                  data: NewZeroVectorBlockData(blockSize))
         {
         }
 
@@ -50,11 +50,11 @@ namespace BrightChain.Engine.Models.Blocks
         /// <returns></returns>
         public override Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> _)
         {
-            return new EmptyDummyBlock(
+            return new ZeroVectorBlock(
 blockParams: blockParams);
         }
 
-        public int CompareTo(EmptyDummyBlock other)
+        public int CompareTo(ZeroVectorBlock other)
         {
             return this.StoredData.CompareTo(other.StoredData);
         }

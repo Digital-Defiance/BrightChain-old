@@ -35,14 +35,14 @@ namespace BrightChain.Engine.Tests
         [DataRow(BlockSize.Large)]
         public void ItCreatesValidRandomDataBlocksTest(BlockSize blockSize)
         {
-            var block = new EmptyDummyBlock(
+            var block = new ZeroVectorBlock(
                 blockParams: new BlockParams(
                 blockSize: blockSize,
                 requestTime: DateTime.Now,
                 keepUntilAtLeast: DateTime.Now.AddDays(1),
                 redundancy: Enumerations.RedundancyContractType.HeapAuto,
                 privateEncrypted: false,
-                originalType: typeof(EmptyDummyBlock)));
+                originalType: typeof(ZeroVectorBlock)));
 
             Assert.IsTrue(block.Validate());
 

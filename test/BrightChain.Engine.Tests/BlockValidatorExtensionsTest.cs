@@ -30,14 +30,14 @@
         [DataRow(BlockSize.Large)]
         public void ItValidatesValidBlocksTest(BlockSize blockSize)
         {
-            Assert.IsTrue(new EmptyDummyBlock(
+            Assert.IsTrue(new ZeroVectorBlock(
                 blockParams: new BlockParams(
                     blockSize: blockSize,
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.MaxValue,
                     redundancy: Enumerations.RedundancyContractType.HeapAuto,
                     privateEncrypted: false,
-                    originalType: typeof(EmptyDummyBlock)))
+                    originalType: typeof(ZeroVectorBlock)))
                 .Validate());
 
             var loggerMock = Mock.Get(this.logger);
