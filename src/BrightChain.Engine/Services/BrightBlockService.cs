@@ -334,6 +334,8 @@ namespace BrightChain.Engine.Services
                 throw new BrightChainException("No blocks returned");
             }
 
+            // TODO: figure out where/when to commit the firstPass blocks
+
             return await
                 this.MakeSuperCBLFromCBLChainAsync(
                     blockParams: blockParams,
