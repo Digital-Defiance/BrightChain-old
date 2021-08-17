@@ -28,14 +28,14 @@ namespace BrightChain.Engine.Interfaces
         /// </summary>
         /// <param name="other">Block to XOR with.</param>
         /// <returns>Returns resultant block with its constituent blocks.</returns>
-        Block XOR(Block other);
+        ReadOnlyMemory<byte> XOR(Block other);
 
         /// <summary>
         /// Function to XOR this block's data with an array of others.
         /// </summary>
         /// <param name="others"></param>
         /// <returns></returns>
-        Block XOR(Block[] others);
+        ReadOnlyMemory<byte> XOR(Block[] others);
 
         BlockSignature Sign(Agent user, string password);
 

@@ -11,6 +11,7 @@
 
     /// <summary>
     /// Brightened data chain, can be composed of file-based CBLs or ChainLinq based data blocks.
+    /// Although a BrightChain contains brightened data, the CBL block itself is not brightened.
     /// TODO: improve memory usage. Don't keep full copy, do all on async enumeration?
     /// </summary>
     [ProtoContract]

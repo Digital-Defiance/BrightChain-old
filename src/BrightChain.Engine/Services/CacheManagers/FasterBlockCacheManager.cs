@@ -36,15 +36,28 @@
         /// </summary>
         private readonly string databaseName;
 
-        private readonly IDevice logDevice;
 
         // Whether we enable a read cache
         static readonly bool useReadCache = false;
 
         /// <summary>
-        /// Backing storage device.
+        /// Session log backing storage device for block metadata.
+        /// </summary>
+        private readonly IDevice blockMetadataLogDevice;
+
+        /// <summary>
+        /// Backing storage device for block metadata.
         /// </summary>
         private readonly IDevice blockMetadataDevice;
+
+        /// <summary>
+        /// Session log backing storage device for block data.
+        /// </summary>
+        private readonly IDevice blockDataLogDevice;
+
+        /// <summary>
+        /// Backing storage device for data.
+        /// </summary>
         private readonly IDevice blockDataDevice;
 
         private readonly FasterKV<BlockHash, TransactableBlock> blockMetadataKV;
@@ -56,7 +69,7 @@
             {
                 var blockMetadataLogSettings = new LogSettings // log settings (devices, page size, memory size, etc.)
                 {
-                    LogDevice = this.logDevice,
+                    LogDevice = this.blockMetadataLogDevice,
                     ObjectLogDevice = this.blockMetadataDevice,
                     ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
                 };
@@ -87,7 +100,7 @@
             {
                 var blockDataLogSettings = new LogSettings
                 {
-                    LogDevice = this.logDevice,
+                    LogDevice = this.blockDataLogDevice,
                     ObjectLogDevice = this.blockDataDevice,
                     ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
                 };
@@ -157,11 +170,12 @@
                 }
             }
 
-            this.logDevice = this.OpenDevice("core");
+            this.blockMetadataLogDevice = this.OpenDevice("metadata-log");
             this.blockMetadataDevice = this.OpenDevice("metadata");
-            this.blockDataDevice = this.OpenDevice("data");
-
             this.blockMetadataKV = this.NewMetdataKV;
+
+            this.blockDataLogDevice = this.OpenDevice("data-log");
+            this.blockDataDevice = this.OpenDevice("data");
             this.blockDataKV = this.NewDataFasterKV;
         }
 

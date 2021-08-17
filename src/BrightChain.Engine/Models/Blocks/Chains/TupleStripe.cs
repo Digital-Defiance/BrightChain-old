@@ -42,12 +42,7 @@
         {
             var blocks = (Block[])this.Blocks;
             Block result = blocks[0];
-            for (int i = 1; i < blocks.Length; i++)
-            {
-                result = result.XOR(blocks[i]);
-            }
-
-            return new SourceBlock(result.BlockParams, result.Bytes);
+            return new SourceBlock(result.BlockParams, result.XOR(blocks));
         }
     }
 }

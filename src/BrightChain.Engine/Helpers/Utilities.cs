@@ -32,7 +32,7 @@
             }
         }
 
-        public static ReadOnlyMemory<byte> ParallelReadOnlyMemoryXOR(ReadOnlyMemory<byte> sourceA, ReadOnlyMemory<byte> sourceB)
+        public static ReadOnlyMemory<byte> ReadOnlyMemoryXOR(ReadOnlyMemory<byte> sourceA, ReadOnlyMemory<byte> sourceB)
         {
             if (sourceA.Length != sourceB.Length)
             {

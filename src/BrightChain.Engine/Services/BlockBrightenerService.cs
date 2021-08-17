@@ -39,6 +39,7 @@
                 // TODO: select or generate pre-generated random blocks (determine mixing)
                 // for now just generate on demand, but these can be pre-seeded, and
                 // technically any block in cache we haven't already used within a chain can be used.
+                // it is imperative we never commit a non-brightened block to cache.
                 // TODO: add a mixing ratio and re-use blocks as appropriately as possible
                 randomizersUsed[i] = new RandomizerBlock(
                     destinationCache: this.resultCache,
@@ -48,14 +49,15 @@
                     requestTime: block.StorageContract.RequestTime);
             }
 
-            var xorBlock = block.XOR(randomizersUsed);
+            this.resultCache.SetAll(randomizersUsed);
+
             return new BrightenedBlock(
                 blockParams: new TransactableBlockParams(
                     cacheManager: this.resultCache,
                     allowCommit: true,
                     blockParams: block.BlockParams),
-                data: xorBlock.Bytes,
-                constituentBlocks: randomizersUsed.Select(b => b.Id).ToArray());
+                data: block.XOR(randomizersUsed),
+                constituentBlockHashes: randomizersUsed.Select(b => b.Id).ToArray());
         }
     }
 }

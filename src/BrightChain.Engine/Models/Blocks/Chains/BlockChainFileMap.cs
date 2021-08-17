@@ -65,7 +65,7 @@
             var tupleGroups = TakeIntoGroupsOf(sourceBlocks, this.ConstituentBlockListBlock.TupleCount);
             await foreach (var tupleGroup in tupleGroups)
             {
-                Block[] blockList = new Block[this.ConstituentBlockListBlock.TupleCount];
+                TransactableBlock[] blockList = new TransactableBlock[this.ConstituentBlockListBlock.TupleCount];
                 var i = 0;
                 foreach (var blockHash in tupleGroup)
                 {

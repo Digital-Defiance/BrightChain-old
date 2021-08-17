@@ -3,7 +3,7 @@
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Models.Hashes;
 
-    public class ConstituentBlockListBlockParams : TransactableBlockParams
+    public class ConstituentBlockListBlockParams : BlockParams
     {
         public readonly DataHash SourceId;
 
@@ -20,11 +20,14 @@
 
         public readonly BlockHash Next = null;
 
-        public ConstituentBlockListBlockParams(TransactableBlockParams blockParams, DataHash sourceId, SegmentHash segmentId, long totalLength, IEnumerable<BlockHash> constituentBlocks, BlockHash previous = null, BlockHash next = null)
+        public ConstituentBlockListBlockParams(BlockParams blockParams, DataHash sourceId, SegmentHash segmentId, long totalLength, IEnumerable<BlockHash> constituentBlocks, BlockHash previous = null, BlockHash next = null)
        : base(
-             cacheManager: blockParams.CacheManager,
-             allowCommit: blockParams.AllowCommit,
-             blockParams: blockParams)
+             blockSize: blockParams.BlockSize,
+             requestTime: blockParams.RequestTime,
+             keepUntilAtLeast: blockParams.KeepUntilAtLeast,
+             redundancy: blockParams.Redundancy,
+             privateEncrypted: blockParams.PrivateEncrypted,
+             originalType: blockParams.OriginalType)
         {
             this.SourceId = sourceId;
             this.TotalLength = totalLength;

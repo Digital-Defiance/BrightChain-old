@@ -184,11 +184,6 @@ namespace BrightChain.Engine.Services
                                 data: buffer),
                             randomizersUsed: out _);
 
-                        this.blockFasterCache.Set(new TransactableBlock(
-                                cacheManager: this.blockFasterCache,
-                                sourceBlock: brightenedBlock,
-                                allowCommit: true));
-
                         yield return brightenedBlock;
                     } // end while
 
@@ -231,6 +226,7 @@ namespace BrightChain.Engine.Services
                 // last block is always full of random data
                 await foreach (BrightenedBlock brightenedBlock in this.StreamCreatedBrightenedBlocksFromFileAsync(sourceInfo: sourceInfo, blockParams: blockParams))
                 {
+                    this.blockFasterCache.Set(brightenedBlock);
                     sourceBytesThisSegment += (int)(sourceBytesRemaining < sourceInfo.BytesPerBlock ? sourceBytesRemaining : brightenedBlock.Bytes.Length);
                     blocksUsedThisSegment.Add(brightenedBlock.Id);
                     blocksUsedThisSegment.AddRange(brightenedBlock.ConstituentBlocks);
@@ -520,7 +516,6 @@ namespace BrightChain.Engine.Services
                 sourceBlock: block,
                 allowCommit: true));
 
-            // TODO dapr
             return block;
         }
 
@@ -591,13 +586,33 @@ namespace BrightChain.Engine.Services
                 sourceBlocks: awaitedBlocks);
         }
 
-        public void PersistCBL(ConstituentBlockListBlock cblBlock)
+        public BrightenedCBL BrightenAndPersistCBL(ConstituentBlockListBlock cblBlock)
         {
             // TODO: update indices
             // TODO: CBLs may be a server option to disable
             // TODO: in the future just return a magnet URL with the N block hashes for the final CBL tuple.
             // CBL should itself be brightened before entering the cache!
-            this.blockFasterCache.Set(cblBlock);
+            var brightenedCbl = this.blockBrightener.Brighten(cblBlock, out Block[] randomizersUsed);
+
+            var tupleSize = randomizersUsed.Length + 1;
+            TransactableBlock[] transactableTuple = new TransactableBlock[tupleSize];
+            for (int i = 0; i < randomizersUsed.Length; i++)
+            {
+                transactableTuple[i] = randomizersUsed[i].MakeTransactable(
+                    cacheManager: this.blockFasterCache,
+                    allowCommit: true);
+            }
+
+            transactableTuple[tupleSize - 1] = brightenedCbl.MakeTransactable(
+                cacheManager: this.blockFasterCache,
+                allowCommit: true);
+
+            var brightenedCBL = new BrightenedCBL(
+                cbl: brightenedCbl);
+
+            this.blockFasterCache.Set(brightenedCBL);
+
+            return brightenedCBL;
         }
 
         public void Dispose()

@@ -2,9 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Extensions;
+    using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
+    using BrightChain.Engine.Services;
     using ProtoBuf;
 
     /// <summary>
@@ -12,23 +15,25 @@
     /// *** CBLs are considered user data ***
     /// </summary>
     [ProtoContract]
-    public class BrightenedBlock : SourceBlock, IComparable<BrightenedBlock>, IComparable<Block>
+    public class BrightenedBlock : TransactableBlock, IComparable<BrightenedBlock>, IComparable<Block>
     {
-        public BrightenedBlock(BlockParams blockParams, ReadOnlyMemory<byte> data, IEnumerable<BlockHash> constituentBlocks)
+        public BrightenedBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data, IEnumerable<BlockHash> constituentBlockHashes)
             : base(
                 blockParams: blockParams,
                 data: data)
         {
-            this.ConstituentBlocks = constituentBlocks;
+            this.ConstituentBlocks = constituentBlockHashes;
             this.OriginalType = typeof(BrightenedBlock).AssemblyQualifiedName;
         }
 
         public override BrightenedBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
+            throw new BrightChainExceptionImpossible("does this even make sense?");
+
             return new BrightenedBlock(
                 blockParams: this.BlockParams,
                 data: data,
-                constituentBlocks: this.ConstituentBlocks);
+                constituentBlockHashes: this.ConstituentBlocks);
         }
 
         public int CompareTo(BrightenedBlock other)

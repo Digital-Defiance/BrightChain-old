@@ -62,7 +62,7 @@
                 redundancyContractType: Enumerations.RedundancyContractType.HeapAuto);
 
             Assert.IsTrue(randomBlock.Validate());
-            Assert.IsTrue(this.cacheManager.Contains(randomBlock.Id));
+            Assert.IsFalse(this.cacheManager.Contains(randomBlock.Id));
 
             var zeroBlockEntResult = zeroBlock.EntropyEstimate;
             Assert.AreEqual(0, zeroBlockEntResult.Entropy);

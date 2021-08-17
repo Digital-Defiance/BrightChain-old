@@ -198,7 +198,7 @@ namespace BrightChain.Engine.Models.Blocks
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public Block XOR(Block other)
+        public ReadOnlyMemory<byte> XOR(Block other)
         {
             if (other is SourceBlock)
             {
@@ -210,66 +210,30 @@ namespace BrightChain.Engine.Models.Blocks
                 throw new BrightChainException("BlockSize mismatch");
             }
 
-            DateTime keepUntil = DateTime.Compare(this.StorageContract.KeepUntilAtLeast, other.StorageContract.KeepUntilAtLeast) > 0 ?
-                this.StorageContract.KeepUntilAtLeast :
-                other.StorageContract.KeepUntilAtLeast;
-            RedundancyContractType redundancy = this.StorageContract.RedundancyContractType > other.StorageContract.RedundancyContractType ?
-                this.StorageContract.RedundancyContractType :
-                other.StorageContract.RedundancyContractType;
-
-            var result = this.NewBlock(
-                blockParams: new BlockParams(
-                    blockSize: this.BlockSize,
-                    requestTime: DateTime.Now,
-                    keepUntilAtLeast: keepUntil,
-                    redundancy: redundancy,
-                    privateEncrypted: this.StorageContract.PrivateEncrypted,
-                    originalType: this.originalType),
-                data: Utilities.ParallelReadOnlyMemoryXOR(this.Bytes, other.Bytes));
-
-            var newList = new List<BlockHash>(this.ConstituentBlocks);
-            if (this is not SourceBlock)
-            {
-                newList.Add(this.Id);
-            }
-
-            if (other is not SourceBlock)
-            {
-                newList.Add(other.Id);
-            }
-
-            result.ConstituentBlocks = newList.ToArray();
-            return result;
+            return Utilities.ReadOnlyMemoryXOR(this.Bytes, other.Bytes);
         }
 
         /// <summary>
         /// XORs this block with a list of other/randomizer blocks.
+        /// XOR will ignore the instance block in the block array.
         /// </summary>
         /// <param name="others"></param>
         /// <returns></returns>
-        public Block XOR(Block[] others)
+        public ReadOnlyMemory<byte> XOR(Block[] others)
         {
-            DateTime keepUntil = this.StorageContract.KeepUntilAtLeast;
-            RedundancyContractType redundancy = this.StorageContract.RedundancyContractType;
             int blockSize = BlockSizeMap.Map[this.BlockSize];
-            var newList = new List<BlockHash>(this.ConstituentBlocks);
-            if (this is not SourceBlock)
-            {
-                newList.Add(this.Id);
-            }
-
             byte[] xorData = this.Bytes.ToArray();
 
             foreach (Block b in others)
             {
+                if (b.Id == this.Id)
+                {
+                    continue;
+                }
+
                 if (b is SourceBlock)
                 {
                     throw new BrightChainException("Unexpected SourceBlock");
-                }
-                else if (b is not RandomizerBlock)
-                {
-                    // TODO: this may change
-                    throw new BrightChainException("Unexpected block type. Can only work with RandomizerBlocks");
                 }
 
                 if (b.BlockSize != this.BlockSize)
@@ -277,34 +241,14 @@ namespace BrightChain.Engine.Models.Blocks
                     throw new BrightChainException("BlockSize mismatch");
                 }
 
-                keepUntil = (b.StorageContract.KeepUntilAtLeast > keepUntil) ? b.StorageContract.KeepUntilAtLeast : keepUntil;
-                redundancy = (b.StorageContract.RedundancyContractType > redundancy) ? b.StorageContract.RedundancyContractType : redundancy;
                 byte[] xorWith = b.Bytes.ToArray();
                 for (int i = 0; i < blockSize; i++)
                 {
                     xorData[i] = (byte)(xorData[i] ^ xorWith[i]);
                 }
-
-                if (b is not SourceBlock)
-                {
-                    newList.Add(b.Id);
-                }
             }
 
-            var newBlockParams = this.BlockParams.Merge(new BlockParams(
-                    blockSize: this.BlockSize,
-                    requestTime: System.DateTime.Now,
-                    keepUntilAtLeast: keepUntil,
-                    redundancy: redundancy,
-                    privateEncrypted: this.StorageContract.PrivateEncrypted,
-                    originalType: this.originalType));
-
-            var result = new BrightenedBlock(
-                blockParams: newBlockParams,
-                data: new ReadOnlyMemory<byte>(xorData),
-                constituentBlocks: newList);
-
-            return result;
+            return new ReadOnlyMemory<byte>(xorData);
         }
 
         /// <summary>

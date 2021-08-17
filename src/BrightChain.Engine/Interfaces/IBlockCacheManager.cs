@@ -16,6 +16,36 @@
         void Set(TransactableBlock value);
 
         /// <summary>
+        /// Adds a key to the cache if it is not already present
+        /// </summary>
+        /// <param name="key">key to palce in the cache</param>
+        void Set(Block value);
+
+        /// <summary>
+        /// Adds all keys to the cache if not already present
+        /// </summary>
+        /// <param name="key">key to palce in the cache</param>
+        void SetAll(IEnumerable<TransactableBlock> value);
+
+        /// <summary>
+        /// Adds all keys to the cache if not already present
+        /// </summary>
+        /// <param name="key">key to palce in the cache</param>
+        void SetAll(IEnumerable<Block> value);
+
+        /// <summary>
+        /// Adds all keys to the cache if not already present
+        /// </summary>
+        /// <param name="key">key to palce in the cache</param>
+        void SetAllAsync(IAsyncEnumerable<TransactableBlock> value);
+
+        /// <summary>
+        /// Adds all keys to the cache if not already present
+        /// </summary>
+        /// <param name="key">key to palce in the cache</param>
+        void SetAllAsync(IAsyncEnumerable<Block> value);
+
+        /// <summary>
         /// Add a node that the cache manager should trust.
         /// </summary>
         /// <param name="node">Node submitting the block to the cache.</param>

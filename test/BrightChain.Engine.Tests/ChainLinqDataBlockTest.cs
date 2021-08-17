@@ -103,10 +103,10 @@
                 Assert.IsNull(retrievedChainNull);
             });
 
-            brightBlockService.PersistCBL(brightChain);
+            var brightenedCBL = brightBlockService.BrightenAndPersistCBL(brightChain);
 
             // in order to get our original blocks back, first get the chain head
-            var retrievedChain = await brightBlockService.FindBlockByIdAsync(brightChain.Id);
+            var retrievedChain = await brightBlockService.FindBlockByIdAsync(brightenedCBL.Id);
             Assert.IsNotNull(retrievedChain);
 
             // how do we validate this?
@@ -137,15 +137,15 @@
                 Assert.IsNull(retrievedChainNull);
             });
 
-            brightBlockService.PersistCBL(brightChain);
+            var brightenedCBL = brightBlockService.BrightenAndPersistCBL(brightChain);
 
             // in order to get our original blocks back, first get the chain head
-            var retrievedChain = await brightBlockService.FindBlockByIdAsync(brightChain.Id);
+            var retrievedChain = await brightBlockService.FindBlockByIdAsync(brightenedCBL.Id);
             Assert.IsNotNull(retrievedChain);
 
-            if (retrievedChain is BrightChain retrievedBrightChain)
+            if (retrievedChain is BrightenedCBL retrievedBrightChain)
             {
-                Assert.AreEqual(brightChain.Crc32, retrievedBrightChain.Crc32);
+                Assert.AreEqual(brightenedCBL.Crc32, retrievedBrightChain.Crc32);
             }
             else
             {

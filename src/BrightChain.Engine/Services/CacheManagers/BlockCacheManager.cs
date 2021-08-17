@@ -119,7 +119,7 @@
         public TupleStripe GetFromBlockIDs(BlockHash[] blockHashes)
         {
             int i = 0;
-            Block[] blocks = new Block[blockHashes.Length];
+            TransactableBlock[] blocks = new TransactableBlock[blockHashes.Length];
             foreach (var hash in blockHashes)
             {
                 blocks[i++] = this.Get(hash);
@@ -182,6 +182,41 @@
                 this.Set(item);
             }
         }
+
+        public virtual void Set(Block value)
+        {
+            this.Set(value.MakeTransactable(
+                cacheManager: this,
+                allowCommit: true));
+        }
+
+        public virtual void Set(BlockHash key, Block value)
+        {
+            this.Set(value.MakeTransactable(
+                cacheManager: this,
+                allowCommit: true));
+        }
+
+        public virtual void SetAll(IEnumerable<Block> items)
+        {
+            foreach (var item in items)
+            {
+                this.Set(item.MakeTransactable(
+                    cacheManager: this,
+                    allowCommit: true));
+            }
+        }
+
+        public async virtual void SetAllAsync(IAsyncEnumerable<Block> items)
+        {
+            await foreach (var item in items)
+            {
+                this.Set(item.MakeTransactable(
+                    cacheManager: this,
+                    allowCommit: true));
+            }
+        }
+
 
         /// <summary>
         ///     Add a node that the cache manager should trust.

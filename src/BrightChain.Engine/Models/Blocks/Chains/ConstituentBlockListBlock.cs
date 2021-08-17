@@ -14,7 +14,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
     /// TODO: Validate constituent blocks can recompose into that data (break up by tuple size), validate all blocks are same length
     /// </summary>
     [ProtoContract]
-    public class ConstituentBlockListBlock : TransactableBlock, IBlock, IDisposable, IValidatable
+    public class ConstituentBlockListBlock : SourceBlock, IBlock, IDisposable, IValidatable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ConstituentBlockListBlock"/> class.
@@ -42,16 +42,13 @@ namespace BrightChain.Engine.Models.Blocks.Chains
         /// Gets a CBLBlockParams object with the parameters of this block.
         /// </summary>
         public override ConstituentBlockListBlockParams BlockParams => new ConstituentBlockListBlockParams(
-                    blockParams: new TransactableBlockParams(
-                        cacheManager: this.CacheManager,
-                        allowCommit: this.AllowCommit,
-                        blockParams: new BlockParams(
+                    blockParams: new BlockParams(
                             blockSize: this.BlockSize,
                             requestTime: this.StorageContract.RequestTime,
                             keepUntilAtLeast: this.StorageContract.KeepUntilAtLeast,
                             redundancy: this.StorageContract.RedundancyContractType,
                             privateEncrypted: this.StorageContract.PrivateEncrypted,
-                            originalType: Type.GetType(this.OriginalType))),
+                            originalType: Type.GetType(this.OriginalType)),
                     sourceId: this.SourceId,
                     segmentId: this.SegmentId,
                     totalLength: this.TotalLength,

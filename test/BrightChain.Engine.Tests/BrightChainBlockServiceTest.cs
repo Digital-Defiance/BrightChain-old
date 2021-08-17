@@ -128,10 +128,10 @@
             {
                 foreach (var blockHash in cblBlock.ConstituentBlocks)
                 {
-                    var cbl = (ConstituentBlockListBlock)await brightChainService
+                    var fetchedBlock = await brightChainService
                         .FindBlockByIdAsync(blockHash)
                             .ConfigureAwait(false);
-
+                    var cbl = (SuperConstituentBlockListBlock)fetchedBlock.AsBlock;
                     Assert.IsTrue(cbl.Validate());
                     Assert.AreEqual(sourceInfo.FileInfo.Length, cbl.TotalLength);
                     Assert.AreEqual(
