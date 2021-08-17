@@ -48,7 +48,10 @@ namespace BrightChain.Engine.Models.Blocks
 
         public ReadOnlyMemory<byte> Bytes => this.StoredData.Bytes;
 
-        public byte ByteAt(int index) => this.StoredData.Bytes.Slice(index).ToArray()[0];
+        public byte ByteAt(int index)
+        {
+            return this.StoredData.Bytes.Slice(index).ToArray()[0];
+        }
 
         public BlockSize BlockSize { get; }
 
