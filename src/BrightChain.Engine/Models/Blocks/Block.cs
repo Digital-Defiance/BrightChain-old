@@ -70,6 +70,7 @@ namespace BrightChain.Engine.Models.Blocks
         [ProtoMember(5)]
         public BrightChainNode OriginatingNode { get; internal set; }
 
+        // TODO: Probably going to remove this from the stored attributes and only persist these on ChainLinqDataObjects?
         [ProtoMember(6)]
         public string OriginalType { get; internal set; }
 
