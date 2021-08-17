@@ -586,7 +586,7 @@ namespace BrightChain.Engine.Services
                 sourceBlocks: awaitedBlocks);
         }
 
-        public BrightenedCBL BrightenAndPersistCBL(ConstituentBlockListBlock cblBlock)
+        public BrightenedBlock BrightenAndPersistCBL(ConstituentBlockListBlock cblBlock)
         {
             // TODO: update indices
             // TODO: CBLs may be a server option to disable
@@ -607,12 +607,9 @@ namespace BrightChain.Engine.Services
                 cacheManager: this.blockFasterCache,
                 allowCommit: true);
 
-            var brightenedCBL = new BrightenedCBL(
-                cbl: brightenedCbl);
+            this.blockFasterCache.Set(brightenedCbl);
 
-            this.blockFasterCache.Set(brightenedCBL);
-
-            return brightenedCBL;
+            return brightenedCbl;
         }
 
         public void Dispose()

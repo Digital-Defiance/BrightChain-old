@@ -10,6 +10,7 @@
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
     using FASTER.core;
@@ -382,6 +383,16 @@
         public void Set(BlockSessionContext sessionContext, TransactableBlock block)
         {
             base.Set(block);
+
+            //if (block is BrightenedBlock brightenedCBL)
+            //{
+            //var cblSession = this.cblSourceHashesKV
+            //.For(functions: new SimpleFunctions<DataHash, BlockHash, CacheContext>())
+            //.NewSession<SimpleFunctions<DataHash, BlockHash, CacheContext>>();
+
+            //cblSession.Upsert()
+            //}
+
             block.SetCacheManager(this);
             sessionContext.Upsert(ref block);
         }

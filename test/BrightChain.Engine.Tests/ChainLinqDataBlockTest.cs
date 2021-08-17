@@ -143,9 +143,11 @@
             var retrievedChain = await brightBlockService.FindBlockByIdAsync(brightenedCBL.Id);
             Assert.IsNotNull(retrievedChain);
 
-            if (retrievedChain is BrightenedCBL retrievedBrightChain)
+            if (retrievedChain is BrightenedBlock brightBlock)
             {
-                Assert.AreEqual(brightenedCBL.Crc32, retrievedBrightChain.Crc32);
+                Assert.AreEqual(brightenedCBL.Crc32, brightBlock.Crc32);
+
+                // TODO: get back actual chain
             }
             else
             {
