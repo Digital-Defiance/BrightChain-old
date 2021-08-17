@@ -1,6 +1,7 @@
 ﻿namespace BrightChain.Engine.Faster
 {
     using System;
+    using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
@@ -18,6 +19,28 @@
         {
             this.MetadataSession = metadataSession;
             this.DataSession = dataSession;
+        }
+
+        public void Upsert(ref TransactableBlock block, bool complete = false)
+        {
+            var blockHash = block.Id;
+            var resultStatus = this.MetadataSession.Upsert(ref blockHash, ref block);
+            if (resultStatus != Status.OK)
+            {
+                throw new BrightChainException("Unable to store block");
+            }
+
+            var blockData = block.StoredData;
+            resultStatus = this.DataSession.Upsert(ref blockHash, ref blockData);
+            if (resultStatus != Status.OK)
+            {
+                throw new BrightChainException("Unable to store block");
+            }
+
+            if (complete)
+            {
+                this.CompletePending(wait: true);
+            }
         }
 
         public bool CompletePending(bool wait)

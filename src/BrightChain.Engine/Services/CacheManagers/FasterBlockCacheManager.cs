@@ -388,21 +388,7 @@
             base.Set(block);
             block.SetCacheManager(this);
             using var sessionContext = this.NewSessionContext;
-            var blockHash = block.Id;
-            var resultStatus = sessionContext.MetadataSession.Upsert(ref blockHash, ref block);
-            if (resultStatus != Status.OK)
-            {
-                throw new BrightChainException("Unable to store block");
-            }
-
-            var blockData = block.StoredData;
-            resultStatus = sessionContext.DataSession.Upsert(ref blockHash, ref blockData);
-            if (resultStatus != Status.OK)
-            {
-                throw new BrightChainException("Unable to store block");
-            }
-
-            sessionContext.CompletePending(wait: true);
+            sessionContext.Upsert(ref block);
         }
 
         public override void SetAll(IEnumerable<TransactableBlock> items)
@@ -414,19 +400,7 @@
             {
                 base.Set(blocks[i]);
                 blocks[i].SetCacheManager(this);
-                var blockHash = blocks[i].Id;
-                var resultStatus = sessionContext.MetadataSession.Upsert(ref blockHash, ref blocks[i]);
-                if (resultStatus != Status.OK)
-                {
-                    throw new BrightChainException("Unable to store block");
-                }
-
-                var blockData = blocks[i].StoredData;
-                resultStatus = sessionContext.DataSession.Upsert(ref blockHash, ref blockData);
-                if (resultStatus != Status.OK)
-                {
-                    throw new BrightChainException("Unable to store block");
-                }
+                sessionContext.Upsert(ref blocks[i], false);
             }
 
             sessionContext.CompletePending(wait: true);
@@ -440,19 +414,7 @@
                 TransactableBlock t = block;
                 base.Set(t);
                 t.SetCacheManager(this);
-                var blockHash = t.Id;
-                var resultStatus = sessionContext.MetadataSession.Upsert(ref blockHash, ref t);
-                if (resultStatus != Status.OK)
-                {
-                    throw new BrightChainException("Unable to store block");
-                }
-
-                var blockData = t.StoredData;
-                resultStatus = sessionContext.DataSession.Upsert(ref blockHash, ref blockData);
-                if (resultStatus != Status.OK)
-                {
-                    throw new BrightChainException("Unable to store block");
-                }
+                sessionContext.Upsert(ref t, false);
             }
 
             await sessionContext.CompletePendingAsync(wait: true)
