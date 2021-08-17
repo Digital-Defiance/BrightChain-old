@@ -379,16 +379,20 @@
             return block;
         }
 
+        public void Set(BlockSessionContext sessionContext, TransactableBlock block)
+        {
+            base.Set(block);
+            block.SetCacheManager(this);
+            sessionContext.Upsert(ref block);
+        }
+
         /// <summary>
         ///     Adds a key to the cache if it is not already present.
         /// </summary>
         /// <param name="block">block to palce in the cache.</param>
         public override void Set(TransactableBlock block)
         {
-            base.Set(block);
-            block.SetCacheManager(this);
-            using var sessionContext = this.NewSessionContext;
-            sessionContext.Upsert(ref block);
+            this.Set(this.NewSessionContext, block);
         }
 
         public override void SetAll(IEnumerable<TransactableBlock> items)
@@ -398,9 +402,7 @@
 
             for (int i = 0; i < blocks.Length; i++)
             {
-                base.Set(blocks[i]);
-                blocks[i].SetCacheManager(this);
-                sessionContext.Upsert(ref blocks[i], false);
+                this.Set(sessionContext, blocks[i]);
             }
 
             sessionContext.CompletePending(wait: true);
@@ -411,10 +413,7 @@
             using var sessionContext = this.NewSessionContext;
             await foreach (var block in items)
             {
-                TransactableBlock t = block;
-                base.Set(t);
-                t.SetCacheManager(this);
-                sessionContext.Upsert(ref t, false);
+                this.Set(sessionContext, block);
             }
 
             await sessionContext.CompletePendingAsync(wait: true)
