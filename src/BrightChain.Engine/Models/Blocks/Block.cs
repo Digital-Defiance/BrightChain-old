@@ -111,16 +111,9 @@ namespace BrightChain.Engine.Models.Blocks
         {
             get
             {
-                MemoryStream memoryStream = new MemoryStream(this.Bytes.ToArray());
-                memoryStream.Position = 0;
                 EntCalc entCalc = new EntCalc(false);
-                while (memoryStream.Position < memoryStream.Length)
-                {
-                    entCalc.AddSample((byte)memoryStream.ReadByte(), false);
-                }
-
+                new List<byte>(this.Bytes.ToArray()).ForEach(b => entCalc.AddSample(b, false));
                 EntCalc.EntCalcResult calculationResult = entCalc.EndCalculation();
-                memoryStream.Close();
                 return calculationResult;
             }
         }
