@@ -29,6 +29,12 @@
             return m && d;
         }
 
+        public async Task CompletePendingAsync(bool wait)
+        {
+            await this.MetadataSession.CompletePendingAsync(waitForCommit: wait).ConfigureAwait(false);
+            await this.DataSession.CompletePendingAsync(waitForCommit: wait).ConfigureAwait(false);
+        }
+
         public string SessionID =>
             string.Format("{0}-{1}", this.MetadataSession.ID, this.DataSession.ID);
 

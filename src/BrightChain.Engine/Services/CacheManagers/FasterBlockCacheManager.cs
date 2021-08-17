@@ -395,7 +395,8 @@
                 }
             }
 
-            sessionContext.CompletePending(wait: true);
+            await sessionContext.CompletePendingAsync(wait: true)
+                .ConfigureAwait(false);
         }
 
         public void Dispose()
