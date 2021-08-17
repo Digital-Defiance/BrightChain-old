@@ -50,6 +50,8 @@
         /// </summary>
         private readonly IDevice blockMetadataDevice;
 
+        private readonly FasterKV<BlockHash, TransactableBlock> blockMetadataKV;
+
         /// <summary>
         /// Session log backing storage device for block data.
         /// </summary>
@@ -60,8 +62,19 @@
         /// </summary>
         private readonly IDevice blockDataDevice;
 
-        private readonly FasterKV<BlockHash, TransactableBlock> blockMetadataKV;
         private readonly FasterKV<BlockHash, BlockData> blockDataKV;
+
+        /// <summary>
+        /// Session log backing storage device for block data.
+        /// </summary>
+        private readonly IDevice cblSourceHashesLogDevice;
+
+        /// <summary>
+        /// Backing storage device for data.
+        /// </summary>
+        private readonly IDevice cblSourceHasheDevice;
+
+        private readonly FasterKV<DataHash, BlockHash> cblSourceHashesKV;
 
         private FasterKV<BlockHash, TransactableBlock> NewMetdataKV
         {
@@ -123,6 +136,35 @@
             }
         }
 
+        private FasterKV<DataHash, BlockHash> NewCblSourceHashesFasterKV
+        {
+            get
+            {
+                var cblSourceHashesLogSettings = new LogSettings
+                {
+                    LogDevice = this.blockDataLogDevice,
+                    ObjectLogDevice = this.blockDataDevice,
+                    ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
+                };
+
+                var cblSourceHashesSerializerSettings = new SerializerSettings<DataHash, BlockHash>
+                {
+                    keySerializer = () => new FasterDataHashSerializer(),
+                    valueSerializer = () => new FasterBlockHashSerializer(),
+                };
+
+                return new FasterKV<DataHash, BlockHash>(
+                    size: HashTableBuckets,
+                    logSettings: cblSourceHashesLogSettings,
+                    checkpointSettings: new CheckpointSettings
+                    {
+                        CheckpointDir = this.GetDiskCacheDirectory().FullName,
+                    },
+                    serializerSettings: cblSourceHashesSerializerSettings,
+                    comparer: BlockSizeMap.ZeroVectorHash(BlockSize.Micro)); // gets an arbitrary BlockHash object which has the IFasterEqualityComparer on the class.
+            }
+        }
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
         /// </summary>
@@ -177,6 +219,10 @@
             this.blockDataLogDevice = this.OpenDevice("data-log");
             this.blockDataDevice = this.OpenDevice("data");
             this.blockDataKV = this.NewDataFasterKV;
+
+            this.cblSourceHashesLogDevice = this.OpenDevice("cbl-log");
+            this.cblSourceHasheDevice = this.OpenDevice("cbl");
+            this.cblSourceHashesKV = this.NewCblSourceHashesFasterKV;
         }
 
         /// <summary>
