@@ -72,7 +72,7 @@
         /// <summary>
         /// Backing storage device for data.
         /// </summary>
-        private readonly IDevice cblSourceHasheDevice;
+        private readonly IDevice cblSourceHashesDevice;
 
         private readonly FasterKV<DataHash, BlockHash> cblSourceHashesKV;
 
@@ -224,7 +224,7 @@
             this.blockDataKV = this.NewDataFasterKV;
 
             this.cblSourceHashesLogDevice = this.OpenDevice("cbl-log");
-            this.cblSourceHasheDevice = this.OpenDevice("cbl");
+            this.cblSourceHashesDevice = this.OpenDevice("cbl");
             this.cblSourceHashesKV = this.NewCblSourceHashesFasterKV;
         }
 
@@ -332,18 +332,7 @@
             }
 
             using var sessionContext = this.NewSessionContext;
-            if (!(sessionContext.MetadataSession.Delete(key) == Status.OK))
-            {
-                return false;
-            }
-
-            if (!(sessionContext.DataSession.Delete(key) == Status.OK))
-            {
-                return false;
-            }
-
-            sessionContext.CompletePending(wait: true);
-            return true;
+            return sessionContext.Drop(key, true);
         }
 
         /// <summary>
@@ -354,38 +343,14 @@
         public override TransactableBlock Get(BlockHash key)
         {
             using var sessionContext = this.NewSessionContext;
-            var metadataResultTuple = sessionContext.MetadataSession.Read(key);
-
-            if (metadataResultTuple.status != Status.OK)
-            {
-                throw new IndexOutOfRangeException(message: key.ToString());
-            }
-
-            var block = metadataResultTuple.output;
-
-            var dataResultTuple = sessionContext.DataSession.Read(key);
-
-            if (dataResultTuple.status != Status.OK)
-            {
-                throw new IndexOutOfRangeException(message: key.ToString());
-            }
-
-            block.StoredData = dataResultTuple.output;
-
-            if (!block.Validate())
-            {
-                throw new BrightChainValidationEnumerableException(block.ValidationExceptions, "Failed to reload block from store");
-            }
-
-            sessionContext.CompletePending(wait: true);
-
-            return block;
+            return sessionContext.Get(key);
         }
 
         public void Set(BlockSessionContext sessionContext, TransactableBlock block)
         {
             base.Set(block);
-
+            block.SetCacheManager(this);
+            sessionContext.Upsert(ref block);
             //if (block is BrightenedBlock brightenedCBL)
             //{
             //var cblSession = this.cblSourceHashesKV
@@ -394,9 +359,6 @@
 
             //cblSession.Upsert()
             //}
-
-            block.SetCacheManager(this);
-            sessionContext.Upsert(ref block);
         }
 
         /// <summary>
@@ -435,6 +397,17 @@
 
         public void Dispose()
         {
+            this.blockMetadataLogDevice.Dispose();
+            this.blockMetadataDevice.Dispose();
+            this.blockMetadataKV.Dispose();
+
+            this.blockDataDevice.Dispose();
+            this.blockDataLogDevice.Dispose();
+            this.blockDataKV.Dispose();
+
+            this.cblSourceHashesDevice.Dispose();
+            this.cblSourceHashesLogDevice.Dispose();
+            this.cblSourceHashesKV.Dispose();
         }
     }
 }

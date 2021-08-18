@@ -22,17 +22,17 @@
         /// </summary>
         protected readonly string configFile;
 
-        private readonly IConfiguration configuration;
+        protected readonly IConfiguration configuration;
 
         /// <summary>
         ///     Database/directory name for this instance's tree root.
         /// </summary>
         protected readonly string databaseName;
 
-        private readonly ILogger logger;
-        private readonly Dictionary<BlockSize, bool> supportedReadBlockSizes;
-        private readonly Dictionary<BlockSize, bool> supportedWriteBlockSizes;
-        private readonly List<BrightChainNode> trustedNodes;
+        protected readonly ILogger logger;
+        protected readonly Dictionary<BlockSize, bool> supportedReadBlockSizes;
+        protected readonly Dictionary<BlockSize, bool> supportedWriteBlockSizes;
+        protected readonly List<BrightChainNode> trustedNodes;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="BlockCacheManager" /> class.

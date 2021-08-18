@@ -21,6 +21,55 @@
             this.DataSession = dataSession;
         }
 
+        public bool Drop(BlockHash blockHash, bool complete = true)
+        {
+            if (!(this.MetadataSession.Delete(blockHash) == Status.OK))
+            {
+                return false;
+            }
+
+            if (!(this.DataSession.Delete(blockHash) == Status.OK))
+            {
+                // TODO: rollback?
+                return false;
+            }
+
+            if (complete)
+            {
+                return this.CompletePending(wait: true);
+            }
+
+            return true;
+        }
+
+        public TransactableBlock Get(BlockHash blockHash)
+        {
+            var metadataResultTuple = this.MetadataSession.Read(blockHash);
+
+            if (metadataResultTuple.status != Status.OK)
+            {
+                throw new IndexOutOfRangeException(message: blockHash.ToString());
+            }
+
+            var block = metadataResultTuple.output;
+
+            var dataResultTuple = this.DataSession.Read(blockHash);
+
+            if (dataResultTuple.status != Status.OK)
+            {
+                throw new IndexOutOfRangeException(message: blockHash.ToString());
+            }
+
+            block.StoredData = dataResultTuple.output;
+
+            if (!block.Validate())
+            {
+                throw new BrightChainValidationEnumerableException(block.ValidationExceptions, "Failed to reload block from store");
+            }
+
+            return block;
+        }
+
         public void Upsert(ref TransactableBlock block, bool complete = false)
         {
             var blockHash = block.Id;
