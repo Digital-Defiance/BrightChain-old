@@ -64,16 +64,6 @@
             this.Computed = true;
         }
 
-        public string ToString(string format, IFormatProvider _)
-        {
-            return BitConverter.ToString(this.SignatureHashBytes.ToArray()).Replace("-", string.Empty).ToLower(culture: System.Globalization.CultureInfo.InvariantCulture);
-        }
-
-        public new string ToString()
-        {
-            return BitConverter.ToString(this.SignatureHashBytes.ToArray()).Replace("-", string.Empty).ToLower(culture: System.Globalization.CultureInfo.InvariantCulture);
-        }
-
         public static bool operator ==(DataSignature a, DataSignature b)
         {
             return ReadOnlyMemoryComparer<byte>.Compare(a.SignatureHashBytes, b.SignatureHashBytes) == 0;
@@ -92,6 +82,16 @@
         public static bool operator !=(DataSignature a, DataSignature b)
         {
             return !a.Equals(b);
+        }
+
+        public string ToString(string format, IFormatProvider _)
+        {
+            return BitConverter.ToString(this.SignatureHashBytes.ToArray()).Replace("-", string.Empty).ToLower(culture: System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        public new string ToString()
+        {
+            return BitConverter.ToString(this.SignatureHashBytes.ToArray()).Replace("-", string.Empty).ToLower(culture: System.Globalization.CultureInfo.InvariantCulture);
         }
 
         public override bool Equals(object obj)

@@ -1,8 +1,8 @@
-using System.Runtime.InteropServices;
-
 namespace BrightChain.Engine.Helpers
 {
-    public sealed class MemoryComparer<T> : IEqualityComparer<Memory<T>>, IComparer<Memory<T>>
+    using System.Runtime.InteropServices;
+
+    public class MemoryComparer<T> : IEqualityComparer<Memory<T>>, IComparer<Memory<T>>
         where T : IEquatable<T>, IComparable<T>
     {
         /// <summary> returns true if both arrays contain the exact same set of bytes. </summary>

@@ -37,9 +37,8 @@
         /// </summary>
         private readonly string databaseName;
 
-
         // Whether we enable a read cache
-        static readonly bool useReadCache = false;
+        private readonly bool useReadCache = false;
 
         /// <summary>
         /// Session log backing storage device for block metadata.
@@ -85,7 +84,7 @@
                 {
                     LogDevice = this.blockMetadataLogDevice,
                     ObjectLogDevice = this.blockMetadataDevice,
-                    ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
+                    ReadCacheSettings = this.useReadCache ? new ReadCacheSettings() : null,
                 };
 
                 // Define serializers; otherwise FASTER will use the slower DataContract
@@ -116,7 +115,7 @@
                 {
                     LogDevice = this.blockDataLogDevice,
                     ObjectLogDevice = this.blockDataDevice,
-                    ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
+                    ReadCacheSettings = this.useReadCache ? new ReadCacheSettings() : null,
                 };
 
                 var blockDataSerializerSettings = new SerializerSettings<BlockHash, BlockData>
@@ -145,7 +144,7 @@
                 {
                     LogDevice = this.blockDataLogDevice,
                     ObjectLogDevice = this.blockDataDevice,
-                    ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
+                    ReadCacheSettings = this.useReadCache ? new ReadCacheSettings() : null,
                 };
 
                 var cblSourceHashesSerializerSettings = new SerializerSettings<DataHash, BlockHash>
@@ -200,7 +199,7 @@
             var configuredDbName
                 = nodeOptions.GetSection("DatabaseName");
 
-            if (configuredDbName is null)
+            if (configuredDbName is null || configuredDbName.Value is null)
             {
                 //ConfigurationHelper.AddOrUpdateAppSetting("NodeOptions:DatabaseName", this.databaseName);
             }
@@ -212,6 +211,9 @@
                     throw new BrightChainException("Provided root block does not match configured root block guid");
                 }
             }
+
+            var readCache = nodeOptions.GetSection("EnableReadCache");
+            this.useReadCache = readCache is null || readCache.Value is null ? false : Convert.ToBoolean(readCache.Value);
 
             this.blockMetadataLogDevice = this.OpenDevice("metadata-log");
             this.blockMetadataDevice = this.OpenDevice("metadata");

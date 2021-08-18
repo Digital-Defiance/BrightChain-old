@@ -1,7 +1,7 @@
-using System.Runtime.InteropServices;
-
 namespace BrightChain.Engine.Helpers
 {
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// Poor implementation of a 1:1 comparator on a ReadOnlyMemory<typeparamref name="T"/>
     /// </summary>
