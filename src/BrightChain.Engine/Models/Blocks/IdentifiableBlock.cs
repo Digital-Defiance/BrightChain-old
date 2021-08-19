@@ -8,19 +8,19 @@
     /// <summary>
     /// User data that must be whitened with the block whitener before being persisted. These blocks must never be stored directly.
     /// </summary>
-    public class SourceBlock
-        : Block, IComparable<SourceBlock>, IComparable<Block>, IComparable<IBlock>
+    public class IdentifiableBlock
+        : Block, IComparable<IdentifiableBlock>, IComparable<Block>, IComparable<IBlock>
     {
-        public SourceBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
+        public IdentifiableBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
             : base(
                 blockParams: blockParams,
                 data: data)
         {
         }
 
-        public override SourceBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
+        public override IdentifiableBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
         {
-            return new SourceBlock(
+            return new IdentifiableBlock(
                 blockParams: new BlockParams(
                     blockSize: this.BlockSize,
                     requestTime: this.StorageContract.RequestTime,
@@ -31,7 +31,7 @@
                 data: data);
         }
 
-        public int CompareTo(SourceBlock other)
+        public int CompareTo(IdentifiableBlock other)
         {
             return this.StoredData.CompareTo(other.StoredData);
         }

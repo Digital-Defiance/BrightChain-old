@@ -50,19 +50,19 @@
 
         public async IAsyncEnumerable<TupleStripe> ReconstructTupleStripes(BlockCacheManager blockCacheManager)
         {
-            var sourceBlocks = this.ConstituentBlockListBlock.ConstituentBlocks;
-            var sourceBlockCount = sourceBlocks.Count();
-            if (sourceBlockCount == 0)
+            var constituentBlocks = this.ConstituentBlockListBlock.ConstituentBlocks;
+            var constituentBlockCount = constituentBlocks.Count();
+            if (constituentBlockCount == 0)
             {
                 throw new BrightChainException("No hashes in constituent block list");
             }
 
-            if ((sourceBlockCount % this.ConstituentBlockListBlock.TupleCount) != 0)
+            if ((constituentBlockCount % this.ConstituentBlockListBlock.TupleCount) != 0)
             {
                 throw new BrightChainException("CBL length is not a multiple of the tuple count");
             }
 
-            var tupleGroups = TakeIntoGroupsOf(sourceBlocks, this.ConstituentBlockListBlock.TupleCount);
+            var tupleGroups = TakeIntoGroupsOf(constituentBlocks, this.ConstituentBlockListBlock.TupleCount);
             await foreach (var tupleGroup in tupleGroups)
             {
                 TransactableBlock[] blockList = new TransactableBlock[this.ConstituentBlockListBlock.TupleCount];

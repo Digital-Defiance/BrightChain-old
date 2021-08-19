@@ -3,17 +3,17 @@
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Models.Hashes;
 
-    public struct SourceBlocksInfo
+    public struct IdentifiableBlocksInfo
     {
         public readonly DataHash SourceId;
-        public int BytesPerBlock;
-        public long TotalBlocksExpected;
+        public readonly int BytesPerBlock;
+        public readonly long TotalBlocksExpected;
         public readonly long TotalBlockedBytes;
         public readonly long HashesPerBlock;
         public readonly int CblsExpected;
         public readonly long BytesPerCbl;
 
-        public SourceBlocksInfo(IEnumerable<Block> blocks)
+        public IdentifiableBlocksInfo(IEnumerable<Block> blocks)
         {
             var first = blocks.First();
             this.SourceId = new DataHash(blocks.SelectMany(b => b.Bytes.ToArray()));

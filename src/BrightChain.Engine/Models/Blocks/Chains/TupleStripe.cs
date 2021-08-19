@@ -35,14 +35,14 @@
         }
 
         /// <summary>
-        /// XOR's the stripe's blocks back into a SourceBlock.
+        /// XOR's the stripe's blocks back into an Identifiable Block.
         /// </summary>
         /// <returns></returns>
-        public SourceBlock Consolidate()
+        public IdentifiableBlock Consolidate()
         {
             var blocks = (Block[])this.Blocks;
             Block result = blocks[0];
-            return new SourceBlock(result.BlockParams, result.XOR(blocks));
+            return new IdentifiableBlock(result.BlockParams, result.XOR(blocks));
         }
     }
 }

@@ -26,12 +26,11 @@ namespace BrightChain.Engine.Models.Blocks
     [ProtoContract]
     [ProtoInclude(1, typeof(BrightenedBlock))]
     [ProtoInclude(2, typeof(RootBlock))]
-    [ProtoInclude(3, typeof(PrivateEncryptedSourceBlock))]
-    [ProtoInclude(4, typeof(RandomizerBlock))]
-    [ProtoInclude(5, typeof(TransactableBlock))]
-    [ProtoInclude(6, typeof(ConstituentBlockListBlock))]
-    [ProtoInclude(7, typeof(SuperConstituentBlockListBlock))]
-    [ProtoInclude(8, typeof(ChainLinq<>))]
+    [ProtoInclude(3, typeof(RandomizerBlock))]
+    [ProtoInclude(4, typeof(TransactableBlock))]
+    [ProtoInclude(5, typeof(ConstituentBlockListBlock))]
+    [ProtoInclude(6, typeof(SuperConstituentBlockListBlock))]
+    [ProtoInclude(7, typeof(ChainLinq<>))]
     public abstract class Block : IBlock, IComparable<IBlock>, IComparable<Block>, IEquatable<Block>, IEquatable<IBlock>
     {
         [ProtoMember(1)]
@@ -199,9 +198,9 @@ namespace BrightChain.Engine.Models.Blocks
         /// <returns></returns>
         public ReadOnlyMemory<byte> XOR(Block other)
         {
-            if (other is SourceBlock)
+            if (other is IdentifiableBlock)
             {
-                throw new BrightChainException("Unexpected SourceBlock");
+                throw new BrightChainException("Unexpected Identifiable Block");
             }
 
             if (this.Bytes.Length != other.Bytes.Length)
@@ -230,9 +229,9 @@ namespace BrightChain.Engine.Models.Blocks
                     continue;
                 }
 
-                if (b is SourceBlock)
+                if (b is IdentifiableBlock)
                 {
-                    throw new BrightChainException("Unexpected SourceBlock");
+                    throw new BrightChainException("Unexpected Identifiable Block");
                 }
 
                 if (b.BlockSize != this.BlockSize)
@@ -309,7 +308,7 @@ namespace BrightChain.Engine.Models.Blocks
         {
             return new TransactableBlock(
                 cacheManager: cacheManager,
-                sourceBlock: this,
+                block: this,
                 allowCommit: allowCommit);
         }
 

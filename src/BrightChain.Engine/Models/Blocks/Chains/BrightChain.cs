@@ -23,15 +23,15 @@
         private readonly int _count;
         private readonly BlockParams _blockParams;
 
-        public BrightChain(ConstituentBlockListBlockParams blockParams, IEnumerable<BrightenedBlock> sourceBlocks)
+        public BrightChain(ConstituentBlockListBlockParams blockParams, IEnumerable<BrightenedBlock> brightenedBlocks)
             : base(blockParams)
         {
-            if (!sourceBlocks.Any())
+            if (!brightenedBlocks.Any())
             {
-                throw new BrightChainException(nameof(sourceBlocks));
+                throw new BrightChainException(nameof(brightenedBlocks));
             }
 
-            this._blocks = sourceBlocks;
+            this._blocks = brightenedBlocks;
             this._head = this._blocks.First();
             this._blockParams = this._head.BlockParams;
 

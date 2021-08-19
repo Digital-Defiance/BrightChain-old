@@ -179,7 +179,7 @@ namespace BrightChain.Engine.Services
                         }
 
                         var brightenedBlock = this.blockBrightener.Brighten(
-                            block: new SourceBlock(
+                            identifiableBlock: new IdentifiableBlock(
                                 blockParams: blockParams,
                                 data: buffer),
                             randomizersUsed: out _);
@@ -515,7 +515,7 @@ namespace BrightChain.Engine.Services
 
             this.blockFasterCache.Set(new TransactableBlock(
                 cacheManager: this.blockFasterCache,
-                sourceBlock: block,
+                block: block,
                 allowCommit: true));
 
             return block;
@@ -542,12 +542,12 @@ namespace BrightChain.Engine.Services
             }
         }
 
-        public async IAsyncEnumerable<BrightenedBlock> BrightenBlocks(IAsyncEnumerable<SourceBlock> sourceBlocks)
+        public async IAsyncEnumerable<BrightenedBlock> BrightenBlocksAsync(IAsyncEnumerable<IdentifiableBlock> identifiableBlocks)
         {
-            await foreach (var sourceBlock in sourceBlocks)
+            await foreach (var identifiableBlock in identifiableBlocks)
             {
                 var brightenedBlock = this.blockBrightener.Brighten(
-                    block: sourceBlock,
+                    identifiableBlock: identifiableBlock,
                     randomizersUsed: out Block[] randomizersUsed);
 
                 brightenedBlock.MakeTransactable(
@@ -585,7 +585,7 @@ namespace BrightChain.Engine.Services
                     constituentBlocks: hashes,
                     previous: null,
                     next: null),
-                sourceBlocks: awaitedBlocks);
+                brightenedBlocks: awaitedBlocks);
         }
 
         public BrightenedBlock BrightenAndPersistCBL(ConstituentBlockListBlock cblBlock)

@@ -15,10 +15,10 @@
     [ProtoContract]
     public class TransactableBlock : Block, IDisposable, ITransactable, ITransactableBlock, IComparable<TransactableBlock>, IComparable<ITransactableBlock>, IEquatable<IBlock>
     {
-        public TransactableBlock(BlockCacheManager cacheManager, Block sourceBlock, bool allowCommit)
+        public TransactableBlock(BlockCacheManager cacheManager, Block block, bool allowCommit)
             : base(
-                blockParams: sourceBlock.BlockParams,
-                data: sourceBlock.Bytes)
+                blockParams: block.BlockParams,
+                data: block.Bytes)
         {
             this.CacheManager = cacheManager;
             this.AllowCommit = allowCommit;

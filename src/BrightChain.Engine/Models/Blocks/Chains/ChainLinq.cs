@@ -131,8 +131,8 @@
         public static async Task<BrightChain> BrightenAllAsync(BrightBlockService brightBlockService, IAsyncEnumerable<ChainLinqObjectBlock<T>> objectBlocks)
         {
             var brightBlocks = brightBlockService
-                .BrightenBlocks(
-                    sourceBlocks: objectBlocks);
+                .BrightenBlocksAsync(
+                    identifiableBlocks: objectBlocks);
 
             return await brightBlockService.ForgeChainAsync(brightBlocks)
                 .ConfigureAwait(false);

@@ -18,7 +18,7 @@
     /// <typeparam name="T"></typeparam>
     [ProtoContract]
     public class ChainLinqObjectBlock<T>
-        : SourceBlock
+        : IdentifiableBlock
         where T : new()
     {
         /// <summary>

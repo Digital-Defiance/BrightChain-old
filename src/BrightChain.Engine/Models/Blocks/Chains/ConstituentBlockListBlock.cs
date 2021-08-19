@@ -14,7 +14,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
     /// TODO: Validate constituent blocks can recompose into that data (break up by tuple size), validate all blocks are same length
     /// </summary>
     [ProtoContract]
-    public class ConstituentBlockListBlock : SourceBlock, IBlock, IDisposable, IValidatable
+    public class ConstituentBlockListBlock : IdentifiableBlock, IBlock, IDisposable, IValidatable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ConstituentBlockListBlock"/> class.

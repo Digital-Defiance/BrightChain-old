@@ -28,9 +28,9 @@
         /// <summary>
         /// Brightening is the process of XORing to correlate the data with block of random data and make it appear more random or "white" as white light is broad multi-spectrum light.
         /// </summary>
-        /// <param name="block"></param>
+        /// <param name="identifiableBlock"></param>
         /// <returns></returns>
-        public BrightenedBlock Brighten(SourceBlock block, out Block[] randomizersUsed)
+        public BrightenedBlock Brighten(IdentifiableBlock identifiableBlock, out Block[] randomizersUsed)
         {
             // the incoming block should be a raw disk block and is never used again
             randomizersUsed = new Block[TupleCount - 1];
@@ -43,10 +43,10 @@
                 // TODO: add a mixing ratio and re-use blocks as appropriately as possible
                 randomizersUsed[i] = new RandomizerBlock(
                     destinationCache: this.resultCache,
-                    blockSize: block.BlockSize,
-                    keepUntilAtLeast: block.StorageContract.KeepUntilAtLeast,
-                    redundancyContractType: block.StorageContract.RedundancyContractType,
-                    requestTime: block.StorageContract.RequestTime);
+                    blockSize: identifiableBlock.BlockSize,
+                    keepUntilAtLeast: identifiableBlock.StorageContract.KeepUntilAtLeast,
+                    redundancyContractType: identifiableBlock.StorageContract.RedundancyContractType,
+                    requestTime: identifiableBlock.StorageContract.RequestTime);
             }
 
             this.resultCache.SetAll(randomizersUsed);
@@ -55,8 +55,8 @@
                 blockParams: new TransactableBlockParams(
                     cacheManager: this.resultCache,
                     allowCommit: true,
-                    blockParams: block.BlockParams),
-                data: block.XOR(randomizersUsed),
+                    blockParams: identifiableBlock.BlockParams),
+                data: identifiableBlock.XOR(randomizersUsed),
                 constituentBlockHashes: randomizersUsed.Select(b => b.Id).ToArray());
         }
     }
