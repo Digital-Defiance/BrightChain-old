@@ -233,15 +233,6 @@
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
-        ///     Can not build a cache manager with no logger.
-        /// </summary>
-        private FasterBlockCacheManager()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         ///     Full path to the configuration file.
         /// </summary>
         public string ConfigurationFilePath

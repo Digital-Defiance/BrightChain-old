@@ -101,24 +101,30 @@
         {
             var m = this.MetadataSession.CompletePending(wait: wait);
             var d = this.DataSession.CompletePending(wait: wait);
+            var c = this.CblSourceHashSession.CompletePending(wait: wait);
 
             // broken out to prevent short circuit
-            return m && d;
+            return m && d && c;
         }
 
         public async Task CompletePendingAsync(bool wait)
         {
-            await this.MetadataSession.CompletePendingAsync(waitForCommit: wait).ConfigureAwait(false);
-            await this.DataSession.CompletePendingAsync(waitForCommit: wait).ConfigureAwait(false);
+            Task.WaitAll(new Task[]
+            {
+                this.MetadataSession.CompletePendingAsync(waitForCommit: wait).AsTask(),
+                this.DataSession.CompletePendingAsync(waitForCommit: wait).AsTask(),
+                this.CblSourceHashSession.CompletePendingAsync(waitForCommit: wait).AsTask(),
+            });
         }
 
         public string SessionID =>
-            string.Format("{0}-{1}", this.MetadataSession.ID, this.DataSession.ID);
+            string.Format("{0}-{1}-{2}", this.MetadataSession.ID, this.DataSession.ID, this.CblSourceHashSession.ID);
 
         public void Dispose()
         {
             this.MetadataSession.Dispose();
             this.DataSession.Dispose();
+            this.CblSourceHashSession.Dispose();
         }
     }
 }
