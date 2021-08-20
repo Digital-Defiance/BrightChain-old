@@ -7,7 +7,6 @@
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Faster;
     using BrightChain.Engine.Faster.Serializers;
-    using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.DataObjects;
@@ -32,47 +31,54 @@
         private readonly string baseDirectory;
 
         /// <summary>
-        ///     Database/directory name for this instance's tree root.
+        /// Whether we enable a read cache.
+        /// Updated from config.
         /// </summary>
-        private readonly string databaseName;
-
-        // Whether we enable a read cache
         private readonly bool useReadCache = false;
 
         /// <summary>
-        /// Session log backing storage device for block metadata.
+        /// Session log storage device for block metadata.
         /// </summary>
         private readonly IDevice blockMetadataLogDevice;
 
         /// <summary>
-        /// Backing storage device for block metadata.
+        /// Storage device for block metadata.
         /// </summary>
         private readonly IDevice blockMetadataDevice;
 
+        /// <summary>
+        /// FasterKV instance for block metadata.
+        /// </summary>
         private readonly FasterKV<BlockHash, TransactableBlock> blockMetadataKV;
 
         /// <summary>
-        /// Session log backing storage device for block data.
+        /// Session log storage device for block data.
         /// </summary>
         private readonly IDevice blockDataLogDevice;
 
         /// <summary>
-        /// Backing storage device for data.
+        /// Storage device for block data.
         /// </summary>
         private readonly IDevice blockDataDevice;
 
+        /// <summary>
+        /// FasterKV instance store for block data.
+        /// </summary>
         private readonly FasterKV<BlockHash, BlockData> blockDataKV;
 
         /// <summary>
-        /// Session log backing storage device for block data.
+        /// Session log storage device for Source File Id -> CBL map.
         /// </summary>
         private readonly IDevice cblSourceHashesLogDevice;
 
         /// <summary>
-        /// Backing storage device for data.
+        /// Storage device for Source File Id -> CBL map.
         /// </summary>
         private readonly IDevice cblSourceHashesDevice;
 
+        /// <summary>
+        /// FasterKV instance store for Source File Id -> CBL map.
+        /// </summary>
         private readonly FasterKV<DataHash, BlockHash> cblSourceHashesKV;
 
         private FasterKV<BlockHash, TransactableBlock> NewMetdataKV
@@ -173,7 +179,6 @@
         public FasterBlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
                 : base(logger, configuration, rootBlock)
         {
-            this.databaseName = Utilities.HashToFormattedString(this.RootBlock.Guid.ToByteArray());
 
             var nodeOptions = configuration.GetSection("NodeOptions");
             if (nodeOptions is null)
@@ -240,7 +245,7 @@
         ///     Full path to the configuration file.
         /// </summary>
         public string ConfigurationFilePath
-            => this.configFile;
+            => this.ConfigFile;
 
         protected DirectoryInfo GetDiskCacheDirectory()
         {
@@ -250,7 +255,7 @@
                     string.Format(
                         CultureInfo.InvariantCulture,
                         "BrightChain-{0}",
-                        this.databaseName)));
+                        this.DatabaseName)));
         }
 
         protected string GetDevicePath(string nameSpace, out DirectoryInfo cacheDirectoryInfo)
@@ -262,7 +267,7 @@
                 string.Format(
                     provider: System.Globalization.CultureInfo.InvariantCulture,
                     format: "brightchain-{0}-{1}.log",
-                    this.databaseName,
+                    this.DatabaseName,
                     nameSpace));
         }
 
@@ -294,16 +299,22 @@
         /// </summary>
         public override event ICacheManager<BlockHash, TransactableBlock>.CacheMissEventHandler CacheMiss;
 
-        public ClientSession<BlockHash, TransactableBlock, TransactableBlock, TransactableBlock, CacheContext, SimpleFunctions<BlockHash, TransactableBlock, CacheContext>> NewMetadataSession =>
+        public BlockSessionContext NewSessionContext => new BlockSessionContext(
+                metadataSession: this.NewMetadataSession,
+                dataSession: this.NewDataSession,
+                cblSourceHashSession: this.NewCblSourceHashSession);
+
+        private ClientSession<BlockHash, TransactableBlock, TransactableBlock, TransactableBlock, CacheContext, SimpleFunctions<BlockHash, TransactableBlock, CacheContext>> NewMetadataSession =>
             this.blockMetadataKV.For(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>())
             .NewSession<SimpleFunctions<BlockHash, TransactableBlock, CacheContext>>();
 
-        public ClientSession<BlockHash, BlockData, BlockData, BlockData, CacheContext, SimpleFunctions<BlockHash, BlockData, CacheContext>> NewDataSession =>
+        private ClientSession<BlockHash, BlockData, BlockData, BlockData, CacheContext, SimpleFunctions<BlockHash, BlockData, CacheContext>> NewDataSession =>
             this.blockDataKV.For(functions: new SimpleFunctions<BlockHash, BlockData, CacheContext>())
             .NewSession<SimpleFunctions<BlockHash, BlockData, CacheContext>>();
 
-        public BlockSessionContext NewSessionContext =>
-            new BlockSessionContext(this.NewMetadataSession, this.NewDataSession);
+        private ClientSession<DataHash, BlockHash, BlockHash, BlockHash, CacheContext, SimpleFunctions<DataHash, BlockHash, CacheContext>> NewCblSourceHashSession =>
+            this.cblSourceHashesKV.For(functions: new SimpleFunctions<DataHash, BlockHash, CacheContext>())
+            .NewSession<SimpleFunctions<DataHash, BlockHash, CacheContext>>();
 
         /// <summary>
         ///     Returns whether the cache manager has the given key and it is not expired.

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
@@ -18,43 +19,71 @@
     public abstract class BlockCacheManager : IBlockCacheManager
     {
         /// <summary>
-        ///     Full to the config file.
+        /// List of nodes we trust.
         /// </summary>
-        protected readonly string configFile;
-
-        protected readonly IConfiguration configuration;
+        private readonly List<BrightChainNode> trustedNodes;
 
         /// <summary>
-        ///     Database/directory name for this instance's tree root.
+        /// Gets a string with the full path to the config file.
         /// </summary>
-        protected readonly string databaseName;
+        public string ConfigFile { get; private set; }
 
-        protected readonly ILogger logger;
-        protected readonly Dictionary<BlockSize, bool> supportedReadBlockSizes;
-        protected readonly Dictionary<BlockSize, bool> supportedWriteBlockSizes;
-        protected readonly List<BrightChainNode> trustedNodes;
+        /// <summary>
+        /// Gets the IConfiguration for this instance.
+        /// </summary>
+        public IConfiguration Configuration { get; private set; }
+
+        /// <summary>
+        /// Gets a string with the Database/directory name for this instance's tree root.
+        /// </summary>
+        public string DatabaseName { get; private set; }
+
+        /// <summary>
+        /// Gets the ILogger for this instance.
+        /// </summary>
+        public ILogger Logger { get; private set; }
+
+        /// <summary>
+        /// gets a RootBlock with authority for this block cache.
+        /// </summary>
+        public RootBlock RootBlock { get; private set; }
+
+        /// <summary>
+        /// Gets a dictionary of block sizes supported for read by this node.
+        /// Done as a dictionary instead of a list for fast search.
+        /// </summary>
+        public Dictionary<BlockSize, bool> SupportedReadBlockSizes { get; private set; }
+
+        /// <summary>
+        /// Gets a dictionary of block sizes supported for write by this node.
+        /// Done as a dictionary instead of a list for fast search.
+        /// </summary>
+        public Dictionary<BlockSize, bool> SupportedWriteBlockSizes { get; private set; }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="BlockCacheManager" /> class.
         /// </summary>
-        /// <param name="logger">Logging provider</param>
-        /// <param name="configuration">Configuration data</param>
+        /// <param name="logger">Logging provider.</param>
+        /// <param name="configuration">Configuration data.</param>
+        /// <param name="rootBlock">Root block definition with authority for the store.</param>
         public BlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
         {
-            this.logger = logger;
-            this.configuration = configuration;
             this.trustedNodes = new List<BrightChainNode>();
-            // TODO: load supported block sizes from configurations
-            var section = this.configuration.GetSection("NodeOptions");
+            this.Logger = logger;
+            this.Configuration = configuration;
             this.RootBlock = rootBlock;
             this.RootBlock.CacheManager = this;
+            this.DatabaseName = Utilities.HashToFormattedString(this.RootBlock.Guid.ToByteArray());
+
+            // TODO: load supported block sizes from configurations, etc.
+            var section = this.Configuration.GetSection("NodeOptions");
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BlockCacheManager" /> class.
-        ///     Not implemented to prevent empty logger.
+        /// Initializes a new instance of the <see cref="BlockCacheManager"/> class.
+        /// Blocked parameterless constructor.
         /// </summary>
-        protected BlockCacheManager()
+        private BlockCacheManager()
         {
             throw new NotImplementedException();
         }
@@ -63,8 +92,6 @@
         ///     Gets a lower classed BlockCacheManager of this object.
         /// </summary>
         public BlockCacheManager AsBlockCacheManager => this;
-
-        public RootBlock RootBlock { get; }
 
         /// <summary>
         ///     Fired whenever a block is added to the cache

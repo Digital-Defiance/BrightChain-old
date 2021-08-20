@@ -13,16 +13,21 @@
 
         public readonly ClientSession<BlockHash, BlockData, BlockData, BlockData, CacheContext, SimpleFunctions<BlockHash, BlockData, CacheContext>> DataSession;
 
+        public readonly ClientSession<DataHash, BlockHash, BlockHash, BlockHash, CacheContext, SimpleFunctions<DataHash, BlockHash, CacheContext>> CblSourceHashSession;
+
         public BlockSessionContext(
             ClientSession<BlockHash, TransactableBlock, TransactableBlock, TransactableBlock, CacheContext, SimpleFunctions<BlockHash, TransactableBlock, CacheContext>> metadataSession,
-            ClientSession<BlockHash, BlockData, BlockData, BlockData, CacheContext, SimpleFunctions<BlockHash, BlockData, CacheContext>> dataSession)
+            ClientSession<BlockHash, BlockData, BlockData, BlockData, CacheContext, SimpleFunctions<BlockHash, BlockData, CacheContext>> dataSession,
+            ClientSession<DataHash, BlockHash, BlockHash, BlockHash, CacheContext, SimpleFunctions<DataHash, BlockHash, CacheContext>> cblSourceHashSession)
         {
             this.MetadataSession = metadataSession;
             this.DataSession = dataSession;
+            this.CblSourceHashSession = cblSourceHashSession;
         }
 
         public bool Drop(BlockHash blockHash, bool complete = true)
         {
+
             if (!(this.MetadataSession.Delete(blockHash) == Status.OK))
             {
                 return false;
