@@ -27,3 +27,8 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+# TODO:
+#    - name: CodeCov
+#      run: .\packages\<ADD PATH>\OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:".\MyUnitTests\bin\Debug\MyUnitTests.dll -noshadow" -filter:"+[UnitTestTargetProject*]* -[MyUnitTests*]*" -output:".\MyProject_coverage.xml"
+#    - name: CodeCov Process
+#      run: .\packages\<ADD PATH>\codecov.exe -f "MyProject_coverage.xml"
