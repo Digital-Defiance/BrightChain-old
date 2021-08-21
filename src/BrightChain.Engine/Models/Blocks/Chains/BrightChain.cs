@@ -22,7 +22,6 @@
         private readonly BrightenedBlock _head;
         private readonly BrightenedBlock _tail;
         private readonly int _count;
-        private readonly BlockParams _blockParams;
 
         public BrightChain(ConstituentBlockListBlockParams blockParams, IEnumerable<BrightenedBlock> brightenedBlocks)
             : base(blockParams)
@@ -34,7 +33,6 @@
 
             this._blocks = new List<BrightenedBlock>(brightenedBlocks);
             this._head = brightenedBlocks.First();
-            this._blockParams = this._head.BlockParams;
             if (!this.VerifyHomogeneity(
                 tail: out this._tail,
                 blockCount: out this._count))
@@ -62,7 +60,6 @@
                 if (index++ == 0)
                 {
                     this._head = block;
-                    this._blockParams = block.BlockParams;
                 }
 
                 if (index == totalExpected)
@@ -91,7 +88,7 @@
                 block.ValidateOriginalType() &&
                 block.CompareOriginalType(this._head) &&
                 block.GetType().Equals(this._head.GetType()) &&
-                block.BlockSize.Equals(this._blockParams.BlockSize);
+                block.BlockSize.Equals(this._head.BlockSize);
         }
 
         /// <summary>
