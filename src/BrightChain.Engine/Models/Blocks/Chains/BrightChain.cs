@@ -57,10 +57,13 @@
         /// <returns></returns>
         public Tuple<BrightenedBlock, int> VerifyHomogeneity()
         {
-            Type blockType = this._blocks.First().GetType();
             foreach (var block in this._blocks)
             {
-                if ((block.OriginalType != blockType.AssemblyQualifiedName) || (block.BlockSize != this._blockParams.BlockSize))
+                if (
+                    !block.ValidateOriginalType() ||
+                    !block.CompareOriginalType(this._head.OriginalType) ||
+                    !block.GetType().Equals(this._head.GetType()) ||
+                    !block.BlockSize.Equals(this._blockParams.BlockSize))
                 {
                     throw new BrightChainException("Block type mismatch");
                 }

@@ -9,7 +9,7 @@
 
     public class StoreBlockCommand : IRequest<BlockHash>
     {
-        public Block Block { get; set; }
+        public BrightenedBlock Block { get; set; }
 
         public class StoreBlockCommandHandler : IRequestHandler<StoreBlockCommand, BlockHash>
         {

@@ -11,11 +11,11 @@ namespace BrightChain.Engine.Models.Blocks
     /// Input blocks to the whitener service that consist of purely CSPRNG data of the specified block size
     /// </summary>
     [ProtoContract]
-    public class RandomizerBlock : TransactableBlock, IComparable<RandomizerBlock>
+    public class RandomizerBlock : BrightenedBlock, IComparable<RandomizerBlock>
     {
-        public RandomizerBlock(BlockCacheManager destinationCache, BlockSize blockSize, DateTime keepUntilAtLeast, RedundancyContractType redundancyContractType, DateTime? requestTime = null)
+        public RandomizerBlock(BrightenedBlockCacheManager destinationCache, BlockSize blockSize, DateTime keepUntilAtLeast, RedundancyContractType redundancyContractType, DateTime? requestTime = null)
             : base(
-                 blockParams: new TransactableBlockParams(
+                 blockParams: new BrightenedBlockParams(
                      cacheManager: destinationCache,
                      allowCommit: true,
                      blockParams: new BlockParams(
@@ -27,33 +27,15 @@ namespace BrightChain.Engine.Models.Blocks
                         originalType: typeof(RandomizerBlock))),
                  data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockSize)))
         {
-            this.OriginalType = typeof(RandomizerBlock).AssemblyQualifiedName;
+            this.OriginalAssemblyTypeString = typeof(RandomizerBlock).AssemblyQualifiedName;
         }
 
-        public RandomizerBlock(TransactableBlockParams blockParams)
+        public RandomizerBlock(BrightenedBlockParams blockParams)
             : base(
                 blockParams: blockParams,
                 data: RandomDataHelper.RandomReadOnlyBytes(BlockSizeMap.BlockSize(blockParams.BlockSize)))
         {
-            this.OriginalType = typeof(RandomizerBlock).AssemblyQualifiedName;
-        }
-
-        /// <summary>
-        /// replace incoming data (will be empty byte array to fit conventions) with random data
-        /// </summary>
-        /// <param name="requestTime"></param>
-        /// <param name="keepUntilAtLeast"></param>
-        /// <param name="redundancy"></param>
-        /// <param name="_"></param>
-        /// <param name="allowCommit"></param>
-        /// <returns></returns>
-        public override RandomizerBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> _)
-        {
-            return new RandomizerBlock(
-                blockParams: new TransactableBlockParams(
-                allowCommit: this.AllowCommit,
-                cacheManager: this.CacheManager,
-                blockParams: blockParams));
+            this.OriginalAssemblyTypeString = typeof(RandomizerBlock).AssemblyQualifiedName;
         }
 
         public int CompareTo(RandomizerBlock other)

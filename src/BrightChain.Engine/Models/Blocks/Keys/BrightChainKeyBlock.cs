@@ -3,7 +3,7 @@
     using ProtoBuf;
 
     [ProtoContract]
-    public class BrightChainKeyBlock : TransactableBlock
+    public class BrightChainKeyBlock : BrightenedBlock
     {
     }
 }

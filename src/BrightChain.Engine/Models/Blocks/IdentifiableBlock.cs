@@ -18,19 +18,6 @@
         {
         }
 
-        public override IdentifiableBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
-        {
-            return new IdentifiableBlock(
-                blockParams: new BlockParams(
-                    blockSize: this.BlockSize,
-                    requestTime: this.StorageContract.RequestTime,
-                    keepUntilAtLeast: this.StorageContract.KeepUntilAtLeast,
-                    redundancy: this.StorageContract.RedundancyContractType,
-                    privateEncrypted: this.StorageContract.PrivateEncrypted,
-                    originalType: Type.GetType(this.OriginalType)),
-                data: data);
-        }
-
         public int CompareTo(IdentifiableBlock other)
         {
             return this.StoredData.CompareTo(other.StoredData);

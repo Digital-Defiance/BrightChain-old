@@ -7,43 +7,25 @@
     /// <summary>
     /// Basic guaranteed members of the cache system.
     /// </summary>
-    public interface IBlockCacheManager : ICacheManager<BlockHash, TransactableBlock>
+    public interface IBrightenedBlockCacheManager : ICacheManager<BlockHash, BrightenedBlock>
     {
         /// <summary>
         /// Adds a key to the cache if it is not already present
         /// </summary>
         /// <param name="key">key to palce in the cache</param>
-        void Set(TransactableBlock value);
-
-        /// <summary>
-        /// Adds a key to the cache if it is not already present
-        /// </summary>
-        /// <param name="key">key to palce in the cache</param>
-        void Set(Block value);
+        void Set(BrightenedBlock value);
 
         /// <summary>
         /// Adds all keys to the cache if not already present
         /// </summary>
         /// <param name="key">key to palce in the cache</param>
-        void SetAll(IEnumerable<TransactableBlock> value);
+        void SetAll(IEnumerable<BrightenedBlock> value);
 
         /// <summary>
         /// Adds all keys to the cache if not already present
         /// </summary>
         /// <param name="key">key to palce in the cache</param>
-        void SetAll(IEnumerable<Block> value);
-
-        /// <summary>
-        /// Adds all keys to the cache if not already present
-        /// </summary>
-        /// <param name="key">key to palce in the cache</param>
-        void SetAllAsync(IAsyncEnumerable<TransactableBlock> value);
-
-        /// <summary>
-        /// Adds all keys to the cache if not already present
-        /// </summary>
-        /// <param name="key">key to palce in the cache</param>
-        void SetAllAsync(IAsyncEnumerable<Block> value);
+        void SetAllAsync(IAsyncEnumerable<BrightenedBlock> value);
 
         /// <summary>
         /// Add a node that the cache manager should trust.

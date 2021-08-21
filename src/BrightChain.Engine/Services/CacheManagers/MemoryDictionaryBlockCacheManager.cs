@@ -13,12 +13,12 @@
     /// <summary>
     ///     Memory based Block Cache Manager.
     /// </summary>
-    public class MemoryDictionaryBlockCacheManager : BlockCacheManager
+    public class MemoryDictionaryBlockCacheManager : BrightenedBlockCacheManager
     {
         /// <summary>
         ///     Hashtable collection for blocks stored in memory
         /// </summary>
-        private readonly Dictionary<BlockHash, TransactableBlock> blocks = new();
+        private readonly Dictionary<BlockHash, BrightenedBlock> blocks = new();
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MemoryDictionaryBlockCacheManager" /> class.
@@ -31,33 +31,24 @@
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MemoryDictionaryBlockCacheManager" /> class.
-        ///     Can not build a cache manager with no logger.
-        /// </summary>
-        private MemoryDictionaryBlockCacheManager()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         ///     Fired whenever a block is added to the cache
         /// </summary>
-        public override event ICacheManager<BlockHash, TransactableBlock>.KeyAddedEventHandler KeyAdded;
+        public override event ICacheManager<BlockHash, BrightenedBlock>.KeyAddedEventHandler KeyAdded;
 
         /// <summary>
         ///     Fired whenever a block is expired from the cache
         /// </summary>
-        public override event ICacheManager<BlockHash, TransactableBlock>.KeyExpiredEventHandler KeyExpired;
+        public override event ICacheManager<BlockHash, BrightenedBlock>.KeyExpiredEventHandler KeyExpired;
 
         /// <summary>
         ///     Fired whenever a block is removed from the collection
         /// </summary>
-        public override event ICacheManager<BlockHash, TransactableBlock>.KeyRemovedEventHandler KeyRemoved;
+        public override event ICacheManager<BlockHash, BrightenedBlock>.KeyRemovedEventHandler KeyRemoved;
 
         /// <summary>
         ///     Fired whenever a block is requested from the cache but is not present.
         /// </summary>
-        public override event ICacheManager<BlockHash, TransactableBlock>.CacheMissEventHandler CacheMiss;
+        public override event ICacheManager<BlockHash, BrightenedBlock>.CacheMissEventHandler CacheMiss;
 
         /// <summary>
         ///     Returns whether the cache manager has the given key and it is not expired.
@@ -91,9 +82,9 @@
         /// </summary>
         /// <param name="key">key to retrieve</param>
         /// <returns>returns requested block or throws</returns>
-        public override TransactableBlock Get(BlockHash key)
+        public override BrightenedBlock Get(BlockHash key)
         {
-            TransactableBlock block;
+            BrightenedBlock block;
             var found = this.blocks.TryGetValue(key, out block);
             if (!found)
             {
@@ -114,13 +105,13 @@
         ///     Adds a key to the cache if it is not already present
         /// </summary>
         /// <param name="block">block to palce in the cache</param>
-        public override void Set(TransactableBlock block)
+        public override void Set(BrightenedBlock block)
         {
             base.Set(block);
             this.blocks[block.Id] = block;
         }
 
-        public async Task CopyContentAsync(BlockCacheManager destinationCache)
+        public async Task CopyContentAsync(BrightenedBlockCacheManager destinationCache)
         {
             await foreach (var key in this.KeysAsync())
             {

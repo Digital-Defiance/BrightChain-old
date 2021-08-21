@@ -17,7 +17,7 @@
         [TestInitialize]
         public void PreTestSetUp()
         {
-            this.logger = new Mock<ILogger<BlockCacheManager>>().Object;
+            this.logger = new Mock<ILogger<BrightenedBlockCacheManager>>().Object;
         }
 
         [DataTestMethod]

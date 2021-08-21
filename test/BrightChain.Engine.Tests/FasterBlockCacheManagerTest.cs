@@ -15,11 +15,11 @@
     /// <summary>
     /// Serializable testable test block class
     /// </summary>
-    public class FasterCacheTestBlock : TransactableBlock
+    public class FasterCacheTestBlock : BrightenedBlock
     {
         public static new FasterBlockCacheManager CacheManager;
 
-        public FasterCacheTestBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data)
+        public FasterCacheTestBlock(BrightenedBlockParams blockParams, ReadOnlyMemory<byte> data)
             : base(
                 blockParams: blockParams,
                 data: data)
@@ -28,7 +28,7 @@
 
         internal FasterCacheTestBlock()
             : base(
-                blockParams: new TransactableBlockParams(
+                blockParams: new BrightenedBlockParams(
                     cacheManager: FasterCacheTestBlock.CacheManager,
                     allowCommit: true,
                     blockParams: new BlockParams(
@@ -52,16 +52,6 @@
             }
 
             return new ReadOnlyMemory<byte>(data);
-        }
-
-        public override FasterCacheTestBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
-        {
-            return new FasterCacheTestBlock(
-                blockParams: new TransactableBlockParams(
-                cacheManager: FasterCacheTestBlock.CacheManager,
-                allowCommit: this.AllowCommit,
-                blockParams: blockParams),
-                data: data);
         }
 
         public override void Dispose()
@@ -97,7 +87,7 @@
                 rootBlock: rootBlock);
         }
 
-        internal override KeyValuePair<BlockHash, TransactableBlock> NewKeyValue()
+        internal override KeyValuePair<BlockHash, BrightenedBlock> NewKeyValue()
         {
             var random = new Random(Guid.NewGuid().GetHashCode());
             var data = new byte[BlockSizeMap.BlockSize(BlockSize.Message)];
@@ -107,7 +97,7 @@
             }
 
             var block = new FasterCacheTestBlock(
-                blockParams: new TransactableBlockParams(
+                blockParams: new BrightenedBlockParams(
                     cacheManager: this.cacheManager,
                     allowCommit: true,
                     blockParams: new BlockParams(
@@ -119,7 +109,7 @@
                         originalType: typeof(FasterCacheTestBlock))),
                 data: data);
 
-            return new KeyValuePair<BlockHash, TransactableBlock>(block.Id, block);
+            return new KeyValuePair<BlockHash, BrightenedBlock>(block.Id, block);
         }
 
         internal override FasterCacheTestBlock NewNullData()

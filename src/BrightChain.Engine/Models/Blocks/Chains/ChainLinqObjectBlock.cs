@@ -101,7 +101,7 @@
             this.BlockObject = blockObject;
             this.ObjectDataLength = totalLength;
             this.Next = next;
-            if (this.OriginalType != this.GetType().AssemblyQualifiedName)
+            if (!this.ValidateOriginalType() || !this.ValidateCurrentTypeVsOriginal())
             {
                 throw new BrightChainException("Original type mismatch.");
             }
@@ -122,11 +122,6 @@
             return new ChainLinqObjectBlock<T>(
                 blockParams: blockParams,
                 blockObject: blockObject);
-        }
-
-        public override ChainLinqObjectBlock<T> NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
-        {
-            throw new NotImplementedException();
         }
 
         public readonly T BlockObject;

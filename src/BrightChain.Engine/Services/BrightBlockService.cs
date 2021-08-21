@@ -242,7 +242,7 @@ namespace BrightChain.Engine.Services
 
                         var cbl = new ConstituentBlockListBlock(
                             blockParams: new ConstituentBlockListBlockParams(
-                                blockParams: new TransactableBlockParams(
+                                blockParams: new BrightenedBlockParams(
                                     cacheManager: this.blockFasterCache,
                                     allowCommit: true,
                                     blockParams: blockParams),
@@ -297,7 +297,7 @@ namespace BrightChain.Engine.Services
 
             return new SuperConstituentBlockListBlock(
                     blockParams: new ConstituentBlockListBlockParams(
-                        blockParams: new TransactableBlockParams(
+                        blockParams: new BrightenedBlockParams(
                             cacheManager: this.blockFasterCache,
                             allowCommit: true,
                             blockParams: blockParams),
@@ -343,7 +343,7 @@ namespace BrightChain.Engine.Services
                         .ConfigureAwait(false);
         }
 
-        public static Dictionary<BlockHash, Block> GetCBLBlocksFromCacheAsDictionary(BlockCacheManager blockCacheManager, ConstituentBlockListBlock block)
+        public static Dictionary<BlockHash, Block> GetCBLBlocksFromCacheAsDictionary(BrightenedBlockCacheManager blockCacheManager, ConstituentBlockListBlock block)
         {
             Dictionary<BlockHash, Block> blocks = new Dictionary<BlockHash, Block>();
             foreach (var blockHash in block.ConstituentBlocks)
@@ -433,7 +433,7 @@ namespace BrightChain.Engine.Services
             return restoredSourceInfo;
         }
 
-        public async Task<TransactableBlock> FindBlockByIdAsync(BlockHash id)
+        public async Task<BrightenedBlock> FindBlockByIdAsync(BlockHash id)
         {
             if (this.blockFasterCache.Contains(id))
             {
@@ -504,7 +504,7 @@ namespace BrightChain.Engine.Services
             }
         }
 
-        public async Task<Block> StoreBlockAsync(Block block)
+        public async Task<Block> StoreBlockAsync(BrightenedBlock block)
         {
             if (!block.Validate())
             {
@@ -513,15 +513,12 @@ namespace BrightChain.Engine.Services
                     message: "Can not store invalid block");
             }
 
-            this.blockFasterCache.Set(new TransactableBlock(
-                cacheManager: this.blockFasterCache,
-                block: block,
-                allowCommit: true));
+            this.blockFasterCache.Set(block);
 
             return block;
         }
 
-        public async IAsyncEnumerable<Tuple<Block, IEnumerable<BrightChainValidationException>>> StoreBlocksAsync(IAsyncEnumerable<Block> blockSource)
+        public async IAsyncEnumerable<Tuple<Block, IEnumerable<BrightChainValidationException>>> StoreBlocksAsync(IAsyncEnumerable<BrightenedBlock> blockSource)
         {
             await foreach (var block in blockSource)
             {
@@ -542,7 +539,7 @@ namespace BrightChain.Engine.Services
             }
         }
 
-        public async IAsyncEnumerable<BrightenedBlock> BrightenBlocksAsync(IAsyncEnumerable<IdentifiableBlock> identifiableBlocks)
+        public async IAsyncEnumerable<BrightenedBlock> BrightenBlocksAsyncEnumerable(IAsyncEnumerable<IdentifiableBlock> identifiableBlocks)
         {
             await foreach (var identifiableBlock in identifiableBlocks)
             {
@@ -574,7 +571,7 @@ namespace BrightChain.Engine.Services
 
             return new BrightChain(
                 blockParams: new ConstituentBlockListBlockParams(
-                    blockParams: new TransactableBlockParams(
+                    blockParams: new BrightenedBlockParams(
                         cacheManager: this.blockFasterCache,
                         allowCommit: true,
                         blockParams: firstBlock.BlockParams),
@@ -597,7 +594,7 @@ namespace BrightChain.Engine.Services
             var brightenedCbl = this.blockBrightener.Brighten(cblBlock, out Block[] randomizersUsed);
 
             var tupleSize = randomizersUsed.Length + 1;
-            TransactableBlock[] transactableTuple = new TransactableBlock[tupleSize];
+            BrightenedBlock[] transactableTuple = new BrightenedBlock[tupleSize];
             for (int i = 0; i < randomizersUsed.Length; i++)
             {
                 transactableTuple[i] = randomizersUsed[i].MakeTransactable(

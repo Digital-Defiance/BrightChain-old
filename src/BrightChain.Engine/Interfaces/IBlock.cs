@@ -69,7 +69,7 @@ namespace BrightChain.Engine.Interfaces
         /// </summary>
         bool SignatureVerified { get; }
 
-        string OriginalType { get; }
+        string OriginalAssemblyTypeString { get; }
 
         string AssemblyVersion { get; }
     }

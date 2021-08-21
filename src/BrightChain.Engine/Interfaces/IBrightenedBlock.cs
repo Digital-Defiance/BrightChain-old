@@ -1,12 +1,12 @@
-﻿using BrightChain.Engine.Models.Blocks;
-using BrightChain.Engine.Models.Hashes;
-
-namespace BrightChain.Engine.Interfaces
+﻿namespace BrightChain.Engine.Interfaces
 {
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Hashes;
+
     /// <summary>
-    /// Basic members for a block that is to be transactable (currently tied to BPlus tree)
+    /// Basic members for a block that is to be transactable.
     /// </summary>
-    public interface ITransactableBlock : IBlock, ITransactable, IDisposable
+    public interface IBrightenedBlock : ITransactableBlock, ITransactable, IDisposable
     {
         /// <summary>
         /// Associated cache manager for this block

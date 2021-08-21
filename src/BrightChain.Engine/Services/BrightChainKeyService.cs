@@ -17,7 +17,7 @@
         public const string CurveKeyName = "secp256r1";
         public const string Issuer = "BrightChain";
 
-        public static ECDsa LoadPrivateKeyFromBlock(BlockCacheManager blockCacheManager, BlockHash id)
+        public static ECDsa LoadPrivateKeyFromBlock(BrightenedBlockCacheManager blockCacheManager, BlockHash id)
         {
             var brightChainKeyBlock = blockCacheManager.Get(id);
             // get data from block

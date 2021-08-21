@@ -11,11 +11,11 @@
     /// There can only be one.
     /// </summary>
     [ProtoContract]
-    public class RootBlock : TransactableBlock, IBlock, IComparable<IBlock>
+    public class RootBlock : BrightenedBlock, IBlock, IComparable<IBlock>
     {
         public RootBlock(Guid databaseGuid, BlockSize blockSize = BlockSize.Large)
             : base(
-                blockParams: new TransactableBlockParams(
+                blockParams: new BrightenedBlockParams(
                     cacheManager: null,
                     allowCommit: false,
                     blockParams: new BlockParams(
@@ -28,7 +28,7 @@
                 data: Helpers.RandomDataHelper.DataFiller(default(ReadOnlyMemory<byte>), blockSize))
         {
             this.Guid = databaseGuid;
-            this.OriginalType = typeof(RootBlock).AssemblyQualifiedName;
+            this.OriginalAssemblyTypeString = typeof(RootBlock).AssemblyQualifiedName;
         }
 
         [ProtoMember(30)]

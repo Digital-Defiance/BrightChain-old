@@ -18,9 +18,9 @@
         /// </summary>
         public const byte TupleCount = 5;
 
-        private readonly BlockCacheManager resultCache;
+        private readonly BrightenedBlockCacheManager resultCache;
 
-        public BlockBrightenerService(BlockCacheManager resultCache)
+        public BlockBrightenerService(BrightenedBlockCacheManager resultCache)
         {
             this.resultCache = resultCache;
         }
@@ -47,12 +47,15 @@
                     keepUntilAtLeast: identifiableBlock.StorageContract.KeepUntilAtLeast,
                     redundancyContractType: identifiableBlock.StorageContract.RedundancyContractType,
                     requestTime: identifiableBlock.StorageContract.RequestTime);
+
+                var transactable = randomizersUsed[i].MakeTransactable(
+                    cacheManager: this.resultCache,
+                    allowCommit: true);
+                this.resultCache.Set(transactable);
             }
 
-            this.resultCache.SetAll(randomizersUsed);
-
             return new BrightenedBlock(
-                blockParams: new TransactableBlockParams(
+                blockParams: new BrightenedBlockParams(
                     cacheManager: this.resultCache,
                     allowCommit: true,
                     blockParams: identifiableBlock.BlockParams),

@@ -4,13 +4,13 @@
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Hashes;
 
-    public class TransactableBlockParams : BlockParams
+    public class BrightenedBlockParams : BlockParams
     {
-        public ICacheManager<BlockHash, TransactableBlock> CacheManager;
+        public ICacheManager<BlockHash, BrightenedBlock> CacheManager;
 
         public bool AllowCommit { get; }
 
-        public TransactableBlockParams(ICacheManager<BlockHash, TransactableBlock> cacheManager, bool allowCommit, BlockParams blockParams)
+        public BrightenedBlockParams(ICacheManager<BlockHash, BrightenedBlock> cacheManager, bool allowCommit, BlockParams blockParams)
             : base(
                   blockSize: blockParams.BlockSize,
                   requestTime: blockParams.RequestTime,
@@ -23,14 +23,14 @@
             this.AllowCommit = allowCommit;
         }
 
-        public TransactableBlockParams Merge(TransactableBlockParams otherBlockParams)
+        public BrightenedBlockParams Merge(BrightenedBlockParams otherBlockParams)
         {
             if (otherBlockParams.BlockSize != this.BlockSize)
             {
                 throw new BrightChainException("BlockSize mismatch");
             }
 
-            return new TransactableBlockParams(
+            return new BrightenedBlockParams(
                 cacheManager: this.CacheManager,
                 allowCommit: this.AllowCommit && otherBlockParams.AllowCommit,
                 blockParams: this.Merge(otherBlockParams));

@@ -16,7 +16,7 @@
     /// <summary>
     ///     Block Cache Manager.
     /// </summary>
-    public abstract class BlockCacheManager : IBlockCacheManager
+    public abstract class BrightenedBlockCacheManager : IBrightenedBlockCacheManager
     {
         /// <summary>
         /// List of nodes we trust.
@@ -61,12 +61,12 @@
         public Dictionary<BlockSize, bool> SupportedWriteBlockSizes { get; private set; }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BlockCacheManager" /> class.
+        ///     Initializes a new instance of the <see cref="BrightenedBlockCacheManager" /> class.
         /// </summary>
         /// <param name="logger">Logging provider.</param>
         /// <param name="configuration">Configuration data.</param>
         /// <param name="rootBlock">Root block definition with authority for the store.</param>
-        public BlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
+        public BrightenedBlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
         {
             this.trustedNodes = new List<BrightChainNode>();
             this.Logger = logger;
@@ -80,10 +80,10 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BlockCacheManager"/> class.
+        /// Initializes a new instance of the <see cref="BrightenedBlockCacheManager"/> class.
         /// Blocked parameterless constructor.
         /// </summary>
-        private BlockCacheManager()
+        private BrightenedBlockCacheManager()
         {
             throw new NotImplementedException();
         }
@@ -91,27 +91,27 @@
         /// <summary>
         ///     Gets a lower classed BlockCacheManager of this object.
         /// </summary>
-        public BlockCacheManager AsBlockCacheManager => this;
+        public BrightenedBlockCacheManager AsBlockCacheManager => this;
 
         /// <summary>
         ///     Fired whenever a block is added to the cache
         /// </summary>
-        public abstract event ICacheManager<BlockHash, TransactableBlock>.KeyAddedEventHandler KeyAdded;
+        public abstract event ICacheManager<BlockHash, BrightenedBlock>.KeyAddedEventHandler KeyAdded;
 
         /// <summary>
         ///     Fired whenever a block is expired from the cache
         /// </summary>
-        public abstract event ICacheManager<BlockHash, TransactableBlock>.KeyExpiredEventHandler KeyExpired;
+        public abstract event ICacheManager<BlockHash, BrightenedBlock>.KeyExpiredEventHandler KeyExpired;
 
         /// <summary>
         ///     Fired whenever a block is removed from the collection
         /// </summary>
-        public abstract event ICacheManager<BlockHash, TransactableBlock>.KeyRemovedEventHandler KeyRemoved;
+        public abstract event ICacheManager<BlockHash, BrightenedBlock>.KeyRemovedEventHandler KeyRemoved;
 
         /// <summary>
         ///     Fired whenever a block is requested from the cache but is not present.
         /// </summary>
-        public abstract event ICacheManager<BlockHash, TransactableBlock>.CacheMissEventHandler CacheMiss;
+        public abstract event ICacheManager<BlockHash, BrightenedBlock>.CacheMissEventHandler CacheMiss;
 
         /// <summary>
         ///     Returns whether the cache manager has the given key and it is not expired
@@ -141,12 +141,12 @@
         /// </summary>
         /// <param name="key">key to retrieve.</param>
         /// <returns>returns requested block or throws.</returns>
-        public abstract TransactableBlock Get(BlockHash key);
+        public abstract BrightenedBlock Get(BlockHash key);
 
         public TupleStripe GetFromBlockIDs(BlockHash[] blockHashes)
         {
             int i = 0;
-            TransactableBlock[] blocks = new TransactableBlock[blockHashes.Length];
+            BrightenedBlock[] blocks = new BrightenedBlock[blockHashes.Length];
             foreach (var hash in blockHashes)
             {
                 blocks[i++] = this.Get(hash);
@@ -159,7 +159,7 @@
         ///     Adds a key to the cache if it is not already present.
         /// </summary>
         /// <param name="value">block to palce in the cache.</param>
-        public virtual void Set(TransactableBlock value)
+        public virtual void Set(BrightenedBlock value)
         {
             if (value is null)
             {
@@ -177,14 +177,9 @@
                     value.ValidationExceptions,
                     "Can not store invalid block");
             }
-
-            if (value is RootBlock rootBlock)
-            {
-                throw new BrightChainException(nameof(rootBlock.Id));
-            }
         }
 
-        public virtual void Set(BlockHash key, TransactableBlock value)
+        public virtual void Set(BlockHash key, BrightenedBlock value)
         {
             if (value.Id != key)
             {
@@ -194,7 +189,7 @@
             this.Set(value);
         }
 
-        public virtual void SetAll(IEnumerable<TransactableBlock> items)
+        public virtual void SetAll(IEnumerable<BrightenedBlock> items)
         {
             foreach (var item in items)
             {
@@ -202,48 +197,13 @@
             }
         }
 
-        public async virtual void SetAllAsync(IAsyncEnumerable<TransactableBlock> items)
+        public async virtual void SetAllAsync(IAsyncEnumerable<BrightenedBlock> items)
         {
             await foreach (var item in items)
             {
                 this.Set(item);
             }
         }
-
-        public virtual void Set(Block value)
-        {
-            this.Set(value.MakeTransactable(
-                cacheManager: this,
-                allowCommit: true));
-        }
-
-        public virtual void Set(BlockHash key, Block value)
-        {
-            this.Set(value.MakeTransactable(
-                cacheManager: this,
-                allowCommit: true));
-        }
-
-        public virtual void SetAll(IEnumerable<Block> items)
-        {
-            foreach (var item in items)
-            {
-                this.Set(item.MakeTransactable(
-                    cacheManager: this,
-                    allowCommit: true));
-            }
-        }
-
-        public async virtual void SetAllAsync(IAsyncEnumerable<Block> items)
-        {
-            await foreach (var item in items)
-            {
-                this.Set(item.MakeTransactable(
-                    cacheManager: this,
-                    allowCommit: true));
-            }
-        }
-
 
         /// <summary>
         ///     Add a node that the cache manager should trust.

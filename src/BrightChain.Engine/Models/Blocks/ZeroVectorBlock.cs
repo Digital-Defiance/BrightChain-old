@@ -23,7 +23,7 @@ namespace BrightChain.Engine.Models.Blocks
                 blockParams: blockParams,
                 data: NewZeroVectorBlockData(blockParams.BlockSize))
         {
-            this.OriginalType = typeof(ZeroVectorBlock).AssemblyQualifiedName;
+            this.OriginalAssemblyTypeString = typeof(ZeroVectorBlock).AssemblyQualifiedName;
         }
 
         public ZeroVectorBlock(BlockSize blockSize)
@@ -37,21 +37,6 @@ namespace BrightChain.Engine.Models.Blocks
                     originalType: typeof(ZeroVectorBlock)),
                   data: NewZeroVectorBlockData(blockSize))
         {
-        }
-
-        /// <summary>
-        /// replace incoming data (will be empty byte array to fit conventions) with random data
-        /// </summary>
-        /// <param name="requestTime"></param>
-        /// <param name="keepUntilAtLeast"></param>
-        /// <param name="redundancy"></param>
-        /// <param name="_"></param>
-        /// <param name="allowCommit"></param>
-        /// <returns></returns>
-        public override Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> _)
-        {
-            return new ZeroVectorBlock(
-blockParams: blockParams);
         }
 
         public int CompareTo(ZeroVectorBlock other)

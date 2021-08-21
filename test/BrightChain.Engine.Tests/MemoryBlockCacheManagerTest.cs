@@ -17,11 +17,11 @@
     /// Serializable testable test block class
     /// </summary>
     [ProtoContract]
-    public class MemoryDictionaryCacheTestBlock : TransactableBlock
+    public class MemoryDictionaryCacheTestBlock : BrightenedBlock
     {
         public static new MemoryDictionaryBlockCacheManager CacheManager;
 
-        public MemoryDictionaryCacheTestBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data)
+        public MemoryDictionaryCacheTestBlock(BrightenedBlockParams blockParams, ReadOnlyMemory<byte> data)
             : base(
                 blockParams: blockParams,
                 data: data)
@@ -30,7 +30,7 @@
 
         internal MemoryDictionaryCacheTestBlock()
             : base(
-                blockParams: new TransactableBlockParams(
+                blockParams: new BrightenedBlockParams(
                     cacheManager: MemoryDictionaryCacheTestBlock.CacheManager,
                     allowCommit: true,
                     blockParams: new BlockParams(
@@ -54,16 +54,6 @@
             }
 
             return new ReadOnlyMemory<byte>(data);
-        }
-
-        public override MemoryDictionaryCacheTestBlock NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data)
-        {
-            return new MemoryDictionaryCacheTestBlock(
-                blockParams: new TransactableBlockParams(
-                cacheManager: MemoryDictionaryCacheTestBlock.CacheManager,
-                allowCommit: this.AllowCommit,
-                blockParams: blockParams),
-                data: data);
         }
 
         public override void Dispose()
@@ -99,7 +89,7 @@
                 rootBlock: rootBlock);
         }
 
-        internal override KeyValuePair<BlockHash, TransactableBlock> NewKeyValue()
+        internal override KeyValuePair<BlockHash, BrightenedBlock> NewKeyValue()
         {
             var random = new Random(Guid.NewGuid().GetHashCode());
             var data = new byte[BlockSizeMap.BlockSize(BlockSize.Message)];
@@ -109,7 +99,7 @@
             }
 
             var block = new MemoryDictionaryCacheTestBlock(
-                blockParams: new TransactableBlockParams(
+                blockParams: new BrightenedBlockParams(
                     cacheManager: this.cacheManager,
                     allowCommit: true,
                     blockParams: new BlockParams(
@@ -121,7 +111,7 @@
                         originalType: typeof(MemoryDictionaryCacheTestBlock))),
                 data: data);
 
-            return new KeyValuePair<BlockHash, TransactableBlock>(block.Id, block);
+            return new KeyValuePair<BlockHash, BrightenedBlock>(block.Id, block);
         }
 
         internal override MemoryDictionaryCacheTestBlock NewNullData()

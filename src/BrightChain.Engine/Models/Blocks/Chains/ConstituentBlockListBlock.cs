@@ -48,7 +48,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
                             keepUntilAtLeast: this.StorageContract.KeepUntilAtLeast,
                             redundancy: this.StorageContract.RedundancyContractType,
                             privateEncrypted: this.StorageContract.PrivateEncrypted,
-                            originalType: Type.GetType(this.OriginalType)),
+                            originalType: this.OriginalType),
                     sourceId: this.SourceId,
                     segmentId: this.SegmentId,
                     totalLength: this.TotalLength,

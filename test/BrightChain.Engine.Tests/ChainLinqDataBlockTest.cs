@@ -20,15 +20,15 @@
     [TestClass]
     public class ChainLinqDataBlockTest
     {
-        protected Mock<ILogger<BlockCacheManager>> logger;
+        protected Mock<ILogger<BrightenedBlockCacheManager>> logger;
         protected Mock<IConfiguration> configuration;
         protected Mock<ILoggerFactory> loggerFactory;
-        protected BlockCacheManager cacheManager;
+        protected BrightenedBlockCacheManager cacheManager;
 
         [TestInitialize]
         public new void PreTestSetup()
         {
-            this.logger = new Mock<ILogger<BlockCacheManager>>();
+            this.logger = new Mock<ILogger<BrightenedBlockCacheManager>>();
             this.configuration = new Mock<IConfiguration>();
 
             var factoryMock = new Mock<ILoggerFactory>();

@@ -9,14 +9,14 @@
 
     public struct BlockSessionContext : IDisposable
     {
-        public readonly ClientSession<BlockHash, TransactableBlock, TransactableBlock, TransactableBlock, CacheContext, SimpleFunctions<BlockHash, TransactableBlock, CacheContext>> MetadataSession;
+        public readonly ClientSession<BlockHash, BrightenedBlock, BrightenedBlock, BrightenedBlock, CacheContext, SimpleFunctions<BlockHash, BrightenedBlock, CacheContext>> MetadataSession;
 
         public readonly ClientSession<BlockHash, BlockData, BlockData, BlockData, CacheContext, SimpleFunctions<BlockHash, BlockData, CacheContext>> DataSession;
 
         public readonly ClientSession<DataHash, BlockHash, BlockHash, BlockHash, CacheContext, SimpleFunctions<DataHash, BlockHash, CacheContext>> CblSourceHashSession;
 
         public BlockSessionContext(
-            ClientSession<BlockHash, TransactableBlock, TransactableBlock, TransactableBlock, CacheContext, SimpleFunctions<BlockHash, TransactableBlock, CacheContext>> metadataSession,
+            ClientSession<BlockHash, BrightenedBlock, BrightenedBlock, BrightenedBlock, CacheContext, SimpleFunctions<BlockHash, BrightenedBlock, CacheContext>> metadataSession,
             ClientSession<BlockHash, BlockData, BlockData, BlockData, CacheContext, SimpleFunctions<BlockHash, BlockData, CacheContext>> dataSession,
             ClientSession<DataHash, BlockHash, BlockHash, BlockHash, CacheContext, SimpleFunctions<DataHash, BlockHash, CacheContext>> cblSourceHashSession)
         {
@@ -47,7 +47,7 @@
             return true;
         }
 
-        public TransactableBlock Get(BlockHash blockHash)
+        public BrightenedBlock Get(BlockHash blockHash)
         {
             var metadataResultTuple = this.MetadataSession.Read(blockHash);
 
@@ -75,7 +75,7 @@
             return block;
         }
 
-        public void Upsert(ref TransactableBlock block, bool complete = false)
+        public void Upsert(ref BrightenedBlock block, bool complete = false)
         {
             var blockHash = block.Id;
             var resultStatus = this.MetadataSession.Upsert(ref blockHash, ref block);

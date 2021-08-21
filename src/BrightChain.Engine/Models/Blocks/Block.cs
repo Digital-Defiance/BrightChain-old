@@ -27,7 +27,7 @@ namespace BrightChain.Engine.Models.Blocks
     [ProtoInclude(1, typeof(BrightenedBlock))]
     [ProtoInclude(2, typeof(RootBlock))]
     [ProtoInclude(3, typeof(RandomizerBlock))]
-    [ProtoInclude(4, typeof(TransactableBlock))]
+    [ProtoInclude(4, typeof(BrightenedBlock))]
     [ProtoInclude(5, typeof(ConstituentBlockListBlock))]
     [ProtoInclude(6, typeof(SuperConstituentBlockListBlock))]
     [ProtoInclude(7, typeof(ChainLinq<>))]
@@ -71,9 +71,9 @@ namespace BrightChain.Engine.Models.Blocks
 
         // TODO: Probably going to remove this from the stored attributes and only persist these on ChainLinqDataObjects?
         [ProtoMember(6)]
-        public string OriginalType { get; internal set; }
+        public string OriginalAssemblyTypeString { get; internal set; }
 
-        protected readonly Type originalType;
+        public readonly Type OriginalType;
 
         [ProtoMember(7)]
         public string AssemblyVersion { get; internal set; }
@@ -94,8 +94,6 @@ namespace BrightChain.Engine.Models.Blocks
         /// Generally only used during construction of a chain
         /// </summary>
         public IEnumerable<BlockHash> ConstituentBlocks { get; protected set; }
-
-        public abstract Block NewBlock(BlockParams blockParams, ReadOnlyMemory<byte> data);
 
         public Block AsBlock => this;
 
@@ -149,7 +147,7 @@ namespace BrightChain.Engine.Models.Blocks
         /// </summary>
         /// <param name="blockParams"></param>
         /// <param name="data"></param>
-        public Block(BlockParams blockParams, ReadOnlyMemory<byte> data)
+        public Block(BlockParams blockParams, ReadOnlyMemory<byte> data, IEnumerable<BlockHash> constituentBlockHashes = null)
         {
             if (this is RootBlock)
             {
@@ -180,13 +178,13 @@ namespace BrightChain.Engine.Models.Blocks
                 redundancyContractType: blockParams.Redundancy);
             this.StoredData = new BlockData(data);
             this.Id = new BlockHash(this); // must happen after data is in place
-            this.ConstituentBlocks = new BlockHash[] { };
+            this.ConstituentBlocks = constituentBlockHashes is null ? new BlockHash[] { } : constituentBlockHashes;
             this.OriginatingNode = null;
             this.Signature = null;
             this.SignatureVerified = false;
             this.RevocationCertificates = new List<RevocationCertificate>();
-            this.originalType = blockParams.OriginalType;
-            this.OriginalType = this.originalType.AssemblyQualifiedName;
+            this.OriginalType = blockParams.OriginalType;
+            this.OriginalAssemblyTypeString = this.OriginalType.AssemblyQualifiedName;
             this.AssemblyVersion = versionAttribute.InformationalVersion;
             this.HashVerified = this.Validate(); // also fills in any validation errors in the array
         }
@@ -253,30 +251,45 @@ namespace BrightChain.Engine.Models.Blocks
         /// Returns a boolean indicating whether the assembly qualified type name was resolved. Optional type to compare against.
         /// </summary>
         /// <param name="typeName"></param>
+        /// <param name="restoredType"></param>
         /// <param name="compareTo"></param>
         /// <returns></returns>
-        public static bool ValidateType(string typeName, Type compareTo = null)
+        public static bool ValidateType(out Type restoredType, string typeName, Type compareTo)
         {
             try
             {
-                var type = Type.GetType(typeName);
+                restoredType = Type.GetType(typeName);
 
-                if (type is null)
+                if (restoredType is null)
                 {
                     return false;
                 }
 
-                return (compareTo is null) || type.Equals(compareTo);
+                return restoredType.Equals(compareTo);
             }
             catch (Exception _)
             {
+                restoredType = null;
                 return false;
             }
         }
 
-        public bool ValidateType(Type compareTo = null)
+        public bool ValidateOriginalType()
         {
-            return ValidateType(this.OriginalType, compareTo is null ? this.originalType : compareTo);
+            return ValidateType(
+                restoredType: out _,
+                typeName: this.OriginalAssemblyTypeString,
+                compareTo: this.OriginalType);
+        }
+
+        public bool CompareOriginalType(Type compareTo)
+        {
+            return this.OriginalType.Equals(compareTo);
+        }
+
+        public bool ValidateCurrentTypeVsOriginal()
+        {
+            return this.GetType().Equals(this.OriginalType);
         }
 
         /// <summary>
@@ -304,12 +317,17 @@ namespace BrightChain.Engine.Models.Blocks
             return false;
         }
 
-        public TransactableBlock MakeTransactable(BlockCacheManager cacheManager, bool allowCommit)
+        public BrightenedBlock MakeTransactable(BrightenedBlockCacheManager cacheManager, bool allowCommit)
         {
-            return new TransactableBlock(
+            var blockParams = new BrightenedBlockParams(
                 cacheManager: cacheManager,
-                block: this,
-                allowCommit: allowCommit);
+                allowCommit: allowCommit,
+                blockParams: this.BlockParams);
+
+            return new BrightenedBlock(
+                blockParams: blockParams,
+                data: this.Bytes,
+                constituentBlockHashes: this.ConstituentBlocks);
         }
 
         /// <summary>
@@ -321,7 +339,7 @@ namespace BrightChain.Engine.Models.Blocks
                 keepUntilAtLeast: this.StorageContract.KeepUntilAtLeast,
                 redundancy: this.StorageContract.RedundancyContractType,
                 privateEncrypted: this.StorageContract.PrivateEncrypted,
-                originalType: this.originalType);
+                originalType: this.OriginalType);
 
         public bool Validate()
         {

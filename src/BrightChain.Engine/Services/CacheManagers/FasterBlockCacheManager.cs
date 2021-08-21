@@ -18,7 +18,7 @@
     /// <summary>
     ///     Disk/Memory hybrid Block Cache Manager based on Microsoft FASTER KV.
     /// </summary>
-    public class FasterBlockCacheManager : BlockCacheManager, IDisposable
+    public class FasterBlockCacheManager : BrightenedBlockCacheManager, IDisposable
     {
         /// <summary>
         /// hash table size (number of 64-byte buckets).
@@ -49,7 +49,7 @@
         /// <summary>
         /// FasterKV instance for block metadata.
         /// </summary>
-        private readonly FasterKV<BlockHash, TransactableBlock> blockMetadataKV;
+        private readonly FasterKV<BlockHash, BrightenedBlock> blockMetadataKV;
 
         /// <summary>
         /// Session log storage device for block data.
@@ -81,7 +81,7 @@
         /// </summary>
         private readonly FasterKV<DataHash, BlockHash> cblSourceHashesKV;
 
-        private FasterKV<BlockHash, TransactableBlock> NewMetdataKV
+        private FasterKV<BlockHash, BrightenedBlock> NewMetdataKV
         {
             get
             {
@@ -94,13 +94,13 @@
 
                 // Define serializers; otherwise FASTER will use the slower DataContract
                 // Needed only for class keys/values
-                var metadataSerializerSettings = new SerializerSettings<BlockHash, TransactableBlock>
+                var metadataSerializerSettings = new SerializerSettings<BlockHash, BrightenedBlock>
                 {
                     keySerializer = () => new FasterBlockHashSerializer(),
-                    valueSerializer = () => new DataContractObjectSerializer<TransactableBlock>(),
+                    valueSerializer = () => new DataContractObjectSerializer<BrightenedBlock>(),
                 };
 
-                return new FasterKV<BlockHash, TransactableBlock>(
+                return new FasterKV<BlockHash, BrightenedBlock>(
                     size: HashTableBuckets,
                     logSettings: blockMetadataLogSettings,
                     checkpointSettings: new CheckpointSettings
@@ -273,31 +273,31 @@
         /// <summary>
         ///     Fired whenever a block is added to the cache
         /// </summary>
-        public override event ICacheManager<BlockHash, TransactableBlock>.KeyAddedEventHandler KeyAdded;
+        public override event ICacheManager<BlockHash, BrightenedBlock>.KeyAddedEventHandler KeyAdded;
 
         /// <summary>
         ///     Fired whenever a block is expired from the cache
         /// </summary>
-        public override event ICacheManager<BlockHash, TransactableBlock>.KeyExpiredEventHandler KeyExpired;
+        public override event ICacheManager<BlockHash, BrightenedBlock>.KeyExpiredEventHandler KeyExpired;
 
         /// <summary>
         ///     Fired whenever a block is removed from the collection
         /// </summary>
-        public override event ICacheManager<BlockHash, TransactableBlock>.KeyRemovedEventHandler KeyRemoved;
+        public override event ICacheManager<BlockHash, BrightenedBlock>.KeyRemovedEventHandler KeyRemoved;
 
         /// <summary>
         ///     Fired whenever a block is requested from the cache but is not present.
         /// </summary>
-        public override event ICacheManager<BlockHash, TransactableBlock>.CacheMissEventHandler CacheMiss;
+        public override event ICacheManager<BlockHash, BrightenedBlock>.CacheMissEventHandler CacheMiss;
 
         public BlockSessionContext NewSessionContext => new BlockSessionContext(
                 metadataSession: this.NewMetadataSession,
                 dataSession: this.NewDataSession,
                 cblSourceHashSession: this.NewCblSourceHashSession);
 
-        private ClientSession<BlockHash, TransactableBlock, TransactableBlock, TransactableBlock, CacheContext, SimpleFunctions<BlockHash, TransactableBlock, CacheContext>> NewMetadataSession =>
-            this.blockMetadataKV.For(functions: new SimpleFunctions<BlockHash, TransactableBlock, CacheContext>())
-            .NewSession<SimpleFunctions<BlockHash, TransactableBlock, CacheContext>>();
+        private ClientSession<BlockHash, BrightenedBlock, BrightenedBlock, BrightenedBlock, CacheContext, SimpleFunctions<BlockHash, BrightenedBlock, CacheContext>> NewMetadataSession =>
+            this.blockMetadataKV.For(functions: new SimpleFunctions<BlockHash, BrightenedBlock, CacheContext>())
+            .NewSession<SimpleFunctions<BlockHash, BrightenedBlock, CacheContext>>();
 
         private ClientSession<BlockHash, BlockData, BlockData, BlockData, CacheContext, SimpleFunctions<BlockHash, BlockData, CacheContext>> NewDataSession =>
             this.blockDataKV.For(functions: new SimpleFunctions<BlockHash, BlockData, CacheContext>())
@@ -341,13 +341,13 @@
         /// </summary>
         /// <param name="key">key to retrieve.</param>
         /// <returns>returns requested block or throws.</returns>
-        public override TransactableBlock Get(BlockHash key)
+        public override BrightenedBlock Get(BlockHash key)
         {
             using var sessionContext = this.NewSessionContext;
             return sessionContext.Get(key);
         }
 
-        public void Set(BlockSessionContext sessionContext, TransactableBlock block)
+        public void Set(BlockSessionContext sessionContext, BrightenedBlock block)
         {
             base.Set(block);
             block.SetCacheManager(this);
@@ -366,15 +366,15 @@
         ///     Adds a key to the cache if it is not already present.
         /// </summary>
         /// <param name="block">block to palce in the cache.</param>
-        public override void Set(TransactableBlock block)
+        public override void Set(BrightenedBlock block)
         {
             this.Set(this.NewSessionContext, block);
         }
 
-        public override void SetAll(IEnumerable<TransactableBlock> items)
+        public override void SetAll(IEnumerable<BrightenedBlock> items)
         {
             using var sessionContext = this.NewSessionContext;
-            TransactableBlock[] blocks = (TransactableBlock[])items;
+            BrightenedBlock[] blocks = (BrightenedBlock[])items;
 
             for (int i = 0; i < blocks.Length; i++)
             {
@@ -384,7 +384,7 @@
             sessionContext.CompletePending(wait: true);
         }
 
-        public async override void SetAllAsync(IAsyncEnumerable<TransactableBlock> items)
+        public async override void SetAllAsync(IAsyncEnumerable<BrightenedBlock> items)
         {
             using var sessionContext = this.NewSessionContext;
             await foreach (var block in items)

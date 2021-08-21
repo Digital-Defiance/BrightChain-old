@@ -1,25 +1,115 @@
 ﻿namespace BrightChain.Engine.Models.Blocks
 {
     using System;
-    using System.Collections.Generic;
-    using BrightChain.Engine.Extensions;
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
     using ProtoBuf;
 
     /// <summary>
-    /// A brightened block has been XOR'd with random data and has a more random frequency.
+    /// Block that is able to be stored, rolled back, committed, or prevented from being stored.
     /// </summary>
     [ProtoContract]
-    public class BrightenedBlock : TransactableBlock, IComparable<BrightenedBlock>, IComparable<Block>
+    public class BrightenedBlock : Block, IDisposable, ITransactable, ITransactableBlock, IComparable<BrightenedBlock>, IComparable<ITransactableBlock>, IEquatable<IBlock>
     {
-        public BrightenedBlock(TransactableBlockParams blockParams, ReadOnlyMemory<byte> data, IEnumerable<BlockHash> constituentBlockHashes)
+        public BrightenedBlock(BrightenedBlockParams blockParams, ReadOnlyMemory<byte> data, IEnumerable<BlockHash> constituentBlockHashes = null)
             : base(
                 blockParams: blockParams,
-                data: data)
+                data: data,
+                constituentBlockHashes: constituentBlockHashes)
         {
-            this.ConstituentBlocks = constituentBlockHashes;
-            this.OriginalType = typeof(BrightenedBlock).AssemblyQualifiedName;
+            this.CacheManager = blockParams.CacheManager;
+            this.AllowCommit = blockParams.AllowCommit;
+            this.disposedValue = false;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BrightenedBlock"/> class.
+        /// For test methods.
+        /// </summary>
+        internal BrightenedBlock()
+            : base(
+                blockParams: new BlockParams(
+                    blockSize: BlockSize.Message,
+                    requestTime: DateTime.Now,
+                    keepUntilAtLeast: DateTime.MaxValue,
+                    redundancy: RedundancyContractType.HeapAuto,
+                    privateEncrypted: false,
+                    originalType: typeof(BrightenedBlock)),
+                data: new ReadOnlyMemory<byte>() { },
+                constituentBlockHashes: new List<BlockHash>())
+        {
+        }
+
+        public BrightenedBlock AsTransactableBlock => this;
+
+        /// <summary>
+        /// Gets a bool indicating whether the block's data has been loaded from the attached cache, or kept after persisting to cache.
+        /// </summary>
+        public bool DataInMemory { get; }
+
+        /// <summary>
+        /// Boolean indicating whether our data has been disposed.
+        /// </summary>
+        private bool disposedValue;
+
+        public ICacheManager<BlockHash, BrightenedBlock> CacheManager { get; internal set; }
+
+        public bool Committed { get; protected set; } = false;
+
+        public bool AllowCommit { get; protected set; } = false;
+
+        public static bool operator ==(BrightenedBlock a, BrightenedBlock b)
+        {
+            return a.BlockSize == b.BlockSize && a.StoredData.Equals(b.StoredData);
+        }
+
+        public static bool operator !=(BrightenedBlock a, BrightenedBlock b)
+        {
+            return !a.Equals(b);
+        }
+
+        public void SetCacheManager(ICacheManager<BlockHash, BrightenedBlock> cacheManager)
+        {
+            this.CacheManager = cacheManager;
+        }
+
+        public void Commit()
+        {
+            if (!this.AllowCommit)
+            {
+                throw new BrightChainException("Block is not allowed to be committed");
+            }
+
+            this.Committed = true;
+        }
+
+        public void Rollback()
+        {
+            this.Committed = false;
+        }
+
+        public override BrightenedBlockParams BlockParams => new BrightenedBlockParams(
+                cacheManager: this.CacheManager,
+                allowCommit: this.AllowCommit,
+                blockParams: new BlockParams(
+                    blockSize: this.BlockSize,
+                    requestTime: this.StorageContract.RequestTime,
+                    keepUntilAtLeast: this.StorageContract.KeepUntilAtLeast,
+                    redundancy: this.StorageContract.RedundancyContractType,
+                    privateEncrypted: this.StorageContract.PrivateEncrypted,
+                    originalType: Type.GetType(this.OriginalAssemblyTypeString)));
+
+        public override bool Equals(object obj)
+        {
+            return obj is BrightenedBlock blockObj ? this.StoredData.Equals(blockObj.StoredData) : false;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.StoredData.GetHashCode();
         }
 
         public int CompareTo(BrightenedBlock other)
@@ -27,13 +117,47 @@
             return this.StoredData.CompareTo(other.StoredData);
         }
 
-        public override void Dispose()
+        public int CompareTo(ITransactableBlock other)
         {
+            return this.StoredData.CompareTo(other.StoredData);
         }
 
-        public new bool Validate()
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~TransactableBlock()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        /// <summary>
+        /// Dispose block data and memory contents.
+        /// </summary>
+        public override void Dispose()
         {
-            return this.PerformValidation(out _);
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            this.Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Dispose block data and memory contents.
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects)
+                }
+
+                this.Rollback();
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                this.disposedValue = true;
+            }
         }
     }
 }
