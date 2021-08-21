@@ -287,6 +287,11 @@ namespace BrightChain.Engine.Models.Blocks
             return this.OriginalType.Equals(compareTo);
         }
 
+        public bool CompareOriginalType(Block other)
+        {
+            return this.CompareOriginalType(other.OriginalType);
+        }
+
         public bool ValidateCurrentTypeVsOriginal()
         {
             return this.GetType().Equals(this.OriginalType);

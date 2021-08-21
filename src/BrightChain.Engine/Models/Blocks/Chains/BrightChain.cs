@@ -32,12 +32,14 @@
             }
 
             this._blocks = brightenedBlocks;
-            this._head = this._blocks.First();
+            this._head = ((BrightenedBlock[])brightenedBlocks)[0];
             this._blockParams = this._head.BlockParams;
-
-            var blockStats = this.VerifyHomogeneity();
-            this._tail = blockStats.Item1;
-            this._count = blockStats.Item2;
+            if (!this.VerifyHomogeneity(
+                tail: out this._tail,
+                blockCount: out this._count))
+            {
+                throw new BrightChainException(nameof(brightenedBlocks));
+            }
         }
 
         public int Count()
@@ -55,21 +57,28 @@
         /// Future planning that this verification process will walk the stack and get the counts/tail anyway, regardless of Async/eager loaded.
         /// </summary>
         /// <returns></returns>
-        public Tuple<BrightenedBlock, int> VerifyHomogeneity()
+        public bool VerifyHomogeneity(out BrightenedBlock tail, out int blockCount)
         {
+            var allOk = true;
+            int count = 0;
+            BrightenedBlock movingTail = this._head;
             foreach (var block in this._blocks)
             {
+                count++;
+                movingTail = block;
                 if (
                     !block.ValidateOriginalType() ||
-                    !block.CompareOriginalType(this._head.OriginalType) ||
+                    !block.CompareOriginalType(this._head) ||
                     !block.GetType().Equals(this._head.GetType()) ||
                     !block.BlockSize.Equals(this._blockParams.BlockSize))
                 {
-                    throw new BrightChainException("Block type mismatch");
+                    allOk = false;
                 }
             }
 
-            return new Tuple<BrightenedBlock, int>(this._tail, this._blocks.Count());
+            blockCount = count;
+            tail = movingTail;
+            return allOk;
         }
 
         public BrightenedBlock Last()
@@ -82,7 +91,7 @@
             return this._blocks;
         }
 
-        public async IAsyncEnumerator<BrightenedBlock> AllAsync()
+        public async IAsyncEnumerator<BrightenedBlock> AllAsyncEnumerable()
         {
             foreach (var block in this._blocks)
             {
@@ -95,7 +104,7 @@
             return this._blocks.Select(b => b.Id);
         }
 
-        public async IAsyncEnumerable<BlockHash> IdsAsync()
+        public async IAsyncEnumerable<BlockHash> IdsAsyncEnumerable()
         {
             foreach (var blockHash in this.Ids())
             {
