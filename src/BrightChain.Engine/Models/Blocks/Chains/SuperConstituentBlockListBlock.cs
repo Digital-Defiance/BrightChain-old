@@ -13,7 +13,7 @@
     [ProtoContract]
     public class SuperConstituentBlockListBlock : ConstituentBlockListBlock, IBlock, IDisposable, IValidatable
     {
-        public SuperConstituentBlockListBlock(ConstituentBlockListBlockParams blockParams, ReadOnlyMemory<byte> data)
+        public SuperConstituentBlockListBlock(ConstituentBlockListBlockParams blockParams)
         : base(
               blockParams: blockParams)
         {

@@ -24,7 +24,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
         : base(
               blockParams: blockParams,
               data: Helpers.RandomDataHelper.DataFiller(
-                  inputData: blockParams.ConstituentBlocks
+                  inputData: blockParams.ConstituentBlockHashes
                             .SelectMany(b => b.HashBytes.ToArray())
                              .ToArray(),
                   blockSize: blockParams.BlockSize))
@@ -32,7 +32,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
             // TODO : if finalBlockHash is null, reconstitute and compute- or accept the validation result's hash essentially?
             this.SourceId = blockParams.SourceId;
             this.TotalLength = blockParams.TotalLength;
-            this.ConstituentBlocks = blockParams.ConstituentBlocks;
+            this.ConstituentBlocks = blockParams.ConstituentBlockHashes;
             this.Previous = blockParams.Previous;
             this.Next = blockParams.Next;
             this.TupleCount = BlockBrightenerService.TupleCount;
@@ -52,7 +52,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
                     sourceId: this.SourceId,
                     segmentId: this.SegmentId,
                     totalLength: this.TotalLength,
-                    constituentBlocks: this.ConstituentBlocks,
+                    constituentBlockHashes: this.ConstituentBlocks,
                     previous: this.Previous,
                     next: this.Next);
 

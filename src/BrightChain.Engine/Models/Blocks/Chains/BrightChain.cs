@@ -7,6 +7,7 @@
     using global::BrightChain.Engine.Exceptions;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
     using global::BrightChain.Engine.Models.Hashes;
+    using global::BrightChain.Engine.Services.CacheManagers;
     using ProtoBuf;
 
     /// <summary>
@@ -31,8 +32,8 @@
                 throw new BrightChainException(nameof(brightenedBlocks));
             }
 
-            this._blocks = brightenedBlocks;
-            this._head = ((BrightenedBlock[])brightenedBlocks)[0];
+            this._blocks = new List<BrightenedBlock>(brightenedBlocks);
+            this._head = brightenedBlocks.First();
             this._blockParams = this._head.BlockParams;
             if (!this.VerifyHomogeneity(
                 tail: out this._tail,
@@ -40,6 +41,38 @@
             {
                 throw new BrightChainException(nameof(brightenedBlocks));
             }
+        }
+
+        public BrightChain(ConstituentBlockListBlockParams blockParams, BrightenedBlockCacheManager sourceCache)
+            : base(blockParams)
+        {
+            if (!blockParams.ConstituentBlockHashes.Any())
+            {
+                throw new BrightChainException("Can not create empty chain");
+            }
+
+            var blocks = new List<BrightenedBlock>();
+            var totalExpected = blockParams.ConstituentBlockHashes.Count();
+            int index = 0;
+
+            foreach (var blockHash in blockParams.ConstituentBlockHashes)
+            {
+                var block = sourceCache.Get(blockHash);
+                blocks.Add(block);
+                if (index++ == 0)
+                {
+                    this._head = block;
+                    this._blockParams = block.BlockParams;
+                }
+
+                if (index == totalExpected)
+                {
+                    this._tail = block;
+                }
+            }
+
+            this._blocks = blocks;
+            this._count = totalExpected;
         }
 
         public int Count()
@@ -50,6 +83,15 @@
         public BrightenedBlock First()
         {
             return this._head;
+        }
+
+        public bool VerifyHomogeneityAgainstBlock(BrightenedBlock block)
+        {
+            return
+                block.ValidateOriginalType() &&
+                block.CompareOriginalType(this._head) &&
+                block.GetType().Equals(this._head.GetType()) &&
+                block.BlockSize.Equals(this._blockParams.BlockSize);
         }
 
         /// <summary>
@@ -66,14 +108,7 @@
             {
                 count++;
                 movingTail = block;
-                if (
-                    !block.ValidateOriginalType() ||
-                    !block.CompareOriginalType(this._head) ||
-                    !block.GetType().Equals(this._head.GetType()) ||
-                    !block.BlockSize.Equals(this._blockParams.BlockSize))
-                {
-                    allOk = false;
-                }
+                allOk = allOk && this.VerifyHomogeneityAgainstBlock(block);
             }
 
             blockCount = count;

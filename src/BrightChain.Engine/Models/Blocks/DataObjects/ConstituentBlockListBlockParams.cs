@@ -9,7 +9,7 @@
 
         public readonly long TotalLength;
 
-        public readonly IEnumerable<BlockHash> ConstituentBlocks;
+        public readonly IEnumerable<BlockHash> ConstituentBlockHashes;
 
         /// <summary>
         /// Hash of the sum bytes of the segment of the file contained in this CBL when assembled in order.
@@ -20,7 +20,7 @@
 
         public readonly BlockHash Next = null;
 
-        public ConstituentBlockListBlockParams(BlockParams blockParams, DataHash sourceId, SegmentHash segmentId, long totalLength, IEnumerable<BlockHash> constituentBlocks, BlockHash previous = null, BlockHash next = null)
+        public ConstituentBlockListBlockParams(BlockParams blockParams, DataHash sourceId, SegmentHash segmentId, long totalLength, IEnumerable<BlockHash> constituentBlockHashes, BlockHash previous = null, BlockHash next = null)
        : base(
              blockSize: blockParams.BlockSize,
              requestTime: blockParams.RequestTime,
@@ -31,7 +31,7 @@
         {
             this.SourceId = sourceId;
             this.TotalLength = totalLength;
-            this.ConstituentBlocks = constituentBlocks;
+            this.ConstituentBlockHashes = constituentBlockHashes;
             this.SegmentId = segmentId;
             this.Previous = previous;
             this.Next = next;
@@ -44,15 +44,15 @@
                 throw new BrightChainException("BlockSize mismatch");
             }
 
-            var newConstituentBlocks = new List<BlockHash>(this.ConstituentBlocks);
-            newConstituentBlocks.AddRange(otherBlockParams.ConstituentBlocks);
+            var newConstituentBlocks = new List<BlockHash>(this.ConstituentBlockHashes);
+            newConstituentBlocks.AddRange(otherBlockParams.ConstituentBlockHashes);
 
             return new ConstituentBlockListBlockParams(
                 blockParams: this.Merge(otherBlockParams),
                 sourceId: this.SourceId,
                 segmentId: this.SegmentId,
                 totalLength: this.TotalLength > otherBlockParams.TotalLength ? this.TotalLength : otherBlockParams.TotalLength,
-                constituentBlocks: newConstituentBlocks,
+                constituentBlockHashes: newConstituentBlocks,
                 previous: this.Previous,
                 next: this.Next);
         }

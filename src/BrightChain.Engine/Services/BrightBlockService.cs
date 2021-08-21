@@ -204,21 +204,22 @@ namespace BrightChain.Engine.Services
         /// <param name="fileName"></param>
         /// <param name="blockParams"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<ConstituentBlockListBlock>> MakeCBLChainFromParamsAsync(string fileName, BlockParams blockParams)
+        public async Task<IEnumerable<BrightChain>> MakeCBLChainFromParamsAsync(string fileName, BlockParams blockParams)
         {
             var sourceInfo = new SourceFileInfo(
                 fileName: fileName,
                 blockSize: blockParams.BlockSize);
-            var blocksUsedThisSegment = new List<BlockHash>();
+            var blockHashesUsedThisSegment = new List<BlockHash>();
+            var brightenedBlocksThisSegment = new List<BrightenedBlock>();
             var sourceBytesRemaining = sourceInfo.FileInfo.Length;
             var totalBytesRemaining = sourceInfo.TotalBlockedBytes;
             var cblsExpected = sourceInfo.CblsExpected;
-            var cblsEmitted = new ConstituentBlockListBlock[cblsExpected];
+            var cblsEmitted = new BrightChain[cblsExpected];
             var cblIdx = 0;
             var blocksRemaining = sourceInfo.TotalBlocksExpected;
 
-            var blocksThisSegment = 0;
-            var sourceBytesThisSegment = 0;
+            var blockCountThisSegment = 0;
+            var sourceByteCountThisSegment = 0;
             var brightenedBlocksConsumed = 0;
 
             using (SHA256 segmentHasher = SHA256.Create())
@@ -226,11 +227,12 @@ namespace BrightChain.Engine.Services
                 // last block is always full of random data
                 await foreach (BrightenedBlock brightenedBlock in this.StreamCreatedBrightenedBlocksFromFileAsync(sourceInfo: sourceInfo, blockParams: blockParams))
                 {
+                    brightenedBlocksThisSegment.Add(brightenedBlock);
                     this.blockFasterCache.Set(brightenedBlock);
-                    sourceBytesThisSegment += (int)(sourceBytesRemaining < sourceInfo.BytesPerBlock ? sourceBytesRemaining : brightenedBlock.Bytes.Length);
-                    blocksUsedThisSegment.Add(brightenedBlock.Id);
-                    blocksUsedThisSegment.AddRange(brightenedBlock.ConstituentBlocks);
-                    var cblFullAfterThisBlock = ++blocksThisSegment == sourceInfo.HashesPerBlock;
+                    sourceByteCountThisSegment += (int)(sourceBytesRemaining < sourceInfo.BytesPerBlock ? sourceBytesRemaining : brightenedBlock.Bytes.Length);
+                    blockHashesUsedThisSegment.Add(brightenedBlock.Id);
+                    blockHashesUsedThisSegment.AddRange(brightenedBlock.ConstituentBlocks);
+                    var cblFullAfterThisBlock = ++blockCountThisSegment == sourceInfo.HashesPerBlock;
                     var sourceConsumed = totalBytesRemaining <= sourceInfo.BytesPerBlock;
                     blocksRemaining--;
                     brightenedBlocksConsumed++;
@@ -240,8 +242,7 @@ namespace BrightChain.Engine.Services
 
                         segmentHasher.TransformFinalBlock(brightenedBlock.Bytes.ToArray(), 0, (int)sourceBytesThisBlock);
 
-                        var cbl = new ConstituentBlockListBlock(
-                            blockParams: new ConstituentBlockListBlockParams(
+                        var cblParams = new ConstituentBlockListBlockParams(
                                 blockParams: new BrightenedBlockParams(
                                     cacheManager: this.blockFasterCache,
                                     allowCommit: true,
@@ -249,12 +250,16 @@ namespace BrightChain.Engine.Services
                                 sourceId: sourceInfo.SourceId,
                                 segmentId: new SegmentHash(
                                     providedHashBytes: segmentHasher.Hash,
-                                    sourceDataLength: sourceBytesThisSegment,
+                                    sourceDataLength: sourceByteCountThisSegment,
                                     computed: true),
                                 totalLength: sourceBytesRemaining > sourceInfo.BytesPerCbl ? sourceInfo.BytesPerCbl : sourceBytesRemaining,
-                                constituentBlocks: blocksUsedThisSegment.ToArray(),
+                                constituentBlockHashes: blockHashesUsedThisSegment.ToArray(),
                                 previous: cblIdx > 0 ? cblsEmitted[cblIdx - 1].Id : null,
-                                next: null));
+                                next: null);
+
+                        var cbl = new BrightChain(
+                            blockParams: cblParams,
+                            brightenedBlocks: brightenedBlocksThisSegment);
 
                         // update the next pointer of the previous block
                         if (cblIdx > 0)
@@ -265,9 +270,10 @@ namespace BrightChain.Engine.Services
                         cblsEmitted[cblIdx++] = cbl;
 
                         segmentHasher.Initialize();
-                        blocksUsedThisSegment.Clear();
-                        blocksThisSegment = 0;
-                        sourceBytesThisSegment = 0;
+                        blockHashesUsedThisSegment.Clear();
+                        brightenedBlocksThisSegment.Clear();
+                        blockCountThisSegment = 0;
+                        sourceByteCountThisSegment = 0;
                     }
                     else
                     {
@@ -289,30 +295,33 @@ namespace BrightChain.Engine.Services
             return cblsEmitted;
         }
 
-        public async Task<SuperConstituentBlockListBlock> MakeSuperCBLFromCBLChainAsync(BlockParams blockParams, IEnumerable<ConstituentBlockListBlock> chainedCbls)
+        public async Task<BrightChain> MakeSuperCBLFromCBLChainAsync(BlockParams blockParams, IEnumerable<ConstituentBlockListBlock> chainedCbls, DataHash sourceId)
         {
             var hashBytes = chainedCbls
                     .SelectMany(c => c.Id.HashBytes.ToArray())
                     .ToArray();
 
-            return new SuperConstituentBlockListBlock(
+            var constituentHashes = chainedCbls.Select(c => c.Id);
+
+            var sCbl = new SuperConstituentBlockListBlock(
                     blockParams: new ConstituentBlockListBlockParams(
                         blockParams: new BrightenedBlockParams(
                             cacheManager: this.blockFasterCache,
                             allowCommit: true,
                             blockParams: blockParams),
-                        sourceId: chainedCbls.First().SourceId,
+                        sourceId: sourceId,
                         segmentId: new SegmentHash(hashBytes),
                         totalLength: hashBytes.Length,
-                        constituentBlocks: chainedCbls.Select(c => c.Id),
+                        constituentBlockHashes: constituentHashes,
                         previous: null,
-                        next: null),
-                    data: Helpers.RandomDataHelper.DataFiller(
-                        inputData: hashBytes,
-                        blockSize: blockParams.BlockSize));
+                        next: null));
+
+            return new BrightChain(
+                blockParams: sCbl.BlockParams,
+                sourceCache: this.blockFasterCache);
         }
 
-        public async Task<ConstituentBlockListBlock> MakeCblOrSuperCblFromFileAsync(string fileName, BlockParams blockParams)
+        public async Task<BrightChain> MakeCblOrSuperCblFromFileAsync(string fileName, BlockParams blockParams)
         {
             var firstPass = await this.MakeCBLChainFromParamsAsync(
                 fileName: fileName,
@@ -320,18 +329,21 @@ namespace BrightChain.Engine.Services
                     .ConfigureAwait(false);
 
             var count = firstPass.Count();
+
+            if (count == 0)
+            {
+                throw new BrightChainException("No blocks returned");
+            }
+
+            var loneCbl = firstPass.ElementAt(0);
+
             if (count == 1)
             {
-                var loneCbl = firstPass.ElementAt(0);
                 return loneCbl;
             }
             else if (count > BlockSizeMap.HashesPerBlock(blockParams.BlockSize))
             {
                 throw new NotImplementedException("Uber-CBLs not yet implemented");
-            }
-            else if (count == 0)
-            {
-                throw new BrightChainException("No blocks returned");
             }
 
             // TODO: figure out where/when to commit the firstPass blocks
@@ -339,7 +351,8 @@ namespace BrightChain.Engine.Services
             return await
                 this.MakeSuperCBLFromCBLChainAsync(
                     blockParams: blockParams,
-                    chainedCbls: firstPass)
+                    chainedCbls: firstPass,
+                    sourceId: loneCbl.SourceId)
                         .ConfigureAwait(false);
         }
 
@@ -579,7 +592,7 @@ namespace BrightChain.Engine.Services
                     segmentId: new SegmentHash(
                         dataBytes: new ReadOnlyMemory<byte>(segmentBytes)),
                     totalLength: BlockSizeMap.BlockSize(firstBlock.BlockSize) * awaitedBlocks.Count,
-                    constituentBlocks: hashes,
+                    constituentBlockHashes: hashes,
                     previous: null,
                     next: null),
                 brightenedBlocks: awaitedBlocks);
