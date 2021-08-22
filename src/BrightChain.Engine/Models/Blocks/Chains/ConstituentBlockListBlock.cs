@@ -124,9 +124,9 @@ namespace BrightChain.Engine.Models.Blocks.Chains
         /// Generate a BlockMap from the list of constituent blocks.
         /// </summary>
         /// <returns>BlockChainFileMap with TupleStripes of the chain.</returns>
-        public BlockChainFileMap GenerateBlockMap()
+        public BrightMap CreateBrightMap()
         {
-            return new BlockChainFileMap(this);
+            return new BrightMap(this);
         }
 
         /// <summary>

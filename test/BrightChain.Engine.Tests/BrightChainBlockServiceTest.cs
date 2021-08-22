@@ -139,8 +139,8 @@
                         HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()),
                         HashToFormattedString(cbl.SourceId.HashBytes.ToArray()));
 
-                    var cblMap = cbl.GenerateBlockMap();
-                    Assert.IsTrue(cblMap is BlockChainFileMap);
+                    var cblMap = cbl.CreateBrightMap();
+                    Assert.IsTrue(cblMap is BrightMap);
                 }
             }
             else
@@ -151,11 +151,9 @@
                     HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()),
                     HashToFormattedString(brightenedCbl.SourceId.HashBytes.ToArray()));
 
-                var cblMap = brightenedCbl.GenerateBlockMap();
-                Assert.IsTrue(cblMap is BlockChainFileMap);
+                var cblMap = brightenedCbl.CreateBrightMap();
+                Assert.IsTrue(cblMap is BrightMap);
             }
-
-            
 
             loggerMock.Verify(l => l.Log(
                 LogLevel.Information,

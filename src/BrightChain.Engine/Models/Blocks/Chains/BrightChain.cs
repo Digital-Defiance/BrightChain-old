@@ -1,6 +1,5 @@
 ﻿namespace BrightChain.Engine.Models.Blocks.Chains
 {
-    using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;

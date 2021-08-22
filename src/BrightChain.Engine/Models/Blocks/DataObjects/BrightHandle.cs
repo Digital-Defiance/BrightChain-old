@@ -52,14 +52,8 @@
             }
         }
 
-        public IEnumerable<string> HashStrings
-        {
-            get
-            {
-                return this.BlockHashByteArrays
+        public IEnumerable<string> HashStrings => this.BlockHashByteArrays
                     .Select(r => Helpers.Utilities.HashToFormattedString(r.ToArray()));
-            }
-        }
 
         public Uri BrightChainAddress(string hostName, string endpoint = "chains")
         {

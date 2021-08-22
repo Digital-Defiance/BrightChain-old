@@ -368,6 +368,74 @@ namespace BrightChain.Engine.Services
             return blocks;
         }
 
+        public async Task<Stream> RestoreStreamFromCBLAsync(ConstituentBlockListBlock constituentBlockListBlock, Stream? destination = null)
+        {
+            if (destination is null)
+            {
+                destination = new MemoryStream();
+            }
+
+            if (constituentBlockListBlock.TotalLength > long.MaxValue)
+            {
+                throw new NotImplementedException();
+            }
+
+            if (constituentBlockListBlock is SuperConstituentBlockListBlock superConstituentBlockListBlock)
+            {
+                throw new NotImplementedException();
+            }
+
+            long bytesWritten = 0;
+            using (SHA256 sha = SHA256.Create())
+            {
+                var iBlockSize = BlockSizeMap.BlockSize(constituentBlockListBlock.BlockSize);
+                StreamWriter streamWriter = new StreamWriter(destination);
+                var cacheManager = this.blockFasterCache.AsBlockCacheManager;
+                var blockMap = constituentBlockListBlock.CreateBrightMap();
+                await foreach (Block block in blockMap.ConsolidateTuplesToChainAsync(cacheManager))
+                {
+                    var bytesLeft = constituentBlockListBlock.TotalLength - bytesWritten;
+                    var lastBlock = bytesLeft <= iBlockSize;
+                    var length = lastBlock ? bytesLeft : iBlockSize;
+                    if (lastBlock)
+                    {
+                        sha.TransformFinalBlock(block.Bytes.ToArray(), 0, (int)length);
+                    }
+                    else
+                    {
+                        sha.TransformBlock(block.Bytes.ToArray(), 0, (int)length, null, 0);
+                    }
+
+                    await destination.WriteAsync(buffer: block.Bytes.ToArray(), offset: 0, count: (int)length)
+                        .ConfigureAwait(false);
+                    bytesWritten += length;
+                }
+
+                if (bytesWritten == 0)
+                {
+                    throw new BrightChainException(nameof(bytesWritten));
+                }
+
+                var finalHash = new DataHash(
+                    providedHashBytes: sha.Hash,
+                    sourceDataLength: bytesWritten,
+                    computed: true);
+
+                if (!finalHash.Equals(constituentBlockListBlock.SourceId))
+                {
+                    throw new BrightChainException(nameof(finalHash));
+                }
+
+                await destination
+                    .FlushAsync()
+                    .ConfigureAwait(false);
+
+                destination.Position = 0;
+
+                return destination;
+            }
+        }
+
         /// <summary>
         /// Given a CBL Block, produce a temporary file on disk containing the reconstitued bytes.
         /// </summary>
@@ -385,66 +453,34 @@ namespace BrightChain.Engine.Services
                 throw new NotImplementedException();
             }
 
-            long bytesWritten = 0;
-            var iBlockSize = BlockSizeMap.BlockSize(constituentBlockListBlock.BlockSize);
-            var blockMap = constituentBlockListBlock.GenerateBlockMap();
             string tempFilename = Path.GetTempFileName();
-            using (var stream = File.OpenWrite(tempFilename))
+
+            using (Stream destination = File.OpenWrite(tempFilename))
             {
-                using (SHA256 sha = SHA256.Create())
+                using (await this
+                   .RestoreStreamFromCBLAsync(constituentBlockListBlock, destination)
+                   .ConfigureAwait(false))
                 {
-                    StreamWriter streamWriter = new StreamWriter(stream);
-                    var cacheManager = this.blockFasterCache.AsBlockCacheManager;
-                    await foreach (Block block in blockMap.ConsolidateTuplesToChainAsync(cacheManager))
-                    {
-                        var bytesLeft = constituentBlockListBlock.TotalLength - bytesWritten;
-                        var lastBlock = bytesLeft <= iBlockSize;
-                        var length = lastBlock ? bytesLeft : iBlockSize;
-                        if (lastBlock)
-                        {
-                            sha.TransformFinalBlock(block.Bytes.ToArray(), 0, (int)length);
-                        }
-                        else
-                        {
-                            sha.TransformBlock(block.Bytes.ToArray(), 0, (int)length, null, 0);
-                        }
-
-                        await stream.WriteAsync(buffer: block.Bytes.ToArray(), offset: 0, count: (int)length)
-                            .ConfigureAwait(false);
-                        bytesWritten += length;
-                    }
-
-                    var finalHash = new BlockHash(
-                        blockType: typeof(ConstituentBlockListBlock),
-                        originalBlockSize: constituentBlockListBlock.BlockSize,
-                        providedHashBytes: sha.Hash,
-                        computed: true);
+                    destination.Close();
+                    destination.Dispose();
                 }
 
-                stream.Flush();
-                stream.Close();
+                var restoredSourceInfo = new SourceFileInfo(
+                    fileName: tempFilename,
+                    blockSize: constituentBlockListBlock.BlockSize);
+
+                if (restoredSourceInfo.FileInfo.Length != constituentBlockListBlock.TotalLength)
+                {
+                    throw new BrightChainException(nameof(restoredSourceInfo.FileInfo.Length));
+                }
+
+                if (!restoredSourceInfo.SourceId.Equals(constituentBlockListBlock.SourceId))
+                {
+                    throw new BrightChainException(nameof(restoredSourceInfo.SourceId));
+                }
+
+                return restoredSourceInfo;
             }
-
-            if (bytesWritten == 0)
-            {
-                throw new BrightChainException(nameof(bytesWritten));
-            }
-
-            var restoredSourceInfo = new SourceFileInfo(
-                fileName: tempFilename,
-                blockSize: constituentBlockListBlock.BlockSize);
-
-            if (restoredSourceInfo.FileInfo.Length != constituentBlockListBlock.TotalLength)
-            {
-                throw new BrightChainException(nameof(restoredSourceInfo.FileInfo.Length));
-            }
-
-            if (!restoredSourceInfo.SourceId.Equals(constituentBlockListBlock.SourceId))
-            {
-                throw new BrightChainException(nameof(restoredSourceInfo.SourceId));
-            }
-
-            return restoredSourceInfo;
         }
 
         public async Task<BrightenedBlock> FindBlockByIdAsync(BlockHash id)
@@ -606,6 +642,18 @@ namespace BrightChain.Engine.Services
                 brightenedBlocks: awaitedBlocks);
         }
 
+        public BrightHandle CblToBrightHandle(ConstituentBlockListBlock cblBlock, BrightenedBlock brightenedCbl, TupleStripe cblStripe)
+        {
+            return new BrightHandle(
+                    blockSize: brightenedCbl.BlockSize,
+                    blockHashes: cblStripe.Blocks
+                        .Select(b => b.Id)
+                        .ToArray(),
+                    originalType: cblStripe.OriginalType,
+                    brightenedCblHash: brightenedCbl.Id,
+                    identifiableSourceHash: cblBlock.SourceId);
+        }
+
         public BrightHandle BrightenCbl(ConstituentBlockListBlock cblBlock, bool persist, out BrightenedBlock brightenedCbl)
         {
             // TODO: update indices
@@ -640,6 +688,21 @@ namespace BrightChain.Engine.Services
         public BrightHandle FindSourceById(DataHash requestedHash)
         {
             return this.blockFasterCache.GetCbl(requestedHash);
+        }
+
+        public TupleStripe BrightHandleToTupleStripe(BrightHandle brightHandle)
+        {
+            return new TupleStripe(
+                tupleCountMatch: brightHandle.BlockHashByteArrays.Count(),
+                blockSizeMatch: brightHandle.BlockSize,
+                originalType: brightHandle.OriginalType,
+                brightenedBlocks: this.blockFasterCache.Get(brightHandle.BlockHashes));
+        }
+
+        public IdentifiableBlock BrightHandleToIdentifiableBlock(BrightHandle brightHandle)
+        {
+            return this.BrightHandleToTupleStripe(brightHandle)
+                .Consolidate();
         }
 
         public void Dispose()

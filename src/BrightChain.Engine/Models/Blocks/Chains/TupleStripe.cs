@@ -3,8 +3,6 @@
     using System.Collections.Generic;
     using global::BrightChain.Engine.Enumerations;
     using global::BrightChain.Engine.Exceptions;
-    using global::BrightChain.Engine.Models.Blocks.DataObjects;
-    using global::BrightChain.Engine.Services.CacheManagers;
 
     /// <summary>
     /// A tuple stripe is a representation of the blocks used only to Recover a source block.
@@ -49,9 +47,11 @@
         /// <returns></returns>
         public IdentifiableBlock Consolidate()
         {
-            Block result = this.Blocks.First();
+            Block firstBlock = this.Blocks.First();
             // the XOR will never XOR with the same block as that would yield all zeroes. It will be skipped.
-            return new IdentifiableBlock(result.BlockParams, result.XOR(this.Blocks));
+            var identifiable = new IdentifiableBlock(firstBlock.BlockParams, firstBlock.XOR(this.Blocks));
+            return identifiable;
+            //return (IdentifiableBlock)Convert.ChangeType(identifiable, identifiable.OriginalType);
         }
     }
 }

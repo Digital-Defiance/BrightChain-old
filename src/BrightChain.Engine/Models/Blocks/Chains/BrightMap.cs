@@ -12,7 +12,7 @@
     /// source file -> blockchainfilemap -> commit
     /// pull blocks from pool -> blockchainfilemap -> read.
     /// </summary>
-    public class BlockChainFileMap
+    public class BrightMap
     {
         private IAsyncEnumerable<TupleStripe> TupleStripes { get; set; }
 
@@ -38,13 +38,33 @@
             yield return items;
         }
 
-        public BlockChainFileMap(ConstituentBlockListBlock cblBlock, IAsyncEnumerable<TupleStripe> tupleStripes = null)
+        public static async IAsyncEnumerable<IEnumerable<T>> TakeIntoGroupsOf<T>(IAsyncEnumerable<T> list, int parts)
+        {
+            var i = 0;
+            T[] items = new T[parts];
+            await foreach (var item in list)
+            {
+                items[i++] = item;
+
+                if (i == parts)
+                {
+                    yield return items;
+                    i = 0;
+                    items = new T[parts];
+                }
+            }
+
+            Array.Resize<T>(ref items, i);
+            yield return items;
+        }
+
+        public BrightMap(ConstituentBlockListBlock cblBlock, IAsyncEnumerable<TupleStripe> tupleStripes = null)
         {
             this.ConstituentBlockListBlock = cblBlock;
             this.TupleStripes = tupleStripes;
         }
 
-        private BlockChainFileMap()
+        private BrightMap()
         {
         }
 
