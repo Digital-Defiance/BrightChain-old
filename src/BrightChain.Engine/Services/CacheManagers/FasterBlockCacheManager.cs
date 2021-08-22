@@ -372,7 +372,7 @@
         /// <param name="block">block to palce in the cache.</param>
         public override void Set(BrightenedBlock block)
         {
-            var context = this.NewSessionContext;
+            using var context = this.NewSessionContext;
             this.Set(context, block);
             context.CompletePending(wait: true);
         }
@@ -392,7 +392,7 @@
                 throw new BrightChainException(nameof(identifiableSourceHash));
             }
 
-            var context = this.NewSessionContext;
+            using var context = this.NewSessionContext;
             context.CblSourceHashSession.Upsert(ref identifiableSourceHash, ref brightHandle);
             context.CompletePending(wait: true);
         }
