@@ -79,7 +79,7 @@
         /// <summary>
         /// FasterKV instance store for Source File Id -> CBL map.
         /// </summary>
-        private readonly FasterKV<DataHash, BlockHash> cblSourceHashesKV;
+        private readonly FasterKV<DataHash, BrightHandle> cblSourceHashesKV;
 
         private FasterKV<BlockHash, BrightenedBlock> NewMetdataKV
         {
@@ -141,7 +141,7 @@
             }
         }
 
-        private FasterKV<DataHash, BlockHash> NewCblSourceHashesFasterKV
+        private FasterKV<DataHash, BrightHandle> NewCblSourceHashesFasterKV
         {
             get
             {
@@ -152,13 +152,13 @@
                     ReadCacheSettings = this.useReadCache ? new ReadCacheSettings() : null,
                 };
 
-                var cblSourceHashesSerializerSettings = new SerializerSettings<DataHash, BlockHash>
+                var cblSourceHashesSerializerSettings = new SerializerSettings<DataHash, BrightHandle>
                 {
                     keySerializer = () => new FasterDataHashSerializer(),
-                    valueSerializer = () => new FasterBlockHashSerializer(),
+                    valueSerializer = () => new DataContractObjectSerializer<BrightHandle>(),
                 };
 
-                return new FasterKV<DataHash, BlockHash>(
+                return new FasterKV<DataHash, BrightHandle>(
                     size: HashTableBuckets,
                     logSettings: cblSourceHashesLogSettings,
                     checkpointSettings: new CheckpointSettings
@@ -303,9 +303,9 @@
             this.blockDataKV.For(functions: new SimpleFunctions<BlockHash, BlockData, CacheContext>())
             .NewSession<SimpleFunctions<BlockHash, BlockData, CacheContext>>();
 
-        private ClientSession<DataHash, BlockHash, BlockHash, BlockHash, CacheContext, SimpleFunctions<DataHash, BlockHash, CacheContext>> NewCblSourceHashSession =>
-            this.cblSourceHashesKV.For(functions: new SimpleFunctions<DataHash, BlockHash, CacheContext>())
-            .NewSession<SimpleFunctions<DataHash, BlockHash, CacheContext>>();
+        private ClientSession<DataHash, BrightHandle, BrightHandle, BrightHandle, CacheContext, SimpleFunctions<DataHash, BrightHandle, CacheContext>> NewCblSourceHashSession =>
+            this.cblSourceHashesKV.For(functions: new SimpleFunctions<DataHash, BrightHandle, CacheContext>())
+            .NewSession<SimpleFunctions<DataHash, BrightHandle, CacheContext>>();
 
         /// <summary>
         ///     Returns whether the cache manager has the given key and it is not expired.
@@ -347,19 +347,23 @@
             return sessionContext.Get(key);
         }
 
+        public override BrightHandle GetCbl(DataHash sourceHash)
+        {
+            using var sessionContext = this.NewSessionContext;
+            var result = sessionContext.CblSourceHashSession.Read(sourceHash);
+            if (result.status != Status.OK)
+            {
+                throw new IndexOutOfRangeException(sourceHash.ToString());
+            }
+
+            return result.output;
+        }
+
         public void Set(BlockSessionContext sessionContext, BrightenedBlock block)
         {
             base.Set(block);
             block.SetCacheManager(this);
             sessionContext.Upsert(ref block);
-            //if (block is BrightenedBlock brightenedCBL)
-            //{
-            //var cblSession = this.cblSourceHashesKV
-            //.For(functions: new SimpleFunctions<DataHash, BlockHash, CacheContext>())
-            //.NewSession<SimpleFunctions<DataHash, BlockHash, CacheContext>>();
-
-            //cblSession.Upsert()
-            //}
         }
 
         /// <summary>
@@ -368,7 +372,29 @@
         /// <param name="block">block to palce in the cache.</param>
         public override void Set(BrightenedBlock block)
         {
-            this.Set(this.NewSessionContext, block);
+            var context = this.NewSessionContext;
+            this.Set(context, block);
+            context.CompletePending(wait: true);
+        }
+
+        public override void SetCbl(BlockHash brightenedCblHash, DataHash identifiableSourceHash, BrightHandle brightHandle)
+        {
+            // technically the node can allow the CBL to be committed even if the store doesn't have the final block necessary to recreate it
+            // this would be allowed in some circumstances TBD.
+            // the parameter is provided as a means to check that.
+            if (!brightHandle.BrightenedCblHash.Equals(brightenedCblHash))
+            {
+                throw new BrightChainException(nameof(brightenedCblHash));
+            }
+
+            if (!brightHandle.IdentifiableSourceHash.Equals(identifiableSourceHash))
+            {
+                throw new BrightChainException(nameof(identifiableSourceHash));
+            }
+
+            var context = this.NewSessionContext;
+            context.CblSourceHashSession.Upsert(ref identifiableSourceHash, ref brightHandle);
+            context.CompletePending(wait: true);
         }
 
         public override void SetAll(IEnumerable<BrightenedBlock> items)

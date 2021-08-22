@@ -68,7 +68,7 @@
             brightenedStripe = new TupleStripe(
                 tupleCountMatch: TupleCount,
                 blockSizeMatch: identifiableBlock.BlockSize,
-                blocks: stripeBlocks,
+                brightenedBlocks: stripeBlocks,
                 originalType: identifiableBlock.OriginalType);
 
             return brightBlock;

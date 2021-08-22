@@ -6,6 +6,7 @@
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
@@ -125,6 +126,16 @@
             {
                 yield return key;
             }
+        }
+
+        public override BrightHandle GetCbl(DataHash sourceHash)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetCbl(BlockHash cblHash, DataHash dataHash, BrightHandle brightHandle)
+        {
+            throw new NotImplementedException();
         }
     }
 }

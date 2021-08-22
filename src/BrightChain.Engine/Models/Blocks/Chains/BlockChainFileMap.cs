@@ -80,7 +80,7 @@
                 yield return new TupleStripe(
                     tupleCountMatch: this.ConstituentBlockListBlock.TupleCount,
                     blockSizeMatch: this.ConstituentBlockListBlock.BlockSize,
-                    blocks: blockList,
+                    brightenedBlocks: blockList,
                     originalType: this.ConstituentBlockListBlock.OriginalType);
             }
         }

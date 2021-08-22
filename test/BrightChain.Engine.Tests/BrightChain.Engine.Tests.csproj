@@ -31,7 +31,7 @@
     <PackageReference Include="Bogus" Version="33.0.2" />
     <PackageReference Include="Codecov" Version="1.13.0" />
     <PackageReference Include="Codecov.MSBuild" Version="1.13.0" />
-    <PackageReference Include="FluentAssertions" Version="6.0.0" />
+    <PackageReference Include="FluentAssertions" Version="6.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0-preview.7.21377.19" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageReference Include="Microsoft.NETCore.TestHost" Version="6.0.0-preview.7.21377.19" />

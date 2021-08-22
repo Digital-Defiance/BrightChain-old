@@ -570,10 +570,16 @@ namespace BrightChain.Engine.Services
             }
         }
 
-        public async Task<BrightChain> ForgeChainAsync(IAsyncEnumerable<BrightenedBlock> brightenedBlocks)
+        /// <summary>
+        /// Given a collection of brightened blocks either as part of a file or ChainLinq, assemble them into a CBL.
+        /// </summary>
+        /// <param name="brightenedBlocks"></param>
+        /// <returns></returns>
+        public async Task<BrightChain> ForgeChainAsync(DataHash sourceId, IAsyncEnumerable<BrightenedBlock> brightenedBlocks)
         {
             var hashes = new List<BlockHash>();
             var awaitedBlocks = new List<BrightenedBlock>();
+
             await foreach (var block in brightenedBlocks)
             {
                 hashes.Add(block.Id);
@@ -590,7 +596,7 @@ namespace BrightChain.Engine.Services
                         cacheManager: this.blockFasterCache,
                         allowCommit: true,
                         blockParams: firstBlock.BlockParams),
-                    sourceId: firstBlock.Id,
+                    sourceId: sourceId,
                     segmentId: new SegmentHash(
                         dataBytes: new ReadOnlyMemory<byte>(segmentBytes)),
                     totalLength: BlockSizeMap.BlockSize(firstBlock.BlockSize) * awaitedBlocks.Count,
@@ -610,12 +616,30 @@ namespace BrightChain.Engine.Services
                 randomizersUsed: out _,
                 brightenedStripe: out TupleStripe cblStripe);
 
+            var handle = new BrightHandle(
+                    blockSize: cblBlock.BlockSize,
+                    blockHashes: cblStripe.Blocks
+                        .Select(b => b.Id)
+                        .ToArray(),
+                    originalType: cblStripe.OriginalType,
+                    brightenedCblHash: brightenedCbl.Id,
+                    identifiableSourceHash: cblBlock.SourceId);
+
             if (persist)
             {
                 this.blockFasterCache.Set(brightenedCbl);
+                this.blockFasterCache.SetCbl(
+                    brightenedCblHash: brightenedCbl.Id,
+                    identifiableSourceHash: cblBlock.SourceId,
+                    brightHandle: handle);
             }
 
-            return cblStripe.Handle;
+            return handle;
+        }
+
+        public BrightHandle FindSourceById(DataHash requestedHash)
+        {
+            return this.blockFasterCache.GetCbl(requestedHash);
         }
 
         public void Dispose()

@@ -8,6 +8,7 @@
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
     using BrightChain.Engine.Models.Nodes;
     using Microsoft.Extensions.Configuration;
@@ -143,6 +144,27 @@
         /// <returns>returns requested block or throws.</returns>
         public abstract BrightenedBlock Get(BlockHash key);
 
+        public virtual IEnumerable<BrightenedBlock> Get(IEnumerable<BlockHash> keys)
+        {
+            var blocks = new List<BrightenedBlock>(capacity: keys.Count());
+            foreach (var key in keys)
+            {
+                blocks.Add(this.Get(key));
+            }
+
+            return blocks;
+        }
+
+        public virtual async IAsyncEnumerable<BrightenedBlock> Get(IAsyncEnumerable<BlockHash> keys)
+        {
+            await foreach (var key in keys)
+            {
+                yield return this.Get(key);
+            }
+        }
+
+        public abstract BrightHandle GetCbl(DataHash sourceHash);
+
         /// <summary>
         ///     Adds a key to the cache if it is not already present.
         /// </summary>
@@ -166,6 +188,8 @@
                     "Can not store invalid block");
             }
         }
+
+        public abstract void SetCbl(BlockHash cblHash, DataHash dataHash, BrightHandle brightHandle);
 
         public virtual void Set(BlockHash key, BrightenedBlock value)
         {

@@ -111,6 +111,8 @@
             var retrievedChain = await brightBlockService.FindBlockByIdAsync(brightenedCbl.Id);
             Assert.IsNotNull(retrievedChain);
 
+            var retrievedHandle = brightBlockService.FindSourceById(brightChain.SourceId);
+
             // how do we validate this?
         }
 

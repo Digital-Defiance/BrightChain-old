@@ -13,12 +13,12 @@
 
         public readonly ClientSession<BlockHash, BlockData, BlockData, BlockData, CacheContext, SimpleFunctions<BlockHash, BlockData, CacheContext>> DataSession;
 
-        public readonly ClientSession<DataHash, BlockHash, BlockHash, BlockHash, CacheContext, SimpleFunctions<DataHash, BlockHash, CacheContext>> CblSourceHashSession;
+        public readonly ClientSession<DataHash, BrightHandle, BrightHandle, BrightHandle, CacheContext, SimpleFunctions<DataHash, BrightHandle, CacheContext>> CblSourceHashSession;
 
         public BlockSessionContext(
             ClientSession<BlockHash, BrightenedBlock, BrightenedBlock, BrightenedBlock, CacheContext, SimpleFunctions<BlockHash, BrightenedBlock, CacheContext>> metadataSession,
             ClientSession<BlockHash, BlockData, BlockData, BlockData, CacheContext, SimpleFunctions<BlockHash, BlockData, CacheContext>> dataSession,
-            ClientSession<DataHash, BlockHash, BlockHash, BlockHash, CacheContext, SimpleFunctions<DataHash, BlockHash, CacheContext>> cblSourceHashSession)
+            ClientSession<DataHash, BrightHandle, BrightHandle, BrightHandle, CacheContext, SimpleFunctions<DataHash, BrightHandle, CacheContext>> cblSourceHashSession)
         {
             this.MetadataSession = metadataSession;
             this.DataSession = dataSession;

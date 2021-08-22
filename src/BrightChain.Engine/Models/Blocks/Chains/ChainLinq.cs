@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Cryptography;
     using System.Threading.Tasks;
     using global::BrightChain.Engine.Exceptions;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
@@ -130,12 +131,37 @@
 
         public static async Task<BrightChain> BrightenAllAsync(BrightBlockService brightBlockService, IAsyncEnumerable<ChainLinqObjectBlock<T>> objectBlocks)
         {
-            var brightBlocks = brightBlockService
+            using (SHA256 sha = SHA256.Create())
+            {
+                int received = 0;
+                var expected = await objectBlocks.CountAsync().ConfigureAwait(false);
+                long bytesProcessed = 0;
+                await foreach (var block in objectBlocks)
+                {
+                    var blockLength = block.Bytes.Length;
+                    bytesProcessed += blockLength;
+                    if (++received == expected)
+                    {
+                        sha.TransformFinalBlock(block.Bytes.ToArray(), 0, blockLength);
+                    }
+                    else
+                    {
+                        sha.TransformBlock(block.Bytes.ToArray(), 0, blockLength, null, 0);
+                    }
+                }
+
+                var brightBlocks = brightBlockService
                 .BrightenBlocksAsyncEnumerable(
                     identifiableBlocks: objectBlocks);
 
-            return await brightBlockService.ForgeChainAsync(brightBlocks)
-                .ConfigureAwait(false);
+                return await brightBlockService.ForgeChainAsync(
+                    sourceId: new DataHash(
+                        providedHashBytes: sha.Hash,
+                        sourceDataLength: bytesProcessed,
+                        computed: true),
+                    brightenedBlocks: brightBlocks)
+                    .ConfigureAwait(false);
+            }
         }
     }
 }
