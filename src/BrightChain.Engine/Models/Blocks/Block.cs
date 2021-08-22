@@ -215,7 +215,7 @@ namespace BrightChain.Engine.Models.Blocks
         /// </summary>
         /// <param name="others"></param>
         /// <returns></returns>
-        public ReadOnlyMemory<byte> XOR(Block[] others)
+        public ReadOnlyMemory<byte> XOR(IEnumerable<Block> others)
         {
             int blockSize = BlockSizeMap.Map[this.BlockSize];
             byte[] xorData = this.Bytes.ToArray();

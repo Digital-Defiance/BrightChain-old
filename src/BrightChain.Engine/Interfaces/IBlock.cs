@@ -35,7 +35,7 @@ namespace BrightChain.Engine.Interfaces
         /// </summary>
         /// <param name="others"></param>
         /// <returns></returns>
-        ReadOnlyMemory<byte> XOR(Block[] others);
+        ReadOnlyMemory<byte> XOR(IEnumerable<Block> others);
 
         BlockSignature Sign(Agent user, string password);
 

@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using global::BrightChain.Engine.Enumerations;
     using global::BrightChain.Engine.Exceptions;
+    using global::BrightChain.Engine.Models.Blocks.DataObjects;
 
     /// <summary>
     /// A tuple stripe is a representation of the blocks used to brighten or recover a source block.
@@ -16,7 +17,11 @@
         /// </summary>
         public readonly IEnumerable<Block> Blocks { get; }
 
-        public TupleStripe(int tupleCountMatch, BlockSize blockSizeMatch, IEnumerable<Block> blocks)
+        private readonly BlockSize blockSize;
+
+        private readonly Type OriginalType;
+
+        public TupleStripe(int tupleCountMatch, BlockSize blockSizeMatch, IEnumerable<Block> blocks, Type originalType)
         {
             if (tupleCountMatch != ((Block[])blocks).Length)
             {
@@ -32,6 +37,8 @@
             }
 
             this.Blocks = blocks;
+            this.blockSize = blockSizeMatch;
+            this.OriginalType = originalType;
         }
 
         /// <summary>
@@ -40,9 +47,21 @@
         /// <returns></returns>
         public IdentifiableBlock Consolidate()
         {
-            var blocks = (Block[])this.Blocks;
-            Block result = blocks[0];
-            return new IdentifiableBlock(result.BlockParams, result.XOR(blocks));
+            Block result = this.Blocks.First();
+            return new IdentifiableBlock(result.BlockParams, result.XOR(this.Blocks));
+        }
+
+        public BrightHandle Handle
+        {
+            get
+            {
+                return new BrightHandle(
+                blockSize: this.blockSize,
+                blockHashes: this.Blocks
+                    .Select(b => b.Id)
+                    .ToArray(),
+                originalType: this.OriginalType);
+            }
         }
     }
 }

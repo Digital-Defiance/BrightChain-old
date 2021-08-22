@@ -182,7 +182,8 @@ namespace BrightChain.Engine.Services
                             identifiableBlock: new IdentifiableBlock(
                                 blockParams: blockParams,
                                 data: buffer),
-                            randomizersUsed: out _);
+                            randomizersUsed: out _,
+                            brightenedStripe: out _);
 
                         yield return brightenedBlock;
                     } // end while
@@ -558,7 +559,8 @@ namespace BrightChain.Engine.Services
             {
                 var brightenedBlock = this.blockBrightener.Brighten(
                     identifiableBlock: identifiableBlock,
-                    randomizersUsed: out Block[] randomizersUsed);
+                    randomizersUsed: out _,
+                    brightenedStripe: out _);
 
                 brightenedBlock.MakeTransactable(
                     cacheManager: this.blockFasterCache,
@@ -598,30 +600,22 @@ namespace BrightChain.Engine.Services
                 brightenedBlocks: awaitedBlocks);
         }
 
-        public BrightenedBlock BrightenAndPersistCBL(ConstituentBlockListBlock cblBlock)
+        public BrightHandle BrightenCbl(ConstituentBlockListBlock cblBlock, bool persist, out BrightenedBlock brightenedCbl)
         {
             // TODO: update indices
             // TODO: CBLs may be a server option to disable
-            // TODO: in the future just return a magnet URL with the N block hashes for the final CBL tuple.
             // CBL should itself be brightened before entering the cache!
-            var brightenedCbl = this.blockBrightener.Brighten(cblBlock, out Block[] randomizersUsed);
+            brightenedCbl = this.blockBrightener.Brighten(
+                identifiableBlock: cblBlock,
+                randomizersUsed: out _,
+                brightenedStripe: out TupleStripe cblStripe);
 
-            var tupleSize = randomizersUsed.Length + 1;
-            BrightenedBlock[] transactableTuple = new BrightenedBlock[tupleSize];
-            for (int i = 0; i < randomizersUsed.Length; i++)
+            if (persist)
             {
-                transactableTuple[i] = randomizersUsed[i].MakeTransactable(
-                    cacheManager: this.blockFasterCache,
-                    allowCommit: true);
+                this.blockFasterCache.Set(brightenedCbl);
             }
 
-            transactableTuple[tupleSize - 1] = brightenedCbl.MakeTransactable(
-                cacheManager: this.blockFasterCache,
-                allowCommit: true);
-
-            this.blockFasterCache.Set(brightenedCbl);
-
-            return brightenedCbl;
+            return cblStripe.Handle;
         }
 
         public void Dispose()

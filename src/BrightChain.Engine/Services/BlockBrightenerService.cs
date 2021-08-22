@@ -2,6 +2,7 @@
 {
     using System.Linq;
     using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Services.CacheManagers;
 
@@ -30,10 +31,11 @@
         /// </summary>
         /// <param name="identifiableBlock"></param>
         /// <returns></returns>
-        public BrightenedBlock Brighten(IdentifiableBlock identifiableBlock, out Block[] randomizersUsed)
+        public BrightenedBlock Brighten(IdentifiableBlock identifiableBlock, out BrightenedBlock[] randomizersUsed, out TupleStripe brightenedStripe)
         {
             // the incoming block should be a raw disk block and is never used again
-            randomizersUsed = new Block[TupleCount - 1];
+            var stripeBlocks = new BrightenedBlock[TupleCount];
+            randomizersUsed = new BrightenedBlock[TupleCount - 1];
             for (int i = 0; i < randomizersUsed.Length; i++)
             {
                 // TODO: select or generate pre-generated random blocks (determine mixing)
@@ -48,19 +50,28 @@
                     redundancyContractType: identifiableBlock.StorageContract.RedundancyContractType,
                     requestTime: identifiableBlock.StorageContract.RequestTime);
 
-                var transactable = randomizersUsed[i].MakeTransactable(
-                    cacheManager: this.resultCache,
-                    allowCommit: true);
-                this.resultCache.Set(transactable);
+                stripeBlocks[i] = randomizersUsed[i];
+
+                this.resultCache.Set(randomizersUsed[i]);
             }
 
-            return new BrightenedBlock(
+            var brightBlock = new BrightenedBlock(
                 blockParams: new BrightenedBlockParams(
                     cacheManager: this.resultCache,
                     allowCommit: true,
                     blockParams: identifiableBlock.BlockParams),
                 data: identifiableBlock.XOR(randomizersUsed),
                 constituentBlockHashes: randomizersUsed.Select(b => b.Id).ToArray());
+
+            stripeBlocks[TupleCount - 1] = brightBlock;
+
+            brightenedStripe = new TupleStripe(
+                tupleCountMatch: TupleCount,
+                blockSizeMatch: identifiableBlock.BlockSize,
+                blocks: stripeBlocks,
+                originalType: identifiableBlock.OriginalType);
+
+            return brightBlock;
         }
     }
 }

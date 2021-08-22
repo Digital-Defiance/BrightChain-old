@@ -11,7 +11,7 @@
     using ProtoBuf;
 
     /// <summary>
-    /// Brightened data chain, can be composed of file-based CBLs or ChainLinq based data blocks.
+    /// Brightened data chain, can be composed of file-based CBLs or brightened ChainLinq based data blocks.
     /// Although a BrightChain contains brightened data, the CBL block itself is not brightened.
     /// TODO: improve memory usage. Don't keep full copy, do all on async enumeration?
     /// </summary>
@@ -50,9 +50,7 @@
             }
 
             var blocks = new List<BrightenedBlock>();
-            var totalExpected = blockParams.ConstituentBlockHashes.Count();
             int index = 0;
-
             foreach (var blockHash in blockParams.ConstituentBlockHashes)
             {
                 var block = sourceCache.Get(blockHash);
@@ -61,15 +59,15 @@
                 {
                     this._head = block;
                 }
-
-                if (index == totalExpected)
-                {
-                    this._tail = block;
-                }
             }
 
             this._blocks = blocks;
-            this._count = totalExpected;
+            if (!this.VerifyHomogeneity(
+                tail: out this._tail,
+                blockCount: out this._count))
+            {
+                throw new BrightChainException(nameof(blocks));
+            }
         }
 
         public int Count()
@@ -98,6 +96,11 @@
         /// <returns></returns>
         public bool VerifyHomogeneity(out BrightenedBlock tail, out int blockCount)
         {
+            if (this._head is null)
+            {
+                throw new BrightChainExceptionImpossible("Head is null despite having present hashes");
+            }
+
             var allOk = true;
             int count = 0;
             BrightenedBlock movingTail = this._head;

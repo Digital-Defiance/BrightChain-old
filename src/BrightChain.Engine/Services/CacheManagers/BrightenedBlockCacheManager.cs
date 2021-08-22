@@ -143,18 +143,6 @@
         /// <returns>returns requested block or throws.</returns>
         public abstract BrightenedBlock Get(BlockHash key);
 
-        public TupleStripe GetFromBlockIDs(BlockHash[] blockHashes)
-        {
-            int i = 0;
-            BrightenedBlock[] blocks = new BrightenedBlock[blockHashes.Length];
-            foreach (var hash in blockHashes)
-            {
-                blocks[i++] = this.Get(hash);
-            }
-
-            return new TupleStripe(BlockBrightenerService.TupleCount, blocks[0].BlockSize, blocks);
-        }
-
         /// <summary>
         ///     Adds a key to the cache if it is not already present.
         /// </summary>

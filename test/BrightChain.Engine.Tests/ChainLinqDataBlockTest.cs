@@ -97,16 +97,18 @@
                 blockSize: blockSize,
                 objectCount: objectCount);
 
+            Assert.AreEqual(brightChain.ConstituentBlocks.Count(), brightChain.Count());
+
             await Assert.ThrowsExceptionAsync<KeyNotFoundException>(async () =>
             {
                 var retrievedChainNull = await brightBlockService.FindBlockByIdAsync(brightChain.Id);
                 Assert.IsNull(retrievedChainNull);
             });
 
-            var brightenedCBL = brightBlockService.BrightenAndPersistCBL(brightChain);
+            var brightHandle = brightBlockService.BrightenCbl(brightChain, true, out BrightenedBlock brightenedCbl);
 
             // in order to get our original blocks back, first get the chain head
-            var retrievedChain = await brightBlockService.FindBlockByIdAsync(brightenedCBL.Id);
+            var retrievedChain = await brightBlockService.FindBlockByIdAsync(brightenedCbl.Id);
             Assert.IsNotNull(retrievedChain);
 
             // how do we validate this?
@@ -131,30 +133,21 @@
                 blockSize: blockSize,
                 objectCount: objectCount);
 
+            Assert.AreEqual(brightChain.ConstituentBlocks.Count(), brightChain.Count());
+
             await Assert.ThrowsExceptionAsync<KeyNotFoundException>(async () =>
             {
                 var retrievedChainNull = await brightBlockService.FindBlockByIdAsync(brightChain.Id);
                 Assert.IsNull(retrievedChainNull);
             });
 
-            var brightenedCBL = brightBlockService.BrightenAndPersistCBL(brightChain);
+            var brightHandle = brightBlockService.BrightenCbl(brightChain, true, out BrightenedBlock brightenedCbl);
 
             // in order to get our original blocks back, first get the chain head
-            var retrievedChain = await brightBlockService.FindBlockByIdAsync(brightenedCBL.Id);
+            var retrievedChain = await brightBlockService.FindBlockByIdAsync(brightenedCbl.Id);
             Assert.IsNotNull(retrievedChain);
 
-            if (retrievedChain is BrightenedBlock brightBlock)
-            {
-                Assert.AreEqual(brightenedCBL.Crc32, brightBlock.Crc32);
-
-                // TODO: get back actual chain
-            }
-            else
-            {
-                Assert.Fail();
-            }
-
-            Assert.AreEqual(brightChain.ConstituentBlocks.Count(), brightChain.Count());
+            Assert.AreEqual(brightenedCbl.Crc32, retrievedChain.Crc32);
         }
     }
 }
