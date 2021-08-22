@@ -114,7 +114,7 @@
                 lengthFunc: (BlockSize blockSize) =>
                     (BlockSizeMap.BlockSize(blockSize) * 2) + 7); // don't land on even block mark for data testing
 
-            ConstituentBlockListBlock cblBlock = await brightChainService.MakeCblOrSuperCblFromFileAsync(
+            BrightChain brightenedCbl = await brightChainService.MakeCblOrSuperCblFromFileAsync(
                 fileName: sourceInfo.FileInfo.FullName,
                 blockParams: new BlockParams(
                     requestTime: DateTime.Now,
@@ -124,9 +124,10 @@
                     blockSize: blockSize,
                     originalType: typeof(ConstituentBlockListBlock)));
 
-            if (cblBlock is SuperConstituentBlockListBlock)
+            if (brightenedCbl is SuperConstituentBlockListBlock)
             {
-                foreach (var blockHash in cblBlock.ConstituentBlocks)
+                throw new NotImplementedException();
+                foreach (var blockHash in brightenedCbl.ConstituentBlocks)
                 {
                     var fetchedBlock = await brightChainService
                         .FindBlockByIdAsync(blockHash)
@@ -144,15 +145,17 @@
             }
             else
             {
-                Assert.IsTrue(cblBlock.Validate());
-                Assert.AreEqual(sourceInfo.FileInfo.Length, cblBlock.TotalLength);
+                Assert.IsTrue(brightenedCbl.Validate());
+                Assert.AreEqual(sourceInfo.FileInfo.Length, brightenedCbl.TotalLength);
                 Assert.AreEqual(
                     HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()),
-                    HashToFormattedString(cblBlock.SourceId.HashBytes.ToArray()));
+                    HashToFormattedString(brightenedCbl.SourceId.HashBytes.ToArray()));
 
-                var cblMap = cblBlock.GenerateBlockMap();
+                var cblMap = brightenedCbl.GenerateBlockMap();
                 Assert.IsTrue(cblMap is BlockChainFileMap);
             }
+
+            
 
             loggerMock.Verify(l => l.Log(
                 LogLevel.Information,
