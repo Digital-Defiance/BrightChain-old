@@ -108,12 +108,11 @@
             var brightHandle = brightBlockService.BrightenCbl(brightChain, true, out BrightenedBlock brightenedCbl);
 
             // in order to get our original blocks back, first get the chain head
-            var retrievedChain = await brightBlockService.FindBlockByIdAsync(brightenedCbl.Id);
+            var retrievedChain = await brightBlockService.FindBlockByIdAsync(brightHandle.BrightenedCblHash);
             Assert.IsNotNull(retrievedChain);
 
             var retrievedHandle = brightBlockService.FindSourceById(brightChain.SourceId);
-
-            // how do we validate this?
+            Assert.IsNotNull(retrievedHandle);
         }
 
         [DataTestMethod]

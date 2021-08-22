@@ -17,8 +17,10 @@
         [ProtoMember(3)]
         public readonly Type OriginalType;
 
+        [ProtoMember(4)]
         public readonly BlockHash BrightenedCblHash;
 
+        [ProtoMember(5)]
         public readonly DataHash IdentifiableSourceHash;
 
         public BrightHandle(BlockSize blockSize, IEnumerable<BlockHash> blockHashes, Type originalType, BlockHash brightenedCblHash = null, DataHash identifiableSourceHash = null)
