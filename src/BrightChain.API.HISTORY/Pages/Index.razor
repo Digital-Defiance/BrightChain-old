@@ -1,0 +1,15 @@
+﻿@page "/"
+@using BrightChain.Engine.Services
+@using StarDateCalc;
+@using BrightChain.API.Helpers;
+@inject BrightBlockService BrightBlockService
+
+<h1>BrightChain: The Revolution(ary) Network</h1>
+
+BrightChain is coming online soon.
+
+<p><b style="color: red;">WARNING</b>: BrightChain is presently Pre-ALPHA. Data contents may be reset at any time.</p>
+
+<p>Birthday: Stardate @StarDateConverter.Birthday</p>
+<p>Stardate: @StarDateConverter.Now</p>
+<p>Database GUID: @BrightBlockService.RootBlock.Guid.ToString()</p>

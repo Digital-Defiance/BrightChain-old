@@ -1,0 +1,102 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <!-- Identifier that must be unique within the hosting gallery -->
+        <id>BrightChain.Engine</id>
+
+        <!-- Package version number that is used when resolving dependencies -->
+        <version>0.0.0.1</version>
+
+        <!-- Authors contain text that appears directly on the gallery -->
+        <authors>Jessica Mulein</authors>
+
+        <!--
+            Owners are typically nuget.org identities that allow gallery
+            users to easily find other packages by the same owners.
+        -->
+        <owners>jessicamulein</owners>
+
+         <!-- Project URL provides a link for the gallery -->
+        <projectUrl>http://github.com/The-Revolution-Network/BrightChain</projectUrl>
+
+         <!-- License information is displayed on the gallery -->
+        <license type="expression">Apache-2.0</license>
+
+
+        <!-- Icon is used in Visual Studio's package manager UI -->
+        <!-- icon>icon.png</icon -->
+
+        <!--
+            If true, this value prompts the user to accept the license when
+            installing the package.
+        -->
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+
+        <!-- Any details about this particular release -->
+        <releaseNotes>PRE-ALPHA. NOT FOR GENERAL USE.</releaseNotes>
+
+        <!--
+            The description can be used in package manager UI. Note that the
+            nuget.org gallery uses information you add in the portal.
+        -->
+        <description>Core logic for the BrightChain Engine</description>
+
+        <!-- Copyright information -->
+        <copyright>Copyright ©2021 Jessica Mulein, BrightChain - a future charitable organization.</copyright>
+
+        <!-- Tags appear in the gallery and can be used for tag searches -->
+        <tags>blockchain csharp digital-contracts</tags>
+
+        <!-- Dependencies are automatically installed when the package is installed -->
+        <dependencies>
+          <dependency id="Stardate" version="0.0.0.1"/>
+          <dependency id="EntCalc" version="1.0.0.0"/>
+          <dependency id="AutoMapper" version="10.1.1"/>
+          <dependency id="DotNetAnalyzers.DocumentationAnalyzers" version="1.0.0-beta.59"/>
+          <dependency id="IdentityModel" version="5.1.0" />
+          <dependency id="IdentityServer4" version="4.1.2" />
+          <dependency id="IdentityServer4.EntityFramework" version="4.1.2" />
+          <dependency id="Microsoft.ApplicationInsights" version="2.18.0" />
+          <dependency id="Microsoft.AspNetCore.Identity.EntityFrameworkCore" version="6.0.0-preview.7.21378.6" />
+          <dependency id="Microsoft.AspNetCore.Mvc.Versioning" version="5.0.0" />
+          <dependency id="Microsoft.CodeAnalysis.Common" version="4.0.0-3.final" />
+          <dependency id="Microsoft.CodeAnalysis.CSharp" version="4.0.0-3.final" />
+          <dependency id="Microsoft.Extensions.Caching.Memory" version="6.0.0-preview.7.21377.19" />
+          <dependency id="Microsoft.Extensions.Logging" version="6.0.0-preview.7.21377.19" />
+          <dependency id="Microsoft.CodeCoverage" version="16.11.0" />
+          <dependency id="Microsoft.Extensions.DependencyInjection" version="6.0.0-preview.7.21377.19" />
+          <dependency id="Microsoft.Extensions.Logging.ApplicationInsights" version="2.18.0" />
+          <dependency id="Microsoft.FASTER.Core" version="1.9.5" />
+          <dependency id="Microsoft.IdentityModel" version="7.0.0" />
+          <dependency id="Microsoft.IdentityModel.Tokens" version="6.12.2" />
+          <dependency id="Microsoft.Data.OData" version="5.8.4" />
+          <dependency id="Microsoft.JSInterop" version="6.0.0-preview.7.21378.6" />
+          <dependency id="Microsoft.OpenApi" version="1.3.0-preview" />
+          <dependency id="Microsoft.Orleans.ProtobufNet" version="3.4.3" />
+          <dependency id="Microsoft.SourceLink.GitHub" version="1.0.0" />
+          <dependency id="NETCore.Encrypt" version="2.0.9.1" />
+          <dependency id="OpenCover" version="4.7.1221" />
+          <dependency id="Portable.BouncyCastle" version="1.8.10" />
+          <dependency id="Schifra" version="0.0.0.4" />
+          <dependency id="STH1123.ReedSolomon" version="2.1.0" />
+          <dependency id="StyleCop.Analyzers" version="1.2.0-beta.354" />
+          <dependency id="System.Buffers" version="4.5.1" />
+          <dependency id="System.Collections.Specialized" version="4.3.0" />
+          <dependency id="System.IO.Pipes.AccessControl" version="6.0.0-preview.5.21301.5" />
+          <dependency id="System.Memory" version="4.5.4" />
+          <dependency id="System.Memory.Data" version="6.0.0-preview.7.21377.19" />
+          <dependency id="System.Net.WebSockets.WebSocketProtocol" version="6.0.0-preview.1.21102.12" />
+          <dependency id="System.Runtime" version="4.3.1" />
+          <dependency id="System.Runtime.Caching" version="6.0.0-preview.7.21377.19" />
+          <dependency id="System.Security.SecureString" version="4.3.0" />
+          <dependency id="System.Threading.AccessControl" version="6.0.0-preview.7.21377.19" />
+          <dependency id="System.Threading.Channels" version="6.0.0-preview.7.21377.19" />
+        </dependencies>
+    </metadata>
+
+    <!-- A readme.txt to display when the package is installed -->
+    <files>
+        <file src="README.txt" target="" />
+        <!-- file src="icon.png" target="" / -->
+    </files>
+</package>

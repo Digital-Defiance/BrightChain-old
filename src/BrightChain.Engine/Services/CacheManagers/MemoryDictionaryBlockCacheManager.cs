@@ -89,7 +89,7 @@
             var found = this.blocks.TryGetValue(key, out block);
             if (!found)
             {
-                throw new IndexOutOfRangeException(nameof(key));
+                throw new IndexOutOfRangeException(message: key.ToString());
             }
 
             if (!block.Validate())

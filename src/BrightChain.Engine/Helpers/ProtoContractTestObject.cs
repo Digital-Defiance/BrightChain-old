@@ -1,5 +1,4 @@
-﻿
-namespace BrightChain.Engine.Helpers
+﻿namespace BrightChain.Engine.Helpers
 {
     using BrightChain.Engine.Interfaces;
     using ProtoBuf;

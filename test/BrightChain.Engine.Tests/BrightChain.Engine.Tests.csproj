@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Bogus" Version="33.0.2" />
     <PackageReference Include="Codecov" Version="1.13.0" />
     <PackageReference Include="Codecov.MSBuild" Version="1.13.0" />

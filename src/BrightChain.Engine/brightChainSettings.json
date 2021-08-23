@@ -7,8 +7,8 @@
     }
   },
   "NodeOptions": {
-    "BasePath": "C:\\BrightChain",
-    "DatabaseName": "84791a2e97b642Dab7e404ff645d601b",
+    "BasePath": null,
+    "DatabaseName": null,
     "EnableReadCache": true,
     "BlockTypes": {
       "Read": [

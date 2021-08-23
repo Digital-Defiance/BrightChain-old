@@ -6,38 +6,53 @@
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
     using FASTER.core;
+    using Microsoft.Extensions.Logging;
 
-    public struct BlockSessionContext : IDisposable
+    public class BlockSessionContext : IDisposable
     {
-        public readonly ClientSession<BlockHash, BrightenedBlock, BrightenedBlock, BrightenedBlock, CacheContext, SimpleFunctions<BlockHash, BrightenedBlock, CacheContext>> MetadataSession;
+        private readonly ILogger logger;
 
-        public readonly ClientSession<BlockHash, BlockData, BlockData, BlockData, CacheContext, SimpleFunctions<BlockHash, BlockData, CacheContext>> DataSession;
+        public readonly ClientSession<BlockHash, BrightenedBlock, BrightenedBlock, BrightenedBlock, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BrightenedBlock, BrightChainFasterCacheContext>> MetadataSession;
 
-        public readonly ClientSession<DataHash, BrightHandle, BrightHandle, BrightHandle, CacheContext, SimpleFunctions<DataHash, BrightHandle, CacheContext>> CblSourceHashSession;
+        public readonly ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>> DataSession;
 
-        public readonly ClientSession<Guid, DataHash, DataHash, DataHash, CacheContext, SimpleFunctions<Guid, DataHash, CacheContext>> CblCorrelationIdsSession;
+        public readonly ClientSession<DataHash, BrightHandle, BrightHandle, BrightHandle, BrightChainFasterCacheContext, SimpleFunctions<DataHash, BrightHandle, BrightChainFasterCacheContext>> CblSourceHashSession;
+
+        public readonly ClientSession<Guid, DataHash, DataHash, DataHash, BrightChainFasterCacheContext, SimpleFunctions<Guid, DataHash, BrightChainFasterCacheContext>> CblCorrelationIdsSession;
 
         public BlockSessionContext(
-            ClientSession<BlockHash, BrightenedBlock, BrightenedBlock, BrightenedBlock, CacheContext, SimpleFunctions<BlockHash, BrightenedBlock, CacheContext>> metadataSession,
-            ClientSession<BlockHash, BlockData, BlockData, BlockData, CacheContext, SimpleFunctions<BlockHash, BlockData, CacheContext>> dataSession,
-            ClientSession<DataHash, BrightHandle, BrightHandle, BrightHandle, CacheContext, SimpleFunctions<DataHash, BrightHandle, CacheContext>> cblSourceHashSession,
-            ClientSession<Guid, DataHash, DataHash, DataHash, CacheContext, SimpleFunctions<Guid, DataHash, CacheContext>> cblCorrelationIdsSession)
+            ILogger logger,
+            ClientSession<BlockHash, BrightenedBlock, BrightenedBlock, BrightenedBlock, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BrightenedBlock, BrightChainFasterCacheContext>> metadataSession,
+            ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>> dataSession,
+            ClientSession<DataHash, BrightHandle, BrightHandle, BrightHandle, BrightChainFasterCacheContext, SimpleFunctions<DataHash, BrightHandle, BrightChainFasterCacheContext>> cblSourceHashSession,
+            ClientSession<Guid, DataHash, DataHash, DataHash, BrightChainFasterCacheContext, SimpleFunctions<Guid, DataHash, BrightChainFasterCacheContext>> cblCorrelationIdsSession)
         {
+            this.logger = logger;
             this.MetadataSession = metadataSession;
             this.DataSession = dataSession;
             this.CblSourceHashSession = cblSourceHashSession;
             this.CblCorrelationIdsSession = cblCorrelationIdsSession;
         }
 
+        public bool Contains(BlockHash blockHash)
+        {
+            var metadataResultTuple = this.MetadataSession.Read(blockHash);
+            var dataResultTuple = this.DataSession.Read(blockHash);
+
+            return
+                metadataResultTuple.status == Status.OK &&
+                dataResultTuple.status != Status.OK;
+        }
+
         public bool Drop(BlockHash blockHash, bool complete = true)
         {
 
-            if (!(this.MetadataSession.Delete(blockHash) == Status.OK))
+            if (this.MetadataSession.Delete(blockHash) != Status.OK)
             {
                 return false;
             }
 
-            if (!(this.DataSession.Delete(blockHash) == Status.OK))
+            if (this.DataSession.Delete(blockHash) != Status.OK)
             {
                 // TODO: rollback?
                 return false;

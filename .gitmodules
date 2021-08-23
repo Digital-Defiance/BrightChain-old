@@ -4,6 +4,6 @@
 [submodule "ENT"]
 	path = src/ENT
 	url = git@github.com:The-Revolution-Network/ENT.git
-[submodule "src/Stardate"]
-	path = src/Stardate
-	url = git@github.com:The-Revolution-Network/Stardate.git
+[submodule "src/BrightChain.API"]
+	path = src/BrightChain.API
+	url = git@github.com:The-Revolution-Network/BrightChain.API.git

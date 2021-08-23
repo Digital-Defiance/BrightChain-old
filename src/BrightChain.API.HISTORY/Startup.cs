@@ -54,6 +54,7 @@ namespace BrightChain.API
             // using WebPWrecover.Services;
             services.AddTransient<IEmailSender, BrightChainEmailSender>();
             services.Configure<AuthMessageSenderOptions>(this.Configuration);
+            services.AddApplicationInsightsTelemetry();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

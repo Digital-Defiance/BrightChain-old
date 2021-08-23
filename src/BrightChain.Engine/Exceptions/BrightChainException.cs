@@ -91,7 +91,7 @@
         //     A string representation of the exception.
         public override string ToString()
         {
-            throw new NotImplementedException();
+            return base.ToString();
         }
 
         //

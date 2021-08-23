@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using FASTER.core;
+    using ProtoBuf;
 
     public class BinaryStringSerializer : BinaryObjectSerializer<string>
     {
@@ -27,7 +28,7 @@
         {
             var stringArr = obj.ToCharArray().Select(c => (byte)c).ToArray();
             this.writer.Write(Convert.ToBase64String(stringArr, 0, stringArr.Length, Base64FormattingOptions.None));
-            this.writer.Write((byte)0);
+            this.writer.Write(0);
         }
     }
 }

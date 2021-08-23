@@ -7,6 +7,16 @@
     "mssql2": {
       "type": "mssql",
       "connectionId": "ConnectionStrings:BrightChainAPIContextConnection"
+    },
+    "appInsights1": {
+      "type": "appInsights"
+    },
+    "secrets1": {
+      "type": "secrets"
+    },
+    "signalr1": {
+      "type": "signalr",
+      "connectionId": "Azure:SignalR:ConnectionString"
     }
   }
 }

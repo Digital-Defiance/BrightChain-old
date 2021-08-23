@@ -69,7 +69,7 @@ namespace BrightChain.Engine.Services
             var configuredDbName
                 = nodeOptions.GetSection("DatabaseName");
 
-            var dbNameConfigured = configuredDbName is not null && configuredDbName.Value is not null;
+            var dbNameConfigured = configuredDbName is not null && configuredDbName.Value.Any();
             Guid serviceUnifiedStoreGuid = dbNameConfigured ? Guid.Parse(configuredDbName.Value) : Guid.NewGuid();
 
             if (!dbNameConfigured)

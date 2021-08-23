@@ -1,6 +1,6 @@
 namespace BrightChain.API
 {
-    public class Program
+    public class Illuminator
     {
         public static void Main(string[] args)
         {

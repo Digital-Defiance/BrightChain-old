@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
-
-namespace BrightChain.Engine.Helpers
+﻿namespace BrightChain.Engine.Helpers
 {
+    using Microsoft.Extensions.Configuration;
+    using ProtoBuf;
+
     public static class ConfigurationHelper
     {
         /// <summary>
