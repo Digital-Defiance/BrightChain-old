@@ -36,6 +36,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
             this.Previous = blockParams.Previous;
             this.Next = blockParams.Next;
             this.TupleCount = BlockBrightenerService.TupleCount;
+            this.CorrelationId = blockParams.CorrelationId;
         }
 
         /// <summary>
@@ -54,7 +55,8 @@ namespace BrightChain.Engine.Models.Blocks.Chains
                     totalLength: this.TotalLength,
                     constituentBlockHashes: this.ConstituentBlocks,
                     previous: this.Previous,
-                    next: this.Next);
+                    next: this.Next,
+                    correlationId: this.CorrelationId);
 
         /// <summary>
         /// Gets or sets the hash of the sum bytes of the file when assembled in order.
@@ -98,6 +100,9 @@ namespace BrightChain.Engine.Models.Blocks.Chains
         /// </summary>
         [ProtoMember(66)]
         public BrokeredAnonymityIdentifier CreatorId { get; set; }
+
+        [ProtoMember(67)]
+        public Guid CorrelationId { get; set; }
 
         /// <summary>
         /// Gets an array of the bytes of the constituent block hashes for writing to disk.

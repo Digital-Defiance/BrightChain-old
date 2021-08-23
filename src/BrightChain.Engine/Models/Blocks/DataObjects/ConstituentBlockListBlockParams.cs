@@ -20,7 +20,9 @@
 
         public readonly BlockHash Next = null;
 
-        public ConstituentBlockListBlockParams(BlockParams blockParams, DataHash sourceId, SegmentHash segmentId, long totalLength, IEnumerable<BlockHash> constituentBlockHashes, BlockHash previous = null, BlockHash next = null)
+        public readonly Guid CorrelationId;
+
+        public ConstituentBlockListBlockParams(BlockParams blockParams, DataHash sourceId, SegmentHash segmentId, long totalLength, IEnumerable<BlockHash> constituentBlockHashes, BlockHash previous = null, BlockHash next = null, Guid? correlationId = null)
        : base(
              blockSize: blockParams.BlockSize,
              requestTime: blockParams.RequestTime,
@@ -35,6 +37,7 @@
             this.SegmentId = segmentId;
             this.Previous = previous;
             this.Next = next;
+            this.CorrelationId = correlationId.HasValue ? correlationId.Value : Guid.NewGuid();
         }
 
         public ConstituentBlockListBlockParams Merge(ConstituentBlockListBlockParams otherBlockParams)
@@ -54,7 +57,8 @@
                 totalLength: this.TotalLength > otherBlockParams.TotalLength ? this.TotalLength : otherBlockParams.TotalLength,
                 constituentBlockHashes: newConstituentBlocks,
                 previous: this.Previous,
-                next: this.Next);
+                next: this.Next,
+                correlationId: this.CorrelationId);
         }
     }
 }
