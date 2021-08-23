@@ -357,7 +357,7 @@ namespace BrightChain.Engine.Services
                         .ConfigureAwait(false);
         }
 
-        public static Dictionary<BlockHash, Block> GetCBLBlocksFromCacheAsDictionary(BrightenedBlockCacheManager blockCacheManager, ConstituentBlockListBlock block)
+        public static Dictionary<BlockHash, Block> GetCBLBlocksFromCacheAsDictionary(BrightenedBlockCacheManagerBase blockCacheManager, ConstituentBlockListBlock block)
         {
             Dictionary<BlockHash, Block> blocks = new Dictionary<BlockHash, Block>();
             foreach (var blockHash in block.ConstituentBlocks)

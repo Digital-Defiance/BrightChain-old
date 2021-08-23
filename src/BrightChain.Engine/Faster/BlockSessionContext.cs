@@ -15,14 +15,18 @@
 
         public readonly ClientSession<DataHash, BrightHandle, BrightHandle, BrightHandle, CacheContext, SimpleFunctions<DataHash, BrightHandle, CacheContext>> CblSourceHashSession;
 
+        public readonly ClientSession<Guid, DataHash, DataHash, DataHash, CacheContext, SimpleFunctions<Guid, DataHash, CacheContext>> CblCorrelationIdsSession;
+
         public BlockSessionContext(
             ClientSession<BlockHash, BrightenedBlock, BrightenedBlock, BrightenedBlock, CacheContext, SimpleFunctions<BlockHash, BrightenedBlock, CacheContext>> metadataSession,
             ClientSession<BlockHash, BlockData, BlockData, BlockData, CacheContext, SimpleFunctions<BlockHash, BlockData, CacheContext>> dataSession,
-            ClientSession<DataHash, BrightHandle, BrightHandle, BrightHandle, CacheContext, SimpleFunctions<DataHash, BrightHandle, CacheContext>> cblSourceHashSession)
+            ClientSession<DataHash, BrightHandle, BrightHandle, BrightHandle, CacheContext, SimpleFunctions<DataHash, BrightHandle, CacheContext>> cblSourceHashSession,
+            ClientSession<Guid, DataHash, DataHash, DataHash, CacheContext, SimpleFunctions<Guid, DataHash, CacheContext>> cblCorrelationIdsSession)
         {
             this.MetadataSession = metadataSession;
             this.DataSession = dataSession;
             this.CblSourceHashSession = cblSourceHashSession;
+            this.CblCorrelationIdsSession = cblCorrelationIdsSession;
         }
 
         public bool Drop(BlockHash blockHash, bool complete = true)
@@ -102,9 +106,10 @@
             var m = this.MetadataSession.CompletePending(wait: wait);
             var d = this.DataSession.CompletePending(wait: wait);
             var c = this.CblSourceHashSession.CompletePending(wait: wait);
+            var ci = this.CblCorrelationIdsSession.CompletePending(wait: wait);
 
             // broken out to prevent short circuit
-            return m && d && c;
+            return m && d && c && ci;
         }
 
         public async Task CompletePendingAsync(bool wait)
@@ -114,17 +119,19 @@
                 this.MetadataSession.CompletePendingAsync(waitForCommit: wait).AsTask(),
                 this.DataSession.CompletePendingAsync(waitForCommit: wait).AsTask(),
                 this.CblSourceHashSession.CompletePendingAsync(waitForCommit: wait).AsTask(),
+                this.CblCorrelationIdsSession.CompletePendingAsync(waitForCommit: wait).AsTask(),
             });
         }
 
         public string SessionID =>
-            string.Format("{0}-{1}-{2}", this.MetadataSession.ID, this.DataSession.ID, this.CblSourceHashSession.ID);
+            string.Format("{0}-{1}-{2}-{3}", this.MetadataSession.ID, this.DataSession.ID, this.CblSourceHashSession.ID, this.CblCorrelationIdsSession.ID);
 
         public void Dispose()
         {
             this.MetadataSession.Dispose();
             this.DataSession.Dispose();
             this.CblSourceHashSession.Dispose();
+            this.CblCorrelationIdsSession.Dispose();
         }
     }
 }

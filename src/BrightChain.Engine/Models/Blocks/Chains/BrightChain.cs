@@ -40,7 +40,7 @@
             }
         }
 
-        public BrightChain(ConstituentBlockListBlockParams blockParams, BrightenedBlockCacheManager sourceCache)
+        public BrightChain(ConstituentBlockListBlockParams blockParams, BrightenedBlockCacheManagerBase sourceCache)
             : base(blockParams)
         {
             if (!blockParams.ConstituentBlockHashes.Any())

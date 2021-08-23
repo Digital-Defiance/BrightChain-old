@@ -14,7 +14,7 @@
     /// <summary>
     ///     Memory based Block Cache Manager.
     /// </summary>
-    public class MemoryDictionaryBlockCacheManager : BrightenedBlockCacheManager
+    public class MemoryDictionaryBlockCacheManager : BrightenedBlockCacheManagerBase
     {
         /// <summary>
         ///     Hashtable collection for blocks stored in memory
@@ -112,7 +112,7 @@
             this.blocks[block.Id] = block;
         }
 
-        public async Task CopyContentAsync(BrightenedBlockCacheManager destinationCache)
+        public async Task CopyContentAsync(BrightenedBlockCacheManagerBase destinationCache)
         {
             await foreach (var key in this.KeysAsync())
             {
@@ -134,6 +134,11 @@
         }
 
         public override void SetCbl(BlockHash cblHash, DataHash dataHash, BrightHandle brightHandle)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override BrightHandle GetCbl(Guid correlationID)
         {
             throw new NotImplementedException();
         }

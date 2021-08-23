@@ -19,9 +19,9 @@
         /// </summary>
         public const byte TupleCount = 5;
 
-        private readonly BrightenedBlockCacheManager resultCache;
+        private readonly BrightenedBlockCacheManagerBase resultCache;
 
-        public BlockBrightenerService(BrightenedBlockCacheManager resultCache)
+        public BlockBrightenerService(BrightenedBlockCacheManagerBase resultCache)
         {
             this.resultCache = resultCache;
         }

@@ -7,6 +7,7 @@
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
     using BrightChain.Engine.Models.Nodes;
@@ -16,7 +17,7 @@
     /// <summary>
     ///     Block Cache Manager.
     /// </summary>
-    public abstract class BrightenedBlockCacheManager : IBrightenedBlockCacheManager
+    public abstract class BrightenedBlockCacheManagerBase : IBrightenedBlockCacheManager
     {
         /// <summary>
         /// List of nodes we trust.
@@ -61,12 +62,12 @@
         public Dictionary<BlockSize, bool> SupportedWriteBlockSizes { get; private set; }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BrightenedBlockCacheManager" /> class.
+        ///     Initializes a new instance of the <see cref="BrightenedBlockCacheManagerBase" /> class.
         /// </summary>
         /// <param name="logger">Logging provider.</param>
         /// <param name="configuration">Configuration data.</param>
         /// <param name="rootBlock">Root block definition with authority for the store.</param>
-        public BrightenedBlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
+        public BrightenedBlockCacheManagerBase(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
         {
             this.trustedNodes = new List<BrightChainNode>();
             this.Logger = logger;
@@ -80,10 +81,10 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BrightenedBlockCacheManager"/> class.
+        /// Initializes a new instance of the <see cref="BrightenedBlockCacheManagerBase"/> class.
         /// Blocked parameterless constructor.
         /// </summary>
-        private BrightenedBlockCacheManager()
+        private BrightenedBlockCacheManagerBase()
         {
             throw new NotImplementedException();
         }
@@ -91,7 +92,7 @@
         /// <summary>
         ///     Gets a lower classed BlockCacheManager of this object.
         /// </summary>
-        public BrightenedBlockCacheManager AsBlockCacheManager => this;
+        public BrightenedBlockCacheManagerBase AsBlockCacheManager => this;
 
         /// <summary>
         ///     Fired whenever a block is added to the cache
@@ -189,6 +190,21 @@
         }
 
         public abstract void SetCbl(BlockHash cblHash, DataHash dataHash, BrightHandle brightHandle);
+
+        public virtual void UpdateCblVersion(ConstituentBlockListBlock newCbl, ConstituentBlockListBlock oldCbl = null)
+        {
+            if (oldCbl is not null && oldCbl.CorrelationId != newCbl.CorrelationId)
+            {
+                throw new BrightChainException(nameof(newCbl.CorrelationId));
+            }
+
+            if (oldCbl is not null && newCbl.StorageContract.RequestTime.CompareTo(oldCbl.StorageContract.RequestTime) < 0)
+            {
+                throw new BrightChainException("New CBL must be newer than old CBL");
+            }
+        }
+
+        public abstract BrightHandle GetCbl(Guid correlationID);
 
         public virtual void Set(BlockHash key, BrightenedBlock value)
         {

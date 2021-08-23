@@ -13,7 +13,7 @@ namespace BrightChain.Engine.Models.Blocks
     [ProtoContract]
     public class RandomizerBlock : BrightenedBlock, IComparable<RandomizerBlock>
     {
-        public RandomizerBlock(BrightenedBlockCacheManager destinationCache, BlockSize blockSize, DateTime keepUntilAtLeast, RedundancyContractType redundancyContractType, DateTime? requestTime = null)
+        public RandomizerBlock(BrightenedBlockCacheManagerBase destinationCache, BlockSize blockSize, DateTime keepUntilAtLeast, RedundancyContractType redundancyContractType, DateTime? requestTime = null)
             : base(
                  blockParams: new BrightenedBlockParams(
                      cacheManager: destinationCache,

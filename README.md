@@ -1,6 +1,6 @@
 # BrightChain
 ## (pre-alpha work in progress. Limited alpha testing coming soon!) 
-[![.NET](https://github.com/The-Revolution-Network/BrightChain/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/The-Revolution-Network/BrightChain/actions/workflows/dotnet.yml)
+[![.NET](https://github.com/The-Revolution-Network/BrightChain/actions/workflows/dotnet.yml/badge.svg)](https://github.com/The-Revolution-Network/BrightChain/actions/workflows/dotnet.yml)
 [![CodeQL](https://github.com/The-Revolution-Network/BrightChain/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/The-Revolution-Network/BrightChain/actions/workflows/codeql-analysis.yml)
 [![Generate Documentation](https://github.com/The-Revolution-Network/BrightChain/actions/workflows/generate-docs.yml/badge.svg)](https://github.com/The-Revolution-Network/BrightChain/actions/workflows/generate-docs.yml)
 
@@ -52,4 +52,4 @@ Recent thoughts:
 * This software is open source, and offered as a "best-effort" thereoetical construct at this time and it may well lose all your data at this point in time.
 
 <!-- this timestamp is updated by a pre-commit hook in git-hooks/pre-commit then added to .git/hooks -->
-Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-08-16T14:42:35-0700</time>
+Last Updated: <time class="timestamp" timestamp="ISO 8601 string">2021-08-25T03:53:25-0700</time>

@@ -9,6 +9,7 @@
     using BrightChain.Engine.Faster.Serializers;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
     using FASTER.core;
@@ -18,7 +19,7 @@
     /// <summary>
     ///     Disk/Memory hybrid Block Cache Manager based on Microsoft FASTER KV.
     /// </summary>
-    public class FasterBlockCacheManager : BrightenedBlockCacheManager, IDisposable
+    public class FasterBlockCacheManager : BrightenedBlockCacheManagerBase, IDisposable
     {
         /// <summary>
         /// hash table size (number of 64-byte buckets).
@@ -80,6 +81,21 @@
         /// FasterKV instance store for Source File Id -> CBL map.
         /// </summary>
         private readonly FasterKV<DataHash, BrightHandle> cblSourceHashesKV;
+
+        /// <summary>
+        /// Session log storage device for CBL correlation Guid -> CBL id.
+        /// </summary>
+        private readonly IDevice cblCorrelationIdsLogDevice;
+
+        /// <summary>
+        /// Storage device for CBL correlation Guid -> CBL id.
+        /// </summary>
+        private readonly IDevice cblCorrelationIdsDevice;
+
+        /// <summary>
+        /// FasterKV instance store for CBL correlation Guid -> CBL id.
+        /// </summary>
+        private readonly FasterKV<Guid, DataHash> cblCorrelationIdsKV;
 
         private FasterKV<BlockHash, BrightenedBlock> NewMetdataKV
         {
@@ -166,7 +182,36 @@
                         CheckpointDir = this.GetDiskCacheDirectory().FullName,
                     },
                     serializerSettings: cblSourceHashesSerializerSettings,
-                    comparer: BlockSizeMap.ZeroVectorHash(BlockSize.Micro)); // gets an arbitrary BlockHash object which has the IFasterEqualityComparer on the class.
+                    comparer: new DataHash(dataBytes: new ReadOnlyMemory<byte>())); // gets an arbitrary BlockHash object which has the IFasterEqualityComparer on the class.
+            }
+        }
+
+        private FasterKV<Guid, DataHash> NewCblCorrelationIdFasterKV
+        {
+            get
+            {
+                var cblSourceHashesLogSettings = new LogSettings
+                {
+                    LogDevice = this.blockDataLogDevice,
+                    ObjectLogDevice = this.blockDataDevice,
+                    ReadCacheSettings = this.useReadCache ? new ReadCacheSettings() : null,
+                };
+
+                var cblSourceHashesSerializerSettings = new SerializerSettings<Guid, DataHash>
+                {
+                    keySerializer = () => new FasterGuidSerializer(),
+                    valueSerializer = () => new FasterDataHashSerializer(),
+                };
+
+                return new FasterKV<Guid, DataHash>(
+                    size: HashTableBuckets,
+                    logSettings: cblSourceHashesLogSettings,
+                    checkpointSettings: new CheckpointSettings
+                    {
+                        CheckpointDir = this.GetDiskCacheDirectory().FullName,
+                    },
+                    serializerSettings: cblSourceHashesSerializerSettings,
+                    comparer: null);
             }
         }
 
@@ -230,6 +275,10 @@
             this.cblSourceHashesLogDevice = this.OpenDevice("cbl-log");
             this.cblSourceHashesDevice = this.OpenDevice("cbl");
             this.cblSourceHashesKV = this.NewCblSourceHashesFasterKV;
+
+            this.cblCorrelationIdsLogDevice = this.OpenDevice("cbl-corr-log");
+            this.cblCorrelationIdsDevice = this.OpenDevice("cbl-corr");
+            this.cblCorrelationIdsKV = this.NewCblCorrelationIdFasterKV;
         }
 
         /// <summary>
@@ -293,7 +342,8 @@
         public BlockSessionContext NewSessionContext => new BlockSessionContext(
                 metadataSession: this.NewMetadataSession,
                 dataSession: this.NewDataSession,
-                cblSourceHashSession: this.NewCblSourceHashSession);
+                cblSourceHashSession: this.NewCblSourceHashSession,
+                cblCorrelationIdsSession: this.NewCblCorrelationIdSession);
 
         private ClientSession<BlockHash, BrightenedBlock, BrightenedBlock, BrightenedBlock, CacheContext, SimpleFunctions<BlockHash, BrightenedBlock, CacheContext>> NewMetadataSession =>
             this.blockMetadataKV.For(functions: new SimpleFunctions<BlockHash, BrightenedBlock, CacheContext>())
@@ -306,6 +356,10 @@
         private ClientSession<DataHash, BrightHandle, BrightHandle, BrightHandle, CacheContext, SimpleFunctions<DataHash, BrightHandle, CacheContext>> NewCblSourceHashSession =>
             this.cblSourceHashesKV.For(functions: new SimpleFunctions<DataHash, BrightHandle, CacheContext>())
             .NewSession<SimpleFunctions<DataHash, BrightHandle, CacheContext>>();
+
+        private ClientSession<Guid, DataHash, DataHash, DataHash, CacheContext, SimpleFunctions<Guid, DataHash, CacheContext>> NewCblCorrelationIdSession =>
+            this.cblCorrelationIdsKV.For(functions: new SimpleFunctions<Guid, DataHash, CacheContext>())
+            .NewSession<SimpleFunctions<Guid, DataHash, CacheContext>>();
 
         /// <summary>
         ///     Returns whether the cache manager has the given key and it is not expired.
@@ -394,7 +448,38 @@
 
             using var context = this.NewSessionContext;
             context.CblSourceHashSession.Upsert(ref identifiableSourceHash, ref brightHandle);
+
+            /*
+            base.UpdateCblVersion(newCbl, oldCbl);
+            var correlationId = newCbl.CorrelationId;
+            var dataHash = newCbl.SourceId;
+            context.CblCorrelationIdsSession.Upsert(ref correlationId, ref dataHash);
+            */
+
             context.CompletePending(wait: true);
+        }
+
+        public override void UpdateCblVersion(ConstituentBlockListBlock newCbl, ConstituentBlockListBlock oldCbl = null)
+        {
+            base.UpdateCblVersion(newCbl, oldCbl);
+
+            using var context = this.NewSessionContext;
+            var correlationId = newCbl.CorrelationId;
+            var dataHash = newCbl.SourceId;
+            context.CblCorrelationIdsSession.Upsert(ref correlationId, ref dataHash);
+            context.CompletePending(wait: true);
+        }
+
+        public override BrightHandle GetCbl(Guid correlationID)
+        {
+            using var context = this.NewSessionContext;
+            var result = context.CblCorrelationIdsSession.Read(correlationID);
+            if (result.status != Status.OK)
+            {
+                throw new IndexOutOfRangeException(nameof(correlationID));
+            }
+
+            return this.GetCbl(result.output);
         }
 
         public override void SetAll(IEnumerable<BrightenedBlock> items)

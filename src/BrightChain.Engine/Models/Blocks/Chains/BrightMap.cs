@@ -68,7 +68,7 @@
         {
         }
 
-        public async IAsyncEnumerable<TupleStripe> ReconstructTupleStripes(BrightenedBlockCacheManager blockCacheManager)
+        public async IAsyncEnumerable<TupleStripe> ReconstructTupleStripes(BrightenedBlockCacheManagerBase blockCacheManager)
         {
             var constituentBlocks = this.ConstituentBlockListBlock.ConstituentBlocks;
             var constituentBlockCount = constituentBlocks.Count();
@@ -105,7 +105,7 @@
             }
         }
 
-        public async IAsyncEnumerable<Block> ConsolidateTuplesToChainAsync(BrightenedBlockCacheManager blockCacheManager)
+        public async IAsyncEnumerable<Block> ConsolidateTuplesToChainAsync(BrightenedBlockCacheManagerBase blockCacheManager)
         {
             await foreach (TupleStripe tupleStripe in (this.TupleStripes is null) ? this.ReconstructTupleStripes(blockCacheManager) : this.TupleStripes)
             {

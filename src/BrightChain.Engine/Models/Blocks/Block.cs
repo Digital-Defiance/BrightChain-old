@@ -322,7 +322,7 @@ namespace BrightChain.Engine.Models.Blocks
             return false;
         }
 
-        public BrightenedBlock MakeTransactable(BrightenedBlockCacheManager cacheManager, bool allowCommit)
+        public BrightenedBlock MakeTransactable(BrightenedBlockCacheManagerBase cacheManager, bool allowCommit)
         {
             var blockParams = new BrightenedBlockParams(
                 cacheManager: cacheManager,
