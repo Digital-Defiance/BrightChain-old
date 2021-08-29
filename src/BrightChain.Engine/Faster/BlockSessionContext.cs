@@ -60,7 +60,7 @@
 
             if (complete)
             {
-                return this.CompletePending(wait: true);
+                return this.CompletePending(waitForCommit: false);
             }
 
             return true;
@@ -112,29 +112,40 @@
 
             if (complete)
             {
-                this.CompletePending(wait: true);
+                this.CompletePending(waitForCommit: false);
             }
         }
 
-        public bool CompletePending(bool wait)
+        public async Task WaitForCommitAsync()
         {
-            var m = this.MetadataSession.CompletePending(wait: wait);
-            var d = this.DataSession.CompletePending(wait: wait);
-            var c = this.CblSourceHashSession.CompletePending(wait: wait);
-            var ci = this.CblCorrelationIdsSession.CompletePending(wait: wait);
+            await Task.WhenAll(new Task[]
+            {
+                    this.MetadataSession.WaitForCommitAsync().AsTask(),
+                    this.DataSession.WaitForCommitAsync().AsTask(),
+                    this.CblSourceHashSession.WaitForCommitAsync().AsTask(),
+                    this.CblCorrelationIdsSession.WaitForCommitAsync().AsTask(),
+            }).ConfigureAwait(false);
+        }
+
+        public bool CompletePending(bool waitForCommit)
+        {
+            var m = this.MetadataSession.CompletePending(wait: waitForCommit);
+            var d = this.DataSession.CompletePending(wait: waitForCommit);
+            var c = this.CblSourceHashSession.CompletePending(wait: waitForCommit);
+            var ci = this.CblCorrelationIdsSession.CompletePending(wait: waitForCommit);
 
             // broken out to prevent short circuit
             return m && d && c && ci;
         }
 
-        public async Task CompletePendingAsync(bool wait)
+        public async Task CompletePendingAsync(bool waitForCommit)
         {
             Task.WaitAll(new Task[]
             {
-                this.MetadataSession.CompletePendingAsync(waitForCommit: wait).AsTask(),
-                this.DataSession.CompletePendingAsync(waitForCommit: wait).AsTask(),
-                this.CblSourceHashSession.CompletePendingAsync(waitForCommit: wait).AsTask(),
-                this.CblCorrelationIdsSession.CompletePendingAsync(waitForCommit: wait).AsTask(),
+                this.MetadataSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask(),
+                this.DataSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask(),
+                this.CblSourceHashSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask(),
+                this.CblCorrelationIdsSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask(),
             });
         }
 

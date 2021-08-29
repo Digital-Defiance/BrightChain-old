@@ -543,14 +543,14 @@ namespace BrightChain.Engine.Services
             return block;
         }
 
-        public async IAsyncEnumerable<Tuple<BlockHash, Block?>> DropBlocksByIdAsync(IAsyncEnumerable<BlockHash> idSource, object ownershipToken = null)
+        public async IAsyncEnumerable<(BlockHash, Block?)> DropBlocksByIdAsync(IAsyncEnumerable<BlockHash> idSource, object ownershipToken = null)
         {
             await foreach (var id in idSource)
             {
                 var dropped = await this.DropBlockByIdAsync(id, ownershipToken)
                     .ConfigureAwait(false);
 
-                yield return new Tuple<BlockHash, Block?>(id, dropped);
+                yield return (id, dropped);
             }
         }
 
@@ -568,21 +568,21 @@ namespace BrightChain.Engine.Services
             return block;
         }
 
-        public async IAsyncEnumerable<Tuple<Block, IEnumerable<BrightChainValidationException>>> StoreBlocksAsync(IAsyncEnumerable<BrightenedBlock> blockSource)
+        public async IAsyncEnumerable<(Block, IEnumerable<BrightChainValidationException>)> StoreBlocksAsync(IAsyncEnumerable<BrightenedBlock> blockSource)
         {
             await foreach (var block in blockSource)
             {
-                Tuple<Block, IEnumerable<BrightChainValidationException>> response;
+                (Block, IEnumerable<BrightChainValidationException>) response;
                 try
                 {
                     var storedBlock = await this.StoreBlockAsync(block)
                     .ConfigureAwait(false);
 
-                    response = new Tuple<Block, IEnumerable<BrightChainValidationException>>(block, new BrightChainValidationException[] { });
+                    response = (block, new BrightChainValidationException[] { });
                 }
                 catch (BrightChainValidationEnumerableException brightChainValidation)
                 {
-                    response = new Tuple<Block, IEnumerable<BrightChainValidationException>>(block, brightChainValidation.Exceptions);
+                    response = (block, brightChainValidation.Exceptions);
                 }
 
                 yield return response;
