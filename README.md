@@ -13,7 +13,7 @@ Unlimited storage for everyone, and a mathematically reinforced and moderated co
 - Uses Microsoft's FASTER
 - BrightNet BlockStore and API for BrightChain: The Revolution(ary) Network
 - The new wiki: https://github.com/The-Revolution-Network/BrightChain/wiki (old will be rewritten/migrated)
-- The old wiki: https://github.com/The-Revolution-Network/brightChainAPI/wiki/Introduction
+- The old wiki has been copied/merged into the new wiki, but needs to be formatted and cleaned up.
 - Auto-generated documentation: http://apidocs.therevolution.network/api/index.html
   - Note that some of the classes don't have docblocks yet, but I've gotten many. The "TODO/example" text is in place as well, but if you click into the sections the content is there.
 
