@@ -29,7 +29,14 @@ The BrightChain "LongPaper" is longer and a work in progress, but goes into plai
   - PDF https://github.com/The-Revolution-Network/BrightChain/blob/main/BrightChain-LongPaper.pdf as of 08/16/21 13:00 Pacfic time.
   - Feedback welcome of course.
 
-Recent thoughts:
+# Contributing
+This project welcomes contributions and suggestions. Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit https://cla.microsoft.com.
+
+When you submit a pull request, a CLA-bot will automatically determine whether you need to provide a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the instructions provided by the bot. You will only need to do this once across all repos using our CLA.
+
+This project has adopted the Microsoft Open Source Code of Conduct. For more information see the Code of Conduct FAQ or contact opencode@microsoft.com with any additional questions or comments.
+
+# Recent thoughts:
  - I think calling BrightChain a LightChain makes sense. it's a lightweight blockchain. It's got blockchain features people want, but without the actual overhead of blockchain, which is unnecessary.
  - If you haven't noticed- BrightChain is almost BrightChainS with an S. It's a pool of chains. Each with its own value.
  - Something I was implementing in the old code but haven't yet gotten to is also a deduplication for public blocks. Basically any chain that has its CBL block committed to the network will have the hash of the overall chain checked for deduplication.
