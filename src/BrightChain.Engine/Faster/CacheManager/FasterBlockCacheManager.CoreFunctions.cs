@@ -1,4 +1,4 @@
-﻿namespace BrightChain.Engine.Services.CacheManagers
+﻿namespace BrightChain.Engine.Faster.CacheManager
 {
     using System;
     using BrightChain.Engine.Exceptions;
@@ -17,7 +17,7 @@
         /// <returns>boolean with whether key is present.</returns>
         public override bool Contains(BlockHash key)
         {
-            return this.SessionContext.Contains(key);
+            return this.sessionContext.Contains(key);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@
                 return false;
             }
 
-            if (!this.SessionContext.Drop(blockHash: key, complete: true))
+            if (!this.sessionContext.Drop(blockHash: key, complete: true))
             {
                 return false;
             }
@@ -48,12 +48,12 @@
         /// <returns>returns requested block or throws.</returns>
         public override BrightenedBlock Get(BlockHash key)
         {
-            return this.SessionContext.Get(key);
+            return this.sessionContext.Get(key);
         }
 
         public override BrightHandle GetCbl(DataHash sourceHash)
         {
-            var result = this.SessionContext.CblSourceHashSession.Read(sourceHash);
+            var result = this.sessionContext.CblSourceHashSession.Read(sourceHash);
             if (result.status == Status.NOTFOUND)
             {
                 throw new IndexOutOfRangeException(message: sourceHash.ToString());
@@ -67,49 +67,6 @@
             return result.output;
         }
 
-        public IEnumerable<Guid> Commit()
-        {
-            this.blockMetadataKV.TakeFullCheckpoint(out Guid metadataToken);
-            this.blockDataKV.TakeFullCheckpoint(out Guid dataToken);
-            this.cblSourceHashesKV.TakeFullCheckpoint(out Guid hashesToken);
-            this.cblCorrelationIdsKV.TakeFullCheckpoint(out Guid correlationsToken);
-            return new Guid[]
-            {
-                metadataToken,
-                dataToken,
-                hashesToken,
-                correlationsToken,
-            };
-        }
-
-        private async Task<(bool, Dictionary<string, (bool, Guid)>)> TakeFullCheckpointAsync(CheckpointType checkpointType = CheckpointType.Snapshot)
-        {
-            var taskDict = new Dictionary<string, Task<(bool, Guid)>>()
-            {
-                { nameof(this.blockMetadataKV), this.blockMetadataKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
-                { nameof(this.blockDataKV), this.blockDataKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
-                { nameof(this.cblSourceHashesKV), this.cblSourceHashesKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
-                { nameof(this.cblCorrelationIdsKV), this.cblCorrelationIdsKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
-            };
-
-            await Task.WhenAll(taskDict.Values)
-                .ConfigureAwait(false);
-
-            var resultDict = new Dictionary<string, (bool, Guid)>();
-            var allGood = true;
-            foreach (var task in taskDict)
-            {
-                var result = task.Value.Result;
-                resultDict.Add(task.Key, result);
-
-                if (!result.Item1)
-                {
-                    allGood = false;
-                }
-            }
-
-            return (allGood, resultDict);
-        }
 
         /// <summary>
         ///     Adds a key to the cache if it is not already present.
@@ -118,9 +75,8 @@
         public void Set(BrightenedBlock block)
         {
             base.Set(block);
-            
             block.SetCacheManager(this);
-            this.SessionContext.Upsert(
+            this.sessionContext.Upsert(
                 block: ref block,
                 complete: true);
         }
@@ -140,8 +96,8 @@
                 throw new BrightChainException(nameof(identifiableSourceHash));
             }
 
-            this.SessionContext.CblSourceHashSession.Upsert(ref identifiableSourceHash, ref brightHandle);
-            this.SessionContext.CompletePending(waitForCommit: false);
+            this.sessionContext.CblSourceHashSession.Upsert(ref identifiableSourceHash, ref brightHandle);
+            this.sessionContext.CompletePending(waitForCommit: false);
         }
 
         public override void UpdateCblVersion(ConstituentBlockListBlock newCbl, ConstituentBlockListBlock oldCbl = null)
@@ -149,12 +105,12 @@
             base.UpdateCblVersion(newCbl, oldCbl);
             var correlationId = newCbl.CorrelationId;
             var dataHash = newCbl.SourceId;
-            this.SessionContext.CblCorrelationIdsSession.Upsert(ref correlationId, ref dataHash);
+            this.sessionContext.CblCorrelationIdsSession.Upsert(ref correlationId, ref dataHash);
         }
 
         public override BrightHandle GetCbl(Guid correlationID)
         {
-            var result = this.SessionContext.CblCorrelationIdsSession.Read(correlationID);
+            var result = this.sessionContext.CblCorrelationIdsSession.Read(correlationID);
             if (result.status == Status.NOTFOUND)
             {
                 throw new IndexOutOfRangeException(message: correlationID.ToString());
@@ -177,7 +133,7 @@
                 this.Set(blocks[i]);
             }
 
-            this.SessionContext.CompletePending(waitForCommit: false);
+            this.sessionContext.CompletePending(waitForCommit: false);
         }
 
         public async override void SetAllAsync(IAsyncEnumerable<BrightenedBlock> items)
@@ -187,7 +143,7 @@
                 this.Set(block);
             }
 
-            await this.SessionContext.CompletePendingAsync(waitForCommit: false).ConfigureAwait(false);
+            await this.sessionContext.CompletePendingAsync(waitForCommit: false).ConfigureAwait(false);
         }
     }
 }

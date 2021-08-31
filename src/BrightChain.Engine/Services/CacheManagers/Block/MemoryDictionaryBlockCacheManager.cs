@@ -1,4 +1,4 @@
-﻿namespace BrightChain.Engine.Services.CacheManagers
+﻿namespace BrightChain.Engine.Services.CacheManagers.Block
 {
     using System;
     using System.Collections.Generic;

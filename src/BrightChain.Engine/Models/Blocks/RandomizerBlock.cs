@@ -4,7 +4,7 @@ namespace BrightChain.Engine.Models.Blocks
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Services.CacheManagers;
+    using BrightChain.Engine.Services.CacheManagers.Block;
     using ProtoBuf;
 
     /// <summary>

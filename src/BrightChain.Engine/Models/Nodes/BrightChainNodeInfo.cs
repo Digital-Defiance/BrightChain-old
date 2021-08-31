@@ -36,6 +36,17 @@
         public readonly List<object> QuarumAdjustments;
 
         /// <summary>
+        /// Numbers of unannounced disconnections without indicating stored block fate.
+        /// </summary>
+        public readonly ulong UnannouncedDisconnections;
+
+        /// <summary>
+        /// Number of seconds total downtime during unnannounced disconnection events.
+        /// Avg flap duration = flapSeconds / unannouncedDisconnections.
+        /// </summary>
+        public readonly ulong FlapSeconds = 0;
+
+        /// <summary>
         /// Number of corroborated validations performed for the network.
         /// </summary>
         public readonly ulong SuccessfulValidations;

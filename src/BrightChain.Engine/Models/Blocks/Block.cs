@@ -15,7 +15,7 @@ namespace BrightChain.Engine.Models.Blocks
     using BrightChain.Engine.Models.Entities;
     using BrightChain.Engine.Models.Hashes;
     using BrightChain.Engine.Models.Nodes;
-    using BrightChain.Engine.Services.CacheManagers;
+    using BrightChain.Engine.Services.CacheManagers.Block;
     using Ent;
     using ProtoBuf;
     using static Ent.EntCalc;

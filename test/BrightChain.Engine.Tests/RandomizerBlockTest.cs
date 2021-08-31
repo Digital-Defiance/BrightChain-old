@@ -5,7 +5,7 @@
     using BrightChain.Engine.Models;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Services.CacheManagers;
+    using BrightChain.Engine.Services.CacheManagers.Block;
     using Microsoft.Extensions.Logging;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;

@@ -178,7 +178,7 @@
         /// Make sure items are removed from the cache
         /// </summary>
         [TestMethod]
-        public void ItDropsCachKeysTest()
+        public void ItDropsCacheKeysTest()
         {
             // Arrange
             this.cacheManager.Set(this.testPair.Key, this.testPair.Value);

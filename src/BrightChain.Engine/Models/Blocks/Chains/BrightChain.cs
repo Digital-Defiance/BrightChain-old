@@ -6,7 +6,7 @@
     using global::BrightChain.Engine.Exceptions;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
     using global::BrightChain.Engine.Models.Hashes;
-    using global::BrightChain.Engine.Services.CacheManagers;
+    using global::BrightChain.Engine.Services.CacheManagers.Block;
     using ProtoBuf;
 
     /// <summary>

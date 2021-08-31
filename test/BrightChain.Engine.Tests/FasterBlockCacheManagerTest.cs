@@ -3,10 +3,10 @@
     using System;
     using System.Collections.Generic;
     using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Faster.CacheManager;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
-    using BrightChain.Engine.Services.CacheManagers;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
     using Microsoft.VisualStudio.TestTools.UnitTesting;

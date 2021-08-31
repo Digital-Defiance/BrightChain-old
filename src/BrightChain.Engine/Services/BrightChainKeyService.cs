@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Security.Cryptography;
     using BrightChain.Engine.Models.Hashes;
-    using BrightChain.Engine.Services.CacheManagers;
+    using BrightChain.Engine.Services.CacheManagers.Block;
     using Microsoft.IdentityModel.Tokens;
     using Org.BouncyCastle.Asn1.Sec;
 

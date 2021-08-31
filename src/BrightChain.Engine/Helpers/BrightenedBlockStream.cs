@@ -6,9 +6,9 @@
 
     public class BrightenedBlockStream : Stream
     {
-        private Stream sourceStream;
-        private Stream destinationStream;
-        private BlockSize blockSize;
+        private readonly Stream sourceStream;
+        private readonly Stream destinationStream;
+        private readonly BlockSize blockSize;
 
 
         public BrightenedBlockStream(Stream sourceStream, BlockSize blockSize)

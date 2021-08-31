@@ -4,7 +4,7 @@
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Services.CacheManagers;
+    using BrightChain.Engine.Services.CacheManagers.Block;
 
     /// <summary>
     /// This tiny little class is actually the lynchpin of the owner free filesystem.

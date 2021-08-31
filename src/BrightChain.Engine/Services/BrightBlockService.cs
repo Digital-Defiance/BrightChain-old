@@ -13,13 +13,15 @@ namespace BrightChain.Engine.Services
     using System.Threading.Tasks;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Faster.CacheManager;
     using BrightChain.Engine.Helpers;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
+    using BrightChain.Engine.Models.Contracts;
     using BrightChain.Engine.Models.Hashes;
     using BrightChain.Engine.Models.Nodes;
-    using BrightChain.Engine.Services.CacheManagers;
+    using BrightChain.Engine.Services.CacheManagers.Block;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
 
@@ -522,7 +524,7 @@ namespace BrightChain.Engine.Services
             return block;
         }
 
-        public async Task<Block> DropBlockByIdAsync(BlockHash id, object? ownershipToken = null)
+        public async Task<Block> DropBlockByIdAsync(BlockHash id, RevocationCertificate? ownershipToken = null)
         {
             var block = await this.FindBlockByIdAsync(id: id)
                 .ConfigureAwait(false);
@@ -543,7 +545,7 @@ namespace BrightChain.Engine.Services
             return block;
         }
 
-        public async IAsyncEnumerable<(BlockHash, Block?)> DropBlocksByIdAsync(IAsyncEnumerable<BlockHash> idSource, object ownershipToken = null)
+        public async IAsyncEnumerable<(BlockHash, Block)> DropBlocksByIdAsync(IAsyncEnumerable<BlockHash> idSource, RevocationCertificate? ownershipToken = null)
         {
             await foreach (var id in idSource)
             {

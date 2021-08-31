@@ -3,7 +3,6 @@
     using System;
     using System.Linq;
     using FASTER.core;
-    using ProtoBuf;
 
     public class BinaryStringSerializer : BinaryObjectSerializer<string>
     {

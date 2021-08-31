@@ -1,4 +1,4 @@
-﻿namespace BrightChain.Engine.Services.CacheManagers
+﻿namespace BrightChain.Engine.Faster.CacheManager
 {
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;

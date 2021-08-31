@@ -6,11 +6,12 @@
     using System.Linq;
     using System.Threading.Tasks;
     using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Faster.CacheManager;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Services;
-    using BrightChain.Engine.Services.CacheManagers;
+    using BrightChain.Engine.Services.CacheManagers.Block;
     using BrightChain.Engine.Tests.TestModels;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;

@@ -46,7 +46,6 @@
 
         public bool Drop(BlockHash blockHash, bool complete = true)
         {
-
             if (this.MetadataSession.Delete(blockHash) != Status.OK)
             {
                 return false;
