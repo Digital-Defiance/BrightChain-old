@@ -85,7 +85,8 @@ namespace BrightChain.Engine.Services
             this.blockFasterCache = new FasterBlockCacheManager(
                 logger: this.logger,
                 configuration: this.configuration,
-                rootBlock: rootBlock);
+                rootBlock: rootBlock,
+                testingSelfDestruct: false);
 
             this.randomizerBlockMemoryCache = new MemoryDictionaryBlockCacheManager(
                 logger: this.logger,

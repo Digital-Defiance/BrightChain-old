@@ -54,8 +54,10 @@
         /// <param name="logger">Instance of the logging provider.</param>
         /// <param name="configuration">Instance of the configuration provider.</param>
         /// <param name="databaseName">Database/directory name for the store.</param>
-        public FasterBlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
-                : base(logger, configuration, rootBlock)
+        /// <param name="rootBlock">Block containing key information for store.</param>
+        /// <param name="testingSelfDestruct">Whether to delete device files on shutdown.</param>
+        public FasterBlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock, bool testingSelfDestruct = false)
+                : base(logger, configuration, rootBlock, testingSelfDestruct)
         {
             var nodeOptions = configuration.GetSection("NodeOptions");
             if (nodeOptions is null)
@@ -108,12 +110,19 @@
         {
             foreach (var entry in this.fasterDevices)
             {
-                (this.fasterStores[entry.Key] as IDisposable).Dispose();
+                var faster = this.fasterStores[entry.Key];
+                (faster as IDisposable).Dispose();
                 entry.Value.Values.All(d =>
                 {
                     d.Dispose();
+                    if (this.testingSelfDestruct)
+                    {
+                        File.Delete(d.FileName);
+                    }
+
                     return true;
                 });
+
             }
         }
     }

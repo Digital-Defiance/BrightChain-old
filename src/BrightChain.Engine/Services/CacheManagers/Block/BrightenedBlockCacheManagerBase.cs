@@ -16,6 +16,11 @@
     public abstract partial class BrightenedBlockCacheManagerBase : IBrightenedBlockCacheManager
     {
         /// <summary>
+        /// Whether the device and store files will delete on shutdown for testing.
+        /// </summary>
+        protected readonly bool testingSelfDestruct = false;
+
+        /// <summary>
         /// List of nodes we trust.
         /// </summary>
         private readonly List<BrightChainNode> trustedNodes;
@@ -68,7 +73,8 @@
         /// <param name="logger">Logging provider.</param>
         /// <param name="configuration">Configuration data.</param>
         /// <param name="rootBlock">Root block definition with authority for the store.</param>
-        public BrightenedBlockCacheManagerBase(ILogger logger, IConfiguration configuration, RootBlock rootBlock)
+        /// <param name="testingSelfDestruct">Whether to delete store and device files on shutdown.</param>
+        public BrightenedBlockCacheManagerBase(ILogger logger, IConfiguration configuration, RootBlock rootBlock, bool testingSelfDestruct = false)
         {
             this.trustedNodes = new List<BrightChainNode>();
             this.Logger = logger;
@@ -76,6 +82,7 @@
             this.RootBlock = rootBlock;
             this.RootBlock.CacheManager = this;
             this.DatabaseName = Utilities.HashToFormattedString(this.RootBlock.Guid.ToByteArray());
+            this.testingSelfDestruct = testingSelfDestruct;
 
             // TODO: load supported block sizes from configurations, etc.
             var section = this.Configuration.GetSection("NodeOptions");

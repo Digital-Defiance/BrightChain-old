@@ -52,7 +52,8 @@
             this.cacheManager = new FasterBlockCacheManager(
                 logger: this.logger.Object,
                 configuration: this.configuration.Object,
-                rootBlock: rootBlock);
+                rootBlock: rootBlock,
+                testingSelfDestruct: true);
         }
 
         public async Task<BrightChain> ForgeChainAsync(BrightBlockService brightBlockService, BlockSize blockSize, int objectCount)

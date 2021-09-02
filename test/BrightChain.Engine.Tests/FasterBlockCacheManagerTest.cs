@@ -74,7 +74,8 @@
             FasterCacheTestBlock.CacheManager = new FasterBlockCacheManager(
                 logger: this.logger.Object,
                 configuration: this.configuration.Object,
-                rootBlock: rootBlock);
+                rootBlock: rootBlock,
+                testingSelfDestruct: true);
             this.cacheManager = FasterCacheTestBlock.CacheManager;
         }
 
@@ -84,7 +85,8 @@
             return new FasterBlockCacheManager(
                 logger: logger,
                 configuration: configuration,
-                rootBlock: rootBlock);
+                rootBlock: rootBlock,
+                testingSelfDestruct: true);
         }
 
         internal override KeyValuePair<BlockHash, BrightenedBlock> NewKeyValue()
