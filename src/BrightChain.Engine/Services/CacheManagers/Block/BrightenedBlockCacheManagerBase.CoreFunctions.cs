@@ -71,16 +71,12 @@
         ///     Adds a key to the cache if it is not already present.
         /// </summary>
         /// <param name="value">block to palce in the cache.</param>
-        public virtual void Set(BrightenedBlock value)
+        /// <param name="updateMetadataOnly">whether to allow duplicate and update the block metadata.</param>
+        public virtual void Set(BrightenedBlock value, bool updateMetadataOnly = false)
         {
             if (value is null)
             {
                 throw new BrightChainException("Can not store null block");
-            }
-
-            if (this.Contains(value.Id))
-            {
-                throw new BrightChainException("Key already exists");
             }
 
             if (!value.Validate())
@@ -89,11 +85,16 @@
                     value.ValidationExceptions,
                     "Can not store invalid block");
             }
+
+            if (this.Contains(value.Id) && !updateMetadataOnly)
+            {
+                throw new BrightChainException("Key already exists");
+            }
         }
 
         public abstract void SetCbl(BlockHash cblHash, DataHash dataHash, BrightHandle brightHandle);
 
-        public virtual void UpdateCblVersion(ConstituentBlockListBlock newCbl, ConstituentBlockListBlock oldCbl = null)
+        public virtual void UpdateCblVersion(ref ConstituentBlockListBlock newCbl, ConstituentBlockListBlock oldCbl = null)
         {
             if (oldCbl is not null && oldCbl.CorrelationId != newCbl.CorrelationId)
             {
@@ -104,6 +105,28 @@
             {
                 throw new BrightChainException("New CBL must be newer than old CBL");
             }
+        }
+
+        public void ExtendStorage(BrightenedBlock block, DateTime keepUntilAtLeast, RedundancyContractType redundancy = RedundancyContractType.Unknown)
+        {
+            // duplicate block with extended attributes
+            var newBlock = new BrightenedBlock(
+                blockParams: new BrightenedBlockParams(
+                    cacheManager: block.CacheManager,
+                    allowCommit: block.AllowCommit,
+                    blockParams: new BlockParams(
+                        blockSize: block.BlockSize,
+                        requestTime: block.StorageContract.RequestTime,
+                        keepUntilAtLeast: keepUntilAtLeast,
+                        redundancy: redundancy == RedundancyContractType.Unknown ? block.StorageContract.RedundancyContractType : redundancy,
+                        privateEncrypted: block.StorageContract.PrivateEncrypted,
+                        originalType: block.OriginalType)),
+                data: block.Bytes,
+                constituentBlockHashes: block.ConstituentBlocks);
+
+            this.RemoveExpiration(block);
+            this.AddExpiration(newBlock);
+            this.Set(block);
         }
 
         public abstract BrightHandle GetCbl(Guid correlationID);

@@ -116,11 +116,14 @@
             this.sessionContext.CompletePending(waitForCommit: false);
         }
 
-        public override void UpdateCblVersion(ConstituentBlockListBlock newCbl, ConstituentBlockListBlock oldCbl = null)
+        public override void UpdateCblVersion(ref ConstituentBlockListBlock newCbl, ConstituentBlockListBlock oldCbl = null)
         {
-            base.UpdateCblVersion(newCbl, oldCbl);
-            var correlationId = newCbl.CorrelationId;
+            newCbl.CorrelationId = oldCbl.CorrelationId;
             newCbl.PreviousVersionHash = oldCbl.SourceId;
+
+            base.UpdateCblVersion(ref newCbl, oldCbl);
+
+            var correlationId = newCbl.CorrelationId;
             var dataHash = newCbl.SourceId;
             this.sessionContext.CblCorrelationIdsSession.Upsert(ref correlationId, ref dataHash);
         }

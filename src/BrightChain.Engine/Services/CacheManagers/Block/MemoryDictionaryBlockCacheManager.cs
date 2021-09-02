@@ -106,9 +106,9 @@
         ///     Adds a key to the cache if it is not already present
         /// </summary>
         /// <param name="block">block to palce in the cache</param>
-        public override void Set(BrightenedBlock block)
+        public override void Set(BrightenedBlock block, bool updateMetadataOnly = false)
         {
-            base.Set(block);
+            base.Set(block, updateMetadataOnly: updateMetadataOnly);
             this.blocks[block.Id] = block;
         }
 
@@ -141,6 +141,27 @@
         public override BrightHandle GetCbl(Guid correlationID)
         {
             throw new NotImplementedException();
+        }
+
+        public override List<BlockHash> GetBlocksExpiringAt(long date)
+        {
+            return default;
+        }
+
+        public override void AddExpiration(BrightenedBlock block, bool noCheckContains = false)
+        {
+        }
+
+        public override void RemoveExpiration(BrightenedBlock block)
+        {
+        }
+
+        public override void ExpireBlocks(long date)
+        {
+        }
+
+        public override void ExpireBlocksThrough(long date)
+        {
         }
     }
 }

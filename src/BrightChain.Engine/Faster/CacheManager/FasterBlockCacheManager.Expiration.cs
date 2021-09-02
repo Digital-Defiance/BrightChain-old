@@ -7,7 +7,7 @@
 
     public partial class FasterBlockCacheManager
     {
-        public List<BlockHash> GetBlocksExpiringAt(long date)
+        public override List<BlockHash> GetBlocksExpiringAt(long date)
         {
             var resultTuple = this.sessionContext.ExpirationSession.Read(date);
             if (resultTuple.status == FASTER.core.Status.OK)
@@ -22,7 +22,7 @@
             }
         }
 
-        public void AddExpiration(Block block, bool noCheckContains = false)
+        public override void AddExpiration(BrightenedBlock block, bool noCheckContains = false)
         {
             if (!noCheckContains && !this.sessionContext.Contains(block.Id))
             {
@@ -39,7 +39,7 @@
             this.sessionContext.ExpirationSession.Upsert(ticks, expiring);
         }
 
-        public void RemoveExpiration(Block block)
+        public override void RemoveExpiration(BrightenedBlock block)
         {
             var ticks = block.StorageContract.KeepUntilAtLeast.Ticks;
             var expiring = this.GetBlocksExpiringAt(ticks);
@@ -47,7 +47,7 @@
             this.sessionContext.ExpirationSession.Upsert(ticks, expiring);
         }
 
-        public void ExpireBlocks(long date)
+        public override void ExpireBlocks(long date)
         {
             // checkpoint
             foreach (var blockHash in this.GetBlocksExpiringAt(date))
@@ -57,7 +57,7 @@
             // checkpoint
         }
 
-        public void ExpireBlocksThrough(long date)
+        public override void ExpireBlocksThrough(long date)
         {
             // determine/lookup oldest block in cache
             // expire all seconds between, inclusive, that time and specified time

@@ -12,8 +12,9 @@
         /// <summary>
         /// Adds a key to the cache if it is not already present
         /// </summary>
-        /// <param name="key">key to palce in the cache</param>
-        void Set(BrightenedBlock value);
+        /// <param name="key">key to palce in the cache.</param>
+        /// <param name="updateMetadataOnly">whether to allow duplicate to update metadata.</param>
+        void Set(BrightenedBlock value, bool updateMetadataOnly = false);
 
         /// <summary>
         /// Adds all keys to the cache if not already present
