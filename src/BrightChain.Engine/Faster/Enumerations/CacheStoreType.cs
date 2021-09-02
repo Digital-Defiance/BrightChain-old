@@ -2,8 +2,9 @@
 {
     public enum CacheStoreType
     {
-        Metadata,
-        Data,
+        PrimaryMetadata,
+        PrimaryData,
+        PrimaryExpiration,
         CBL,
         CBLCorrelation,
     }

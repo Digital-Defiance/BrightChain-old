@@ -16,6 +16,8 @@
 
         public readonly ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>> DataSession;
 
+        public readonly ClientSession<long, List<BlockHash>, List<BlockHash>, List<BlockHash>, BrightChainFasterCacheContext, SimpleFunctions<long, List<BlockHash>, BrightChainFasterCacheContext>> ExpirationSession;
+
         public readonly ClientSession<DataHash, BrightHandle, BrightHandle, BrightHandle, BrightChainFasterCacheContext, SimpleFunctions<DataHash, BrightHandle, BrightChainFasterCacheContext>> CblSourceHashSession;
 
         public readonly ClientSession<Guid, DataHash, DataHash, DataHash, BrightChainFasterCacheContext, SimpleFunctions<Guid, DataHash, BrightChainFasterCacheContext>> CblCorrelationIdsSession;
@@ -24,12 +26,14 @@
             ILogger logger,
             ClientSession<BlockHash, BrightenedBlock, BrightenedBlock, BrightenedBlock, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BrightenedBlock, BrightChainFasterCacheContext>> metadataSession,
             ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>> dataSession,
+            ClientSession<long, List<BlockHash>, List<BlockHash>, List<BlockHash>, BrightChainFasterCacheContext, SimpleFunctions<long, List<BlockHash>, BrightChainFasterCacheContext>> expirationSession,
             ClientSession<DataHash, BrightHandle, BrightHandle, BrightHandle, BrightChainFasterCacheContext, SimpleFunctions<DataHash, BrightHandle, BrightChainFasterCacheContext>> cblSourceHashSession,
             ClientSession<Guid, DataHash, DataHash, DataHash, BrightChainFasterCacheContext, SimpleFunctions<Guid, DataHash, BrightChainFasterCacheContext>> cblCorrelationIdsSession)
         {
             this.logger = logger;
             this.MetadataSession = metadataSession;
             this.DataSession = dataSession;
+            this.ExpirationSession = expirationSession;
             this.CblSourceHashSession = cblSourceHashSession;
             this.CblCorrelationIdsSession = cblCorrelationIdsSession;
         }
@@ -93,7 +97,7 @@
             return block;
         }
 
-        public void Upsert(ref BrightenedBlock block, bool complete = false)
+        public void Upsert(ref BrightenedBlock block, bool completePending = false)
         {
             var blockHash = block.Id;
             var resultStatus = this.MetadataSession.Upsert(ref blockHash, ref block);
@@ -109,7 +113,7 @@
                 throw new BrightChainException("Unable to store block");
             }
 
-            if (complete)
+            if (completePending)
             {
                 this.CompletePending(waitForCommit: false);
             }

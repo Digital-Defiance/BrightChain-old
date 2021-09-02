@@ -15,18 +15,24 @@
                 logger: this.Logger,
                 metadataSession: this.NewMetadataSession,
                 dataSession: this.NewDataSession,
+                expirationSession: this.NewExpirationSession,
                 cblSourceHashSession: this.NewCblSourceHashSession,
                 cblCorrelationIdsSession: this.NewCblCorrelationIdSession);
 
         private ClientSession<BlockHash, BrightenedBlock, BrightenedBlock, BrightenedBlock, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BrightenedBlock, BrightChainFasterCacheContext>> NewMetadataSession
-            => this.blockMetadataKV
+            => this.primaryMetadataKV
                 .For(functions: new SimpleFunctions<BlockHash, BrightenedBlock, BrightChainFasterCacheContext>())
                 .NewSession<SimpleFunctions<BlockHash, BrightenedBlock, BrightChainFasterCacheContext>>();
 
         private ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>> NewDataSession
-            => this.blockDataKV
+            => this.primaryDataKV
                 .For(functions: new SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>())
                 .NewSession<SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>>();
+
+        private ClientSession<long, List<BlockHash>, List<BlockHash>, List<BlockHash>, BrightChainFasterCacheContext, SimpleFunctions<long, List<BlockHash>, BrightChainFasterCacheContext>> NewExpirationSession
+            => this.primaryExpirationKV
+                .For(functions: new SimpleFunctions<long, List<BlockHash>, BrightChainFasterCacheContext>())
+                .NewSession<SimpleFunctions<long, List<BlockHash>, BrightChainFasterCacheContext>>();
 
         private ClientSession<DataHash, BrightHandle, BrightHandle, BrightHandle, BrightChainFasterCacheContext, SimpleFunctions<DataHash, BrightHandle, BrightChainFasterCacheContext>> NewCblSourceHashSession
             => this.cblSourceHashesKV

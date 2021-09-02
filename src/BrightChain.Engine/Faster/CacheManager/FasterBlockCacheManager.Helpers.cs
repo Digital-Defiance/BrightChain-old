@@ -17,7 +17,7 @@
             new Dictionary<CacheStoreType, Func<Dictionary<CacheDeviceType, IDevice>, bool, string, FasterBase>>()
             {
                 {
-                    CacheStoreType.Metadata,
+                    CacheStoreType.PrimaryMetadata,
                     FasterBase (Dictionary<CacheDeviceType, IDevice> storeDevices, bool useReadCache, string cacheDir) =>
                     {
                         var blockMetadataLogSettings = new LogSettings // log settings (devices, page size, memory size, etc.)
@@ -47,7 +47,7 @@
                     }
                 },
                 {
-                    CacheStoreType.Data,
+                    CacheStoreType.PrimaryData,
                     FasterBase (Dictionary<CacheDeviceType, IDevice> storeDevices, bool useReadCache, string cacheDir) =>
                     {
                         var blockDataLogSettings = new LogSettings
@@ -72,6 +72,34 @@
                             },
                             serializerSettings: blockDataSerializerSettings,
                             comparer: BlockSizeMap.ZeroVectorHash(BlockSize.Micro)); // gets an arbitrary BlockHash object which has the IFasterEqualityComparer on the class.
+                    }
+                },
+                {
+                    CacheStoreType.PrimaryExpiration,
+                    FasterBase (Dictionary<CacheDeviceType, IDevice> storeDevices, bool useReadCache, string cacheDir) =>
+                    {
+                        var blockDataLogSettings = new LogSettings
+                        {
+                            LogDevice = storeDevices[CacheDeviceType.Log],
+                            ObjectLogDevice = storeDevices[CacheDeviceType.Data],
+                            ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
+                        };
+
+                        var blockDataSerializerSettings = new SerializerSettings<long, List<BlockHash>>
+                        {
+                            keySerializer = () => null,
+                            valueSerializer = () => new DataContractObjectSerializer<List<BlockHash>>(),
+                        };
+
+                        return new FasterKV<long, List<BlockHash>>(
+                            size: HashTableBuckets,
+                            logSettings: blockDataLogSettings,
+                            checkpointSettings: new CheckpointSettings
+                            {
+                                CheckpointDir = cacheDir,
+                            },
+                            serializerSettings: blockDataSerializerSettings,
+                            comparer: null);
                     }
                 },
                 {
@@ -132,11 +160,14 @@
                 },
             };
 
-        protected FasterKV<BlockHash, BrightenedBlock> blockMetadataKV =>
-            (FasterKV<BlockHash, BrightenedBlock>)this.fasterStores[CacheStoreType.Metadata];
+        protected FasterKV<BlockHash, BrightenedBlock> primaryMetadataKV =>
+            (FasterKV<BlockHash, BrightenedBlock>)this.fasterStores[CacheStoreType.PrimaryMetadata];
 
-        protected FasterKV<BlockHash, BlockData> blockDataKV =>
-            (FasterKV<BlockHash, BlockData>)this.fasterStores[CacheStoreType.Data];
+        protected FasterKV<BlockHash, BlockData> primaryDataKV =>
+            (FasterKV<BlockHash, BlockData>)this.fasterStores[CacheStoreType.PrimaryData];
+
+        protected FasterKV<long, List<BlockHash>> primaryExpirationKV =>
+            (FasterKV<long, List<BlockHash>>)this.fasterStores[CacheStoreType.PrimaryExpiration];
 
         protected FasterKV<DataHash, BrightHandle> cblSourceHashesKV =>
             (FasterKV<DataHash, BrightHandle>)this.fasterStores[CacheStoreType.CBL];

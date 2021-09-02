@@ -14,6 +14,14 @@
     /// <summary>
     ///     Disk/Memory hybrid Block Cache Manager based on Microsoft FASTER KV.
     /// </summary>
+    /// <remarks>
+    /// The plan is to keep a few separate caches of data in sync using the FasterKV checkpointing.
+    /// Hopefully errors where we need to put back or take out blocks that have already been altered on disk are rare.
+    /// The primary cache is actually three caches in tandem:
+    /// - The Metadata cache contains block metadata that may be updated.
+    /// - The Data cache contains the actual raw block data only. These blocks are not to be altered unless deleted through a revocation certificate or normal expiration.
+    /// - The Expiration cache contains a list of Block ID's expiring in any given second.
+    /// </remarks>
     public partial class FasterBlockCacheManager : BrightenedBlockCacheManagerBase, IDisposable
     {
         /// <summary>
@@ -81,7 +89,7 @@
 
             (this.fasterDevices, this.fasterStores) = this.InitFaster();
             this.sessionContext = this.NewSharedSessionContext;
-            this.lastAddresses = this.NextSerials();
+            this.lastAddresses = this.HeadAddresses();
             this.lastCheckpoint = this.TakeFullCheckpoint();
         }
 

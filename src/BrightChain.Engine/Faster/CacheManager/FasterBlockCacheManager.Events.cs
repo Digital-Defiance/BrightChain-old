@@ -6,7 +6,6 @@
 
     public partial class FasterBlockCacheManager
     {
-
         /// <summary>
         ///     Fired whenever a block is added to the cache
         /// </summary>

@@ -20,8 +20,9 @@
         {
             return await this.CheckpointFuncAsync(() => new Dictionary<CacheStoreType, Task<(bool, Guid)>>()
             {
-                { CacheStoreType.Metadata, this.blockMetadataKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
-                { CacheStoreType.Data, this.blockDataKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
+                { CacheStoreType.PrimaryMetadata, this.primaryMetadataKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
+                { CacheStoreType.PrimaryData, this.primaryDataKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
+                { CacheStoreType.PrimaryExpiration, this.primaryExpirationKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
                 { CacheStoreType.CBL, this.cblSourceHashesKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
                 { CacheStoreType.CBLCorrelation, this.cblCorrelationIdsKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
             }).ConfigureAwait(false);
@@ -36,8 +37,9 @@
         {
             return await this.CheckpointFuncAsync(() => new Dictionary<CacheStoreType, Task<(bool, Guid)>>()
             {
-                { CacheStoreType.Metadata, this.blockMetadataKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
-                { CacheStoreType.Data, this.blockDataKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
+                { CacheStoreType.PrimaryMetadata, this.primaryMetadataKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
+                { CacheStoreType.PrimaryData, this.primaryDataKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
+                { CacheStoreType.PrimaryExpiration, this.primaryExpirationKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
                 { CacheStoreType.CBL, this.cblSourceHashesKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
                 { CacheStoreType.CBLCorrelation, this.cblCorrelationIdsKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
             }).ConfigureAwait(false);
@@ -52,8 +54,9 @@
         {
             return await this.CheckpointFuncAsync(() => new Dictionary<CacheStoreType, Task<(bool, Guid)>>()
             {
-                { CacheStoreType.Metadata, this.blockMetadataKV.TakeIndexCheckpointAsync().AsTask() },
-                { CacheStoreType.Data, this.blockDataKV.TakeIndexCheckpointAsync().AsTask() },
+                { CacheStoreType.PrimaryMetadata, this.primaryMetadataKV.TakeIndexCheckpointAsync().AsTask() },
+                { CacheStoreType.PrimaryData, this.primaryDataKV.TakeIndexCheckpointAsync().AsTask() },
+                { CacheStoreType.PrimaryExpiration, this.primaryExpirationKV.TakeIndexCheckpointAsync().AsTask() },
                 { CacheStoreType.CBL, this.cblSourceHashesKV.TakeIndexCheckpointAsync().AsTask() },
                 { CacheStoreType.CBLCorrelation, this.cblCorrelationIdsKV.TakeIndexCheckpointAsync().AsTask() },
             }).ConfigureAwait(false);
@@ -61,25 +64,28 @@
 
         public BlockSessionCheckpoint CheckpointFunc(FasterCheckpointOperation operation, CheckpointType checkpointType = CheckpointType.Snapshot)
         {
-            bool metadataResult, dataResult, cblResult, cblCorrelationResult;
-            Guid metadataToken, dataToken, cblToken, cblCorrelationsToken;
+            bool metadataResult, dataResult, expirationResult, cblResult, cblCorrelationResult;
+            Guid metadataToken, dataToken, expirationToken, cblToken, cblCorrelationsToken;
             switch (operation)
             {
                 case FasterCheckpointOperation.Full:
-                    metadataResult = this.blockMetadataKV.TakeFullCheckpoint(token: out metadataToken, checkpointType: checkpointType);
-                    dataResult = this.blockDataKV.TakeFullCheckpoint(token: out dataToken, checkpointType: checkpointType);
+                    metadataResult = this.primaryMetadataKV.TakeFullCheckpoint(token: out metadataToken, checkpointType: checkpointType);
+                    dataResult = this.primaryDataKV.TakeFullCheckpoint(token: out dataToken, checkpointType: checkpointType);
+                    expirationResult = this.primaryExpirationKV.TakeFullCheckpoint(token: out expirationToken, checkpointType: checkpointType);
                     cblResult = this.cblSourceHashesKV.TakeFullCheckpoint(token: out cblToken, checkpointType: checkpointType);
                     cblCorrelationResult = this.cblCorrelationIdsKV.TakeFullCheckpoint(token: out cblCorrelationsToken, checkpointType: checkpointType);
                     break;
                 case FasterCheckpointOperation.Hybrid:
-                    metadataResult = this.blockMetadataKV.TakeHybridLogCheckpoint(out metadataToken);
-                    dataResult = this.blockDataKV.TakeHybridLogCheckpoint(out dataToken);
+                    metadataResult = this.primaryMetadataKV.TakeHybridLogCheckpoint(out metadataToken);
+                    dataResult = this.primaryDataKV.TakeHybridLogCheckpoint(out dataToken);
+                    expirationResult = this.primaryExpirationKV.TakeHybridLogCheckpoint(token: out expirationToken, checkpointType: checkpointType);
                     cblResult = this.cblSourceHashesKV.TakeHybridLogCheckpoint(out cblToken);
                     cblCorrelationResult = this.cblCorrelationIdsKV.TakeHybridLogCheckpoint(out cblCorrelationsToken);
                     break;
                 case FasterCheckpointOperation.Index:
-                    metadataResult = this.blockMetadataKV.TakeIndexCheckpoint(out metadataToken);
-                    dataResult = this.blockDataKV.TakeIndexCheckpoint(out dataToken);
+                    metadataResult = this.primaryMetadataKV.TakeIndexCheckpoint(out metadataToken);
+                    dataResult = this.primaryDataKV.TakeIndexCheckpoint(out dataToken);
+                    expirationResult = this.primaryExpirationKV.TakeIndexCheckpoint(token: out expirationToken);
                     cblResult = this.cblSourceHashesKV.TakeIndexCheckpoint(out cblToken);
                     cblCorrelationResult = this.cblCorrelationIdsKV.TakeIndexCheckpoint(out cblCorrelationsToken);
                     break;
@@ -88,18 +94,20 @@
             }
 
             return new BlockSessionCheckpoint(
-                success: metadataResult && dataResult && cblResult && cblCorrelationResult,
+                success: metadataResult && dataResult && expirationResult && cblResult && cblCorrelationResult,
                 results: new Dictionary<CacheStoreType, bool>()
                     {
-                    { CacheStoreType.Metadata, metadataResult },
-                    { CacheStoreType.Data, dataResult },
+                    { CacheStoreType.PrimaryMetadata, metadataResult },
+                    { CacheStoreType.PrimaryData, dataResult },
+                    { CacheStoreType.PrimaryExpiration, expirationResult },
                     { CacheStoreType.CBL, cblResult },
                     { CacheStoreType.CBLCorrelation, cblCorrelationResult },
                     },
                 guids: new Dictionary<CacheStoreType, Guid>()
                     {
-                    { CacheStoreType.Metadata, metadataToken },
-                    { CacheStoreType.Data, dataToken },
+                    { CacheStoreType.PrimaryMetadata, metadataToken },
+                    { CacheStoreType.PrimaryData, dataToken },
+                    { CacheStoreType.PrimaryExpiration, expirationToken },
                     { CacheStoreType.CBL, cblToken },
                     { CacheStoreType.CBLCorrelation, cblCorrelationsToken },
                     });
@@ -132,8 +140,9 @@
             await Task
                 .WhenAll(new Task[]
                     {
-                        this.blockMetadataKV.CompleteCheckpointAsync().AsTask(),
-                        this.blockDataKV.CompleteCheckpointAsync().AsTask(),
+                        this.primaryMetadataKV.CompleteCheckpointAsync().AsTask(),
+                        this.primaryDataKV.CompleteCheckpointAsync().AsTask(),
+                        this.primaryExpirationKV.CompleteCheckpointAsync().AsTask(),
                         this.cblSourceHashesKV.CompleteCheckpointAsync().AsTask(),
                         this.cblCorrelationIdsKV.CompleteCheckpointAsync().AsTask(),
                     })
@@ -145,12 +154,16 @@
             return new BlockSessionAddresses(addresses: new Dictionary<CacheStoreType, long>
             {
                 {
-                    CacheStoreType.Metadata,
+                    CacheStoreType.PrimaryMetadata,
                     this.sessionContext.MetadataSession.NextSerialNo
                 },
                 {
-                    CacheStoreType.Data,
+                    CacheStoreType.PrimaryData,
                     this.sessionContext.DataSession.NextSerialNo
+                },
+                {
+                    CacheStoreType.PrimaryExpiration,
+                    this.sessionContext.ExpirationSession.NextSerialNo
                 },
                 {
                     CacheStoreType.CBL,
@@ -163,20 +176,53 @@
             });
         }
 
+        public BlockSessionAddresses HeadAddresses()
+        {
+            return new BlockSessionAddresses(addresses: new Dictionary<CacheStoreType, long>
+            {
+                {
+                    CacheStoreType.PrimaryMetadata,
+                    this.primaryMetadataKV.Log.HeadAddress
+                },
+                {
+                    CacheStoreType.PrimaryData,
+                    this.primaryDataKV.Log.HeadAddress
+                },
+                {
+                    CacheStoreType.PrimaryExpiration,
+                    this.primaryExpirationKV.Log.HeadAddress
+                },
+                {
+                    CacheStoreType.CBL,
+                    this.cblSourceHashesKV.Log.HeadAddress
+                },
+                {
+                    CacheStoreType.CBLCorrelation,
+                    this.cblCorrelationIdsKV.Log.HeadAddress
+                },
+            });
+        }
+
         public BlockSessionAddresses Compact(bool shiftBeginAddress = true)
         {
             return new BlockSessionAddresses(addresses: new Dictionary<CacheStoreType, long>
             {
                 {
-                    CacheStoreType.Metadata,
+                    CacheStoreType.PrimaryMetadata,
                     this.sessionContext.MetadataSession.Compact(
-                        untilAddress: this.blockMetadataKV.Log.HeadAddress,
+                        untilAddress: this.primaryMetadataKV.Log.HeadAddress,
                         shiftBeginAddress: shiftBeginAddress)
                 },
                 {
-                    CacheStoreType.Data,
+                    CacheStoreType.PrimaryData,
                     this.sessionContext.DataSession.Compact(
-                        untilAddress: this.blockDataKV.Log.HeadAddress,
+                        untilAddress: this.primaryDataKV.Log.HeadAddress,
+                        shiftBeginAddress: shiftBeginAddress)
+                },
+                {
+                    CacheStoreType.PrimaryExpiration,
+                    this.sessionContext.ExpirationSession.Compact(
+                        untilAddress: this.primaryExpirationKV.Log.HeadAddress,
                         shiftBeginAddress: shiftBeginAddress)
                 },
                 {
@@ -198,8 +244,9 @@
         {
             Task.WaitAll(new Task[]
             {
-                this.blockMetadataKV.RecoverAsync().AsTask(),
-                this.blockDataKV.RecoverAsync().AsTask(),
+                this.primaryMetadataKV.RecoverAsync().AsTask(),
+                this.primaryDataKV.RecoverAsync().AsTask(),
+                this.primaryExpirationKV.RecoverAsync().AsTask(),
                 this.cblSourceHashesKV.RecoverAsync().AsTask(),
                 this.cblCorrelationIdsKV.RecoverAsync().AsTask(),
             });

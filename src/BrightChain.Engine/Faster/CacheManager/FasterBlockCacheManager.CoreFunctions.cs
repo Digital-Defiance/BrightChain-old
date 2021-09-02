@@ -28,7 +28,19 @@
         /// <returns>whether requested key was present and actually dropped.</returns>
         public override bool Drop(BlockHash key, bool noCheckContains = true)
         {
-            if (!base.Drop(key, noCheckContains))
+            bool contains;
+            BrightenedBlock block = null;
+            try
+            {
+                block = this.Get(key);
+                contains = true;
+            }
+            catch(Exception _)
+            {
+                contains = false;
+            }
+
+            if (!base.Drop(key, noCheckContains: true))
             {
                 return false;
             }
@@ -37,6 +49,8 @@
             {
                 return false;
             }
+
+            this.RemoveExpiration(block);
 
             return true;
         }
@@ -78,7 +92,8 @@
             block.SetCacheManager(this);
             this.sessionContext.Upsert(
                 block: ref block,
-                complete: true);
+                completePending: false);
+            this.AddExpiration(block, noCheckContains: true);
         }
 
         public override void SetCbl(BlockHash brightenedCblHash, DataHash identifiableSourceHash, BrightHandle brightHandle)
