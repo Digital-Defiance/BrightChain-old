@@ -1,12 +1,12 @@
-﻿using BrightChain.Engine.Exceptions;
-using BrightChain.Engine.Interfaces;
-using BrightChain.Engine.Models.Blocks.DataObjects;
-using BrightChain.Engine.Models.Hashes;
-using BrightChain.Engine.Services;
-using ProtoBuf;
-
-namespace BrightChain.Engine.Models.Blocks.Chains
+﻿namespace BrightChain.Engine.Models.Blocks.Chains
 {
+    using global::BrightChain.Engine.Exceptions;
+    using global::BrightChain.Engine.Interfaces;
+    using global::BrightChain.Engine.Models.Blocks.DataObjects;
+    using global::BrightChain.Engine.Models.Hashes;
+    using global::BrightChain.Engine.Services;
+    using ProtoBuf;
+
     /// <summary>
     /// A block which describes the hashes of all of the blocks needed to reconstitute a resultant block.
     /// TODO: Ensure that the resultant list doesn't exceed a block, split into two lists, make a new top block, etc.
@@ -37,6 +37,7 @@ namespace BrightChain.Engine.Models.Blocks.Chains
             this.Next = blockParams.Next;
             this.TupleCount = BlockBrightenerService.TupleCount;
             this.CorrelationId = blockParams.CorrelationId;
+            this.PreviousVersionHash = blockParams.PreviousVersionHash;
         }
 
         /// <summary>
@@ -56,7 +57,8 @@ namespace BrightChain.Engine.Models.Blocks.Chains
                     constituentBlockHashes: this.ConstituentBlocks,
                     previous: this.Previous,
                     next: this.Next,
-                    correlationId: this.CorrelationId);
+                    correlationId: this.CorrelationId,
+                    previousVersionHash: this.PreviousVersionHash);
 
         /// <summary>
         /// Gets or sets the hash of the sum bytes of the file when assembled in order.
@@ -103,6 +105,9 @@ namespace BrightChain.Engine.Models.Blocks.Chains
 
         [ProtoMember(67)]
         public Guid CorrelationId { get; set; }
+
+        [ProtoMember(68)]
+        public DataHash PreviousVersionHash { get; set; }
 
         /// <summary>
         /// Gets an array of the bytes of the constituent block hashes for writing to disk.

@@ -22,7 +22,9 @@
 
         public readonly Guid CorrelationId;
 
-        public ConstituentBlockListBlockParams(BlockParams blockParams, DataHash sourceId, SegmentHash segmentId, long totalLength, IEnumerable<BlockHash> constituentBlockHashes, BlockHash previous = null, BlockHash next = null, Guid? correlationId = null)
+        public readonly DataHash PreviousVersionHash = null;
+
+        public ConstituentBlockListBlockParams(BlockParams blockParams, DataHash sourceId, SegmentHash segmentId, long totalLength, IEnumerable<BlockHash> constituentBlockHashes, BlockHash previous = null, BlockHash next = null, Guid? correlationId = null, DataHash previousVersionHash = null)
        : base(
              blockSize: blockParams.BlockSize,
              requestTime: blockParams.RequestTime,
@@ -31,6 +33,11 @@
              privateEncrypted: blockParams.PrivateEncrypted,
              originalType: blockParams.OriginalType)
         {
+            if (correlationId.HasValue && previousVersionHash is null)
+            {
+                throw new BrightChainException("Should not have correlation Id specified with no previous hash");
+            }
+
             this.SourceId = sourceId;
             this.TotalLength = totalLength;
             this.ConstituentBlockHashes = constituentBlockHashes;
@@ -38,6 +45,7 @@
             this.Previous = previous;
             this.Next = next;
             this.CorrelationId = correlationId.HasValue ? correlationId.Value : Guid.NewGuid();
+            this.PreviousVersionHash = previousVersionHash;
         }
 
         public ConstituentBlockListBlockParams Merge(ConstituentBlockListBlockParams otherBlockParams)

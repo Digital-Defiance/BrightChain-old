@@ -112,6 +112,7 @@
             }
 
             this.sessionContext.CblSourceHashSession.Upsert(ref identifiableSourceHash, ref brightHandle);
+
             this.sessionContext.CompletePending(waitForCommit: false);
         }
 
@@ -119,6 +120,7 @@
         {
             base.UpdateCblVersion(newCbl, oldCbl);
             var correlationId = newCbl.CorrelationId;
+            newCbl.PreviousVersionHash = oldCbl.SourceId;
             var dataHash = newCbl.SourceId;
             this.sessionContext.CblCorrelationIdsSession.Upsert(ref correlationId, ref dataHash);
         }

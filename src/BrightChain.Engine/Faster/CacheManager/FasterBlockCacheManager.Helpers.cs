@@ -172,6 +172,9 @@
         protected FasterKV<DataHash, BrightHandle> cblSourceHashesKV =>
             (FasterKV<DataHash, BrightHandle>)this.fasterStores[CacheStoreType.CBL];
 
+        /// <summary>
+        /// Map of correlation GUIDs to latest CBL source hash associated with a correlation ID.
+        /// </summary>
         protected FasterKV<Guid, DataHash> cblCorrelationIdsKV =>
             (FasterKV<Guid, DataHash>)this.fasterStores[CacheStoreType.CBLCorrelation];
 
