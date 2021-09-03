@@ -39,6 +39,7 @@ namespace BrightChain.Engine.Models.Hashes
                 }
 
                 this.BlockSize = block.BlockSize;
+                this.BlockType = block.GetType();
             }
         }
 

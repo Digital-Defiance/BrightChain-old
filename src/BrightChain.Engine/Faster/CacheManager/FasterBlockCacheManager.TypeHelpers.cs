@@ -57,11 +57,17 @@
                     CacheStoreType.CBLIndices,
                     FasterBase (Dictionary<CacheDeviceType, IDevice> storeDevices, bool useReadCache, string cacheDir) =>
                     {
+                        var cblIndexSerializerSettings = new SerializerSettings<string, BrightChainIndexValue>
+                        {
+                            keySerializer = () => null,
+                            valueSerializer = () => new FasterBrightChainIndexValueSerializer(),
+                        };
+
                         return new FasterKV<string, BrightChainIndexValue>(
                             size: HashTableBuckets,
                             logSettings: NewLogSettings(storeDevices, useReadCache),
                             checkpointSettings: NewCheckpointSettings(cacheDir),
-                            serializerSettings: null,
+                            serializerSettings: cblIndexSerializerSettings,
                             comparer: null);
                     }
                 },

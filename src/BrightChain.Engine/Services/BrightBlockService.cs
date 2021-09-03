@@ -259,7 +259,9 @@ namespace BrightChain.Engine.Services
                                 totalLength: sourceBytesRemaining > sourceInfo.BytesPerCbl ? sourceInfo.BytesPerCbl : sourceBytesRemaining,
                                 constituentBlockHashes: blockHashesUsedThisSegment.ToArray(),
                                 previous: cblIdx > 0 ? cblsEmitted[cblIdx - 1].Id : null,
-                                next: null);
+                                next: null,
+                                correlationId: null,
+                                previousVersionHash: null);
 
                         var cbl = new BrightChain(
                             blockParams: cblParams,
@@ -641,7 +643,9 @@ namespace BrightChain.Engine.Services
                     totalLength: BlockSizeMap.BlockSize(firstBlock.BlockSize) * awaitedBlocks.Count,
                     constituentBlockHashes: hashes,
                     previous: null,
-                    next: null),
+                    next: null,
+                    correlationId: null,
+                    previousVersionHash: null),
                 brightenedBlocks: awaitedBlocks);
         }
 

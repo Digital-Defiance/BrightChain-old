@@ -17,7 +17,15 @@
 
         public override void Deserialize(out DataHash obj)
         {
-            obj = Serializer.Deserialize<DataHash>(source: this.reader.BaseStream);
+            var hashSize = this.reader.ReadInt32();
+            var sourceLength = this.reader.ReadInt64();
+            var dataBytes = this.reader.ReadBytes(hashSize);
+            var computed = this.reader.ReadBoolean();
+
+            obj = new DataHash(
+                providedHashBytes: dataBytes,
+                sourceDataLength: sourceLength,
+                computed: computed);
         }
 
         public override void Serialize(ref DataHash obj)
@@ -27,7 +35,10 @@
                 throw new ArgumentNullException(nameof(obj));
             }
 
-            Serializer.Serialize(destination: this.writer.BaseStream, instance: obj);
+            this.writer.Write(BlockHash.HashSizeBytes);
+            this.writer.Write(obj.SourceDataLength);
+            this.writer.Write(obj.HashBytes.ToArray());
+            this.writer.Write(obj.Computed);
         }
     }
 }

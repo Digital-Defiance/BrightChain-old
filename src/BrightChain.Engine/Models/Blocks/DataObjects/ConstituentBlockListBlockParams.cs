@@ -33,11 +33,6 @@
              privateEncrypted: blockParams.PrivateEncrypted,
              originalType: blockParams.OriginalType)
         {
-            if (correlationId.HasValue && previousVersionHash is null)
-            {
-                throw new BrightChainException("Should not have correlation Id specified with no previous hash");
-            }
-
             this.SourceId = sourceId;
             this.TotalLength = totalLength;
             this.ConstituentBlockHashes = constituentBlockHashes;
@@ -66,7 +61,8 @@
                 constituentBlockHashes: newConstituentBlocks,
                 previous: this.Previous,
                 next: this.Next,
-                correlationId: this.CorrelationId);
+                correlationId: this.CorrelationId,
+                previousVersionHash: this.PreviousVersionHash);
         }
     }
 }
