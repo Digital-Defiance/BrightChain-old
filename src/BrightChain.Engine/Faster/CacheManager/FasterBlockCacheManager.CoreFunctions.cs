@@ -129,12 +129,12 @@
         private static string CorrelationIndexKey(Guid correlationId)
             => string.Format("Correlation:{0}", correlationId.ToString());
 
-        public override void UpdateCblVersion(ref ConstituentBlockListBlock newCbl, ConstituentBlockListBlock oldCbl = null)
+        public override void UpdateCblVersion(ConstituentBlockListBlock newCbl, ConstituentBlockListBlock oldCbl = null)
         {
             newCbl.CorrelationId = oldCbl.CorrelationId;
             newCbl.PreviousVersionHash = oldCbl.SourceId;
 
-            base.UpdateCblVersion(ref newCbl, oldCbl);
+            base.UpdateCblVersion(newCbl, oldCbl);
 
             this.sessionContext.CblIndicesSession.Upsert(
                 key: CorrelationIndexKey(newCbl.CorrelationId),

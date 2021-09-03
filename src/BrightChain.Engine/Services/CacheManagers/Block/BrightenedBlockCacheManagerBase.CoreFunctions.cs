@@ -94,7 +94,7 @@
 
         public abstract void SetCbl(BlockHash cblHash, DataHash dataHash, BrightHandle brightHandle);
 
-        public virtual void UpdateCblVersion(ref ConstituentBlockListBlock newCbl, ConstituentBlockListBlock oldCbl = null)
+        public virtual void UpdateCblVersion(ConstituentBlockListBlock newCbl, ConstituentBlockListBlock oldCbl = null)
         {
             if (oldCbl is not null && oldCbl.CorrelationId != newCbl.CorrelationId)
             {
