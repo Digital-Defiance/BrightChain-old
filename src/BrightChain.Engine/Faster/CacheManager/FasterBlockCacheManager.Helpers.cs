@@ -25,6 +25,16 @@
             };
         }
 
+        private DirectoryInfo EnsuredDirectory(string dir)
+        {
+            if (!Directory.Exists(dir))
+            {
+                return Directory.CreateDirectory(dir);
+            }
+
+            return new DirectoryInfo(dir);
+        }
+
         protected DirectoryInfo GetDiskCacheDirectory()
         {
             return Directory.CreateDirectory(

@@ -47,20 +47,6 @@
         private readonly Dictionary<CacheStoreType, Dictionary<CacheDeviceType, IDevice>> fasterDevices;
         private readonly Dictionary<CacheStoreType, FasterBase> fasterStores;
 
-        private string CreatedDirectory(string dir, out DirectoryInfo directoryInfo)
-        {
-            if (!Directory.Exists(dir))
-            {
-                directoryInfo = Directory.CreateDirectory(dir);
-            }
-            else
-            {
-                directoryInfo = new DirectoryInfo(dir);
-            }
-
-            return Path.GetFullPath(dir);
-        }
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
         /// </summary>
@@ -81,7 +67,7 @@
             var configOption = nodeOptions.GetSection("BasePath");
             var dir = configOption is not null && configOption.Value.Any() ? configOption.Value : Path.Join(Path.GetTempPath(), "brightchain");
 
-            this.CreatedDirectory(dir, out this.baseDirectory);
+            this.baseDirectory = this.EnsuredDirectory(dir);
 
             var configuredDbName
                 = nodeOptions.GetSection("DatabaseName");
