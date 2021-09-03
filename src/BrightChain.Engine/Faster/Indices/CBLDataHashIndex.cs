@@ -11,5 +11,11 @@
         {
             this.DataHash = dataHash;
         }
+
+        public CBLDataHashIndex(ReadOnlyMemory<byte> data)
+            : base(data)
+        {
+            this.DataHash = BrightHandleIndexValue.Deserialize<DataHash>(data);
+        }
     }
 }

@@ -19,6 +19,12 @@ namespace BrightChain.Engine.Faster.Indices
             return new ReadOnlyMemory<byte>(s.GetBuffer());
         }
 
+        protected static T Deserialize<T>(ReadOnlyMemory<byte> data)
+        {
+            MemoryStream s = new MemoryStream(data.ToArray());
+            return Serializer.Deserialize<T>(s);
+        }
+
         public BrightChainIndexValue AsIndex => this;
     }
 }

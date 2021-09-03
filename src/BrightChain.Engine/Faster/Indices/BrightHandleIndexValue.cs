@@ -11,5 +11,11 @@
         {
             this.BrightHandle = brightHandle;
         }
+
+        public BrightHandleIndexValue(ReadOnlyMemory<byte> data)
+            : base(data)
+        {
+            this.BrightHandle = BrightHandleIndexValue.Deserialize<BrightHandle>(data);
+        }
     }
 }
