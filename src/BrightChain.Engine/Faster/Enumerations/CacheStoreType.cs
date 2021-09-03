@@ -2,8 +2,7 @@
 {
     public enum CacheStoreType
     {
-        PrimaryMetadata,
-        PrimaryData,
-        CBLIndices,
+        BlockData,
+        Indices,
     }
 }

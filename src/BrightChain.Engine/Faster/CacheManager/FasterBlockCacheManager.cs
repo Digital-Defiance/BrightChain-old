@@ -18,9 +18,9 @@
     /// The plan is to keep a few separate caches of data in sync using the FasterKV checkpointing.
     /// Hopefully errors where we need to put back or take out blocks that have already been altered on disk are rare.
     /// The primary cache is actually two caches in tandem:
-    /// - The Metadata cache contains block metadata that may be updated.
     /// - The Data cache contains the actual raw block data only. These blocks are not to be altered unless deleted through a revocation certificate or normal expiration.
-    /// There is currently one additional cache that is a multi-purpose KV that serves as a shared index table
+    /// There is currently one additional, combined cache that is a multi-purpose KV that serves as a shared index table
+    ///   - The BlockMetadata cache contains block metadata that may be updated.
     ///   - BlockExpirationIndexValues contain a list of Block ID's expiring in any given second.
     ///   - CBLDataHashIndexValues contain the latest CBL source hash associated with a given correlation ID.
     ///   - BrightHandleIndexValues contain the CBL handles for a given source hash ID.

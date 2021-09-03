@@ -121,7 +121,7 @@
                         EncodeIntegerBigEndian(innerWriter, parameters.InverseQ);
                         var length = (int)innerStream.Length;
                         EncodeLength(writer, length);
-                        writer.Write(innerStream.GetBuffer(), 0, length);
+                        writer.Write(innerStream.GetBuffer(), 0, length); // TODO: verify if these should be ToArray()
                     }
 
                     // WriteLine terminates with \r\n, we want only \n

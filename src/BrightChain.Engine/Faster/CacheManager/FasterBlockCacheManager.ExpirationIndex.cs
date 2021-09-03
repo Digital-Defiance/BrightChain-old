@@ -7,14 +7,14 @@
 
     public partial class FasterBlockCacheManager
     {
-        public static string DateKey(long date)
+        public static string BlockExpirationIndexKey(long date)
         {
             return string.Format("Expiration:{0}", date);
         }
 
         public override IEnumerable<BlockHash> GetBlocksExpiringAt(long date)
         {
-            var resultTuple = this.sessionContext.CblIndicesSession.Read(DateKey(date));
+            var resultTuple = this.sessionContext.CblIndicesSession.Read(BlockExpirationIndexKey(date));
             if (resultTuple.status == FASTER.core.Status.OK)
             {
                 if (resultTuple.output is BlockExpirationIndexValue expirationIndex)
@@ -50,7 +50,9 @@
                 expiring[size] = block.Id;
             }
 
-            this.sessionContext.CblIndicesSession.Upsert(DateKey(ticks), new BlockExpirationIndexValue(expiring));
+            this.sessionContext.CblIndicesSession.Upsert(
+                key: BlockExpirationIndexKey(ticks),
+                desiredValue: new BlockExpirationIndexValue(expiring));
         }
 
         public override void RemoveExpiration(BrightenedBlock block)
@@ -58,7 +60,9 @@
             var ticks = block.StorageContract.KeepUntilAtLeast.Ticks;
             var expiring = new List<BlockHash>(this.GetBlocksExpiringAt(ticks));
             expiring.Remove(block.Id);
-            this.sessionContext.CblIndicesSession.Upsert(DateKey(ticks), new BlockExpirationIndexValue(expiring.ToArray()));
+            this.sessionContext.CblIndicesSession.Upsert(
+                key: BlockExpirationIndexKey(ticks),
+                desiredValue: new BlockExpirationIndexValue(expiring.ToArray()));
         }
 
         public override void ExpireBlocks(long date)

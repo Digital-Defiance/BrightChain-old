@@ -20,29 +20,29 @@
             this.ExpiringHashes = InternalDeserialize(data).ExpiringHashes;
         }
 
-        internal static ReadOnlyMemory<byte> InternalSerialize(IEnumerable<BlockHash> data)
+        private static ReadOnlyMemory<byte> InternalSerialize(IEnumerable<BlockHash> data)
         {
+            var serializer = new FasterBlockHashSerializer();
             var memory = new MemoryStream();
+
             memory.Write(BitConverter.GetBytes(data.Count()));
-            var tmp = new FasterBlockHashSerializer();
-            tmp.BeginSerialize(memory);
+            serializer.BeginSerialize(memory);
             foreach (var item in data)
             {
                 var refItem = item;
-                tmp.Serialize(ref refItem);
+                serializer.Serialize(ref refItem);
             }
 
-            memory.Position = 0;
-            var retval = new ReadOnlyMemory<byte>(memory.GetBuffer());
-            tmp.EndSerialize();
+            var retval = new ReadOnlyMemory<byte>(memory.ToArray());
+            serializer.EndSerialize();
             return retval;
         }
 
-        internal static BlockExpirationIndexValue InternalDeserialize(ReadOnlyMemory<byte> data)
+        private static BlockExpirationIndexValue InternalDeserialize(ReadOnlyMemory<byte> data)
         {
-            var tmp = new FasterBlockHashSerializer();
+            var deserializer = new FasterBlockHashSerializer();
             MemoryStream s = new MemoryStream(data.ToArray());
-            tmp.BeginDeserialize(s);
+            deserializer.BeginDeserialize(s);
 
             byte[] iBytes = new byte[sizeof(int)];
             s.Read(iBytes, 0, sizeof(int));
@@ -50,9 +50,10 @@
             var hashes = new BlockHash[count];
             for (int i = 0; i < count; i++)
             {
-                tmp.Deserialize(out hashes[i]);
+                deserializer.Deserialize(out hashes[i]);
             }
-            tmp.EndDeserialize();
+
+            deserializer.EndDeserialize();
             return new BlockExpirationIndexValue(hashes: hashes);
         }
     }

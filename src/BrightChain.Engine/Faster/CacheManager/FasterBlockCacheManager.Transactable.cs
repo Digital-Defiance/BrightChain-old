@@ -20,9 +20,8 @@
         {
             return await this.CheckpointFuncAsync(() => new Dictionary<CacheStoreType, Task<(bool, Guid)>>()
             {
-                { CacheStoreType.PrimaryMetadata, this.primaryMetadataKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
-                { CacheStoreType.PrimaryData, this.primaryDataKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
-                { CacheStoreType.CBLIndices, this.cblIndicesKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
+                { CacheStoreType.BlockData, this.primaryDataKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
+                { CacheStoreType.Indices, this.cblIndicesKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
             }).ConfigureAwait(false);
         }
 
@@ -35,9 +34,8 @@
         {
             return await this.CheckpointFuncAsync(() => new Dictionary<CacheStoreType, Task<(bool, Guid)>>()
             {
-                { CacheStoreType.PrimaryMetadata, this.primaryMetadataKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
-                { CacheStoreType.PrimaryData, this.primaryDataKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
-                { CacheStoreType.CBLIndices, this.cblIndicesKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
+                { CacheStoreType.BlockData, this.primaryDataKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
+                { CacheStoreType.Indices, this.cblIndicesKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
             }).ConfigureAwait(false);
         }
 
@@ -50,30 +48,26 @@
         {
             return await this.CheckpointFuncAsync(() => new Dictionary<CacheStoreType, Task<(bool, Guid)>>()
             {
-                { CacheStoreType.PrimaryMetadata, this.primaryMetadataKV.TakeIndexCheckpointAsync().AsTask() },
-                { CacheStoreType.PrimaryData, this.primaryDataKV.TakeIndexCheckpointAsync().AsTask() },
-                { CacheStoreType.CBLIndices, this.cblIndicesKV.TakeIndexCheckpointAsync().AsTask() },
+                { CacheStoreType.BlockData, this.primaryDataKV.TakeIndexCheckpointAsync().AsTask() },
+                { CacheStoreType.Indices, this.cblIndicesKV.TakeIndexCheckpointAsync().AsTask() },
             }).ConfigureAwait(false);
         }
 
         public BlockSessionCheckpoint CheckpointFunc(FasterCheckpointOperation operation, CheckpointType checkpointType = CheckpointType.Snapshot)
         {
-            bool metadataResult, dataResult, expirationResult, cblResult, cblIndexResult;
-            Guid metadataToken, dataToken, expirationToken, cblToken, cblIndexsToken;
+            bool dataResult, expirationResult, cblResult, cblIndexResult;
+            Guid dataToken, expirationToken, cblToken, cblIndexsToken;
             switch (operation)
             {
                 case FasterCheckpointOperation.Full:
-                    metadataResult = this.primaryMetadataKV.TakeFullCheckpoint(token: out metadataToken, checkpointType: checkpointType);
                     dataResult = this.primaryDataKV.TakeFullCheckpoint(token: out dataToken, checkpointType: checkpointType);
                     cblIndexResult = this.cblIndicesKV.TakeFullCheckpoint(token: out cblIndexsToken, checkpointType: checkpointType);
                     break;
                 case FasterCheckpointOperation.Hybrid:
-                    metadataResult = this.primaryMetadataKV.TakeHybridLogCheckpoint(out metadataToken);
                     dataResult = this.primaryDataKV.TakeHybridLogCheckpoint(out dataToken);
                     cblIndexResult = this.cblIndicesKV.TakeHybridLogCheckpoint(out cblIndexsToken);
                     break;
                 case FasterCheckpointOperation.Index:
-                    metadataResult = this.primaryMetadataKV.TakeIndexCheckpoint(out metadataToken);
                     dataResult = this.primaryDataKV.TakeIndexCheckpoint(out dataToken);
                     cblIndexResult = this.cblIndicesKV.TakeIndexCheckpoint(out cblIndexsToken);
                     break;
@@ -82,18 +76,16 @@
             }
 
             return new BlockSessionCheckpoint(
-                success: metadataResult && dataResult && cblIndexResult,
+                success: dataResult && cblIndexResult,
                 results: new Dictionary<CacheStoreType, bool>()
                     {
-                    { CacheStoreType.PrimaryMetadata, metadataResult },
-                    { CacheStoreType.PrimaryData, dataResult },
-                    { CacheStoreType.CBLIndices, cblIndexResult },
+                    { CacheStoreType.BlockData, dataResult },
+                    { CacheStoreType.Indices, cblIndexResult },
                     },
                 guids: new Dictionary<CacheStoreType, Guid>()
                     {
-                    { CacheStoreType.PrimaryMetadata, metadataToken },
-                    { CacheStoreType.PrimaryData, dataToken },
-                    { CacheStoreType.CBLIndices, cblIndexsToken },
+                    { CacheStoreType.BlockData, dataToken },
+                    { CacheStoreType.Indices, cblIndexsToken },
                     });
         }
 
@@ -124,7 +116,6 @@
             await Task
                 .WhenAll(new Task[]
                     {
-                        this.primaryMetadataKV.CompleteCheckpointAsync().AsTask(),
                         this.primaryDataKV.CompleteCheckpointAsync().AsTask(),
                         this.cblIndicesKV.CompleteCheckpointAsync().AsTask(),
                     })
@@ -136,15 +127,11 @@
             return new BlockSessionAddresses(addresses: new Dictionary<CacheStoreType, long>
             {
                 {
-                    CacheStoreType.PrimaryMetadata,
-                    this.sessionContext.MetadataSession.NextSerialNo
-                },
-                {
-                    CacheStoreType.PrimaryData,
+                    CacheStoreType.BlockData,
                     this.sessionContext.DataSession.NextSerialNo
                 },
                 {
-                    CacheStoreType.CBLIndices,
+                    CacheStoreType.Indices,
                     this.sessionContext.CblIndicesSession.NextSerialNo
                 },
             });
@@ -155,15 +142,11 @@
             return new BlockSessionAddresses(addresses: new Dictionary<CacheStoreType, long>
             {
                 {
-                    CacheStoreType.PrimaryMetadata,
-                    this.primaryMetadataKV.Log.HeadAddress
-                },
-                {
-                    CacheStoreType.PrimaryData,
+                    CacheStoreType.BlockData,
                     this.primaryDataKV.Log.HeadAddress
                 },
                 {
-                    CacheStoreType.CBLIndices,
+                    CacheStoreType.Indices,
                     this.cblIndicesKV.Log.HeadAddress
                 },
             });
@@ -174,19 +157,13 @@
             return new BlockSessionAddresses(addresses: new Dictionary<CacheStoreType, long>
             {
                 {
-                    CacheStoreType.PrimaryMetadata,
-                    this.sessionContext.MetadataSession.Compact(
-                        untilAddress: this.primaryMetadataKV.Log.HeadAddress,
-                        shiftBeginAddress: shiftBeginAddress)
-                },
-                {
-                    CacheStoreType.PrimaryData,
+                    CacheStoreType.BlockData,
                     this.sessionContext.DataSession.Compact(
                         untilAddress: this.primaryDataKV.Log.HeadAddress,
                         shiftBeginAddress: shiftBeginAddress)
                 },
                 {
-                    CacheStoreType.CBLIndices,
+                    CacheStoreType.Indices,
                     this.sessionContext.CblIndicesSession.Compact(
                         untilAddress: this.cblIndicesKV.Log.HeadAddress,
                         shiftBeginAddress: shiftBeginAddress)
@@ -198,7 +175,6 @@
         {
             Task.WaitAll(new Task[]
             {
-                this.primaryMetadataKV.RecoverAsync().AsTask(),
                 this.primaryDataKV.RecoverAsync().AsTask(),
                 this.cblIndicesKV.RecoverAsync().AsTask(),
             });

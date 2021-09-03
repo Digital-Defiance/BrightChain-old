@@ -4,6 +4,7 @@ namespace BrightChain.Engine.Models.Blocks
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.Serialization;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Extensions;
@@ -23,6 +24,7 @@ namespace BrightChain.Engine.Models.Blocks
     /// <summary>
     /// The block is the base unit persisted to disk.
     /// </summary>
+    [DataContract]
     [ProtoContract]
     [ProtoInclude(1, typeof(BrightenedBlock))]
     [ProtoInclude(2, typeof(RootBlock))]

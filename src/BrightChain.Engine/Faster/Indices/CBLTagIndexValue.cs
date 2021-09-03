@@ -22,8 +22,7 @@ namespace BrightChain.Engine.Faster.Indices
         {
             MemoryStream s = new MemoryStream();
             Serializer.Serialize(s, data);
-            s.Position = 0;
-            return new ReadOnlyMemory<byte>(s.GetBuffer());
+            return new ReadOnlyMemory<byte>(s.ToArray());
         }
 
         internal static IEnumerable<Guid> InternalDeserialize(ReadOnlyMemory<byte> data)

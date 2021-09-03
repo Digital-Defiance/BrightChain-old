@@ -34,8 +34,7 @@
 
             var memoryStream = new MemoryStream();
             Serializer.Serialize<T>(destination: memoryStream, instance: objectData);
-            memoryStream.Position = 0;
-            var finalBytes = Encoding.UTF8.GetBytes(chars: memoryStream.GetBuffer().Select(c => (char)c).ToArray());
+            var finalBytes = Encoding.UTF8.GetBytes(chars: memoryStream.ToArray().Select(c => (char)c).ToArray());
             if (finalBytes.Length >= BlockSizeMap.BlockSize(blockSize))
             {
                 throw new Exception("Serialized data is too long for block. Use a larger block size.");

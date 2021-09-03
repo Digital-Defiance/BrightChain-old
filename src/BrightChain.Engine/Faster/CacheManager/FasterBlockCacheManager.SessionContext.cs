@@ -13,14 +13,8 @@
 
         private BlockSessionContext NewSharedSessionContext => new BlockSessionContext(
                 logger: this.Logger,
-                metadataSession: this.NewMetadataSession,
                 dataSession: this.NewDataSession,
                 cblIndicesSession: this.NewCblIndicesSession);
-
-        private ClientSession<BlockHash, BrightenedBlock, BrightenedBlock, BrightenedBlock, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BrightenedBlock, BrightChainFasterCacheContext>> NewMetadataSession
-            => this.primaryMetadataKV
-                .For(functions: new SimpleFunctions<BlockHash, BrightenedBlock, BrightChainFasterCacheContext>())
-                .NewSession<SimpleFunctions<BlockHash, BrightenedBlock, BrightChainFasterCacheContext>>();
 
         private ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>> NewDataSession
             => this.primaryDataKV

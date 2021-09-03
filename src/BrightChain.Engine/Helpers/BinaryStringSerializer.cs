@@ -17,8 +17,7 @@
                 streamWriter.Write((byte)b);
             }
 
-            mem.Position = 0;
-            var memBuf = mem.GetBuffer();
+            var memBuf = mem.ToArray();
             var origBytes = Convert.FromBase64CharArray(memBuf.Select(b => (char)b).ToArray(), 0, (int)mem.Length);
             obj = new string(origBytes.Select(b => (char)b).ToArray());
         }

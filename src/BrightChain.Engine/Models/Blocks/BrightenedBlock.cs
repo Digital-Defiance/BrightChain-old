@@ -1,6 +1,7 @@
 ﻿namespace BrightChain.Engine.Models.Blocks
 {
     using System;
+    using System.Runtime.Serialization;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Interfaces;

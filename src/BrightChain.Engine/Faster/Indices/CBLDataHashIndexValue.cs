@@ -23,8 +23,7 @@
         {
             MemoryStream s = new MemoryStream();
             Serializer.Serialize(s, data);
-            s.Position = 0;
-            return new ReadOnlyMemory<byte>(s.GetBuffer());
+            return new ReadOnlyMemory<byte>(s.ToArray());
         }
 
         internal static T InternalDeserialize<T>(ReadOnlyMemory<byte> data)

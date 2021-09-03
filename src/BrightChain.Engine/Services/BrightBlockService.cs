@@ -435,7 +435,7 @@ namespace BrightChain.Engine.Services
                     .FlushAsync()
                     .ConfigureAwait(false);
 
-                destination.Position = 0;
+                destination.Seek(0, SeekOrigin.Begin);
 
                 return destination;
             }
