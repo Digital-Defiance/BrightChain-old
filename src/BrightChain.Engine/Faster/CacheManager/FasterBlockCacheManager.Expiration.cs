@@ -40,10 +40,12 @@
             }
 
             var ticks = block.StorageContract.KeepUntilAtLeast.Ticks;
-            var expiring = new List<BlockHash>(this.GetBlocksExpiringAt(ticks));
+            var expiring = (BlockHash[])this.GetBlocksExpiringAt(ticks);
             if (!expiring.Contains(block.Id))
             {
-                expiring.Add(block.Id);
+                var size = expiring.Count();
+                Array.Resize(ref expiring, size + 1);
+                expiring[size] = block.Id;
             }
 
             this.sessionContext.CblIndicesSession.Upsert(DateKey(ticks), new BlockExpirationIndexValue(expiring));
@@ -54,7 +56,7 @@
             var ticks = block.StorageContract.KeepUntilAtLeast.Ticks;
             var expiring = new List<BlockHash>(this.GetBlocksExpiringAt(ticks));
             expiring.Remove(block.Id);
-            this.sessionContext.CblIndicesSession.Upsert(DateKey(ticks), new BlockExpirationIndexValue(expiring));
+            this.sessionContext.CblIndicesSession.Upsert(DateKey(ticks), new BlockExpirationIndexValue(expiring.ToArray()));
         }
 
         public override void ExpireBlocks(long date)

@@ -220,7 +220,9 @@
         {
             var functions = new SimpleFunctions<Tkey, Tvalue, BrightChainFasterCacheContext>();
             using var session = this.fasterKV.NewSession(functions: functions);
-            var resultStatus = session.Upsert(ref key, ref value);
+            var resultStatus = session.Upsert(
+                key: key,
+                desiredValue: value);
             if (resultStatus != Status.OK)
             {
                 throw new BrightChainException("Unable to store block");

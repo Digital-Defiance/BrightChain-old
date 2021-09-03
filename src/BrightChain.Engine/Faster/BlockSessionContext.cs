@@ -90,17 +90,15 @@
             return block;
         }
 
-        public void Upsert(ref BrightenedBlock block, bool completePending = false)
+        public void Upsert(BrightenedBlock block, bool completePending = false)
         {
-            var blockHash = block.Id;
-            var resultStatus = this.MetadataSession.Upsert(ref blockHash, ref block);
+            var resultStatus = this.MetadataSession.Upsert(block.Id, block);
             if (resultStatus != Status.OK)
             {
                 throw new BrightChainException("Unable to store block");
             }
 
-            var blockData = block.StoredData;
-            resultStatus = this.DataSession.Upsert(ref blockHash, ref blockData);
+            resultStatus = this.DataSession.Upsert(block.Id, block.StoredData);
             if (resultStatus != Status.OK)
             {
                 throw new BrightChainException("Unable to store block");
