@@ -7,8 +7,10 @@
 
     public partial class FasterBlockCacheManager
     {
-        public static string DateKey(long date) =>
-            string.Format("Expiration:{0}", date);
+        public static string DateKey(long date)
+        {
+            return string.Format("Expiration:{0}", date);
+        }
 
         public override IEnumerable<BlockHash> GetBlocksExpiringAt(long date)
         {

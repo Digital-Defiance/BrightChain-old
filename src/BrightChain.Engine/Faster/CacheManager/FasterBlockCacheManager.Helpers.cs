@@ -1,32 +1,29 @@
 ﻿namespace BrightChain.Engine.Faster.CacheManager
 {
     using System;
-    using System.Globalization;
     using System.IO;
-    using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Faster.Enumerations;
-    using BrightChain.Engine.Faster.Indices;
-    using BrightChain.Engine.Faster.Serializers;
-    using BrightChain.Engine.Models.Blocks;
-    using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Models.Hashes;
     using FASTER.core;
 
     public partial class FasterBlockCacheManager
     {
-        private static LogSettings NewLogSettings(Dictionary<CacheDeviceType, IDevice> storeDevices, bool useReadCache) =>
-            new LogSettings
+        private static LogSettings NewLogSettings(Dictionary<CacheDeviceType, IDevice> storeDevices, bool useReadCache)
+        {
+            return new LogSettings
             {
                 LogDevice = storeDevices[CacheDeviceType.Log],
                 ObjectLogDevice = storeDevices[CacheDeviceType.Data],
                 ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
             };
+        }
 
-        private static CheckpointSettings NewCheckpointSettings(string cacheDir) =>
-            new CheckpointSettings
+        private static CheckpointSettings NewCheckpointSettings(string cacheDir)
+        {
+            return new CheckpointSettings
             {
                 CheckpointDir = cacheDir,
             };
+        }
 
         protected DirectoryInfo GetDiskCacheDirectory()
         {

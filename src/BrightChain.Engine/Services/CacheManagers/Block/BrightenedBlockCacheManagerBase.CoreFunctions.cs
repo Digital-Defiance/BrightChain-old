@@ -65,8 +65,6 @@
             }
         }
 
-        public abstract BrightHandle GetCbl(DataHash sourceHash);
-
         /// <summary>
         ///     Adds a key to the cache if it is not already present.
         /// </summary>
@@ -92,21 +90,6 @@
             }
         }
 
-        public abstract void SetCbl(BlockHash cblHash, DataHash dataHash, BrightHandle brightHandle);
-
-        public virtual void UpdateCblVersion(ConstituentBlockListBlock newCbl, ConstituentBlockListBlock oldCbl = null)
-        {
-            if (oldCbl is not null && oldCbl.CorrelationId != newCbl.CorrelationId)
-            {
-                throw new BrightChainException(nameof(newCbl.CorrelationId));
-            }
-
-            if (oldCbl is not null && newCbl.StorageContract.RequestTime.CompareTo(oldCbl.StorageContract.RequestTime) < 0)
-            {
-                throw new BrightChainException("New CBL must be newer than old CBL");
-            }
-        }
-
         public void ExtendStorage(BrightenedBlock block, DateTime keepUntilAtLeast, RedundancyContractType redundancy = RedundancyContractType.Unknown)
         {
             // duplicate block with extended attributes
@@ -128,8 +111,6 @@
             this.AddExpiration(newBlock);
             this.Set(block);
         }
-
-        public abstract BrightHandle GetCbl(Guid correlationID);
 
         public virtual void Set(BlockHash key, BrightenedBlock value)
         {

@@ -2,9 +2,9 @@
 {
     public class CBLTagIndexValue : BrightChainIndexValue
     {
-        public readonly List<Guid> CorrelationIds;
+        public readonly IEnumerable<Guid> CorrelationIds;
 
-        public CBLTagIndexValue(List<Guid> guids)
+        public CBLTagIndexValue(IEnumerable<Guid> guids)
             : base(data: InternalSerialize(guids))
         {
             this.CorrelationIds = guids;
@@ -13,7 +13,7 @@
         public CBLTagIndexValue(ReadOnlyMemory<byte> data)
             : base(data)
         {
-            this.CorrelationIds = InternalDeserialize<List<Guid>>(data);
+            this.CorrelationIds = InternalDeserialize<IEnumerable<Guid>>(data);
         }
     }
 }

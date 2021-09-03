@@ -1,8 +1,6 @@
 ﻿namespace BrightChain.Engine.Faster.CacheManager
 {
     using System;
-    using System.Globalization;
-    using System.IO;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Faster.Enumerations;
     using BrightChain.Engine.Faster.Indices;
