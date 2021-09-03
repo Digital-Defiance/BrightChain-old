@@ -2,6 +2,7 @@
 {
     using System;
     using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Faster.Indices;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
@@ -18,24 +19,20 @@
 
         public readonly ClientSession<long, List<BlockHash>, List<BlockHash>, List<BlockHash>, BrightChainFasterCacheContext, SimpleFunctions<long, List<BlockHash>, BrightChainFasterCacheContext>> ExpirationSession;
 
-        public readonly ClientSession<DataHash, BrightHandle, BrightHandle, BrightHandle, BrightChainFasterCacheContext, SimpleFunctions<DataHash, BrightHandle, BrightChainFasterCacheContext>> CblSourceHashSession;
-
-        public readonly ClientSession<Guid, DataHash, DataHash, DataHash, BrightChainFasterCacheContext, SimpleFunctions<Guid, DataHash, BrightChainFasterCacheContext>> CblCorrelationIdsSession;
+        public readonly ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, SimpleFunctions<string, BrightChainIndexValue, BrightChainFasterCacheContext>> CblIndicesSession;
 
         public BlockSessionContext(
             ILogger logger,
             ClientSession<BlockHash, BrightenedBlock, BrightenedBlock, BrightenedBlock, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BrightenedBlock, BrightChainFasterCacheContext>> metadataSession,
             ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>> dataSession,
             ClientSession<long, List<BlockHash>, List<BlockHash>, List<BlockHash>, BrightChainFasterCacheContext, SimpleFunctions<long, List<BlockHash>, BrightChainFasterCacheContext>> expirationSession,
-            ClientSession<DataHash, BrightHandle, BrightHandle, BrightHandle, BrightChainFasterCacheContext, SimpleFunctions<DataHash, BrightHandle, BrightChainFasterCacheContext>> cblSourceHashSession,
-            ClientSession<Guid, DataHash, DataHash, DataHash, BrightChainFasterCacheContext, SimpleFunctions<Guid, DataHash, BrightChainFasterCacheContext>> cblCorrelationIdsSession)
+            ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, SimpleFunctions<string, BrightChainIndexValue, BrightChainFasterCacheContext>> cblIndicesSession)
         {
             this.logger = logger;
             this.MetadataSession = metadataSession;
             this.DataSession = dataSession;
             this.ExpirationSession = expirationSession;
-            this.CblSourceHashSession = cblSourceHashSession;
-            this.CblCorrelationIdsSession = cblCorrelationIdsSession;
+            this.CblIndicesSession = cblIndicesSession;
         }
 
         public bool Contains(BlockHash blockHash)
@@ -125,8 +122,7 @@
             {
                     this.MetadataSession.WaitForCommitAsync().AsTask(),
                     this.DataSession.WaitForCommitAsync().AsTask(),
-                    this.CblSourceHashSession.WaitForCommitAsync().AsTask(),
-                    this.CblCorrelationIdsSession.WaitForCommitAsync().AsTask(),
+                    this.CblIndicesSession.WaitForCommitAsync().AsTask(),
             }).ConfigureAwait(false);
         }
 
@@ -134,11 +130,10 @@
         {
             var m = this.MetadataSession.CompletePending(wait: waitForCommit);
             var d = this.DataSession.CompletePending(wait: waitForCommit);
-            var c = this.CblSourceHashSession.CompletePending(wait: waitForCommit);
-            var ci = this.CblCorrelationIdsSession.CompletePending(wait: waitForCommit);
+            var c = this.CblIndicesSession.CompletePending(wait: waitForCommit);
 
             // broken out to prevent short circuit
-            return m && d && c && ci;
+            return m && d && c;
         }
 
         public async Task CompletePendingAsync(bool waitForCommit)
@@ -147,20 +142,18 @@
             {
                 this.MetadataSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask(),
                 this.DataSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask(),
-                this.CblSourceHashSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask(),
-                this.CblCorrelationIdsSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask(),
+                this.CblIndicesSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask(),
             });
         }
 
         public string SessionID =>
-            string.Format("{0}-{1}-{2}-{3}", this.MetadataSession.ID, this.DataSession.ID, this.CblSourceHashSession.ID, this.CblCorrelationIdsSession.ID);
+            string.Format("{0}-{1}-{2}-{3}", this.MetadataSession.ID, this.DataSession.ID, this.CblIndicesSession.ID);
 
         public void Dispose()
         {
             this.MetadataSession.Dispose();
             this.DataSession.Dispose();
-            this.CblSourceHashSession.Dispose();
-            this.CblCorrelationIdsSession.Dispose();
+            this.CblIndicesSession.Dispose();
         }
     }
 }

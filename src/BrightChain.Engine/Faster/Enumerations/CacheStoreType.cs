@@ -5,8 +5,6 @@
         PrimaryMetadata,
         PrimaryData,
         PrimaryExpiration,
-        CBL,
-        CBLCorrelation,
-        //CBLByTag,
+        CBLIndices,
     }
 }

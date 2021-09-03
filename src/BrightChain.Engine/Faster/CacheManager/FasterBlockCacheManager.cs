@@ -37,7 +37,7 @@
         /// <summary>
         ///     Directory where the block tree root will be placed.
         /// </summary>
-        private readonly string baseDirectory;
+        private readonly DirectoryInfo baseDirectory;
 
         /// <summary>
         /// Whether we enable a read cache.
@@ -47,6 +47,20 @@
 
         private readonly Dictionary<CacheStoreType, Dictionary<CacheDeviceType, IDevice>> fasterDevices;
         private readonly Dictionary<CacheStoreType, FasterBase> fasterStores;
+
+        private string CreatedDirectory(string dir, out DirectoryInfo directoryInfo)
+        {
+            if (!Directory.Exists(dir))
+            {
+                directoryInfo = Directory.CreateDirectory(dir);
+            }
+            else
+            {
+                directoryInfo = new DirectoryInfo(dir);
+            }
+
+            return Path.GetFullPath(dir);
+        }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
@@ -67,13 +81,8 @@
 
             var configOption = nodeOptions.GetSection("BasePath");
             var dir = configOption is not null && configOption.Value.Any() ? configOption.Value : Path.Join(Path.GetTempPath(), "brightchain");
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-                //throw new BrightChainException(string.Format("'BasePath' must exist, but does not: \"{0}\"", dir));
-            }
 
-            this.baseDirectory = Path.GetFullPath(dir);
+            this.CreatedDirectory(dir, out this.baseDirectory);
 
             var configuredDbName
                 = nodeOptions.GetSection("DatabaseName");

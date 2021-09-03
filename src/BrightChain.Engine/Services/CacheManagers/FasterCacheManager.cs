@@ -29,7 +29,7 @@
         /// <summary>
         ///     Directory where the block tree root will be placed.
         /// </summary>
-        private readonly string baseDirectory;
+        private readonly DirectoryInfo baseDirectory;
 
         private readonly IDevice logDevice;
 
@@ -71,7 +71,7 @@
                 throw new BrightChainException(string.Format("'BasePath' must exist, but does not: \"{0}\"", dir));
             }
 
-            this.baseDirectory = Path.GetFullPath(dir);
+            this.baseDirectory = new DirectoryInfo(dir);
 
             this.logDevice = this.OpenDevice(string.Format("{0}-log", typeof(Tkey).Name));
             this.fasterDevice = this.OpenDevice(string.Format("{0}-data", typeof(Tkey).Name));
@@ -121,7 +121,7 @@
         {
             return Directory.CreateDirectory(
                 Path.Combine(
-                    this.baseDirectory,
+                    this.baseDirectory.FullName,
                     string.Format(
                         CultureInfo.InvariantCulture,
                         "BrightChain-{0}",

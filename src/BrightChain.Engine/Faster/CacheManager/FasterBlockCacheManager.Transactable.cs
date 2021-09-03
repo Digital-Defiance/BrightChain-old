@@ -23,8 +23,7 @@
                 { CacheStoreType.PrimaryMetadata, this.primaryMetadataKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
                 { CacheStoreType.PrimaryData, this.primaryDataKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
                 { CacheStoreType.PrimaryExpiration, this.primaryExpirationKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
-                { CacheStoreType.CBL, this.cblSourceHashesKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
-                { CacheStoreType.CBLCorrelation, this.cblCorrelationIdsKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
+                { CacheStoreType.CBLIndices, this.cblIndicesKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
             }).ConfigureAwait(false);
         }
 
@@ -40,8 +39,7 @@
                 { CacheStoreType.PrimaryMetadata, this.primaryMetadataKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
                 { CacheStoreType.PrimaryData, this.primaryDataKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
                 { CacheStoreType.PrimaryExpiration, this.primaryExpirationKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
-                { CacheStoreType.CBL, this.cblSourceHashesKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
-                { CacheStoreType.CBLCorrelation, this.cblCorrelationIdsKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
+                { CacheStoreType.CBLIndices, this.cblIndicesKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
             }).ConfigureAwait(false);
         }
 
@@ -57,8 +55,7 @@
                 { CacheStoreType.PrimaryMetadata, this.primaryMetadataKV.TakeIndexCheckpointAsync().AsTask() },
                 { CacheStoreType.PrimaryData, this.primaryDataKV.TakeIndexCheckpointAsync().AsTask() },
                 { CacheStoreType.PrimaryExpiration, this.primaryExpirationKV.TakeIndexCheckpointAsync().AsTask() },
-                { CacheStoreType.CBL, this.cblSourceHashesKV.TakeIndexCheckpointAsync().AsTask() },
-                { CacheStoreType.CBLCorrelation, this.cblCorrelationIdsKV.TakeIndexCheckpointAsync().AsTask() },
+                { CacheStoreType.CBLIndices, this.cblIndicesKV.TakeIndexCheckpointAsync().AsTask() },
             }).ConfigureAwait(false);
         }
 
@@ -72,44 +69,39 @@
                     metadataResult = this.primaryMetadataKV.TakeFullCheckpoint(token: out metadataToken, checkpointType: checkpointType);
                     dataResult = this.primaryDataKV.TakeFullCheckpoint(token: out dataToken, checkpointType: checkpointType);
                     expirationResult = this.primaryExpirationKV.TakeFullCheckpoint(token: out expirationToken, checkpointType: checkpointType);
-                    cblResult = this.cblSourceHashesKV.TakeFullCheckpoint(token: out cblToken, checkpointType: checkpointType);
-                    cblCorrelationResult = this.cblCorrelationIdsKV.TakeFullCheckpoint(token: out cblCorrelationsToken, checkpointType: checkpointType);
+                    cblCorrelationResult = this.cblIndicesKV.TakeFullCheckpoint(token: out cblCorrelationsToken, checkpointType: checkpointType);
                     break;
                 case FasterCheckpointOperation.Hybrid:
                     metadataResult = this.primaryMetadataKV.TakeHybridLogCheckpoint(out metadataToken);
                     dataResult = this.primaryDataKV.TakeHybridLogCheckpoint(out dataToken);
                     expirationResult = this.primaryExpirationKV.TakeHybridLogCheckpoint(token: out expirationToken, checkpointType: checkpointType);
-                    cblResult = this.cblSourceHashesKV.TakeHybridLogCheckpoint(out cblToken);
-                    cblCorrelationResult = this.cblCorrelationIdsKV.TakeHybridLogCheckpoint(out cblCorrelationsToken);
+                    cblCorrelationResult = this.cblIndicesKV.TakeHybridLogCheckpoint(out cblCorrelationsToken);
                     break;
                 case FasterCheckpointOperation.Index:
                     metadataResult = this.primaryMetadataKV.TakeIndexCheckpoint(out metadataToken);
                     dataResult = this.primaryDataKV.TakeIndexCheckpoint(out dataToken);
                     expirationResult = this.primaryExpirationKV.TakeIndexCheckpoint(token: out expirationToken);
-                    cblResult = this.cblSourceHashesKV.TakeIndexCheckpoint(out cblToken);
-                    cblCorrelationResult = this.cblCorrelationIdsKV.TakeIndexCheckpoint(out cblCorrelationsToken);
+                    cblCorrelationResult = this.cblIndicesKV.TakeIndexCheckpoint(out cblCorrelationsToken);
                     break;
                 default:
                     throw new BrightChainExceptionImpossible("Unexpected type");
             }
 
             return new BlockSessionCheckpoint(
-                success: metadataResult && dataResult && expirationResult && cblResult && cblCorrelationResult,
+                success: metadataResult && dataResult && expirationResult && cblCorrelationResult,
                 results: new Dictionary<CacheStoreType, bool>()
                     {
                     { CacheStoreType.PrimaryMetadata, metadataResult },
                     { CacheStoreType.PrimaryData, dataResult },
                     { CacheStoreType.PrimaryExpiration, expirationResult },
-                    { CacheStoreType.CBL, cblResult },
-                    { CacheStoreType.CBLCorrelation, cblCorrelationResult },
+                    { CacheStoreType.CBLIndices, cblCorrelationResult },
                     },
                 guids: new Dictionary<CacheStoreType, Guid>()
                     {
                     { CacheStoreType.PrimaryMetadata, metadataToken },
                     { CacheStoreType.PrimaryData, dataToken },
                     { CacheStoreType.PrimaryExpiration, expirationToken },
-                    { CacheStoreType.CBL, cblToken },
-                    { CacheStoreType.CBLCorrelation, cblCorrelationsToken },
+                    { CacheStoreType.CBLIndices, cblCorrelationsToken },
                     });
         }
 
@@ -143,8 +135,7 @@
                         this.primaryMetadataKV.CompleteCheckpointAsync().AsTask(),
                         this.primaryDataKV.CompleteCheckpointAsync().AsTask(),
                         this.primaryExpirationKV.CompleteCheckpointAsync().AsTask(),
-                        this.cblSourceHashesKV.CompleteCheckpointAsync().AsTask(),
-                        this.cblCorrelationIdsKV.CompleteCheckpointAsync().AsTask(),
+                        this.cblIndicesKV.CompleteCheckpointAsync().AsTask(),
                     })
                 .ConfigureAwait(false);
         }
@@ -166,12 +157,8 @@
                     this.sessionContext.ExpirationSession.NextSerialNo
                 },
                 {
-                    CacheStoreType.CBL,
-                    this.sessionContext.CblSourceHashSession.NextSerialNo
-                },
-                {
-                    CacheStoreType.CBLCorrelation,
-                    this.sessionContext.CblCorrelationIdsSession.NextSerialNo
+                    CacheStoreType.CBLIndices,
+                    this.sessionContext.CblIndicesSession.NextSerialNo
                 },
             });
         }
@@ -193,12 +180,8 @@
                     this.primaryExpirationKV.Log.HeadAddress
                 },
                 {
-                    CacheStoreType.CBL,
-                    this.cblSourceHashesKV.Log.HeadAddress
-                },
-                {
-                    CacheStoreType.CBLCorrelation,
-                    this.cblCorrelationIdsKV.Log.HeadAddress
+                    CacheStoreType.CBLIndices,
+                    this.cblIndicesKV.Log.HeadAddress
                 },
             });
         }
@@ -226,15 +209,9 @@
                         shiftBeginAddress: shiftBeginAddress)
                 },
                 {
-                    CacheStoreType.CBL,
-                    this.sessionContext.CblSourceHashSession.Compact(
-                        untilAddress: this.cblSourceHashesKV.Log.HeadAddress,
-                        shiftBeginAddress: shiftBeginAddress)
-                },
-                {
-                    CacheStoreType.CBLCorrelation,
-                    this.sessionContext.CblCorrelationIdsSession.Compact(
-                        untilAddress: this.cblCorrelationIdsKV.Log.HeadAddress,
+                    CacheStoreType.CBLIndices,
+                    this.sessionContext.CblIndicesSession.Compact(
+                        untilAddress: this.cblIndicesKV.Log.HeadAddress,
                         shiftBeginAddress: shiftBeginAddress)
                 },
             });
@@ -247,8 +224,7 @@
                 this.primaryMetadataKV.RecoverAsync().AsTask(),
                 this.primaryDataKV.RecoverAsync().AsTask(),
                 this.primaryExpirationKV.RecoverAsync().AsTask(),
-                this.cblSourceHashesKV.RecoverAsync().AsTask(),
-                this.cblCorrelationIdsKV.RecoverAsync().AsTask(),
+                this.cblIndicesKV.RecoverAsync().AsTask(),
             });
         }
     }

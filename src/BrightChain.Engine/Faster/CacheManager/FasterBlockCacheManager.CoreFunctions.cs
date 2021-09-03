@@ -2,6 +2,7 @@
 {
     using System;
     using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Faster.Indices;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
@@ -67,7 +68,7 @@
 
         public override BrightHandle GetCbl(DataHash sourceHash)
         {
-            var result = this.sessionContext.CblSourceHashSession.Read(sourceHash);
+            var result = this.sessionContext.CblIndicesSession.Read(sourceHash.ToString());
             if (result.status == Status.NOTFOUND)
             {
                 throw new IndexOutOfRangeException(message: sourceHash.ToString());
@@ -78,9 +79,13 @@
                     message: string.Format("cbl handle fetch error: {0}", result.status.ToString()));
             }
 
-            return result.output;
-        }
+            if (result.output is BrightHandleIndexValue brightHandle)
+            {
+                return brightHandle.BrightHandle;
+            }
 
+            throw new BrightChainException("Unexpected index result type for key");
+        }
 
         /// <summary>
         ///     Adds a key to the cache if it is not already present.
@@ -111,7 +116,9 @@
                 throw new BrightChainException(nameof(identifiableSourceHash));
             }
 
-            this.sessionContext.CblSourceHashSession.Upsert(ref identifiableSourceHash, ref brightHandle);
+            var sourceHash = identifiableSourceHash.ToString();
+            var indexValue = new BrightHandleIndexValue(brightHandle).AsIndex;
+            this.sessionContext.CblIndicesSession.Upsert(ref sourceHash, ref indexValue);
 
             this.sessionContext.CompletePending(waitForCommit: false);
         }
@@ -123,14 +130,14 @@
 
             base.UpdateCblVersion(ref newCbl, oldCbl);
 
-            var correlationId = newCbl.CorrelationId;
-            var dataHash = newCbl.SourceId;
-            this.sessionContext.CblCorrelationIdsSession.Upsert(ref correlationId, ref dataHash);
+            var correlationId = newCbl.CorrelationId.ToString();
+            var indexValue = new CBLDataHashIndex(newCbl.SourceId).AsIndex;
+            this.sessionContext.CblIndicesSession.Upsert(ref correlationId, ref indexValue);
         }
 
         public override BrightHandle GetCbl(Guid correlationID)
         {
-            var result = this.sessionContext.CblCorrelationIdsSession.Read(correlationID);
+            var result = this.sessionContext.CblIndicesSession.Read(correlationID.ToString());
             if (result.status == Status.NOTFOUND)
             {
                 throw new IndexOutOfRangeException(message: correlationID.ToString());
@@ -141,7 +148,12 @@
                     message: string.Format("cbl correlation fetch error: {0}", result.status.ToString()));
             }
 
-            return this.GetCbl(result.output);
+            if (result.output is BrightHandleIndexValue brightHandle)
+            {
+                return brightHandle.BrightHandle;
+            }
+
+            throw new BrightChainException("Unexpected index result type for key");
         }
 
         public override void SetAll(IEnumerable<BrightenedBlock> items)
