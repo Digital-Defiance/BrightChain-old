@@ -3,6 +3,7 @@
     using global::BrightChain.Engine.Exceptions;
     using global::BrightChain.Engine.Interfaces;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
+    using global::BrightChain.Engine.Models.Blocks.Tags;
     using global::BrightChain.Engine.Models.Hashes;
     using global::BrightChain.Engine.Services;
     using ProtoBuf;
@@ -96,6 +97,9 @@
         /// </summary>
         [ProtoMember(65)]
         public BlockHash Next { get; set; }
+
+        [ProtoMember(69)]
+        public IEnumerable<BrightTag> Tags { get; internal set; }
 
         /// <summary>
         /// Gets or sets the BrightChainID of the block's creator.
