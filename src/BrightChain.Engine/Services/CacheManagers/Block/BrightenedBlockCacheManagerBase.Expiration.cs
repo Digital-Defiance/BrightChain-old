@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BrightChain.Engine.Models.Blocks;
-using BrightChain.Engine.Models.Hashes;
-
-namespace BrightChain.Engine.Services.CacheManagers.Block
+﻿namespace BrightChain.Engine.Services.CacheManagers.Block
 {
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Hashes;
+
     public partial class BrightenedBlockCacheManagerBase
     {
-        public abstract List<BlockHash> GetBlocksExpiringAt(long date);
+        public abstract IEnumerable<BlockHash> GetBlocksExpiringAt(long date);
 
         public abstract void AddExpiration(BrightenedBlock block, bool noCheckContains = false);
 

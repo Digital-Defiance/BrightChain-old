@@ -131,7 +131,7 @@
             base.UpdateCblVersion(ref newCbl, oldCbl);
 
             var correlationId = newCbl.CorrelationId.ToString();
-            var indexValue = new CBLDataHashIndex(newCbl.SourceId).AsIndex;
+            var indexValue = new CBLDataHashIndexValue(newCbl.SourceId).AsIndex;
             this.sessionContext.CblIndicesSession.Upsert(ref correlationId, ref indexValue);
         }
 

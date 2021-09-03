@@ -17,15 +17,14 @@
     /// <remarks>
     /// The plan is to keep a few separate caches of data in sync using the FasterKV checkpointing.
     /// Hopefully errors where we need to put back or take out blocks that have already been altered on disk are rare.
-    /// The primary cache is actually three caches in tandem:
+    /// The primary cache is actually two caches in tandem:
     /// - The Metadata cache contains block metadata that may be updated.
     /// - The Data cache contains the actual raw block data only. These blocks are not to be altered unless deleted through a revocation certificate or normal expiration.
-    /// - The Expiration cache contains a list of Block ID's expiring in any given second.
-    /// There are currently two additional caches:
-    /// - The CBL Source Hashes cache contains the corresponding CBL block for a given source file hash. Eg if blah.zip has a sha256 of "xyz" it will return the CBL for that file if it has been stored publically before.
-    ///   - This cache is likely to be duplicated in the near future to contain CBLs for private blocks.
-    /// - The CBL Correlation IDs cache contains return the latest CBL source hash associated with a given correlation ID.
-    ///   - This cache may also be duplicated in the near future to contain correlation ids for private blocks.
+    /// There is currently one additional cache that is a multi-purpose KV that serves as a shared index table
+    ///   - BlockExpirationIndexValues contain a list of Block ID's expiring in any given second.
+    ///   - CBLDataHashIndexValues contain the latest CBL source hash associated with a given correlation ID.
+    ///   - BrightHandleIndexValues contain the CBL handles for a given source hash ID.
+    ///   - CBLTagIndexValue contain the correlation IDs for a given tag.
     /// </remarks>
     public partial class FasterBlockCacheManager : BrightenedBlockCacheManagerBase, IDisposable
     {

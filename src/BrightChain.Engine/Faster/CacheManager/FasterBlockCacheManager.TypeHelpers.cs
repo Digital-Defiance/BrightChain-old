@@ -56,24 +56,6 @@
                     }
                 },
                 {
-                    CacheStoreType.PrimaryExpiration,
-                    FasterBase (Dictionary<CacheDeviceType, IDevice> storeDevices, bool useReadCache, string cacheDir) =>
-                    {
-                        var blockDataSerializerSettings = new SerializerSettings<long, List<BlockHash>>
-                        {
-                            keySerializer = () => null,
-                            valueSerializer = () => new DataContractObjectSerializer<List<BlockHash>>(),
-                        };
-
-                        return new FasterKV<long, List<BlockHash>>(
-                            size: HashTableBuckets,
-                            logSettings: NewLogSettings(storeDevices, useReadCache),
-                            checkpointSettings: NewCheckpointSettings(cacheDir),
-                            serializerSettings: blockDataSerializerSettings,
-                            comparer: null);
-                    }
-                },
-                {
                     CacheStoreType.CBLIndices,
                     FasterBase (Dictionary<CacheDeviceType, IDevice> storeDevices, bool useReadCache, string cacheDir) =>
                     {
@@ -92,9 +74,6 @@
 
         protected FasterKV<BlockHash, BlockData> primaryDataKV =>
             (FasterKV<BlockHash, BlockData>)this.fasterStores[CacheStoreType.PrimaryData];
-
-        protected FasterKV<long, List<BlockHash>> primaryExpirationKV =>
-            (FasterKV<long, List<BlockHash>>)this.fasterStores[CacheStoreType.PrimaryExpiration];
 
         /// <summary>
         /// Map of correlation GUIDs to latest CBL source hash associated with a correlation ID.

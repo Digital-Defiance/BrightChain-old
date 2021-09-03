@@ -17,21 +17,17 @@
 
         public readonly ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>> DataSession;
 
-        public readonly ClientSession<long, List<BlockHash>, List<BlockHash>, List<BlockHash>, BrightChainFasterCacheContext, SimpleFunctions<long, List<BlockHash>, BrightChainFasterCacheContext>> ExpirationSession;
-
         public readonly ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, SimpleFunctions<string, BrightChainIndexValue, BrightChainFasterCacheContext>> CblIndicesSession;
 
         public BlockSessionContext(
             ILogger logger,
             ClientSession<BlockHash, BrightenedBlock, BrightenedBlock, BrightenedBlock, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BrightenedBlock, BrightChainFasterCacheContext>> metadataSession,
             ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>> dataSession,
-            ClientSession<long, List<BlockHash>, List<BlockHash>, List<BlockHash>, BrightChainFasterCacheContext, SimpleFunctions<long, List<BlockHash>, BrightChainFasterCacheContext>> expirationSession,
             ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, SimpleFunctions<string, BrightChainIndexValue, BrightChainFasterCacheContext>> cblIndicesSession)
         {
             this.logger = logger;
             this.MetadataSession = metadataSession;
             this.DataSession = dataSession;
-            this.ExpirationSession = expirationSession;
             this.CblIndicesSession = cblIndicesSession;
         }
 

@@ -7,7 +7,7 @@
         public readonly BrightHandle BrightHandle;
 
         public BrightHandleIndexValue(BrightHandle brightHandle)
-            : base(data: BrightChainIndexValue.Serialize<BrightHandle>(brightHandle))
+            : base(data: InternalSerialize(brightHandle))
         {
             this.BrightHandle = brightHandle;
         }
@@ -15,7 +15,7 @@
         public BrightHandleIndexValue(ReadOnlyMemory<byte> data)
             : base(data)
         {
-            this.BrightHandle = BrightHandleIndexValue.Deserialize<BrightHandle>(data);
+            this.BrightHandle = InternalDeserialize<BrightHandle>(data);
         }
     }
 }

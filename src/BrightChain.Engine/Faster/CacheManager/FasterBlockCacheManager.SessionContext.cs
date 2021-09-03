@@ -16,7 +16,6 @@
                 logger: this.Logger,
                 metadataSession: this.NewMetadataSession,
                 dataSession: this.NewDataSession,
-                expirationSession: this.NewExpirationSession,
                 cblIndicesSession: this.NewCblIndicesSession);
 
         private ClientSession<BlockHash, BrightenedBlock, BrightenedBlock, BrightenedBlock, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BrightenedBlock, BrightChainFasterCacheContext>> NewMetadataSession
@@ -28,11 +27,6 @@
             => this.primaryDataKV
                 .For(functions: new SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>())
                 .NewSession<SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>>();
-
-        private ClientSession<long, List<BlockHash>, List<BlockHash>, List<BlockHash>, BrightChainFasterCacheContext, SimpleFunctions<long, List<BlockHash>, BrightChainFasterCacheContext>> NewExpirationSession
-            => this.primaryExpirationKV
-                .For(functions: new SimpleFunctions<long, List<BlockHash>, BrightChainFasterCacheContext>())
-                .NewSession<SimpleFunctions<long, List<BlockHash>, BrightChainFasterCacheContext>>();
 
         private ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, SimpleFunctions<string, BrightChainIndexValue, BrightChainFasterCacheContext>> NewCblIndicesSession
             => this.cblIndicesKV

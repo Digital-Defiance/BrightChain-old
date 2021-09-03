@@ -4,7 +4,6 @@
     {
         PrimaryMetadata,
         PrimaryData,
-        PrimaryExpiration,
         CBLIndices,
     }
 }

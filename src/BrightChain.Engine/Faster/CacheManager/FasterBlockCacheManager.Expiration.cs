@@ -1,25 +1,35 @@
 ﻿namespace BrightChain.Engine.Faster.CacheManager
 {
     using BrightChain.Engine.Exceptions;
-    using BrightChain.Engine.Interfaces;
+    using BrightChain.Engine.Faster.Indices;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Hashes;
 
     public partial class FasterBlockCacheManager
     {
-        public override List<BlockHash> GetBlocksExpiringAt(long date)
+        public static string DateKey(long date) =>
+            string.Format("Expiration:{0}", date);
+
+        public override IEnumerable<BlockHash> GetBlocksExpiringAt(long date)
         {
-            var resultTuple = this.sessionContext.ExpirationSession.Read(date);
+            var resultTuple = this.sessionContext.CblIndicesSession.Read(DateKey(date));
             if (resultTuple.status == FASTER.core.Status.OK)
             {
-                return resultTuple.output;
-            } else if (resultTuple.status == FASTER.core.Status.NOTFOUND)
-            {
-                return new List<BlockHash>();
-            } else
-            {
-                throw new BrightChainException(resultTuple.status.ToString());
+                if (resultTuple.output is BlockExpirationIndexValue expirationIndex)
+                {
+                    return expirationIndex.ExpiringHashes;
+                }
+                else
+                {
+                    throw new BrightChainException("Unexpected index value type for key");
+                }
             }
+            else if (resultTuple.status == FASTER.core.Status.NOTFOUND)
+            {
+                return new BlockHash[] { };
+            }
+
+            throw new BrightChainException(resultTuple.status.ToString());
         }
 
         public override void AddExpiration(BrightenedBlock block, bool noCheckContains = false)
@@ -30,21 +40,21 @@
             }
 
             var ticks = block.StorageContract.KeepUntilAtLeast.Ticks;
-            var expiring = this.GetBlocksExpiringAt(ticks);
+            var expiring = new List<BlockHash>(this.GetBlocksExpiringAt(ticks));
             if (!expiring.Contains(block.Id))
             {
                 expiring.Add(block.Id);
             }
 
-            this.sessionContext.ExpirationSession.Upsert(ticks, expiring);
+            this.sessionContext.CblIndicesSession.Upsert(DateKey(ticks), new BlockExpirationIndexValue(expiring));
         }
 
         public override void RemoveExpiration(BrightenedBlock block)
         {
             var ticks = block.StorageContract.KeepUntilAtLeast.Ticks;
-            var expiring = this.GetBlocksExpiringAt(ticks);
+            var expiring = new List<BlockHash>(this.GetBlocksExpiringAt(ticks));
             expiring.Remove(block.Id);
-            this.sessionContext.ExpirationSession.Upsert(ticks, expiring);
+            this.sessionContext.CblIndicesSession.Upsert(DateKey(ticks), new BlockExpirationIndexValue(expiring));
         }
 
         public override void ExpireBlocks(long date)
