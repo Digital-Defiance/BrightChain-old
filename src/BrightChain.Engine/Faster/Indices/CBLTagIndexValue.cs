@@ -13,7 +13,7 @@
         public CBLTagIndexValue(ReadOnlyMemory<byte> data)
             : base(data)
         {
-            this.CorrelationIds = BrightHandleIndexValue.InternalDeserialize<List<Guid>>(data);
+            this.CorrelationIds = InternalDeserialize<List<Guid>>(data);
         }
     }
 }
