@@ -3,7 +3,7 @@
     using BrightChain.Engine.Models.Entities;
     using BrightChain.Engine.Models.Hashes;
 
-    public class BrightMail : BrightBlockMessage
+    public class BrightMail : BrightMessage
     {
         private readonly IEnumerable<string> Headers;
         private readonly IEnumerable<BlockHash> Attachments;
