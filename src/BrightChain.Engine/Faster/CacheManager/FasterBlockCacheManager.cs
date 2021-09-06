@@ -15,7 +15,7 @@
     ///     Disk/Memory hybrid Block Cache Manager based on Microsoft FASTER KV.
     /// </summary>
     /// <remarks>
-    /// The plan is to keep a few separate caches of data in sync using the FasterKV checkpointing.
+    /// The plan is to keep a couple separate caches of data in sync using the FasterKV checkpointing.
     /// Hopefully errors where we need to put back or take out blocks that have already been altered on disk are rare.
     /// The primary, Write Once*, Read Many cache:
     /// - The Data cache contains the actual raw block data only. These blocks are not to be altered unless deleted through a revocation certificate or normal expiration.
