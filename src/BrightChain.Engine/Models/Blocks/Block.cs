@@ -101,6 +101,8 @@ namespace BrightChain.Engine.Models.Blocks
 
         public IBlock AsIBlock => this;
 
+        public ulong Reads { get; }
+
         public IEnumerable<BrightChainValidationException> ValidationExceptions { get; private set; }
 
         /// <summary>

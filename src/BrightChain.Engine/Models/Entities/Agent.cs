@@ -1,6 +1,7 @@
 ﻿namespace BrightChain.Engine.Models.Entities
 {
     using System;
+    using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Keys;
 
@@ -17,5 +18,7 @@
         public Block[] PublicBlocks { get; }
 
         public Block[] PrivateBlocks { get; }
+
+        public Dictionary<(string, BrightMailBoxType, BrightMessageType), IEnumerable<BrightMessage>> Mailbox { get; }
     }
 }
