@@ -9,7 +9,8 @@
     public partial class FasterBlockCacheManager
     {
         private readonly BlockSessionCheckpoint lastCheckpoint;
-        private readonly BlockSessionAddresses lastAddresses;
+        private readonly BlockSessionAddresses lastHead;
+        private readonly BlockSessionAddresses lastCommit;
 
         public BlockSessionCheckpoint TakeFullCheckpoint(CheckpointType checkpointType = CheckpointType.Snapshot)
         {

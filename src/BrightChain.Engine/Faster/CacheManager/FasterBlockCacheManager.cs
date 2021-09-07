@@ -51,6 +51,7 @@
 
         private readonly Dictionary<CacheStoreType, Dictionary<CacheDeviceType, IDevice>> fasterDevices;
         private readonly Dictionary<CacheStoreType, FasterBase> fasterStores;
+        private List<Block> uncommittedBlocks;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
@@ -95,8 +96,10 @@
 
             (this.fasterDevices, this.fasterStores) = this.InitFaster();
             this.sessionContext = this.NewSharedSessionContext;
-            this.lastAddresses = this.HeadAddresses();
+            this.lastHead = this.HeadAddresses();
+            this.lastCommit = lastHead;
             this.lastCheckpoint = this.TakeFullCheckpoint();
+            this.uncommittedBlocks = new List<Block>();
         }
 
         /// <summary>
