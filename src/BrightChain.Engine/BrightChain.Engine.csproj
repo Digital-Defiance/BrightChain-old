@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="crockford-base32-core" Version="2.0.0" />
+    <PackageReference Include="docfx" Version="2.58.3" />
     <PackageReference Include="DotNetAnalyzers.DocumentationAnalyzers" Version="1.0.0-beta.59">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
