@@ -5,6 +5,7 @@
     using System.IO;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Faster;
+    using BrightChain.Engine.Faster.Functions;
     using BrightChain.Engine.Interfaces;
     using FASTER.core;
     using Microsoft.Extensions.Configuration;
@@ -176,7 +177,7 @@
         /// <returns>boolean with whether key is present.</returns>
         public bool Contains(Tkey key)
         {
-            using var session = this.fasterKV.NewSession(functions: new SimpleFunctions<Tkey, Tvalue, BrightChainFasterCacheContext>());
+            using var session = this.fasterKV.NewSession(functions: new BrightChainAdvancedFunctions<Tkey, Tvalue, Tvalue, Tvalue, BrightChainFasterCacheContext>());
             var resultTuple = session.Read(key);
             return resultTuple.status == Status.OK;
         }
@@ -189,7 +190,7 @@
         /// <returns>whether requested key was present and actually dropped.</returns>
         public bool Drop(Tkey key, bool noCheckContains = true)
         {
-            using var session = this.fasterKV.NewSession(functions: new SimpleFunctions<Tkey, Tvalue, BrightChainFasterCacheContext>());
+            using var session = this.fasterKV.NewSession(functions: new BrightChainAdvancedFunctions<Tkey, Tvalue, Tvalue, Tvalue, BrightChainFasterCacheContext>());
             var resultStatus = session.Delete(key);
             return resultStatus == Status.OK;
         }
@@ -201,7 +202,7 @@
         /// <returns>returns requested block or throws.</returns>
         public Tvalue Get(Tkey key)
         {
-            using var session = this.fasterKV.NewSession(functions: new SimpleFunctions<Tkey, Tvalue, BrightChainFasterCacheContext>());
+            using var session = this.fasterKV.NewSession(functions: new BrightChainAdvancedFunctions<Tkey, Tvalue, Tvalue, Tvalue, BrightChainFasterCacheContext>());
             var resultTuple = session.Read(key);
 
             if (resultTuple.status != Status.OK)
@@ -218,7 +219,7 @@
         /// <param name="block">block to palce in the cache.</param>
         public void Set(Tkey key, Tvalue value)
         {
-            var functions = new SimpleFunctions<Tkey, Tvalue, BrightChainFasterCacheContext>();
+            var functions = new BrightChainAdvancedFunctions<Tkey, Tvalue, Tvalue, Tvalue, BrightChainFasterCacheContext>();
             using var session = this.fasterKV.NewSession(functions: functions);
             var resultStatus = session.Upsert(
                 key: key,

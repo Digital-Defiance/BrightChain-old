@@ -36,6 +36,11 @@
         public readonly List<object> QuarumAdjustments;
 
         /// <summary>
+        /// Last time the node came online.
+        /// </summary>
+        public readonly ulong LastUptime;
+
+        /// <summary>
         /// Numbers of unannounced disconnections without indicating stored block fate.
         /// </summary>
         public readonly ulong UnannouncedDisconnections;

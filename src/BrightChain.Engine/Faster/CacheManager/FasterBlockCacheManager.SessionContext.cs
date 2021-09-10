@@ -2,6 +2,7 @@
 {
     using BrightChain.Engine.Faster;
     using BrightChain.Engine.Faster.Indices;
+    using BrightChain.Engine.Faster.Functions;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
@@ -16,14 +17,14 @@
                 dataSession: this.NewDataSession,
                 cblIndicesSession: this.NewCblIndicesSession);
 
-        private ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>> NewDataSession
+        private ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainAdvancedFunctions<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext>> NewDataSession
             => this.primaryDataKV
-                .For(functions: new SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>())
-                .NewSession<SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>>();
+                .For(functions: new BrightChainAdvancedFunctions<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext>())
+                .NewSession<BrightChainAdvancedFunctions<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext>>();
 
-        private ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, SimpleFunctions<string, BrightChainIndexValue, BrightChainFasterCacheContext>> NewCblIndicesSession
+        private ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, BrightChainAdvancedFunctions<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext>> NewCblIndicesSession
             => this.cblIndicesKV
-                .For(functions: new SimpleFunctions<string, BrightChainIndexValue, BrightChainFasterCacheContext>())
-                .NewSession<SimpleFunctions<string, BrightChainIndexValue, BrightChainFasterCacheContext>>();
+                .For(functions: new BrightChainAdvancedFunctions<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext>())
+                .NewSession<BrightChainAdvancedFunctions<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext>>();
     }
 }

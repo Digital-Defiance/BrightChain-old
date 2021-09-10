@@ -3,6 +3,7 @@
     using System;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Faster.Indices;
+    using BrightChain.Engine.Faster.Functions;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
@@ -13,14 +14,14 @@
     {
         private readonly ILogger logger;
 
-        public readonly ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>> DataSession;
+        public readonly ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainAdvancedFunctions<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext>> DataSession;
 
-        public readonly ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, SimpleFunctions<string, BrightChainIndexValue, BrightChainFasterCacheContext>> CblIndicesSession;
+        public readonly ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, BrightChainAdvancedFunctions<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext>> CblIndicesSession;
 
         public BlockSessionContext(
             ILogger logger,
-            ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, SimpleFunctions<BlockHash, BlockData, BrightChainFasterCacheContext>> dataSession,
-            ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, SimpleFunctions<string, BrightChainIndexValue, BrightChainFasterCacheContext>> cblIndicesSession)
+            ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainAdvancedFunctions<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext>> dataSession,
+            ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, BrightChainAdvancedFunctions<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext>> cblIndicesSession)
         {
             this.logger = logger;
             this.DataSession = dataSession;

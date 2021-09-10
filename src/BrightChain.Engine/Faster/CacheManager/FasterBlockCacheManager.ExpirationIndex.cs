@@ -17,7 +17,11 @@
             var resultTuple = this.sessionContext.CblIndicesSession.Read(BlockExpirationIndexKey(date));
             if (resultTuple.status == FASTER.core.Status.OK)
             {
-                if (resultTuple.output is BlockExpirationIndexValue expirationIndex)
+                if (resultTuple.output is null)
+                {
+                    throw new BrightChainExceptionImpossible("Cache returned null value");
+                }
+                else if (resultTuple.output is BlockExpirationIndexValue expirationIndex)
                 {
                     return expirationIndex.ExpiringHashes;
                 }
