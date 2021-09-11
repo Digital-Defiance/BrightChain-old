@@ -14,14 +14,14 @@
     {
         private readonly ILogger logger;
 
-        public readonly ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainAdvancedFunctions<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext>> DataSession;
+        public readonly ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainBlockHashAdvancedFunctions> DataSession;
 
-        public readonly ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, BrightChainAdvancedFunctions<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext>> CblIndicesSession;
+        public readonly ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, BrightChainIndicesAdvancedFunctions> CblIndicesSession;
 
         public BlockSessionContext(
             ILogger logger,
-            ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainAdvancedFunctions<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext>> dataSession,
-            ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, BrightChainAdvancedFunctions<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext>> cblIndicesSession)
+            ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainBlockHashAdvancedFunctions> dataSession,
+            ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, BrightChainIndicesAdvancedFunctions> cblIndicesSession)
         {
             this.logger = logger;
             this.DataSession = dataSession;

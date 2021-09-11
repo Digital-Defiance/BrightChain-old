@@ -17,14 +17,14 @@
                 dataSession: this.NewDataSession,
                 cblIndicesSession: this.NewCblIndicesSession);
 
-        private ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainAdvancedFunctions<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext>> NewDataSession
+        private ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainBlockHashAdvancedFunctions> NewDataSession
             => this.primaryDataKV
-                .For(functions: new BrightChainAdvancedFunctions<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext>())
-                .NewSession<BrightChainAdvancedFunctions<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext>>();
+                .For(functions: new BrightChainBlockHashAdvancedFunctions())
+                .NewSession<BrightChainBlockHashAdvancedFunctions>();
 
-        private ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, BrightChainAdvancedFunctions<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext>> NewCblIndicesSession
+        private ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, BrightChainIndicesAdvancedFunctions> NewCblIndicesSession
             => this.cblIndicesKV
-                .For(functions: new BrightChainAdvancedFunctions<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext>())
-                .NewSession<BrightChainAdvancedFunctions<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext>>();
+                .For(functions: new BrightChainIndicesAdvancedFunctions())
+                .NewSession<BrightChainIndicesAdvancedFunctions>();
     }
 }
