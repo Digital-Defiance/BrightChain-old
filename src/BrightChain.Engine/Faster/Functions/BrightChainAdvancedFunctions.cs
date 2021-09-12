@@ -3,39 +3,33 @@
     using FASTER.core;
 
     public class BrightChainAdvancedFunctions<Key, Value, Input, Output, Context> : FunctionsBase<Key, Value, Input, Output, Context>
+        where Input : Value
+        where Output : Input, Value
     {
         public BrightChainAdvancedFunctions(bool locking = false)
             : base(locking: locking)
         {
         }
 
-        /// <inheritdoc/>
-        public override void ReadCompletionCallback(ref Key key, ref Input input, ref Output output, Context ctx, Status status)
+        public override void ConcurrentReader(ref Key key, ref Input input, ref Value value, ref Output dst)
         {
-            if (output is null)
-            {
-                return;
-            }
+            dst = (Output)value;
         }
 
-        /// <inheritdoc/>
-        public override void RMWCompletionCallback(ref Key key, ref Input input, Context ctx, Status status)
+        public override bool ConcurrentWriter(ref Key key, ref Value src, ref Value dst)
         {
+            dst = src;
+            return true;
         }
 
-        /// <inheritdoc/>
-        public override void UpsertCompletionCallback(ref Key key, ref Value value, Context ctx)
+        public override void SingleWriter(ref Key key, ref Value src, ref Value dst)
         {
+            dst = src;
         }
 
-        /// <inheritdoc/>
-        public override void DeleteCompletionCallback(ref Key key, Context ctx)
+        public override void InitialUpdater(ref Key key, ref Input input, ref Value value)
         {
-        }
-
-        /// <inheritdoc/>
-        public override void CheckpointCompletionCallback(string sessionId, CommitPoint commitPoint)
-        {
+            value = input;
         }
     }
 }
