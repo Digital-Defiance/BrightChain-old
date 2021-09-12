@@ -4,15 +4,15 @@
     <TargetFramework>net6.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Version>0.0.0.1</Version>
+    <Version>0.0.0.2</Version>
+    <AssemblyVersion>0.0.0.2</AssemblyVersion>
+    <FileVersion>0.0.0.2</FileVersion>
     <Description>BrightChain: The Revolution(ary) Network</Description>
     <Copyright>(c) Jessica Mulein, The Revolution Network, BrightChain 2021</Copyright>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://apidocs.therevolution.network/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/The-Revolution-Network/BrightChain</RepositoryUrl>
-    <AssemblyVersion>0.0.0.1</AssemblyVersion>
-    <FileVersion>0.0.0.1</FileVersion>
     <AnalysisLevel>preview</AnalysisLevel>
     <RootNamespace>BrightChain.Engine</RootNamespace>
     <AssemblyName>BrightChain.Engine</AssemblyName>
