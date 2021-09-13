@@ -46,7 +46,7 @@
         RedundantFastLocal,
 
         /// <summary>
-        /// This node consumes or offers quarum block validation.
+        /// This node consumes or offers quorum block validation.
         /// </summary>
         BlockValidation,
 

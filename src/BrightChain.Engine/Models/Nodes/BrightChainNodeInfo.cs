@@ -31,9 +31,9 @@
 
         /// <summary>
         /// Reserved concept property to indicate either positive or negative adjustments to the public info/statistics about this node.
-        /// All entries must be signed and match quarum in order to participate.
+        /// All entries must be signed and match quorum in order to participate.
         /// </summary>
-        public readonly List<object> QuarumAdjustments;
+        public readonly List<object> QuorumAdjustments;
 
         /// <summary>
         /// Last time the node came online.
