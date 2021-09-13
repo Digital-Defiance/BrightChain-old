@@ -9,10 +9,9 @@
 
     public static class Utilities
     {
-        public static System.Diagnostics.FileVersionInfo GetAssemblyVersionForType(Type assemblyType = null) =>
-            System.Diagnostics.FileVersionInfo.GetVersionInfo(
-                fileName: System.Reflection.Assembly.GetAssembly(
-                    type: assemblyType is null ? typeof(Services.BrightBlockService) : assemblyType).Location);
+        public static Version GetAssemblyVersionForType(Type assemblyType = null) =>
+                System.Reflection.Assembly.GetAssembly(
+                    type: assemblyType is null ? typeof(Services.BrightBlockService) : assemblyType).GetName().Version;
 
         public static async IAsyncEnumerable<byte> ReadOnlyMemoryToAsyncEnumerable(ReadOnlyMemory<byte> source)
         {
