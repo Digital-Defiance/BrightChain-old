@@ -40,6 +40,8 @@ namespace BrightChain.Engine.Services
         private readonly BlockBrightenerService blockBrightener;
         private readonly BrightChainNode brightChainNodeAuthority;
 
+        public readonly Version AssemblyVersion;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BrightBlockService"/> class.
         /// </summary>
@@ -97,6 +99,7 @@ namespace BrightChain.Engine.Services
             this.blockBrightener = new BlockBrightenerService(
                 resultCache: this.blockFasterCache);
             this.brightChainNodeAuthority = new BrightChainNode(this.configuration);
+            this.AssemblyVersion = Utilities.GetAssemblyVersionForType();
         }
 
         public RootBlock RootBlock => this.blockFasterCache.RootBlock;
