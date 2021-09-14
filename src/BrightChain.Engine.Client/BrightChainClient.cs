@@ -1,4 +1,8 @@
-﻿namespace BrightChain.Engine.Client
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace BrightChain.Engine.Client
 {
     public class BrightChainClient
     {

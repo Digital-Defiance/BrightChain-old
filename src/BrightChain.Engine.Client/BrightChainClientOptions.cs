@@ -1,6 +1,9 @@
 ﻿namespace BrightChain.Engine.Client
 {
+    using System;
+    using System.Collections.Generic;
     using System.Net;
+    using System.Net.Http;
 
     //
     // Summary:

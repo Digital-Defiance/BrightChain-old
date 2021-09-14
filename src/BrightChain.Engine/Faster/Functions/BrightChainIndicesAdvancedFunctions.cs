@@ -27,9 +27,10 @@
             dst = src;
         }
 
-        public override void InitialUpdater(ref string key, ref BrightChainIndexValue input, ref BrightChainIndexValue value)
+        public override void InitialUpdater(ref string key, ref BrightChainIndexValue input, ref BrightChainIndexValue value, ref BrightChainIndexValue output)
         {
             value = input;
+            output = input;
         }
     }
 }

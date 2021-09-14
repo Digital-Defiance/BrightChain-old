@@ -1,3 +1,5 @@
+using System;
+
 namespace BrightChain.Engine.Interfaces
 {
     public interface IDataSignature : IFormattable

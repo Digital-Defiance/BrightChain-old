@@ -1,4 +1,6 @@
-﻿namespace BrightChain.Engine.Models.Hashes
+﻿using System;
+
+namespace BrightChain.Engine.Models.Hashes
 {
     /// <summary>
     /// Notably a Guid is not a hash, but this is a convenient container.. maybe a refactor.

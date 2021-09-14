@@ -1,5 +1,6 @@
 ﻿namespace BrightChain.Engine.Models.Blocks.Chains
 {
+    using System;
     using global::BrightChain.Engine.Interfaces;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
     using ProtoBuf;

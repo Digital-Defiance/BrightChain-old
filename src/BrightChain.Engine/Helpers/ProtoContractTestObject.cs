@@ -1,5 +1,6 @@
 ﻿namespace BrightChain.Engine.Helpers
 {
+    using System;
     using BrightChain.Engine.Interfaces;
     using ProtoBuf;
 

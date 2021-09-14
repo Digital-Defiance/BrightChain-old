@@ -1,6 +1,7 @@
 ﻿namespace BrightChain.Engine.Helpers
 {
     using System;
+    using System.IO;
     using System.Linq;
     using FASTER.core;
 

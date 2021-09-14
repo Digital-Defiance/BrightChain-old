@@ -1,5 +1,6 @@
 ﻿namespace BrightChain.Engine.Faster.Serializers
 {
+    using System;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Faster.Indices;
     using BrightChain.Engine.Models.Hashes;

@@ -1,6 +1,7 @@
 ﻿namespace BrightChain.Engine.Models.Entities
 {
     using System;
+    using System.Collections.Generic;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Keys;

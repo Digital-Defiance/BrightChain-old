@@ -1,5 +1,6 @@
 ﻿namespace BrightChain.Engine.Faster.Serializers
 {
+    using System;
     using BrightChain.Engine.Models.Hashes;
     using FASTER.core;
     using ProtoBuf;

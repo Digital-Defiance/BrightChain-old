@@ -1,5 +1,8 @@
 ﻿namespace BrightChain.Engine.Models.Blocks.Chains
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using global::BrightChain.Engine.Exceptions;
     using global::BrightChain.Engine.Interfaces;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;

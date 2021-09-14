@@ -1,6 +1,7 @@
 ﻿namespace BrightChain.Engine.Faster.CacheManager
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using BrightChain.Engine.Faster.Enumerations;
     using FASTER.core;

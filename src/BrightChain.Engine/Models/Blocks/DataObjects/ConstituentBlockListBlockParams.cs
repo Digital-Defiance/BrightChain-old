@@ -1,5 +1,7 @@
 ﻿namespace BrightChain.Engine.Models.Blocks.DataObjects
 {
+    using System;
+    using System.Collections.Generic;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Models.Hashes;
 

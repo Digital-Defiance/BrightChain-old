@@ -1,5 +1,6 @@
 ﻿namespace BrightChain.Engine.Faster.Serializers
 {
+    using System;
     using FASTER.core;
     /// <summary>
     /// Serializer for CacheKey - used if CacheKey is changed from struct to class

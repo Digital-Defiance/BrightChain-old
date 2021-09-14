@@ -1,4 +1,6 @@
-﻿namespace BrightChain.Engine.Helpers
+﻿using System;
+
+namespace BrightChain.Engine.Helpers
 {
     public class Crc32
     {
@@ -12,6 +14,7 @@
                 byte index = (byte)(((crc) & 0xff) ^ bytes[i]);
                 crc = (crc >> 8) ^ this.table[index];
             }
+
             return ~crc;
         }
 
@@ -44,6 +47,7 @@
                         temp >>= 1;
                     }
                 }
+
                 this.table[i] = temp;
             }
         }

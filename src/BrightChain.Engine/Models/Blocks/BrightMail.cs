@@ -1,5 +1,6 @@
 ﻿namespace BrightChain.Engine.Models.Blocks
 {
+    using System.Collections.Generic;
     using BrightChain.Engine.Models.Entities;
     using BrightChain.Engine.Models.Hashes;
 

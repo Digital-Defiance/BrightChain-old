@@ -1,5 +1,6 @@
 ﻿namespace BrightChain.Engine.Models.Blocks
 {
+    using System;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Entities;
 

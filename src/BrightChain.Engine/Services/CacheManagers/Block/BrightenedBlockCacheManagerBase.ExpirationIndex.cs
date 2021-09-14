@@ -1,5 +1,6 @@
 ﻿namespace BrightChain.Engine.Services.CacheManagers.Block
 {
+    using System.Collections.Generic;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Hashes;
 

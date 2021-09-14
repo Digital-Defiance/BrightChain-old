@@ -1,5 +1,7 @@
 ﻿namespace BrightChain.Engine.Exceptions
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// Base class for all BrightChain exceptions
     /// </summary>

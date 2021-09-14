@@ -1,11 +1,12 @@
-﻿using BrightChain.Engine.Enumerations;
-using BrightChain.Engine.Exceptions;
-using BrightChain.Engine.Models.Blocks;
-using BrightChain.Engine.Models.Blocks.Chains;
-using BrightChain.Engine.Models.Hashes;
-
-namespace BrightChain.Engine.Extensions
+﻿namespace BrightChain.Engine.Extensions
 {
+    using BrightChain.Engine.Enumerations;
+    using BrightChain.Engine.Exceptions;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.Chains;
+    using BrightChain.Engine.Models.Hashes;
+    using System.Collections.Generic;
+
     public static class BlockValidationExtensions
     {
         /// <summary>

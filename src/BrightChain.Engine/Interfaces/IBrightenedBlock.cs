@@ -1,5 +1,6 @@
 ﻿namespace BrightChain.Engine.Interfaces
 {
+    using System;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Hashes;
 

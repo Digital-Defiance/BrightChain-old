@@ -1,5 +1,6 @@
 ﻿namespace BrightChain.Engine.Models.Hashes
 {
+    using System;
     using System.Security.Cryptography;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Helpers;

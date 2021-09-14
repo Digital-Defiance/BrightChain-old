@@ -1,5 +1,6 @@
 ﻿namespace BrightChain.Engine.Models.Blocks.DataObjects
 {
+    using System;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
 

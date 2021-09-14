@@ -9,6 +9,7 @@
     using BrightChain.Engine.Models.Hashes;
     using FASTER.core;
     using Microsoft.Extensions.Logging;
+    using System.Threading.Tasks;
 
     public class BlockSessionContext : IDisposable
     {

@@ -1,5 +1,6 @@
 ﻿namespace BrightChain.Engine.Faster.Indices
 {
+    using System;
     using BrightChain.Engine.Models.Blocks.DataObjects;
 
     public class BrightHandleIndexValue : BrightChainIndexValue

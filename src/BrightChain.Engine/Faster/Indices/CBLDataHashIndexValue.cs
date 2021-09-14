@@ -1,5 +1,7 @@
 ﻿namespace BrightChain.Engine.Faster.Indices
 {
+    using System;
+    using System.IO;
     using BrightChain.Engine.Models.Hashes;
     using ProtoBuf;
 

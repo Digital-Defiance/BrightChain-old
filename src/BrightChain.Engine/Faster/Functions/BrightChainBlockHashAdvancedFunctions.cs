@@ -27,9 +27,10 @@
             dst = src;
         }
 
-        public override void InitialUpdater(ref BlockHash key, ref BlockData input, ref BlockData value)
+        public override void InitialUpdater(ref BlockHash key, ref BlockData input, ref BlockData value, ref BlockData output)
         {
             value = input;
+            output = input;
         }
     }
 }

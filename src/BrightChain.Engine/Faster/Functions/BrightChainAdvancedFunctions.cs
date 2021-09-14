@@ -27,7 +27,7 @@
             dst = src;
         }
 
-        public override void InitialUpdater(ref Key key, ref Input input, ref Value value)
+        public override void InitialUpdater(ref Key key, ref Input input, ref Value value, ref Output output)
         {
             value = input;
         }

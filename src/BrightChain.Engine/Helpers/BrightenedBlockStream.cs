@@ -1,5 +1,6 @@
 ﻿namespace BrightChain.Engine.Helpers
 {
+    using System;
     using System.IO;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Models.Blocks;

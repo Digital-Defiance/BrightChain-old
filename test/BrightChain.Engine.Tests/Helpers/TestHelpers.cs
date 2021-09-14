@@ -1,7 +1,8 @@
-﻿using BrightChain.Engine.Enumerations;
-
-namespace BrightChain.Engine.Tests.Helpers
+﻿namespace BrightChain.Engine.Tests.Helpers
 {
+    using System;
+    using BrightChain.Engine.Enumerations;
+
     public static class TestHelpers
     {
         public static BlockSize RandomBlockSize()

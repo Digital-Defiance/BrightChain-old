@@ -1,5 +1,8 @@
 ﻿namespace BrightChain.Engine.Faster.CacheManager
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Faster.Indices;
     using BrightChain.Engine.Models.Blocks;

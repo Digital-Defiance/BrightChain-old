@@ -1,7 +1,10 @@
-﻿using ProtoBuf;
-
-namespace BrightChain.Engine.Faster.Indices
+﻿namespace BrightChain.Engine.Faster.Indices
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using ProtoBuf;
+
     public class CBLTagIndexValue : BrightChainIndexValue
     {
         public readonly IEnumerable<Guid> CorrelationIds;

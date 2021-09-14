@@ -1,5 +1,7 @@
 namespace BrightChain.Engine.Helpers
 {
+    using System;
+    using System.Collections.Generic;
     using System.Runtime.InteropServices;
 
     public class MemoryComparer<T> : IEqualityComparer<Memory<T>>, IComparer<Memory<T>>

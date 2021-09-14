@@ -1,4 +1,5 @@
-﻿using BrightChain.Engine.Enumerations;
+﻿using System;
+using BrightChain.Engine.Enumerations;
 
 namespace BrightChain.Engine.Models.Blocks.Tags
 {

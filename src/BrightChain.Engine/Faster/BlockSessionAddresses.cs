@@ -1,5 +1,6 @@
 ﻿namespace BrightChain.Engine.Faster
 {
+    using System.Collections.Generic;
     using BrightChain.Engine.Faster.Enumerations;
 
     public struct BlockSessionAddresses
