@@ -14,7 +14,7 @@ Unlimited storage for everyone, and a mathematically reinforced and moderated co
 - BrightNet BlockStore and API for BrightChain: The Revolution Network
 - The new wiki: https://github.com/BrightChain/wiki (old will be rewritten/migrated)
 - The old wiki has been copied/merged into the new wiki, but needs to be formatted and cleaned up.
-- Auto-generated documentation: http://apidocs.therevolution.network/api/index.html
+- Auto-generated documentation: http://apidocs.brightchain.org/api/index.html
   - Note that some of the classes don't have docblocks yet, but I've gotten many. The "TODO/example" text is in place as well, but if you click into the sections the content is there.
 
 # One-Pager
