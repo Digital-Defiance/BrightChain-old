@@ -11,8 +11,8 @@
     <Copyright>(c) Jessica Mulein, The Revolution Network, BrightChain 2021</Copyright>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://apidocs.therevolution.network/</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/The-Revolution-Network/BrightChain</RepositoryUrl>
+    <PackageProjectUrl>https://apidocs.brightchain.org/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/BrightChain/BrightChain</RepositoryUrl>
     <AnalysisLevel>preview</AnalysisLevel>
     <RootNamespace>BrightChain.Engine</RootNamespace>
     <AssemblyName>BrightChain.Engine</AssemblyName>

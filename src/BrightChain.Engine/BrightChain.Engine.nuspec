@@ -17,7 +17,7 @@
         <owners>jessicamulein</owners>
 
          <!-- Project URL provides a link for the gallery -->
-        <projectUrl>http://github.com/The-Revolution-Network/BrightChain</projectUrl>
+        <projectUrl>http://github.com/BrightChain/BrightChain</projectUrl>
 
          <!-- License information is displayed on the gallery -->
         <license type="expression">Apache-2.0</license>
