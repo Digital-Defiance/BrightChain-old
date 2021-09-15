@@ -12,10 +12,19 @@ Unlimited storage for everyone, and a mathematically reinforced and moderated co
 - BrightChain Engine in C#/.Net 6 (Currently requires VS 2022 Preview, or IntelliJ Rider)
 - Uses Microsoft's FASTER
 - BrightNet BlockStore and API for BrightChain: The Revolution Network
-- The new wiki: https://github.com/BrightChain/wiki (old will be rewritten/migrated)
-- The old wiki has been copied/merged into the new wiki, but needs to be formatted and cleaned up.
+- Wiki: https://github.com/BrightChain/BrightChain/wiki
+  - The old wiki has been copied/merged into the new wiki, but needs to be formatted and cleaned up.
 - Auto-generated documentation: http://apidocs.brightchain.org/api/index.html
   - Note that some of the classes don't have docblocks yet, but I've gotten many. The "TODO/example" text is in place as well, but if you click into the sections the content is there.
+
+# Nutshell
+- BrightChain is new.
+- No mining, no cryptocurrency at the base level, but third parties could build one on top easily. Moreover it has mechanisms for deduplicating data, content aware meta tagging everything, and forcing everyone to think about what they want to keep.
+- BrightChain is all kinds of opposites held in balance.
+  - Anonymity on condition of good behavior.
+  - Fully verified identity for governmental voting.
+  - Fully anonymized data during storage and yet fully meta tagged restored when used.
+  - Permanent storage for the best, eventual recycling for the rest.
 
 # One-Pager
 The BrightChain "One-Pager" is about 3 pages at the moment, but pending some slimming down is about as concise a document as I've put together.

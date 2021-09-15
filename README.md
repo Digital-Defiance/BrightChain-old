@@ -17,6 +17,15 @@ Unlimited storage for everyone, and a mathematically reinforced and moderated co
 - Auto-generated documentation: http://apidocs.brightchain.org/api/index.html
   - Note that some of the classes don't have docblocks yet, but I've gotten many. The "TODO/example" text is in place as well, but if you click into the sections the content is there.
 
+# Nutshell
+- BrightChain is new.
+- No mining, no cryptocurrency at the base level, but third parties could build one on top easily. Moreover it has mechanisms for deduplicating data, content aware meta tagging everything, and forcing everyone to think about what they want to keep.
+- BrightChain is all kinds of opposites held in balance.
+  - Anonymity on condition of good behavior.
+  - Fully verified identity for governmental voting.
+  - Fully anonymized data during storage and yet fully meta tagged restored when used.
+  - Permanent storage for the best, eventual recycling for the rest.
+
 # One-Pager
 The BrightChain "One-Pager" is about 3 pages at the moment, but pending some slimming down is about as concise a document as I've put together.
 - https://apertureimagingcom-my.sharepoint.com/:w:/g/personal/jessica_mulein_com/EYoQU8qG_xlGpD0_A-mxhvoBqv3OylrfjeRAohvoC0gDQg?e=0U2XDa
