@@ -1,9 +1,9 @@
 # BrightChain
 ## (pre-alpha work in progress. Limited alpha testing coming soon!) 
-[![.NET](https://github.com/BrightChain/actions/workflows/dotnet.yml/badge.svg)](https://github.com/BrightChain/actions/workflows/dotnet.yml)
-[![Docker Image CI](https://github.com/BrightChain/actions/workflows/docker.yml/badge.svg)](https://github.com/BrightChain/actions/workflows/docker.yml)
-[![CodeQL](https://github.com/BrightChain/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/BrightChain/actions/workflows/codeql-analysis.yml)
-[![Generate Documentation](https://github.com/BrightChain/actions/workflows/generate-docs.yml/badge.svg)](https://github.com/BrightChain/actions/workflows/generate-docs.yml)
+[![.NET](https://github.com/BrightChain/BrightChain/actions/workflows/dotnet.yml/badge.svg)](https://github.com/BrightChain/BrightChain/actions/workflows/dotnet.yml)
+[![Docker Image CI](https://github.com/BrightChain/BrightChain/actions/workflows/docker.yml/badge.svg)](https://github.com/BrightChain/BrightChain/actions/workflows/docker.yml)
+[![CodeQL](https://github.com/BrightChain/BrightChain/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/BrightChain/BrightChain/actions/workflows/codeql-analysis.yml)
+[![Generate Documentation](https://github.com/BrightChain/BrightChain/actions/workflows/generate-docs.yml/badge.svg)](https://github.com/BrightChain/BrightChain/actions/workflows/generate-docs.yml)
 
 A Lightweight BlockChain- LightChain based on a Brightnet Blockstore- BrightChain.
 All the benefits of blockchain dApps and contracts without the mining and waste.
