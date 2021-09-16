@@ -20,6 +20,9 @@
         public ulong Crc64 =>
             DamienG.Security.Cryptography.Crc64Iso.Compute(this.Bytes.ToArray());
 
+        public string Base58Data =>
+            Helpers.Utilities.BytesToBase58(this.Bytes);
+
         public static bool operator ==(BlockData a, BlockData b)
         {
             return Helpers.ReadOnlyMemoryComparer<byte>.Compare(a.Bytes, b.Bytes) == 0;

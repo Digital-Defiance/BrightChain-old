@@ -1,9 +1,8 @@
 ﻿namespace BrightChain.Engine.Faster.CacheManager
 {
     using BrightChain.Engine.Faster;
-    using BrightChain.Engine.Faster.Indices;
     using BrightChain.Engine.Faster.Functions;
-    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Faster.Indices;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
     using FASTER.core;

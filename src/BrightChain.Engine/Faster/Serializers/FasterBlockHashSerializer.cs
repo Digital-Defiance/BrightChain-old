@@ -4,7 +4,6 @@
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Models.Hashes;
     using FASTER.core;
-    using ProtoBuf;
 
     /// <summary>
     /// Serializer for CacheKey - used if CacheKey is changed from struct to class

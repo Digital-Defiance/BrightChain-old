@@ -3,9 +3,7 @@
     using System;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Faster.Indices;
-    using BrightChain.Engine.Models.Hashes;
     using FASTER.core;
-    using ProtoBuf;
 
     /// <summary>
     /// Serializer for CacheKey - used if CacheKey is changed from struct to class

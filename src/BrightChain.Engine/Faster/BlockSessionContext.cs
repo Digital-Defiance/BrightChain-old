@@ -1,15 +1,15 @@
 ﻿namespace BrightChain.Engine.Faster
 {
     using System;
+    using System.Threading.Tasks;
     using BrightChain.Engine.Exceptions;
-    using BrightChain.Engine.Faster.Indices;
     using BrightChain.Engine.Faster.Functions;
+    using BrightChain.Engine.Faster.Indices;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
     using FASTER.core;
     using Microsoft.Extensions.Logging;
-    using System.Threading.Tasks;
 
     public class BlockSessionContext : IDisposable
     {

@@ -1,15 +1,11 @@
 ﻿namespace BrightChain.Engine.Services.CacheManagers.Block
 {
     using System;
-    using System.Collections.Generic;
-    using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Interfaces;
-    using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;
-    using BrightChain.Engine.Models.Nodes;
 
     /// <summary>
     ///     Block Cache Manager.

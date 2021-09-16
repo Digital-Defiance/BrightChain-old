@@ -3,7 +3,6 @@
     using System;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Faster.Indices;
-    using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Blocks.Chains;
     using BrightChain.Engine.Models.Blocks.DataObjects;
     using BrightChain.Engine.Models.Hashes;

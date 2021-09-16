@@ -86,6 +86,9 @@ namespace BrightChain.Engine.Models.Hashes
         [ProtoMember(21)]
         public BlockSize BlockSize { get; }
 
+        public string Base58 =>
+            Helpers.Utilities.BytesToBase58(this.HashBytes);
+
         public static bool operator ==(BlockHash a, BlockHash b)
         {
             return a.SourceDataLength == b.SourceDataLength && Helpers.ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;

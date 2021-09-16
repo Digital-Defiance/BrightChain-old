@@ -47,7 +47,7 @@ This project has adopted the Microsoft Open Source Code of Conduct. For more inf
 
 # Recent thoughts:
  - A lot of the reputation and resultant API throttling will be in the line of thinking with: https://en.wikipedia.org/wiki/Hashcash#Advantages_and_disadvantages
- - URLs are probably going to be base32 {address}.brightchain.net
+ - URLs are probably going to be Base58 {address}.brightchain.net
  - Will have an alias registry for {alias}.brightchain.net - aka BrightChain DNS.
  - I think calling BrightChain a LightChain makes sense. it's a lightweight blockchain. It's got blockchain features people want, but without the actual overhead of blockchain, which is unnecessary.
  - If you haven't noticed- BrightChain is almost BrightChainS with an S. It's a pool of chains. Each with its own value.

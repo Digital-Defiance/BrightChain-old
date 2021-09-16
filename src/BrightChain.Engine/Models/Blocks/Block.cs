@@ -49,6 +49,10 @@ namespace BrightChain.Engine.Models.Blocks
 
         public ReadOnlyMemory<byte> Bytes => this.StoredData.Bytes;
 
+        public string Base58Data => this.StoredData.Base58Data;
+
+        public string Base58Id => this.Id.Base58;
+
         public byte ByteAt(int index)
         {
             return this.StoredData.Bytes.Slice(index).ToArray()[0];

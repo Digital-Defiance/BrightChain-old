@@ -1,7 +1,6 @@
 ﻿namespace BrightChain.Engine.Faster.Functions
 {
     using BrightChain.Engine.Faster.Indices;
-    using BrightChain.Engine.Models.Blocks.DataObjects;
     using FASTER.core;
 
     public class BrightChainIndicesAdvancedFunctions : FunctionsBase<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext>

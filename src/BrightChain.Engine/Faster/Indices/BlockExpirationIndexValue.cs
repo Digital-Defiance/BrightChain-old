@@ -2,11 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.IO;
+    using System.Linq;
     using BrightChain.Engine.Faster.Serializers;
     using BrightChain.Engine.Models.Hashes;
-    using ProtoBuf;
 
     public class BlockExpirationIndexValue : BrightChainIndexValue
     {
