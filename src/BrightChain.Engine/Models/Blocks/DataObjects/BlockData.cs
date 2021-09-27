@@ -14,24 +14,31 @@
             this.Bytes = data;
         }
 
+        public IEnumerable<byte> SHA256 =>
+            System.Security.Cryptography.SHA256.Create().ComputeHash(this.Bytes.ToArray());
+
         public uint Crc32 =>
             Helpers.Crc32.ComputeNewChecksum(this.Bytes.ToArray());
 
         public ulong Crc64 =>
             DamienG.Security.Cryptography.Crc64Iso.Compute(this.Bytes.ToArray());
 
-        public string Base58Data =>
-            Helpers.Utilities.BytesToBase58(this.Bytes);
+        public string Base64SHA256 =>
+            SimpleBase.Base58.Bitcoin.Encode(new ReadOnlySpan<byte>((byte[])this.SHA256));
 
         public static bool operator ==(BlockData a, BlockData b)
         {
             return Helpers.ReadOnlyMemoryComparer<byte>.Compare(a.Bytes, b.Bytes) == 0;
         }
+        public string Base58Crc64 =>
+            SimpleBase.Base58.Bitcoin.Encode(BitConverter.GetBytes(this.Crc64));
 
         public static bool operator !=(BlockData a, BlockData b)
         {
             return Helpers.ReadOnlyMemoryComparer<byte>.Compare(a.Bytes, b.Bytes) != 0;
         }
+        public string Base58Data =>
+            SimpleBase.Base58.Bitcoin.Encode(this.Bytes.ToArray());
 
         public int CompareTo(BlockData other)
         {

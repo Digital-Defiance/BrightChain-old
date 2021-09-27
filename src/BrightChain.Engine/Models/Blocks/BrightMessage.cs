@@ -4,7 +4,7 @@
     using BrightChain.Engine.Models.Entities;
     using BrightChain.Engine.Models.Hashes;
 
-    public class BrightMessage : IDisposable
+    public record BrightMessage : IDisposable
     {
         protected readonly Guid Id;
         protected readonly Agent Sender;

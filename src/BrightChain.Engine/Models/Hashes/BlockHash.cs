@@ -87,7 +87,16 @@ namespace BrightChain.Engine.Models.Hashes
         public BlockSize BlockSize { get; }
 
         public string Base58 =>
-            Helpers.Utilities.BytesToBase58(this.HashBytes);
+            SimpleBase.Base58.Bitcoin.Encode(this.HashBytes.ToArray());
+
+        public uint Crc32 =>
+            Helpers.Crc32.ComputeNewChecksum(this.HashBytes.ToArray());
+
+        public ulong Crc64 =>
+            DamienG.Security.Cryptography.Crc64Iso.Compute(this.HashBytes.ToArray());
+
+        public string Base58Crc64 =>
+            SimpleBase.Base58.Bitcoin.Encode(BitConverter.GetBytes(this.Crc64));
 
         public static bool operator ==(BlockHash a, BlockHash b)
         {
@@ -141,7 +150,7 @@ namespace BrightChain.Engine.Models.Hashes
 
         public override int GetHashCode()
         {
-            return (int)Crc32.ComputeNewChecksum(this.HashBytes.ToArray());
+            return (int)Helpers.Crc32.ComputeNewChecksum(this.HashBytes.ToArray());
         }
 
         public long GetHashCode64(ref BlockHash k)

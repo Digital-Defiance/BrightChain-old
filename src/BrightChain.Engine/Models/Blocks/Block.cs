@@ -107,6 +107,10 @@ namespace BrightChain.Engine.Models.Blocks
 
         public ulong Reads { get; }
 
+        public IEnumerable<BlockRating> Ratings { get; }
+
+        public decimal Rating { get; }
+
         public IEnumerable<BrightChainValidationException> ValidationExceptions { get; private set; }
 
         /// <summary>
