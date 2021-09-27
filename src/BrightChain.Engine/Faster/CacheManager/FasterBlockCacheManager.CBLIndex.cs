@@ -17,7 +17,7 @@
 
         public override BrightHandle GetCbl(DataHash sourceHash)
         {
-            var result = this.sessionContext.CblIndicesSession.Read(CblIndexKey(sourceHash));
+            var result = this.sessionContext.SharedCacheSession.Read(CblIndexKey(sourceHash));
             if (result.status == Status.NOTFOUND)
             {
                 throw new IndexOutOfRangeException(message: sourceHash.ToString());
@@ -51,7 +51,7 @@
                 throw new BrightChainException(nameof(identifiableSourceHash));
             }
 
-            this.sessionContext.CblIndicesSession.Upsert(
+            this.sessionContext.SharedCacheSession.Upsert(
                 key: CblIndexKey(identifiableSourceHash),
                 desiredValue: new BrightHandleIndexValue(brightHandle).AsIndex);
 
@@ -70,7 +70,7 @@
 
             base.UpdateCblVersion(newCbl, oldCbl);
 
-            this.sessionContext.CblIndicesSession.Upsert(
+            this.sessionContext.SharedCacheSession.Upsert(
                 key: CorrelationIndexKey(newCbl.CorrelationId),
                 desiredValue: new CBLDataHashIndexValue(newCbl.SourceId).AsIndex);
         }
@@ -78,7 +78,7 @@
         public override BrightHandle GetCbl(Guid correlationId)
         {
             var key = CorrelationIndexKey(correlationId);
-            var result = this.sessionContext.CblIndicesSession.Read(key);
+            var result = this.sessionContext.SharedCacheSession.Read(key);
             if (result.status == Status.NOTFOUND)
             {
                 throw new IndexOutOfRangeException(message: correlationId.ToString());

@@ -131,11 +131,11 @@
             {
                 {
                     CacheStoreType.BlockData,
-                    this.sessionContext.DataSession.NextSerialNo
+                    this.sessionContext.BlockDataBlobSession.NextSerialNo
                 },
                 {
                     CacheStoreType.Indices,
-                    this.sessionContext.CblIndicesSession.NextSerialNo
+                    this.sessionContext.SharedCacheSession.NextSerialNo
                 },
             });
         }
@@ -161,13 +161,13 @@
             {
                 {
                     CacheStoreType.BlockData,
-                    this.sessionContext.DataSession.Compact(
+                    this.sessionContext.BlockDataBlobSession.Compact(
                         untilAddress: this.primaryDataKV.Log.HeadAddress,
                         shiftBeginAddress: shiftBeginAddress)
                 },
                 {
                     CacheStoreType.Indices,
-                    this.sessionContext.CblIndicesSession.Compact(
+                    this.sessionContext.SharedCacheSession.Compact(
                         untilAddress: this.cblIndicesKV.Log.HeadAddress,
                         shiftBeginAddress: shiftBeginAddress)
                 },
