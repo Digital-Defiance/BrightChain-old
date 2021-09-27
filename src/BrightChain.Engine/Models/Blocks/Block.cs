@@ -111,6 +111,26 @@ namespace BrightChain.Engine.Models.Blocks
 
         public decimal Rating { get; }
 
+        /// <summary>
+        /// If Guid is set with valid LegalOrder, any delete calls should be prevented. Respond as denied or invisible according to LegalHoldInvisible.
+        /// </summary>
+        public Guid? LegalHoldPreventDelete { get; }
+
+        /// <summary>
+        /// If Guid is set with valid LegalOrder, any read accesses should be prevented. Respond as denied or invisible according to LegalHoldInvisible.
+        /// </summary>
+        public Guid? LegalHoldPreventRead { get; }
+
+        /// <summary>
+        /// If Guid is set with valid LegalOrder, any read accesses should be logged to appropriate legal log.
+        /// </summary>
+        public Guid? LegalHoldLogRead { get; }
+
+        /// <summary>
+        /// If Guid is set with valid LegalOrder, any accesses should respond as if block does not exist.
+        /// </summary>
+        public Guid? LegalHoldInvisible { get; }
+
         public IEnumerable<BrightChainValidationException> ValidationExceptions { get; private set; }
 
         /// <summary>
