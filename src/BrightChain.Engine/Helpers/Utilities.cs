@@ -6,7 +6,6 @@
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Models.Blocks;
     using BrightChain.Engine.Models.Hashes;
-    using SimpleBase;
 
     public static class Utilities
     {
@@ -77,11 +76,6 @@
             {
                 throw new BrightChainException("BlockHash size mismatch.");
             }
-        }
-
-        public static string BytesToBase58(ReadOnlyMemory<byte> data)
-        {
-            return SimpleBase.Base58.Bitcoin.Encode(data.ToArray());
         }
     }
 }

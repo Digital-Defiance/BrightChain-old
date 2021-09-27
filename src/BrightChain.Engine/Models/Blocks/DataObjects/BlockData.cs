@@ -30,6 +30,7 @@
         {
             return Helpers.ReadOnlyMemoryComparer<byte>.Compare(a.Bytes, b.Bytes) == 0;
         }
+
         public string Base58Crc64 =>
             SimpleBase.Base58.Bitcoin.Encode(BitConverter.GetBytes(this.Crc64));
 
@@ -37,6 +38,7 @@
         {
             return Helpers.ReadOnlyMemoryComparer<byte>.Compare(a.Bytes, b.Bytes) != 0;
         }
+
         public string Base58Data =>
             SimpleBase.Base58.Bitcoin.Encode(this.Bytes.ToArray());
 
