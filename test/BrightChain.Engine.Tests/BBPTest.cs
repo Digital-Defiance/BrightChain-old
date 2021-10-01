@@ -1,7 +1,5 @@
 ﻿namespace BrightChain.Engine.Tests
 {
-    using System;
-    using BBP;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
