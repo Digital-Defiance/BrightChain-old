@@ -10,3 +10,6 @@
 [submodule "src/BBPPiCalculator"]
 	path = src/BBPPiCalculator
 	url = git@github.com:paysonwelch/BBPPiCalculator.git
+[submodule "src/LUHN-mod-n"]
+	path = src/LUHN-mod-n
+	url = git@github.com:JessicaMulein/LUHN-mod-n.git

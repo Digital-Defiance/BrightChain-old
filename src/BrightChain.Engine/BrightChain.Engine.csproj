@@ -81,6 +81,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ENT\EntCalc.csproj" />
+    <ProjectReference Include="..\LUHN-mod-n\src\LUHN-mod-n.csproj" />
   </ItemGroup>
 
   <ItemGroup>
