@@ -73,6 +73,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\BBPPiCalculator\BBPPiCalculator\BBP\BBP.csproj" />
     <ProjectReference Include="..\..\src\BrightChain.Engine\BrightChain.Engine.csproj" />
   </ItemGroup>
 
