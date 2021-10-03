@@ -33,7 +33,7 @@
         public const int TinySize = 1024;
 
         /// <summary>
-        /// Best for small files. 4024 bytes. 4K.
+        /// Best for small files. 4096 bytes. 4K.
         /// </summary>
         public const int SmallSize = 4 * 1024;
 
