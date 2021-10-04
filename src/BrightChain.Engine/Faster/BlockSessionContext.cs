@@ -15,9 +15,9 @@
     {
         private readonly ILogger logger;
 
-        public readonly ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainBlockHashAdvancedFunctions> DataSession;
+        public readonly ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainBlockHashAdvancedFunctions> BlockDataBlobSession;
 
-        public readonly ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, BrightChainIndicesAdvancedFunctions> CblIndicesSession;
+        public readonly ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, BrightChainIndicesAdvancedFunctions> SharedCacheSession;
 
         public BlockSessionContext(
             ILogger logger,
@@ -25,13 +25,13 @@
             ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, BrightChainIndicesAdvancedFunctions> cblIndicesSession)
         {
             this.logger = logger;
-            this.DataSession = dataSession;
-            this.CblIndicesSession = cblIndicesSession;
+            this.BlockDataBlobSession = dataSession;
+            this.SharedCacheSession = cblIndicesSession;
         }
 
         public bool Contains(BlockHash blockHash)
         {
-            var dataResultTuple = this.DataSession.Read(blockHash);
+            var dataResultTuple = this.BlockDataBlobSession.Read(blockHash);
 
             return
                 dataResultTuple.status == Status.OK;
@@ -39,7 +39,7 @@
 
         public bool Drop(BlockHash blockHash, bool complete = true)
         {
-            if (this.DataSession.Delete(blockHash) != Status.OK)
+            if (this.BlockDataBlobSession.Delete(blockHash) != Status.OK)
             {
                 // TODO: rollback?
                 return false;
@@ -60,14 +60,14 @@
 
         public BrightenedBlock Get(BlockHash blockHash)
         {
-            var dataResultTuple = this.DataSession.Read(blockHash);
+            var dataResultTuple = this.BlockDataBlobSession.Read(blockHash);
 
             if (dataResultTuple.status != Status.OK)
             {
                 throw new IndexOutOfRangeException(message: blockHash.ToString());
             }
 
-            var result = this.CblIndicesSession.Read(BlockMetadataIndexKey(blockHash));
+            var result = this.SharedCacheSession.Read(BlockMetadataIndexKey(blockHash));
             if (result.status == Status.NOTFOUND)
             {
                 throw new IndexOutOfRangeException(message: blockHash.ToString());
@@ -98,7 +98,7 @@
 
         public void Upsert(BrightenedBlock block, bool completePending = false)
         {
-            var resultStatus = this.CblIndicesSession.Upsert(
+            var resultStatus = this.SharedCacheSession.Upsert(
                 key: BlockMetadataIndexKey(block.Id),
                 desiredValue: new BlockMetadataIndexValue(block));
 
@@ -107,7 +107,7 @@
                 throw new BrightChainException("Unable to store block");
             }
 
-            resultStatus = this.DataSession.Upsert(block.Id, block.StoredData);
+            resultStatus = this.BlockDataBlobSession.Upsert(block.Id, block.StoredData);
             if (resultStatus != Status.OK)
             {
                 throw new BrightChainException("Unable to store block");
@@ -123,15 +123,15 @@
         {
             await Task.WhenAll(new Task[]
             {
-                    this.DataSession.WaitForCommitAsync().AsTask(),
-                    this.CblIndicesSession.WaitForCommitAsync().AsTask(),
+                    this.BlockDataBlobSession.WaitForCommitAsync().AsTask(),
+                    this.SharedCacheSession.WaitForCommitAsync().AsTask(),
             }).ConfigureAwait(false);
         }
 
         public bool CompletePending(bool waitForCommit)
         {
-            var d = this.DataSession.CompletePending(wait: waitForCommit);
-            var c = this.CblIndicesSession.CompletePending(wait: waitForCommit);
+            var d = this.BlockDataBlobSession.CompletePending(wait: waitForCommit);
+            var c = this.SharedCacheSession.CompletePending(wait: waitForCommit);
 
             // broken out to prevent short circuit
             return d && c;
@@ -141,18 +141,18 @@
         {
             Task.WaitAll(new Task[]
             {
-                this.DataSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask(),
-                this.CblIndicesSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask(),
+                this.BlockDataBlobSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask(),
+                this.SharedCacheSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask(),
             });
         }
 
         public string SessionID =>
-            string.Format("{0}-{1}", this.DataSession.ID, this.CblIndicesSession.ID);
+            string.Format("{0}-{1}", this.BlockDataBlobSession.ID, this.SharedCacheSession.ID);
 
         public void Dispose()
         {
-            this.DataSession.Dispose();
-            this.CblIndicesSession.Dispose();
+            this.BlockDataBlobSession.Dispose();
+            this.SharedCacheSession.Dispose();
         }
     }
 }

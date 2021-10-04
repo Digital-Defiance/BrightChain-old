@@ -107,6 +107,30 @@ namespace BrightChain.Engine.Models.Blocks
 
         public ulong Reads { get; }
 
+        public IEnumerable<BlockRating> Ratings { get; }
+
+        public decimal Rating { get; }
+
+        /// <summary>
+        /// If Guid is set with valid LegalOrder, any delete calls should be prevented. Respond as denied or invisible according to LegalHoldInvisible.
+        /// </summary>
+        public Guid? LegalHoldPreventDelete { get; }
+
+        /// <summary>
+        /// If Guid is set with valid LegalOrder, any read accesses should be prevented. Respond as denied or invisible according to LegalHoldInvisible.
+        /// </summary>
+        public Guid? LegalHoldPreventRead { get; }
+
+        /// <summary>
+        /// If Guid is set with valid LegalOrder, any read accesses should be logged to appropriate legal log.
+        /// </summary>
+        public Guid? LegalHoldLogRead { get; }
+
+        /// <summary>
+        /// If Guid is set with valid LegalOrder, any accesses should respond as if block does not exist.
+        /// </summary>
+        public Guid? LegalHoldInvisible { get; }
+
         public IEnumerable<BrightChainValidationException> ValidationExceptions { get; private set; }
 
         /// <summary>
@@ -184,7 +208,7 @@ namespace BrightChain.Engine.Models.Blocks
                 ByteCount: data.Length,
                 PrivateEncrypted: blockParams.PrivateEncrypted,
                 redundancyContractType: blockParams.Redundancy);
-            this.StoredData = new BlockData(data);
+            this.StoredData = new StoredBlockData(data);
             this.Id = new BlockHash(this); // must happen after data is in place
             this.ConstituentBlocks = constituentBlockHashes is null ? new BlockHash[] { } : constituentBlockHashes;
             this.OriginatingNode = null;

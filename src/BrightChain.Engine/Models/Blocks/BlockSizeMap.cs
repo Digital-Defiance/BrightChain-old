@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Models.Hashes;
@@ -32,7 +33,7 @@
         public const int TinySize = 1024;
 
         /// <summary>
-        /// Best for small files. 4024 bytes. 4K.
+        /// Best for small files. 4096 bytes. 4K.
         /// </summary>
         public const int SmallSize = 4 * 1024;
 
@@ -46,7 +47,7 @@
         /// </summary>
         public const int LargeSize = 4 * 1024 * 1024;
 
-        public static readonly Dictionary<BlockSize, int> Map = new()
+        public static readonly ImmutableDictionary<BlockSize, int> Map = new Dictionary<BlockSize, int>()
         {
             { Enumerations.BlockSize.Unknown, -1 },
             { Enumerations.BlockSize.Nano, NanoSize },
@@ -56,9 +57,9 @@
             { Enumerations.BlockSize.Small, SmallSize },
             { Enumerations.BlockSize.Medium, MediumSize },
             { Enumerations.BlockSize.Large, LargeSize },
-        };
+        }.ToImmutableDictionary();
 
-        public static readonly Dictionary<BlockSize, int> HashesPerBlockMap = new()
+        public static readonly ImmutableDictionary<BlockSize, int> HashesPerBlockMap = new Dictionary<BlockSize, int>()
         {
             { Enumerations.BlockSize.Unknown, -1 },
             { Enumerations.BlockSize.Nano, NanoSize / DataHash.HashSizeBytes },
@@ -68,12 +69,12 @@
             { Enumerations.BlockSize.Small, SmallSize / DataHash.HashSizeBytes },
             { Enumerations.BlockSize.Medium, MediumSize / DataHash.HashSizeBytes },
             { Enumerations.BlockSize.Large, LargeSize / DataHash.HashSizeBytes },
-        };
+        }.ToImmutableDictionary();
 
         /// <summary>
         /// Map of Zero Vector Block generators by block size, created from known hashes.
         /// </summary>
-        public static readonly Dictionary<BlockSize, BlockHash> ZeroVectorMap = new()
+        public static readonly ImmutableDictionary<BlockSize, BlockHash> ZeroVectorMap = new Dictionary<BlockSize, BlockHash>()
         {
             {
                 Enumerations.BlockSize.Unknown,
@@ -135,7 +136,7 @@
                     providedHashBytes: Convert.FromHexString("bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8"),
                     computed: true)
             },
-        };
+        }.ToImmutableDictionary();
 
         /// <summary>
         ///     Map a block size enumeration to its actual size in bytes.

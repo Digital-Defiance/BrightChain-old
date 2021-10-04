@@ -7,3 +7,9 @@
 [submodule "src/BrightChain.API"]
 	path = src/BrightChain.API
 	url = git@github.com:BrightChain/BrightChain.API.git
+[submodule "src/BBPPiCalculator"]
+	path = src/BBPPiCalculator
+	url = git@github.com:JessicaMulein/BBPPiCalculator.git
+[submodule "src/LUHN-mod-n"]
+	path = src/LUHN-mod-n
+	url = git@github.com:JessicaMulein/LUHN-mod-n.git

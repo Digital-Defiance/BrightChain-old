@@ -17,7 +17,7 @@
 
         public override IEnumerable<BlockHash> GetBlocksExpiringAt(long date)
         {
-            var resultTuple = this.sessionContext.CblIndicesSession.Read(BlockExpirationIndexKey(date));
+            var resultTuple = this.sessionContext.SharedCacheSession.Read(BlockExpirationIndexKey(date));
             if (resultTuple.status == FASTER.core.Status.OK)
             {
                 if (resultTuple.output is null)
@@ -57,7 +57,7 @@
                 expiring[size] = block.Id;
             }
 
-            this.sessionContext.CblIndicesSession.Upsert(
+            this.sessionContext.SharedCacheSession.Upsert(
                 key: BlockExpirationIndexKey(ticks),
                 desiredValue: new BlockExpirationIndexValue(expiring));
         }
@@ -67,7 +67,7 @@
             var ticks = block.StorageContract.KeepUntilAtLeast.Ticks;
             var expiring = new List<BlockHash>(this.GetBlocksExpiringAt(ticks));
             expiring.Remove(block.Id);
-            this.sessionContext.CblIndicesSession.Upsert(
+            this.sessionContext.SharedCacheSession.Upsert(
                 key: BlockExpirationIndexKey(ticks),
                 desiredValue: new BlockExpirationIndexValue(expiring.ToArray()));
         }
