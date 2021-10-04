@@ -80,6 +80,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BBPPiCalculator\BBPPiCalculator\BBP\BBP.csproj" />
     <ProjectReference Include="..\ENT\EntCalc.csproj" />
     <ProjectReference Include="..\LUHN-mod-n\src\LUHN-mod-n.csproj" />
   </ItemGroup>

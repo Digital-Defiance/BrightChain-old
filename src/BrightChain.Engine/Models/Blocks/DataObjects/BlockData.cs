@@ -5,13 +5,18 @@
     using System.Diagnostics.CodeAnalysis;
     using FASTER.core;
 
-    public struct BlockData : IComparable<BlockData>, IEquatable<BlockData>, IEqualityComparer<BlockData>, IFasterEqualityComparer<BlockData>
+    public abstract class BlockData : IComparable<BlockData>, IEquatable<BlockData>, IEqualityComparer<BlockData>, IFasterEqualityComparer<BlockData>
     {
-        public readonly ReadOnlyMemory<byte> Bytes;
-
-        public BlockData(ReadOnlyMemory<byte> data)
+        public virtual ReadOnlyMemory<byte> Bytes
         {
-            this.Bytes = data;
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public BlockData()
+        {
         }
 
         public IEnumerable<byte> SHA256 =>

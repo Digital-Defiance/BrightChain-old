@@ -208,7 +208,7 @@ namespace BrightChain.Engine.Models.Blocks
                 ByteCount: data.Length,
                 PrivateEncrypted: blockParams.PrivateEncrypted,
                 redundancyContractType: blockParams.Redundancy);
-            this.StoredData = new BlockData(data);
+            this.StoredData = new StoredBlockData(data);
             this.Id = new BlockHash(this); // must happen after data is in place
             this.ConstituentBlocks = constituentBlockHashes is null ? new BlockHash[] { } : constituentBlockHashes;
             this.OriginatingNode = null;
