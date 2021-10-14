@@ -16,11 +16,6 @@
         protected readonly Guid Thread;
         protected bool _disposedValue;
 
-        protected BrightMessage()
-        {
-            throw new NotImplementedException();
-        }
-
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposedValue)
