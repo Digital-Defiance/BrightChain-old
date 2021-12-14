@@ -96,7 +96,6 @@
             this.useReadCache = readCache is null || readCache.Value is null ? false : Convert.ToBoolean(readCache.Value);
 
             (this.fasterDevices, this.fasterStores) = this.InitFaster();
-            this.sessionContext = this.NewSharedSessionContext;
             this.lastHead = this.HeadAddresses();
             this.lastCommit = lastHead;
             this.lastCheckpoint = this.TakeFullCheckpoint();

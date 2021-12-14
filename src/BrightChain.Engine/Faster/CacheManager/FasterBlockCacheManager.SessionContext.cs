@@ -9,9 +9,7 @@
 
     public partial class FasterBlockCacheManager
     {
-        private readonly BlockSessionContext sessionContext;
-
-        private BlockSessionContext NewSharedSessionContext => new BlockSessionContext(
+        private BlockSessionContext NewFasterSessionContext => new BlockSessionContext(
                 logger: this.Logger,
                 dataSession: this.NewDataSession,
                 cblIndicesSession: this.NewCblIndicesSession);
