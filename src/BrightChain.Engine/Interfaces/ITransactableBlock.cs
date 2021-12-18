@@ -1,4 +1,5 @@
 ﻿using System;
+using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Models.Blocks;
 using BrightChain.Engine.Models.Hashes;
 
@@ -21,10 +22,6 @@ namespace BrightChain.Engine.Interfaces
         /// <summary>
         /// Whether this block has been committed to the block store
         /// </summary>
-        bool Committed { get; }
-        /// <summary>
-        /// Whether this block should be allowed to be committed to the block store
-        /// </summary>
-        bool AllowCommit { get; }
+        TransactionStatus State { get; }
     }
 }

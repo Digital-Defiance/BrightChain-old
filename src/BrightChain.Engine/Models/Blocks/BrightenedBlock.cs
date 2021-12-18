@@ -1,4 +1,6 @@
-﻿namespace BrightChain.Engine.Models.Blocks
+﻿using System.Linq;
+
+namespace BrightChain.Engine.Models.Blocks
 {
     using System;
     using System.Collections.Generic;
@@ -22,7 +24,7 @@
                 constituentBlockHashes: constituentBlockHashes)
         {
             this.CacheManager = blockParams.CacheManager;
-            this.AllowCommit = blockParams.AllowCommit;
+            this.State = !blockParams.AllowCommit ? TransactionStatus.DoNotWrite : TransactionStatus.Uncommitted;
             this.disposedValue = false;
         }
 
@@ -58,9 +60,21 @@
 
         public ICacheManager<BlockHash, BrightenedBlock> CacheManager { get; internal set; }
 
-        public bool Committed { get; protected set; } = false;
+        public TransactionStatus State { get; private set; }
 
-        public bool AllowCommit { get; protected set; } = false;
+        public bool AllowCommit
+        {
+            get
+            {
+                return new TransactionStatus[]
+                {
+                    TransactionStatus.Uncommitted,
+                    TransactionStatus.Committed,
+                    TransactionStatus.WrittenUnconfirmed,
+                    TransactionStatus.RolledBackRewrite,
+                }.Contains(this.State);
+            }
+        }
 
         public static bool operator ==(BrightenedBlock a, BrightenedBlock b)
         {
@@ -77,24 +91,64 @@
             this.CacheManager = cacheManager;
         }
 
+        /// <summary>
+        /// Commit the block to disk
+        /// </summary>
+        /// <exception cref="BrightChainException"></exception>
+        /// <exception cref="NotImplementedException"></exception>
         public void Commit()
         {
-            if (!this.AllowCommit)
+            switch (this.State)
             {
-                throw new BrightChainException("Block is not allowed to be committed");
-            }
+                case TransactionStatus.DoNotWrite:
+                case TransactionStatus.RolledBackDoNotWrite:
+                    throw new BrightChainException("Block is not allowed to be committed");
 
-            this.Committed = true;
+                case TransactionStatus.RolledBackRewrite:
+                case TransactionStatus.Uncommitted:
+                    this.State = TransactionStatus.WrittenUnconfirmed;
+                    throw new NotImplementedException();
+                    return;
+
+                case TransactionStatus.WrittenUnconfirmed:
+                    this.State = TransactionStatus.Committed;
+                    throw new NotImplementedException();
+                    return;
+
+                case TransactionStatus.Committed:
+                    return;
+
+                default:
+                    throw new BrightChainException(nameof(this.State));
+            }
         }
 
-        public void Rollback()
+        public void Rollback(bool rewrite = false)
         {
-            this.Committed = false;
+            switch (this.State)
+            {
+                case TransactionStatus.DoNotWrite:
+                case TransactionStatus.RolledBackDoNotWrite:
+                    return;
+
+                case TransactionStatus.RolledBackRewrite:
+                case TransactionStatus.Uncommitted:
+                case TransactionStatus.WrittenUnconfirmed:
+                    this.State = rewrite ? TransactionStatus.RolledBackRewrite : TransactionStatus.RolledBackDoNotWrite;
+                    throw new NotImplementedException();
+                    return;
+
+                case TransactionStatus.Committed:
+                    throw new BrightChainException("Block already committed");
+
+                default:
+                    throw new BrightChainException(nameof(this.State));
+            }
         }
 
         public override BrightenedBlockParams BlockParams => new BrightenedBlockParams(
                 cacheManager: this.CacheManager,
-                allowCommit: this.AllowCommit,
+                allowCommit: State.Equals(TransactionStatus.DoNotWrite) ? false : true,
                 blockParams: new BlockParams(
                     blockSize: this.BlockSize,
                     requestTime: this.StorageContract.RequestTime,
