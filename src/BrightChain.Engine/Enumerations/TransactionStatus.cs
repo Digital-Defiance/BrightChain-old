@@ -31,4 +31,9 @@ public enum TransactionStatus
     /// Confirmed written to disk and session completed successfully.
     /// </summary>
     Committed,
+
+    /// <summary>
+    /// Confirmed removed from disk and session completed successfully. 
+    /// </summary>
+    DroppedCommitted,
 }

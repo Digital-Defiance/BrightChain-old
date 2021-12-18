@@ -70,6 +70,7 @@ namespace BrightChain.Engine.Models.Blocks
                 {
                     TransactionStatus.Uncommitted,
                     TransactionStatus.Committed,
+                    TransactionStatus.DroppedCommitted,
                     TransactionStatus.WrittenUnconfirmed,
                     TransactionStatus.RolledBackRewrite,
                 }.Contains(this.State);
@@ -116,6 +117,7 @@ namespace BrightChain.Engine.Models.Blocks
                     return;
 
                 case TransactionStatus.Committed:
+                case TransactionStatus.DroppedCommitted:
                     return;
 
                 default:
@@ -138,6 +140,7 @@ namespace BrightChain.Engine.Models.Blocks
                     throw new NotImplementedException();
                     return;
 
+                case TransactionStatus.DroppedCommitted:
                 case TransactionStatus.Committed:
                     throw new BrightChainException("Block already committed");
 
