@@ -48,10 +48,24 @@
 
         public virtual IEnumerable<BrightenedBlock> Get(IEnumerable<BlockHash> keys)
         {
-            var blocks = new List<BrightenedBlock>(capacity: keys.Count());
+            var blocks = new List<BrightenedBlock>();
             foreach (var key in keys)
             {
-                blocks.Add(this.Get(key));
+                BrightenedBlock blockData;
+                if (this.UncommittedBlocks.ContainsKey(key))
+                {
+                    this.UncommittedBlocks.TryGetValue(key: key, out blockData);
+                }
+                else
+                {
+                    blockData = this.Get(key);
+                    if (blockData is null)
+                    {
+                        throw new BrightChainException("Failed to retried block");
+                    }
+                }
+
+                blocks.Add(blockData);
             }
 
             return blocks;

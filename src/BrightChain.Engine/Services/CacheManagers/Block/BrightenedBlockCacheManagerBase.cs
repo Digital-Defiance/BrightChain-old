@@ -1,4 +1,6 @@
-﻿namespace BrightChain.Engine.Services.CacheManagers.Block
+﻿using BrightChain.Engine.Models.Hashes;
+
+namespace BrightChain.Engine.Services.CacheManagers.Block
 {
     using System;
     using System.Collections.Generic;
@@ -67,6 +69,8 @@
         /// </summary>
         public BrightenedBlockCacheManagerBase AsBlockCacheManager => this;
 
+        public readonly Dictionary<BlockHash, BrightenedBlock> UncommittedBlocks;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="BrightenedBlockCacheManagerBase" /> class.
         /// </summary>
@@ -83,6 +87,7 @@
             this.RootBlock.CacheManager = this;
             this.DatabaseName = Utilities.HashToFormattedString(this.RootBlock.Guid.ToByteArray());
             this.testingSelfDestruct = testingSelfDestruct;
+            this.UncommittedBlocks = new Dictionary<BlockHash, BrightenedBlock>();
 
             // TODO: load supported block sizes from configurations, etc.
             var section = this.Configuration.GetSection("NodeOptions");
