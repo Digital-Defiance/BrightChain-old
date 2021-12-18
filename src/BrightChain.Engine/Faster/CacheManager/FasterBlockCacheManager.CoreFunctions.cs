@@ -14,7 +14,10 @@
         /// <returns>boolean with whether key is present.</returns>
         public override bool Contains(BlockHash key)
         {
-            return this.sessionContext.Contains(key);
+            using var sessionContext = this.NewFasterSessionContext;
+            {
+                return sessionContext.Contains(key);
+            }
         }
 
         /// <summary>
@@ -42,9 +45,12 @@
                 return false;
             }
 
-            if (!this.sessionContext.Drop(blockHash: key, complete: true))
+            using var sessionContext = this.NewFasterSessionContext;
             {
-                return false;
+                if (!sessionContext.Drop(blockHash: key, complete: true))
+                {
+                    return false;
+                }
             }
 
             this.RemoveExpiration(block);
@@ -59,7 +65,10 @@
         /// <returns>returns requested block or throws.</returns>
         public override BrightenedBlock Get(BlockHash key)
         {
-            return this.sessionContext.Get(key);
+            using var sessionContext = this.NewFasterSessionContext;
+            {
+                return sessionContext.Get(key);
+            }
         }
 
         /// <summary>
@@ -70,9 +79,12 @@
         {
             base.Set(block);
             block.SetCacheManager(this);
-            this.sessionContext.Upsert(
-                block: block,
-                completePending: false);
+            using var sessionContext = this.NewFasterSessionContext;
+            {
+                sessionContext.Upsert(
+                    block: block,
+                    completePending: false);
+            }
             this.AddExpiration(block, noCheckContains: true);
         }
 
@@ -85,7 +97,10 @@
                 this.Set(blocks[i]);
             }
 
-            this.sessionContext.CompletePending(waitForCommit: false);
+            using var sessionContext = this.NewFasterSessionContext;
+            {
+                sessionContext.CompletePending(waitForCommit: false);
+            }
         }
 
         public async override void SetAllAsync(IAsyncEnumerable<BrightenedBlock> items)
@@ -95,7 +110,10 @@
                 this.Set(block);
             }
 
-            await this.sessionContext.CompletePendingAsync(waitForCommit: false).ConfigureAwait(false);
+            using var sessionContext = this.NewFasterSessionContext;
+            {
+                await sessionContext.CompletePendingAsync(waitForCommit: false).ConfigureAwait(false);
+            }
         }
     }
 }

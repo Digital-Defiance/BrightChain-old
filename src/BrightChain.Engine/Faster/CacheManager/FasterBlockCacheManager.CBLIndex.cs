@@ -17,23 +17,26 @@
 
         public override BrightHandle GetCbl(DataHash sourceHash)
         {
-            var result = this.sessionContext.SharedCacheSession.Read(CblIndexKey(sourceHash));
-            if (result.status == Status.NOTFOUND)
+            using var sessionContext = this.NewFasterSessionContext;
             {
-                throw new IndexOutOfRangeException(message: sourceHash.ToString());
-            }
-            else if (result.status != Status.OK)
-            {
-                throw new BrightChainException(
-                    message: string.Format("cbl handle fetch error: {0}", result.status.ToString()));
-            }
+                var result = sessionContext.SharedCacheSession.Read(CblIndexKey(sourceHash));
+                if (result.status == Status.NOTFOUND)
+                {
+                    throw new IndexOutOfRangeException(message: sourceHash.ToString());
+                }
+                else if (result.status != Status.OK)
+                {
+                    throw new BrightChainException(
+                        message: string.Format("cbl handle fetch error: {0}", result.status.ToString()));
+                }
 
-            if (result.output is BrightHandleIndexValue brightHandle)
-            {
-                return brightHandle.BrightHandle;
-            }
+                if (result.output is BrightHandleIndexValue brightHandle)
+                {
+                    return brightHandle.BrightHandle;
+                }
 
-            throw new BrightChainException("Unexpected index result type for key");
+                throw new BrightChainException("Unexpected index result type for key");
+            }
         }
 
         public override void SetCbl(BlockHash brightenedCblHash, DataHash identifiableSourceHash, BrightHandle brightHandle)
@@ -51,11 +54,14 @@
                 throw new BrightChainException(nameof(identifiableSourceHash));
             }
 
-            this.sessionContext.SharedCacheSession.Upsert(
-                key: CblIndexKey(identifiableSourceHash),
-                desiredValue: new BrightHandleIndexValue(brightHandle).AsIndex);
+            using var sessionContext = this.NewFasterSessionContext;
+            {
+                sessionContext.SharedCacheSession.Upsert(
+                    key: CblIndexKey(identifiableSourceHash),
+                    desiredValue: new BrightHandleIndexValue(brightHandle).AsIndex);
 
-            this.sessionContext.CompletePending(waitForCommit: false);
+                sessionContext.CompletePending(waitForCommit: false);
+            }
         }
 
         private static string CorrelationIndexKey(Guid correlationId)
@@ -69,32 +75,37 @@
             newCbl.PreviousVersionHash = oldCbl.SourceId;
 
             base.UpdateCblVersion(newCbl, oldCbl);
-
-            this.sessionContext.SharedCacheSession.Upsert(
-                key: CorrelationIndexKey(newCbl.CorrelationId),
-                desiredValue: new CBLDataHashIndexValue(newCbl.SourceId).AsIndex);
+            using var sessionContext = this.NewFasterSessionContext;
+            {
+                sessionContext.SharedCacheSession.Upsert(
+                    key: CorrelationIndexKey(newCbl.CorrelationId),
+                    desiredValue: new CBLDataHashIndexValue(newCbl.SourceId).AsIndex);
+            }
         }
 
         public override BrightHandle GetCbl(Guid correlationId)
         {
-            var key = CorrelationIndexKey(correlationId);
-            var result = this.sessionContext.SharedCacheSession.Read(key);
-            if (result.status == Status.NOTFOUND)
+            using var sessionContext = this.NewFasterSessionContext;
             {
-                throw new IndexOutOfRangeException(message: correlationId.ToString());
-            }
-            else if (result.status != Status.OK)
-            {
-                throw new BrightChainException(
-                    message: string.Format("cbl correlation fetch error: {0}", result.status.ToString()));
-            }
+                var key = CorrelationIndexKey(correlationId);
+                var result = sessionContext.SharedCacheSession.Read(key);
+                if (result.status == Status.NOTFOUND)
+                {
+                    throw new IndexOutOfRangeException(message: correlationId.ToString());
+                }
+                else if (result.status != Status.OK)
+                {
+                    throw new BrightChainException(
+                        message: string.Format("cbl correlation fetch error: {0}", result.status.ToString()));
+                }
 
-            if (result.output is BrightHandleIndexValue brightHandle)
-            {
-                return brightHandle.BrightHandle;
-            }
+                if (result.output is BrightHandleIndexValue brightHandle)
+                {
+                    return brightHandle.BrightHandle;
+                }
 
-            throw new BrightChainException("Unexpected index result type for key");
+                throw new BrightChainException("Unexpected index result type for key");
+            }
         }
     }
 }

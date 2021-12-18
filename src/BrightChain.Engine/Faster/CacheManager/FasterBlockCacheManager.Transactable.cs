@@ -127,17 +127,20 @@
 
         public BlockSessionAddresses NextSerials()
         {
-            return new BlockSessionAddresses(addresses: new Dictionary<CacheStoreType, long>
+            using var sessionContext = this.NewFasterSessionContext;
             {
+                return new BlockSessionAddresses(addresses: new Dictionary<CacheStoreType, long>
                 {
-                    CacheStoreType.BlockData,
-                    this.sessionContext.BlockDataBlobSession.NextSerialNo
-                },
-                {
-                    CacheStoreType.Indices,
-                    this.sessionContext.SharedCacheSession.NextSerialNo
-                },
-            });
+                    {
+                        CacheStoreType.BlockData,
+                        sessionContext.BlockDataBlobSession.NextSerialNo
+                    },
+                    {
+                        CacheStoreType.Indices,
+                        sessionContext.SharedCacheSession.NextSerialNo
+                    },
+                });
+            }
         }
 
         public BlockSessionAddresses HeadAddresses()
@@ -157,21 +160,22 @@
 
         public BlockSessionAddresses Compact(bool shiftBeginAddress = true)
         {
-            return new BlockSessionAddresses(addresses: new Dictionary<CacheStoreType, long>
+            using var sessionContext = this.NewFasterSessionContext;
             {
+                return new BlockSessionAddresses(addresses: new Dictionary<CacheStoreType, long>
                 {
-                    CacheStoreType.BlockData,
-                    this.sessionContext.BlockDataBlobSession.Compact(
-                        untilAddress: this.primaryDataKV.Log.HeadAddress,
-                        shiftBeginAddress: shiftBeginAddress)
-                },
-                {
-                    CacheStoreType.Indices,
-                    this.sessionContext.SharedCacheSession.Compact(
-                        untilAddress: this.cblIndicesKV.Log.HeadAddress,
-                        shiftBeginAddress: shiftBeginAddress)
-                },
-            });
+                    {
+                        CacheStoreType.BlockData, sessionContext.BlockDataBlobSession.Compact(
+                            untilAddress: this.primaryDataKV.Log.HeadAddress,
+                            shiftBeginAddress: shiftBeginAddress)
+                    },
+                    {
+                        CacheStoreType.Indices, sessionContext.SharedCacheSession.Compact(
+                            untilAddress: this.cblIndicesKV.Log.HeadAddress,
+                            shiftBeginAddress: shiftBeginAddress)
+                    },
+                });
+            }
         }
 
         public async void Recover()
