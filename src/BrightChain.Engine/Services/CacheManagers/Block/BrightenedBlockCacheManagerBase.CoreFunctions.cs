@@ -100,8 +100,17 @@
 
             if (this.Contains(value.Id) && !updateMetadataOnly)
             {
-                throw new BrightChainException("Key already exists");
+                throw new BrightChainException("Key already exists in fasterkv");
             }
+
+            if (this.UncommittedBlocks.ContainsKey(value.Id) && !updateMetadataOnly)
+            {
+                throw new BrightChainException("Key already exists uncommitted blocks");
+            }
+
+            this.UncommittedBlocks[value.Id] = value;
+
+            // TODO: place into transaction
         }
 
         public void ExtendStorage(BrightenedBlock block, DateTime keepUntilAtLeast, RedundancyContractType redundancy = RedundancyContractType.Unknown)
@@ -123,7 +132,9 @@
 
             this.RemoveExpiration(block);
             this.AddExpiration(newBlock);
-            this.Set(block);
+            this.Set(
+                value: block,
+                updateMetadataOnly: false);
         }
 
         public virtual void Set(BlockHash key, BrightenedBlock value)
@@ -133,14 +144,18 @@
                 throw new BrightChainException("Can not store transactable block with different key");
             }
 
-            this.Set(value);
+            this.Set(
+                value: value,
+                updateMetadataOnly: false);
         }
 
         public virtual void SetAll(IEnumerable<BrightenedBlock> items)
         {
             foreach (var item in items)
             {
-                this.Set(item);
+                this.Set(
+                    value: item,
+                    updateMetadataOnly: false);
             }
         }
 
@@ -148,7 +163,9 @@
         {
             await foreach (var item in items)
             {
-                this.Set(item);
+                this.Set(
+                    value: item,
+                    updateMetadataOnly: false);
             }
         }
 
