@@ -81,15 +81,15 @@
         /// <summary>
         ///     Retrieves a block from the cache if it is present
         /// </summary>
-        /// <param name="key">key to retrieve</param>
+        /// <param name="blockHash">key to retrieve</param>
         /// <returns>returns requested block or throws</returns>
-        public override BrightenedBlock Get(BlockHash key)
+        public override BrightenedBlock Get(BlockHash blockHash)
         {
             BrightenedBlock block;
-            var found = this.blocks.TryGetValue(key, out block);
+            var found = this.blocks.TryGetValue(blockHash, out block);
             if (!found)
             {
-                throw new IndexOutOfRangeException(message: key.ToString());
+                throw new IndexOutOfRangeException(message: blockHash.ToString());
             }
 
             if (!block.Validate())

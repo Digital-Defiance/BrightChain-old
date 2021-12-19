@@ -42,9 +42,42 @@
         /// <summary>
         ///     Retrieves a block from the cache if it is present.
         /// </summary>
-        /// <param name="key">key to retrieve.</param>
+        /// <param name="blockHash">key to retrieve.</param>
         /// <returns>returns requested block or throws.</returns>
-        public abstract BrightenedBlock Get(BlockHash key);
+        public abstract BrightenedBlock Get(BlockHash blockHash);
+
+        private void AddUpdateMemoryBlock(BrightenedBlock block)
+        {
+            var memoryHit = this.UncommittedBlocks.ContainsKey(block.Id);
+            var oldBlock = memoryHit ? this.UncommittedBlocks[block.Id] : null;
+            this.UncommittedBlocks[block.Id] = block;
+            this.UncommittedHashesByStatus[block.State].Add(block.Id);
+
+            if (!memoryHit)
+            {
+                return;
+            }
+
+            var memoryHashesByStatusList = this.UncommittedHashesByStatus[oldBlock!.State];
+            if (memoryHashesByStatusList.Contains(block.Id))
+            {
+                memoryHashesByStatusList.Remove(block.Id);
+            }
+        }
+
+        private BrightenedBlock CacheFetchToMemory(BlockHash blockHash)
+        {
+            var cacheHit = this.Contains(key: blockHash);
+            if (!cacheHit)
+            {
+                throw new BrightChainException(message: "Cache Miss");
+            }
+
+            var cacheBlock = this.Get(blockHash: blockHash);
+            this.AddUpdateMemoryBlock(block: cacheBlock);
+
+            return cacheBlock;
+        }
 
         public virtual IEnumerable<BrightenedBlock> Get(IEnumerable<BlockHash> keys)
         {
@@ -54,15 +87,12 @@
                 BrightenedBlock blockData;
                 if (this.UncommittedBlocks.ContainsKey(key))
                 {
-                    this.UncommittedBlocks.TryGetValue(key: key, out blockData);
+                    blockData = this.UncommittedBlocks[key];
+                    this.UncommittedHashesByStatus[blockData.State].Add(key);
                 }
                 else
                 {
-                    blockData = this.Get(key);
-                    if (blockData is null)
-                    {
-                        throw new BrightChainException("Failed to retried block");
-                    }
+                    blockData = this.Get(blockHash: key);
                 }
 
                 blocks.Add(blockData);
@@ -108,7 +138,7 @@
                 throw new BrightChainException("Key already exists uncommitted blocks");
             }
 
-            this.UncommittedBlocks[value.Id] = value;
+            AddUpdateMemoryBlock(block: value);
 
             // TODO: place into transaction
         }

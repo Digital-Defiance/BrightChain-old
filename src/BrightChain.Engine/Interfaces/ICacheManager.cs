@@ -14,9 +14,9 @@
         /// <summary>
         /// Retrieves an object from the cache if it is present
         /// </summary>
-        /// <param name="key">key to retrieve</param>
+        /// <param name="blockHash">key to retrieve</param>
         /// <returns>returns requested block or throws</returns>
-        Tvalue Get(Tkey key);
+        Tvalue Get(Tkey blockHash);
 
         /// <summary>
         /// Adds a key to the cache if it is not already present

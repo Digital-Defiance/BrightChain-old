@@ -61,13 +61,13 @@
         /// <summary>
         ///     Retrieves a block from the cache if it is present.
         /// </summary>
-        /// <param name="key">key to retrieve.</param>
+        /// <param name="blockHash">key to retrieve.</param>
         /// <returns>returns requested block or throws.</returns>
-        public override BrightenedBlock Get(BlockHash key)
+        public override BrightenedBlock Get(BlockHash blockHash)
         {
             using var sessionContext = this.NewFasterSessionContext;
             {
-                return sessionContext.Get(key);
+                return sessionContext.Get(blockHash);
             }
         }
 

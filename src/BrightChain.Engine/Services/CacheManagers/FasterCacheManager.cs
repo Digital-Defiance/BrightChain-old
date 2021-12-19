@@ -198,16 +198,16 @@
         /// <summary>
         ///     Retrieves a block from the cache if it is present.
         /// </summary>
-        /// <param name="key">key to retrieve.</param>
+        /// <param name="blockHash">key to retrieve.</param>
         /// <returns>returns requested block or throws.</returns>
-        public Tvalue Get(Tkey key)
+        public Tvalue Get(Tkey blockHash)
         {
             using var session = this.fasterKV.NewSession(functions: new BrightChainAdvancedFunctions<Tkey, Tvalue, Tvalue, Tvalue, BrightChainFasterCacheContext>());
-            var resultTuple = session.Read(key);
+            var resultTuple = session.Read(blockHash);
 
             if (resultTuple.status != Status.OK)
             {
-                throw new IndexOutOfRangeException(message: key.ToString());
+                throw new IndexOutOfRangeException(message: blockHash.ToString());
             }
 
             return resultTuple.output;

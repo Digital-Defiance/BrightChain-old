@@ -4,11 +4,12 @@ public enum TransactionStatus
 {
     /// <summary>
     /// This block should not be written to disk.
+    /// initial state, may be added to Memory dictionary only.
     /// </summary>
     DoNotWrite,
 
     /// <summary>
-    /// This block has not been written to disk.
+    /// This block has not been written to disk, but should be.
     /// Memory Dictionary only.
     /// </summary>
     Uncommitted,
@@ -26,7 +27,7 @@ public enum TransactionStatus
     RolledBackRewrite,
 
     /// <summary>
-    /// Written to disk but transaction not confirmed/completed. FasterKV + MemoryDict
+    /// Written to disk but transaction not confirmed/completed. FasterKV + MemoryDict.
     /// </summary>
     WrittenUnconfirmed,
 
