@@ -48,9 +48,9 @@
 
         private void AddUpdateMemoryBlock(BrightenedBlock block)
         {
-            var memoryHit = this.UncommittedBlocks.ContainsKey(block.Id);
-            var oldBlock = memoryHit ? this.UncommittedBlocks[block.Id] : null;
-            this.UncommittedBlocks[block.Id] = block;
+            var memoryHit = this.UncomittedBlocksByHash.ContainsKey(block.Id);
+            var oldBlock = memoryHit ? this.UncomittedBlocksByHash[block.Id] : null;
+            this.UncomittedBlocksByHash[block.Id] = block;
             this.UncommittedHashesByStatus[block.State].Add(block.Id);
 
             if (!memoryHit)
@@ -85,9 +85,9 @@
             foreach (var key in keys)
             {
                 BrightenedBlock blockData;
-                if (this.UncommittedBlocks.ContainsKey(key))
+                if (this.UncomittedBlocksByHash.ContainsKey(key))
                 {
-                    blockData = this.UncommittedBlocks[key];
+                    blockData = this.UncomittedBlocksByHash[key];
                     this.UncommittedHashesByStatus[blockData.State].Add(key);
                 }
                 else
@@ -133,7 +133,7 @@
                 throw new BrightChainException("Key already exists in fasterkv");
             }
 
-            if (this.UncommittedBlocks.ContainsKey(value.Id) && !updateMetadataOnly)
+            if (this.UncomittedBlocksByHash.ContainsKey(value.Id) && !updateMetadataOnly)
             {
                 throw new BrightChainException("Key already exists uncommitted blocks");
             }
@@ -222,5 +222,10 @@
             // this means total size is hashes^2*size
             return hashesPerBlockSquared * iBlockSize;
         }
+
+        public IEnumerable<BrightenedBlock> UncommittedBlocksByStatus(TransactionStatus transactionStatus) =>
+            this.Get(keys: this.UncommittedHashesByStatus[transactionStatus].ToArray());
+
+        public IEnumerable<BrightenedBlock> UncommittedBlocks => this.UncomittedBlocksByHash.Values;
     }
 }

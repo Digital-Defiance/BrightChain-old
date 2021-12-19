@@ -72,7 +72,7 @@ namespace BrightChain.Engine.Services.CacheManagers.Block
         /// <summary>
         /// Blocks that are in-memory either pending write to the cache or confirmation of no-rollback required.
         /// </summary>
-        public readonly Dictionary<BlockHash, BrightenedBlock> UncommittedBlocks;
+        public readonly Dictionary<BlockHash, BrightenedBlock> UncomittedBlocksByHash;
         /// <summary>
         /// Hashes of concomitted blocks grouped by transactions status.
         /// </summary>
@@ -94,7 +94,7 @@ namespace BrightChain.Engine.Services.CacheManagers.Block
             this.RootBlock.CacheManager = this;
             this.DatabaseName = Utilities.HashToFormattedString(this.RootBlock.Guid.ToByteArray());
             this.testingSelfDestruct = testingSelfDestruct;
-            this.UncommittedBlocks = new Dictionary<BlockHash, BrightenedBlock>();
+            this.UncomittedBlocksByHash = new Dictionary<BlockHash, BrightenedBlock>();
             this.UncommittedHashesByStatus = new Dictionary<TransactionStatus, List<BlockHash>>();
 
             // TODO: load supported block sizes from configurations, etc.
