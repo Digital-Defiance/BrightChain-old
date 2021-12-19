@@ -5,11 +5,11 @@
 
     public struct BlockSessionAddresses
     {
-        public readonly Dictionary<CacheStoreType, long> Addresses;
+        public readonly long Address;
 
-        public BlockSessionAddresses(Dictionary<CacheStoreType, long> addresses)
+        public BlockSessionAddresses(long address)
         {
-            this.Addresses = addresses;
+            this.Address = address;
         }
     }
 }

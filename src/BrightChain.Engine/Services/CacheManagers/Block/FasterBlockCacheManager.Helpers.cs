@@ -3,7 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Faster.Enumerations;
+    using BrightChain.Engine.Faster.Serializers;
+    using BrightChain.Engine.Models.Blocks;
+    using BrightChain.Engine.Models.Blocks.DataObjects;
+    using BrightChain.Engine.Models.Hashes;
     using FASTER.core;
 
     public partial class FasterBlockCacheManager
@@ -67,28 +72,34 @@
         }
 
         private
-            (Dictionary<CacheStoreType, Dictionary<CacheDeviceType, IDevice>> DevicesByStoreType,
-            Dictionary<CacheStoreType, FasterBase> StoresByStoreType)
+            (Dictionary<CacheDeviceType, IDevice> Devices,
+            FasterBase Store)
             InitFaster()
         {
             var cacheDir = this.GetDiskCacheDirectory().FullName;
-            var kvs = new Dictionary<CacheStoreType, FasterBase>();
-            var devices = new Dictionary<CacheStoreType, Dictionary<CacheDeviceType, IDevice>>();
-            foreach (CacheStoreType storeType in Enum.GetValues(enumType: typeof(CacheStoreType)))
+            var kv = new FasterBase();
+            var devices = new Dictionary<CacheDeviceType, IDevice>();
+            var logDevicesByType = new Dictionary<CacheDeviceType, IDevice>();
+            foreach (CacheDeviceType deviceType in Enum.GetValues(enumType: typeof(CacheDeviceType)))
             {
-                var logDevicesByType = new Dictionary<CacheDeviceType, IDevice>();
-                foreach (CacheDeviceType deviceType in Enum.GetValues(enumType: typeof(CacheDeviceType)))
-                {
-                    var device = this.CreateLogDevice(string.Format("{0}-{1}", storeType.ToString(), deviceType.ToString()));
-                    logDevicesByType.Add(deviceType, device);
-                }
-
-                devices.Add(storeType, logDevicesByType);
-                var newKv = this.newKVFuncs[storeType](logDevicesByType, this.useReadCache, cacheDir);
-                kvs.Add(storeType, newKv);
+                var device = this.CreateLogDevice(deviceType.ToString());
+                logDevicesByType.Add(deviceType, device);
             }
 
-            return (devices, kvs);
+            var blockDataSerializerSettings = new SerializerSettings<BlockHash, BlockData>
+            {
+                keySerializer = () => new FasterBlockHashSerializer(),
+                valueSerializer = () => new DataContractObjectSerializer<BlockData>(),
+            };
+
+            var newStore = new FasterKV<BlockHash, BlockData>(
+                size: HashTableBuckets,
+                logSettings: NewLogSettings(devices, this.useReadCache),
+                checkpointSettings: NewCheckpointSettings(cacheDir),
+                serializerSettings: blockDataSerializerSettings,
+                comparer: BlockSizeMap.ZeroVectorHash(BlockSize.Micro)); // gets an arbitrary BlockHash object which has the IFasterEqualityComparer on the class.
+
+            return (devices, newStore);
         }
     }
 }

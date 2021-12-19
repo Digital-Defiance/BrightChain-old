@@ -19,9 +19,7 @@ namespace BrightChain.Engine.Interfaces
         /// </summary>
         /// <param name="cacheManager"></param>
         void SetCacheManager(ICacheManager<BlockHash, BrightenedBlock> cacheManager);
-        /// <summary>
-        /// Whether this block has been committed to the block store
-        /// </summary>
-        TransactionStatus State { get; }
+
+        bool AllowCommit { get; }
     }
 }

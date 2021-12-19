@@ -15,7 +15,7 @@
                 cblIndicesSession: this.NewCblIndicesSession);
 
         private ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainBlockHashAdvancedFunctions> NewDataSession
-            => this.primaryDataKV
+            => this.KV
                 .For(functions: new BrightChainBlockHashAdvancedFunctions())
                 .NewSession<BrightChainBlockHashAdvancedFunctions>();
 

@@ -1,4 +1,6 @@
-﻿using BrightChain.Engine.Models.Hashes;
+﻿using BrightChain.Engine.Models;
+using BrightChain.Engine.Models.Hashes;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BrightChain.Engine.Services.CacheManagers.Block
 {
@@ -70,15 +72,6 @@ namespace BrightChain.Engine.Services.CacheManagers.Block
         public BrightenedBlockCacheManagerBase AsBlockCacheManager => this;
 
         /// <summary>
-        /// Blocks that are in-memory either pending write to the cache or confirmation of no-rollback required.
-        /// </summary>
-        public readonly Dictionary<BlockHash, BrightenedBlock> UncomittedBlocksByHash;
-        /// <summary>
-        /// Hashes of concomitted blocks grouped by transactions status.
-        /// </summary>
-        public readonly Dictionary<TransactionStatus, List<BlockHash>> UncommittedHashesByStatus;
-
-        /// <summary>
         ///     Initializes a new instance of the <see cref="BrightenedBlockCacheManagerBase" /> class.
         /// </summary>
         /// <param name="logger">Logging provider.</param>
@@ -94,8 +87,6 @@ namespace BrightChain.Engine.Services.CacheManagers.Block
             this.RootBlock.CacheManager = this;
             this.DatabaseName = Utilities.HashToFormattedString(this.RootBlock.Guid.ToByteArray());
             this.testingSelfDestruct = testingSelfDestruct;
-            this.UncomittedBlocksByHash = new Dictionary<BlockHash, BrightenedBlock>();
-            this.UncommittedHashesByStatus = new Dictionary<TransactionStatus, List<BlockHash>>();
 
             // TODO: load supported block sizes from configurations, etc.
             var section = this.Configuration.GetSection("NodeOptions");

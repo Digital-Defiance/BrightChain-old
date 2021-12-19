@@ -23,7 +23,7 @@
         {
             return await this.CheckpointFuncAsync(() => new Dictionary<CacheStoreType, Task<(bool, Guid)>>()
             {
-                { CacheStoreType.BlockData, this.primaryDataKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
+                { CacheStoreType.BlockData, this.KV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
                 { CacheStoreType.Indices, this.cblIndicesKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
             }).ConfigureAwait(false);
         }
@@ -37,7 +37,7 @@
         {
             return await this.CheckpointFuncAsync(() => new Dictionary<CacheStoreType, Task<(bool, Guid)>>()
             {
-                { CacheStoreType.BlockData, this.primaryDataKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
+                { CacheStoreType.BlockData, this.KV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
                 { CacheStoreType.Indices, this.cblIndicesKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
             }).ConfigureAwait(false);
         }
@@ -51,7 +51,7 @@
         {
             return await this.CheckpointFuncAsync(() => new Dictionary<CacheStoreType, Task<(bool, Guid)>>()
             {
-                { CacheStoreType.BlockData, this.primaryDataKV.TakeIndexCheckpointAsync().AsTask() },
+                { CacheStoreType.BlockData, this.KV.TakeIndexCheckpointAsync().AsTask() },
                 { CacheStoreType.Indices, this.cblIndicesKV.TakeIndexCheckpointAsync().AsTask() },
             }).ConfigureAwait(false);
         }
@@ -63,15 +63,15 @@
             switch (operation)
             {
                 case FasterCheckpointOperation.Full:
-                    dataResult = this.primaryDataKV.TakeFullCheckpoint(token: out dataToken, checkpointType: checkpointType);
+                    dataResult = this.KV.TakeFullCheckpoint(token: out dataToken, checkpointType: checkpointType);
                     cblIndexResult = this.cblIndicesKV.TakeFullCheckpoint(token: out cblIndexsToken, checkpointType: checkpointType);
                     break;
                 case FasterCheckpointOperation.Hybrid:
-                    dataResult = this.primaryDataKV.TakeHybridLogCheckpoint(out dataToken);
+                    dataResult = this.KV.TakeHybridLogCheckpoint(out dataToken);
                     cblIndexResult = this.cblIndicesKV.TakeHybridLogCheckpoint(out cblIndexsToken);
                     break;
                 case FasterCheckpointOperation.Index:
-                    dataResult = this.primaryDataKV.TakeIndexCheckpoint(out dataToken);
+                    dataResult = this.KV.TakeIndexCheckpoint(out dataToken);
                     cblIndexResult = this.cblIndicesKV.TakeIndexCheckpoint(out cblIndexsToken);
                     break;
                 default:
@@ -119,7 +119,7 @@
             await Task
                 .WhenAll(new Task[]
                     {
-                        this.primaryDataKV.CompleteCheckpointAsync().AsTask(),
+                        this.KV.CompleteCheckpointAsync().AsTask(),
                         this.cblIndicesKV.CompleteCheckpointAsync().AsTask(),
                     })
                 .ConfigureAwait(false);
@@ -149,7 +149,7 @@
             {
                 {
                     CacheStoreType.BlockData,
-                    this.primaryDataKV.Log.HeadAddress
+                    this.KV.Log.HeadAddress
                 },
                 {
                     CacheStoreType.Indices,
@@ -166,7 +166,7 @@
                 {
                     {
                         CacheStoreType.BlockData, sessionContext.BlockDataBlobSession.Compact(
-                            untilAddress: this.primaryDataKV.Log.HeadAddress,
+                            untilAddress: this.KV.Log.HeadAddress,
                             shiftBeginAddress: shiftBeginAddress)
                     },
                     {
@@ -182,7 +182,7 @@
         {
             Task.WaitAll(new Task[]
             {
-                this.primaryDataKV.RecoverAsync().AsTask(),
+                this.KV.RecoverAsync().AsTask(),
                 this.cblIndicesKV.RecoverAsync().AsTask(),
             });
         }

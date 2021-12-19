@@ -77,29 +77,24 @@
             this.logDevice = this.OpenDevice(string.Format("{0}-log", typeof(Tkey).Name));
             this.fasterDevice = this.OpenDevice(string.Format("{0}-data", typeof(Tkey).Name));
 
-            var logSettings = new LogSettings // log settings (devices, page size, memory size, etc.)
-            {
-                LogDevice = this.fasterDevice,
-                ObjectLogDevice = this.fasterDevice,
-                ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
-            };
-
-            // Define serializers; otherwise FASTER will use the slower DataContract
-            // Needed only for class keys/values
-            var serializerSettings = new SerializerSettings<Tkey, Tvalue>
-            {
-                keySerializer = () => new TkeySerializer(),
-                valueSerializer = () => new TvalueSerializer(),
-            };
 
             this.fasterKV = new FasterKV<Tkey, Tvalue>(
                 size: 1L << 20, // hash table size (number of 64-byte buckets)
-                logSettings: logSettings,
+                logSettings: new LogSettings // log settings (devices, page size, memory size, etc.)
+                {
+                    LogDevice = this.fasterDevice,
+                    ObjectLogDevice = this.fasterDevice,
+                    ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
+                },
                 checkpointSettings: new CheckpointSettings
                 {
                     CheckpointDir = this.GetDiskCacheDirectory().FullName,
+                }, // Define serializers; otherwise FASTER will use the slower DataContract
+                serializerSettings: new SerializerSettings<Tkey, Tvalue>
+                {
+                    keySerializer = () => new TkeySerializer(),
+                    valueSerializer = () => new TvalueSerializer(),
                 },
-                serializerSettings: serializerSettings,
                 comparer: null);
         }
 
