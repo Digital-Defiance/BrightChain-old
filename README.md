@@ -29,21 +29,17 @@ Unlimited storage for everyone, and a mathematically reinforced and moderated co
 # One-Pager
 The BrightChain "One-Pager" is about 3 pages at the moment, but pending some slimming down is about as concise a document as I've put together.
 - https://apertureimagingcom-my.sharepoint.com/:w:/g/personal/jessica_mulein_com/EYoQU8qG_xlGpD0_A-mxhvoBqv3OylrfjeRAohvoC0gDQg?e=0U2XDa
-  - PDF https://github.com/BrightChain/blob/main/BrightChain-One-Pager.pdf as of 08/13/21 09:44 Pacfic time.
+  - PDF https://github.com/BrightChain/BrightChain/blob/main/BrightChain-One-Pager.pdf as of 08/13/21 09:44 Pacfic time.
   - Feedback welcome.
 
 # "Long-Paper"
 The BrightChain "LongPaper" is longer and a work in progress, but goes into plain language detail on all aspects.
 - https://apertureimagingcom-my.sharepoint.com/:w:/g/personal/jessica_mulein_com/EQGi-tzRmL9KotpkENN0OXcB5LQwpT7ox3vFo3eIJZrqcg?e=MZOanw
-  - PDF https://github.com/BrightChain/blob/main/BrightChain-LongPaper.pdf as of 08/16/21 13:00 Pacfic time.
+  - PDF https://github.com/BrightChain/BrightChain/blob/main/BrightChain-LongPaper.pdf as of 08/16/21 13:00 Pacfic time.
   - Feedback welcome of course.
 
 # Contributing
-This project welcomes contributions and suggestions. Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit https://cla.microsoft.com.
-
-When you submit a pull request, a CLA-bot will automatically determine whether you need to provide a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the instructions provided by the bot. You will only need to do this once across all repos using our CLA.
-
-This project has adopted the Microsoft Open Source Code of Conduct. For more information see the Code of Conduct FAQ or contact opencode@microsoft.com with any additional questions or comments.
+This project welcomes contributions and suggestions. Licensing up for debate. Code should eventually belong to BrightChain charitable organiztion as IP holder and generally Apache 2 / MIT / GPLv3 sort of licence.
 
 # Recent thoughts:
  - A lot of the reputation and resultant API throttling will be in the line of thinking with: https://en.wikipedia.org/wiki/Hashcash#Advantages_and_disadvantages
