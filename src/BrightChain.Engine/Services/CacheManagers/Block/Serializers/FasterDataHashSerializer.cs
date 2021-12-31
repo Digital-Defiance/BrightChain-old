@@ -1,4 +1,6 @@
-﻿namespace BrightChain.Engine.Faster.Serializers
+﻿using NeuralFabric.Models.Hashes;
+
+namespace BrightChain.Engine.Faster.Serializers
 {
     using System;
     using BrightChain.Engine.Models.Hashes;

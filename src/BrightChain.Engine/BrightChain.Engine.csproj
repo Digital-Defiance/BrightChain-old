@@ -86,6 +86,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BBPPiCalculator\BBPPiCalculator\BBP\BBP.csproj" />
     <ProjectReference Include="..\ENT\EntCalc.csproj" />
+    <ProjectReference Include="..\NeuralFabric\NeuralFabric.csproj" />
   </ItemGroup>
 
   <ItemGroup>

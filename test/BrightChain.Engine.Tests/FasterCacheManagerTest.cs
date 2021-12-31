@@ -13,7 +13,7 @@
 
     [TestClass]
     public class FasterCacheManagerTest
-        : CacheManagerTest<FasterCacheManager<string, ProtoContractTestObject, BinaryStringSerializer, DataContractObjectSerializer<ProtoContractTestObject>>, string, ProtoContractTestObject>
+        : CacheManagerTest<TapestryCacheManager<string, ProtoContractTestObject, BinaryStringSerializer, DataContractObjectSerializer<ProtoContractTestObject>>, string, ProtoContractTestObject>
     {
         private static int TestKeyLength { get; } = 11;
 
@@ -27,12 +27,12 @@
             return randomString;
         }
 
-        internal override FasterCacheManager<string, ProtoContractTestObject, BinaryStringSerializer, DataContractObjectSerializer<ProtoContractTestObject>> NewCacheManager(ILogger logger, IConfiguration configuration)
+        internal override TapestryCacheManager<string, ProtoContractTestObject, BinaryStringSerializer, DataContractObjectSerializer<ProtoContractTestObject>> NewCacheManager(ILogger logger, IConfiguration configuration)
         {
-            return new FasterCacheManager<string, ProtoContractTestObject, BinaryStringSerializer, DataContractObjectSerializer<ProtoContractTestObject>>(
+            return new TapestryCacheManager<string, ProtoContractTestObject, BinaryStringSerializer, DataContractObjectSerializer<ProtoContractTestObject>>(
 logger: this.logger.Object,
 configuration: this.configuration.Object,
-databaseName: Guid.NewGuid().ToString());
+collectionName: Guid.NewGuid().ToString());
         }
 
         internal override KeyValuePair<string, ProtoContractTestObject> NewKeyValue()

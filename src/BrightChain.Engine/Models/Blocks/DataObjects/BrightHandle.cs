@@ -1,4 +1,6 @@
-﻿namespace BrightChain.Engine.Models.Blocks.DataObjects
+﻿using NeuralFabric.Models.Hashes;
+
+namespace BrightChain.Engine.Models.Blocks.DataObjects
 {
     using System;
     using System.Collections.Generic;
@@ -56,7 +58,7 @@
         }
 
         public IEnumerable<string> HashStrings => this.BlockHashByteArrays
-                    .Select(r => Helpers.Utilities.HashToFormattedString(r.ToArray()));
+                    .Select(r => NeuralFabric.Helpers.Utilities.HashToFormattedString(r.ToArray()));
 
         public Uri BrightChainAddress(string hostName, string endpoint = "chains")
         {

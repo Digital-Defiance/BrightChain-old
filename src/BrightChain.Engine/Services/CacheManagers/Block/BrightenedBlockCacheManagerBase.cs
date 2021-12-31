@@ -85,7 +85,7 @@ namespace BrightChain.Engine.Services.CacheManagers.Block
             this.Configuration = configuration;
             this.RootBlock = rootBlock;
             this.RootBlock.CacheManager = this;
-            this.DatabaseName = Utilities.HashToFormattedString(this.RootBlock.Guid.ToByteArray());
+            this.DatabaseName = NeuralFabric.Helpers.Utilities.HashToFormattedString(this.RootBlock.Guid.ToByteArray());
             this.testingSelfDestruct = testingSelfDestruct;
 
             // TODO: load supported block sizes from configurations, etc.

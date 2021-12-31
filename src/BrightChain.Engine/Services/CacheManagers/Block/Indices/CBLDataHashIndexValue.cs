@@ -1,4 +1,6 @@
-﻿namespace BrightChain.Engine.Faster.Indices
+﻿using NeuralFabric.Models.Hashes;
+
+namespace BrightChain.Engine.Faster.Indices
 {
     using System;
     using System.IO;

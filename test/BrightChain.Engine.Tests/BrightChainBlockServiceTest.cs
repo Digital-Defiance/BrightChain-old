@@ -136,8 +136,8 @@
                     Assert.IsTrue(cbl.Validate());
                     Assert.AreEqual(sourceInfo.FileInfo.Length, cbl.TotalLength);
                     Assert.AreEqual(
-                        HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()),
-                        HashToFormattedString(cbl.SourceId.HashBytes.ToArray()));
+                        NeuralFabric.Helpers.Utilities.HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()),
+                        NeuralFabric.Helpers.Utilities.HashToFormattedString(cbl.SourceId.HashBytes.ToArray()));
 
                     var cblMap = cbl.CreateBrightMap();
                     Assert.IsTrue(cblMap is BrightMap);
@@ -148,8 +148,8 @@
                 Assert.IsTrue(brightenedCbl.Validate());
                 Assert.AreEqual(sourceInfo.FileInfo.Length, brightenedCbl.TotalLength);
                 Assert.AreEqual(
-                    HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()),
-                    HashToFormattedString(brightenedCbl.SourceId.HashBytes.ToArray()));
+                    NeuralFabric.Helpers.Utilities.HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()),
+                    NeuralFabric.Helpers.Utilities.HashToFormattedString(brightenedCbl.SourceId.HashBytes.ToArray()));
 
                 var cblMap = brightenedCbl.CreateBrightMap();
                 Assert.IsTrue(cblMap is BrightMap);
@@ -198,8 +198,8 @@
             var restoredFile = await brightChainService.RestoreFileFromCBLAsync(cblBlock);
 
             Assert.AreEqual(
-                HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()),
-                HashToFormattedString(restoredFile.SourceId.HashBytes.ToArray()));
+                NeuralFabric.Helpers.Utilities.HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()),
+                NeuralFabric.Helpers.Utilities.HashToFormattedString(restoredFile.SourceId.HashBytes.ToArray()));
 
             loggerMock.Verify(l => l.Log(
                 LogLevel.Information,

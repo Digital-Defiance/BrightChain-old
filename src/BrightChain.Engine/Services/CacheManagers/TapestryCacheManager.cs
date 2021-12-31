@@ -1,4 +1,8 @@
-﻿namespace BrightChain.Engine.Services.CacheManagers
+﻿using BrightChain.Engine.Faster.CacheManager;
+using BrightChain.Engine.Models.Blocks;
+using NeuralFabric.Models;
+
+namespace BrightChain.Engine.Services.CacheManagers
 {
     using System;
     using System.Globalization;
@@ -14,7 +18,7 @@
     /// <summary>
     ///     Disk/Memory hybrid Cache Manager based on Microsoft FASTER KV.
     /// </summary>
-    public class FasterCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer>
+    public class TapestryCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer>
         : ICacheManager<Tkey, Tvalue>, IDisposable
         where Tkey : IComparable<Tkey>
         where TkeySerializer : BinaryObjectSerializer<Tkey>, new()
@@ -25,84 +29,27 @@
         /// </summary>
         protected readonly string configFile;
 
-        protected readonly string databaseName;
+        protected readonly Tapestry _tapestry;
 
         /// <summary>
-        ///     Directory where the block tree root will be placed.
-        /// </summary>
-        private readonly DirectoryInfo baseDirectory;
-
-        private readonly IDevice logDevice;
-
-        // Whether we enable a read cache
-        static readonly bool useReadCache = false;
-
-        /// <summary>
-        /// Backing storage device.
-        /// </summary>
-        private readonly IDevice fasterDevice;
-
-        private readonly FasterKV<Tkey, Tvalue> fasterKV;
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="FasterCacheManager" /> class.
+        ///     Initializes a new instance of the <see cref="TapestryCacheManager{Tkey,Tvalue,TkeySerializer,TvalueSerializer}" /> class.
         /// </summary>
         /// <param name="logger">Instance of the logging provider.</param>
         /// <param name="configuration">Instance of the configuration provider.</param>
-        /// <param name="databaseName">Database/directory name for the store.</param>
-        public FasterCacheManager(ILogger logger, IConfiguration configuration, string databaseName)
+        /// <param name="collectionName">Database/directory name for the store.</param>
+        public TapestryCacheManager(ILogger logger, IConfiguration configuration, string collectionName)
         {
-            this.databaseName = databaseName;
-
-            var nodeOptions = configuration.GetSection("NodeOptions");
-            if (nodeOptions is null)
-            {
-                throw new BrightChainException("'NodeOptions' config section must be defined, but is not");
-            }
-
-            var configOption = nodeOptions.GetSection("BasePath");
-            if (configOption is null || configOption.Value is null)
-            {
-                throw new BrightChainException("'BasePath' config option must be set, but is not");
-            }
-
-            var dir = configOption.Value;
-            if (dir.Length == 0 || !Directory.Exists(dir))
-            {
-                throw new BrightChainException(string.Format("'BasePath' must exist, but does not: \"{0}\"", dir));
-            }
-
-            this.baseDirectory = new DirectoryInfo(dir);
-
-            this.logDevice = this.OpenDevice(string.Format("{0}-log", typeof(Tkey).Name));
-            this.fasterDevice = this.OpenDevice(string.Format("{0}-data", typeof(Tkey).Name));
-
-
-            this.fasterKV = new FasterKV<Tkey, Tvalue>(
-                size: 1L << 20, // hash table size (number of 64-byte buckets)
-                logSettings: new LogSettings // log settings (devices, page size, memory size, etc.)
-                {
-                    LogDevice = this.fasterDevice,
-                    ObjectLogDevice = this.fasterDevice,
-                    ReadCacheSettings = useReadCache ? new ReadCacheSettings() : null,
-                },
-                checkpointSettings: new CheckpointSettings
-                {
-                    CheckpointDir = this.GetDiskCacheDirectory().FullName,
-                }, // Define serializers; otherwise FASTER will use the slower DataContract
-                serializerSettings: new SerializerSettings<Tkey, Tvalue>
-                {
-                    keySerializer = () => new TkeySerializer(),
-                    valueSerializer = () => new TvalueSerializer(),
-                },
-                comparer: null);
+            this._tapestry = new Tapestry(
+                logger: logger,
+                configuration: configuration,
+                collectionName: collectionName);
         }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
         ///     Can not build a cache manager with no logger.
         /// </summary>
-        private FasterCacheManager()
+        private TapestryCacheManager()
         {
             throw new NotImplementedException();
         }
@@ -112,38 +59,6 @@
         /// </summary>
         public string ConfigurationFilePath
             => this.configFile;
-
-        protected DirectoryInfo GetDiskCacheDirectory()
-        {
-            return Directory.CreateDirectory(
-                Path.Combine(
-                    this.baseDirectory.FullName,
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        "BrightChain-{0}",
-                        this.databaseName)));
-        }
-
-        protected string GetDevicePath(string nameSpace, out DirectoryInfo cacheDirectoryInfo)
-        {
-            cacheDirectoryInfo = this.GetDiskCacheDirectory();
-
-            return Path.Combine(
-                    cacheDirectoryInfo.FullName,
-                    string.Format(
-                        provider: System.Globalization.CultureInfo.InvariantCulture,
-                        format: "brightchain-{0}-{1}.log",
-                        this.databaseName,
-                        nameSpace));
-        }
-
-        protected IDevice OpenDevice(string nameSpace)
-        {
-            var devicePath = this.GetDevicePath(nameSpace, out DirectoryInfo _);
-
-            return Devices.CreateLogDevice(
-                logPath: devicePath);
-        }
 
         /// <summary>
         ///     Fired whenever a block is added to the cache

@@ -1,4 +1,6 @@
-﻿namespace BrightChain.Engine.Factories
+﻿using NeuralFabric.Models.Hashes;
+
+namespace BrightChain.Engine.Factories
 {
     using System;
     using System.Linq;

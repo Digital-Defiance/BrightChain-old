@@ -1,4 +1,6 @@
-﻿namespace BrightChain.Engine.Faster.CacheManager
+﻿using NeuralFabric.Models.Hashes;
+
+namespace BrightChain.Engine.Faster.CacheManager
 {
     using System;
     using BrightChain.Engine.Exceptions;

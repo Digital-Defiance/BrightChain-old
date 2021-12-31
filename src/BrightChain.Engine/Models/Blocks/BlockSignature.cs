@@ -1,4 +1,8 @@
-﻿namespace BrightChain.Engine.Models.Blocks
+﻿using System.Security.Cryptography;
+using BrightChain.Engine.Exceptions;
+using NeuralFabric.Models.Hashes;
+
+namespace BrightChain.Engine.Models.Blocks
 {
     using System;
     using BrightChain.Engine.Enumerations;
@@ -13,7 +17,7 @@
     public class BlockSignature : DataSignature, IDataSignature, IComparable<BlockSignature>
     {
         public BlockSignature(IBlock block)
-            : base(block)
+            : base(dataBytes: block.StoredData.Bytes)
         {
         }
 
@@ -23,13 +27,21 @@
         }
 
         public BlockSignature(BlockSize originalBlockSize, ReadOnlyMemory<byte> providedHashBytes)
-            : base(originalBlockSize, providedHashBytes)
+            : base(providedHashBytes: providedHashBytes, computed: false)
         {
+            if (providedHashBytes.Length != BlockSizeMap.BlockSize(originalBlockSize))
+            {
+                throw new BrightChainException("hash size mismatch");
+            }
         }
 
         internal BlockSignature(BlockSize originalBlockSize, ReadOnlyMemory<byte> providedHashBytes, bool computed = false)
-            : base(originalBlockSize, providedHashBytes, computed)
+            : base(providedHashBytes: providedHashBytes, computed: computed)
         {
+            if (providedHashBytes.Length != BlockSizeMap.BlockSize(originalBlockSize))
+            {
+                throw new BrightChainException("hash size mismatch");
+            }
         }
 
         public int CompareTo(BlockSignature other)

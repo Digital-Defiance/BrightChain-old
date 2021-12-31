@@ -113,7 +113,7 @@
             var requestedLength = lengthFunc(blockSize);
             var fileInfo = CreateRandomFile(fileName, requestedLength, out sourceFileHash);
             var sourceInfo = new SourceFileInfo(fileInfo: fileInfo, blockSize: blockSize);
-            if (Utilities.HashToFormattedString(sourceFileHash) != Utilities.HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()))
+            if (NeuralFabric.Helpers.Utilities.HashToFormattedString(sourceFileHash) != NeuralFabric.Helpers.Utilities.HashToFormattedString(sourceInfo.SourceId.HashBytes.ToArray()))
             {
                 throw new BrightChainException(nameof(sourceFileHash));
             }

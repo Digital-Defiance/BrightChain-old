@@ -1,4 +1,6 @@
-﻿namespace BrightChain.Engine.Tests.Services
+﻿using NeuralFabric.Models.Hashes;
+
+namespace BrightChain.Engine.Tests.Services
 {
     using BrightChain.Engine.Enumerations;
     using BrightChain.Engine.Exceptions;
