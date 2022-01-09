@@ -3,7 +3,7 @@
 	url = https://github.com/BrightChain/BrightChain.wiki.git
 [submodule "ENT"]
 	path = src/ENT
-	url = git@github.com:BrightChain/ENT.git
+	url = git@github.com:FreddieMercurial/ENT.git
 [submodule "src/BrightChain.API"]
 	path = src/BrightChain.API
 	url = git@github.com:BrightChain/BrightChain.API.git
