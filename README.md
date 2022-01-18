@@ -25,7 +25,7 @@ Unlimited storage for everyone, and a mathematically reinforced and moderated co
   - Fully verified identity for governmental voting.
   - Fully anonymized data during storage and yet fully meta tagged restored when used.
   - Permanent storage for the best, eventual recycling for the rest.
-- Check out [!["The Big Picture"](https://github.com/BrightChain/BrightChain/wiki/Big-Picture)] in the Wiki.
+- Check out ["The Big Picture"](https://github.com/BrightChain/BrightChain/wiki/Big-Picture) in the Wiki.
 
 # One-Pager
 The BrightChain "One-Pager" is about 3 pages at the moment, but pending some slimming down is about as concise a document as I've put together.
