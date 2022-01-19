@@ -43,6 +43,7 @@ The BrightChain "LongPaper" is longer and a work in progress, but goes into plai
 This project welcomes contributions and suggestions. Licensing up for debate. Code should eventually belong to BrightChain charitable organiztion as IP holder and generally Apache 2 / MIT / GPLv3 sort of licence.
 
 # Recent thoughts:
+ - FEC notes for the brokered anonymity https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.120.5485&rep=rep1&type=pdf
  - A lot of the reputation and resultant API throttling will be in the line of thinking with: https://en.wikipedia.org/wiki/Hashcash#Advantages_and_disadvantages
  - URLs are probably going to be base32 {address}.brightchain.org
  - Will have an alias registry for {alias}.brightchain.org - aka BrightChain DNS.
