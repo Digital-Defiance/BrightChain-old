@@ -10,7 +10,7 @@ All the benefits of blockchain dApps and contracts without the mining and waste.
 Unlimited storage for everyone, and a mathematically reinforced and moderated community that will last for the ages.
 
 - BrightChain Engine in C#/.Net 6 (Currently requires VS 2022 Preview, or IntelliJ Rider)
-- Uses Microsoft's FASTER
+- Uses a Microsoft FASTER KV store on each node
 - BrightNet BlockStore and API for BrightChain: The Revolution Network
 - Wiki: https://github.com/BrightChain/BrightChain/wiki
   - The old wiki has been copied/merged into the new wiki, but needs to be formatted and cleaned up.
