@@ -19,3 +19,9 @@
 [submodule "test/NeuralFabric.Tests"]
 	path = test/NeuralFabric.Tests
 	url = git@github.com:BrightChain/NeuralFabric.Tests.git
+[submodule "src/Shart"]
+	path = src/Shart
+	url = git@github.com:FreddieMercurial/Shart.git
+[submodule "test/Shart.Test"]
+	path = test/Shart.Test
+	url = git@github.com:FreddieMercurial/Shart.Test.git
