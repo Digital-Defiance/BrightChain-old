@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Architecture </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Architecture ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="architecture">Architecture</h1>
+
+<h2 id="part-1-the-soup-market">Part 1: The Soup Market</h2>
+<p>I mentioned Bright Block Soup. Let's start a soup store together.</p>
+<p>Some years ago, the <a href="https://en.wikipedia.org/wiki/OFFSystem">Owner-Free Filesystem &quot;OFFSystem&quot;</a> was conceptualized but ultimately failed to gain traction due to lack of participation. Additionally there was not enough data on the overall overhead of such a system. I'm going to explain the Owner Free Filesystem in the context of our block soup.</p>
+<p>Why do you care to learn about this? This method of storing not only allows secure data to be held out in the open without security concerns, but it also essentially eliminates copyright concerns for node participants storing data within the network. One thing the world constantly needs more of is storage. Although providing storage to the network isn't required, doing so will be incentivized as we'll cover in a little bit.</p>
+<p>Now, imagine you have a bowl of Alphabet Soup. In it are a bunch of jumbled letters that don't spell anything unless you do some work to arrange them. You can then re-arrange them into a new sentence and yet it's still the same soup. So what does that soup really spell out? Does the can you buy on the shelf inherently spell anything? If I dump a can out on the counter, it's not going to make a sentence once- let alone in a repeatable manner.</p>
+<p>With that sort of thinking in mind, lets continue.</p>
+<p>When we're packaging soup, we like to put it all in cans of the same size. But we do have different size cans like the family size and the standard 8 oz.
+Let's say we have a can of very special soup that we can dump out and it spells our message exactly. In order to keep the soup looking random, everything that gets put in must be randomized. Therefore we have a random soup can generator whose sole purpose is to have random cans with mixed alphabet messages ready to go for this. Say now we take the special can with our actual message and mix it using a mathematical operation on called an Exclusive OR (XOR). Each letter is affected in order by the added can of random soup and the resultant can looks totally random but in fact has all of the data you put in, though it is now dependent on the other can. This can looks random, but it is still heavily correlated to the original message. We then mix it with more cans in order to dilute the original flavor/message. We need to keep track of exactly which can types we used and they all must be different. Once the message has been mixed with enough random cans, we can safely put it out on the market and nobody will know what it actually says. We throw away the can of special, original soup.</p>
+<p>In order to get your original can of soup back, you need to know which flavor of soups are needed and what order to put them in to be able to reconstruct your original message so you go and get a can with that recipe in it.</p>
+<ul>
+<li>Message <code>M</code></li>
+<li>Random cans/flavors <code>A</code> <code>B</code> <code>C</code></li>
+<li>Resultant can/flavor <code>Z</code></li>
+<li><code>M ^ A ^ B ^ C = Z</code></li>
+</ul>
+<p>now we throw out <code>M</code> and keep <code>A</code>, <code>B</code>, <code>C</code> and <code>Z</code>. These are different soup flavors.</p>
+<p>To get M back, <code>A ^ B ^ C ^ Z = M</code></p>
+<p>Assuming your message is bigger than one can, we keep doing this over and over in order until we've covered the entire message.</p>
+<p>Anyone is free to ask the store for a can of <code>A</code>, <code>B</code>, <code>C</code>, even <code>Z</code>. But unless you know the recipe for your original can, you can't get it back- especially if there are essentially unlimited flavors. Someone needs to go to the store with a billion flavors and know to ask for your four.</p>
+<p>Now we have an open market where anyone can walk in, add soup flavors and request flavors with no questions asked. It's up to everyone to keep their own secret recipe safe.</p>
+<p>Getting back to the network here, we can actually keep your recipe in another random can/block and put that into the network as well since it looks random. This makes long recipes (big files) easier to keep since you'll hopefully only need to keep track of a few cans types in order to keep your recipe. These essentially take the form of magnet links something like https://brightchain.net/blocks?recipe=<code>A</code>+<code>B</code>+<code>C</code>+<code>Z</code></p>
+<p>In order to identify the blocks, they will need an identifier. In BrightChain, the SHA256 of the block's full data packet is the id. There is no reason to store multiple identical blocks. *I suspect that there will be a link to a separate option block in order to deal with optional parameters.</p>
+<p>For more information on the math, please check the OFFSystem wikipedia entry linked above. It also has links which discuss the overall efficiencies as measured empirically on the network when it was active.</p>
+<p>Now, the Revolution Network has a way to store data out in the open, without encryption- although technically speaking this is a form of encryption native storage. At this point we're able to then start a user database.</p>
+<p>Unlike BitClout which decided to store data off-chain due to the cost involved, The Revolution Network solves this with the massive distributed filesystem. Users will be encouraged to contribute disk resources and this will help their <a href="https://github.com/The-Revolution-Network/brightChainAPI/wiki/Reputation">Valuation</a></p>
+<hr>
+<p>On to <a href="https://github.com/The-Revolution-Network/brightChainAPI/wiki/Authentication">Part 2: Authentication</a></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain.wiki/blob/608f8ea39911c40f9dbb688388c4064c0c7e8c55/old-Architecture.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

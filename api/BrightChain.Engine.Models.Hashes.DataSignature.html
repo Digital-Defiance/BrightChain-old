@@ -1,0 +1,819 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class DataSignature
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class DataSignature
+   ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="BrightChain.Engine.Models.Hashes.DataSignature">
+  
+  
+  <h1 id="BrightChain_Engine_Models_Hashes_DataSignature" data-uid="BrightChain.Engine.Models.Hashes.DataSignature" class="text-break">Class DataSignature
+  </h1>
+  <div class="markdown level0 summary"><p>Type box for the sha hashes of signatures.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">DataSignature</span></div>
+      <div class="level2"><a class="xref" href="BrightChain.Engine.Models.Blocks.BlockSignature.html">BlockSignature</a></div>
+      <div class="level2"><a class="xref" href="BrightChain.Engine.Models.Contracts.RevocationCertificate.html">RevocationCertificate</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="BrightChain.Engine.Interfaces.IDataSignature.html">IDataSignature</a></div>
+    <div><span class="xref">System.IFormattable</span></div>
+    <div><span class="xref">System.IComparable</span>&lt;<a class="xref" href="BrightChain.Engine.Models.Hashes.DataSignature.html">DataSignature</a>&gt;</div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="BrightChain.Engine.Models.Hashes.html">BrightChain.Engine.Models.Hashes</a></h6>
+  <h6><strong>Assembly</strong>: BrightChain.Engine.dll</h6>
+  <h5 id="BrightChain_Engine_Models_Hashes_DataSignature_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ProtoContract]
+[ProtoInclude(1, typeof(BlockSignature))]
+[ProtoInclude(2, typeof(RevocationCertificate))]
+public class DataSignature : IDataSignature, IFormattable, IComparable&lt;DataSignature&gt;</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature__ctor_BrightChain_Engine_Enumerations_BlockSize_System_ReadOnlyMemory_System_Byte__.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature.%23ctor(BrightChain.Engine.Enumerations.BlockSize%2CSystem.ReadOnlyMemory%7BSystem.Byte%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L46">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Hashes_DataSignature__ctor_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.#ctor*"></a>
+  <h4 id="BrightChain_Engine_Models_Hashes_DataSignature__ctor_BrightChain_Engine_Enumerations_BlockSize_System_ReadOnlyMemory_System_Byte__" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.#ctor(BrightChain.Engine.Enumerations.BlockSize,System.ReadOnlyMemory{System.Byte})">DataSignature(BlockSize, ReadOnlyMemory&lt;Byte&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DataSignature(BlockSize originalBlockSize, ReadOnlyMemory&lt;byte&gt; providedHashBytes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Enumerations.BlockSize.html">BlockSize</a></td>
+        <td><span class="parametername">originalBlockSize</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ReadOnlyMemory</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td><span class="parametername">providedHashBytes</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature__ctor_BrightChain_Engine_Interfaces_IBlock_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature.%23ctor(BrightChain.Engine.Interfaces.IBlock)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L36">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Hashes_DataSignature__ctor_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.#ctor*"></a>
+  <h4 id="BrightChain_Engine_Models_Hashes_DataSignature__ctor_BrightChain_Engine_Interfaces_IBlock_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.#ctor(BrightChain.Engine.Interfaces.IBlock)">DataSignature(IBlock)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DataSignature(IBlock block)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Interfaces.IBlock.html">IBlock</a></td>
+        <td><span class="parametername">block</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature__ctor_System_ReadOnlyMemory_System_Byte__.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature.%23ctor(System.ReadOnlyMemory%7BSystem.Byte%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L58">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Hashes_DataSignature__ctor_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.#ctor*"></a>
+  <h4 id="BrightChain_Engine_Models_Hashes_DataSignature__ctor_System_ReadOnlyMemory_System_Byte__" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.#ctor(System.ReadOnlyMemory{System.Byte})">DataSignature(ReadOnlyMemory&lt;Byte&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DataSignature(ReadOnlyMemory&lt;byte&gt; dataBytes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ReadOnlyMemory</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td><span class="parametername">dataBytes</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature_SignatureHashSize.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature.SignatureHashSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L23">View Source</a>
+  </span>
+  <h4 id="BrightChain_Engine_Models_Hashes_DataSignature_SignatureHashSize" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.SignatureHashSize">SignatureHashSize</h4>
+  <div class="markdown level1 summary"><p>Size in bits of the hash.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int SignatureHashSize = 256</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature_SignatureHashSizeBytes.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature.SignatureHashSizeBytes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L28">View Source</a>
+  </span>
+  <h4 id="BrightChain_Engine_Models_Hashes_DataSignature_SignatureHashSizeBytes" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.SignatureHashSizeBytes">SignatureHashSizeBytes</h4>
+  <div class="markdown level1 summary"><p>Size in bytes of the hash.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int SignatureHashSizeBytes = 32</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature_Computed.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature.Computed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L33">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Hashes_DataSignature_Computed_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.Computed*"></a>
+  <h4 id="BrightChain_Engine_Models_Hashes_DataSignature_Computed" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.Computed">Computed</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ProtoMember(2)]
+public bool Computed { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature_SignatureHashBytes.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature.SignatureHashBytes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L30">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Hashes_DataSignature_SignatureHashBytes_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.SignatureHashBytes*"></a>
+  <h4 id="BrightChain_Engine_Models_Hashes_DataSignature_SignatureHashBytes" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.SignatureHashBytes">SignatureHashBytes</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ProtoMember(1)]
+public ReadOnlyMemory&lt;byte&gt; SignatureHashBytes { get; protected set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ReadOnlyMemory</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature_CompareTo_BrightChain_Engine_Models_Hashes_DataSignature_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature.CompareTo(BrightChain.Engine.Models.Hashes.DataSignature)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L108">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Hashes_DataSignature_CompareTo_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.CompareTo*"></a>
+  <h4 id="BrightChain_Engine_Models_Hashes_DataSignature_CompareTo_BrightChain_Engine_Models_Hashes_DataSignature_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.CompareTo(BrightChain.Engine.Models.Hashes.DataSignature)">CompareTo(DataSignature)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int CompareTo(DataSignature other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Hashes.DataSignature.html">DataSignature</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature_Equals_System_Object_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L98">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Hashes_DataSignature_Equals_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.Equals*"></a>
+  <h4 id="BrightChain_Engine_Models_Hashes_DataSignature_Equals_System_Object_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.Equals(System.Object)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature_GetHashCode.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L103">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Hashes_DataSignature_GetHashCode_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.GetHashCode*"></a>
+  <h4 id="BrightChain_Engine_Models_Hashes_DataSignature_GetHashCode" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.GetHashCode()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature_ToString.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L93">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Hashes_DataSignature_ToString_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.ToString*"></a>
+  <h4 id="BrightChain_Engine_Models_Hashes_DataSignature_ToString" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature_ToString_System_String_System_IFormatProvider_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature.ToString(System.String%2CSystem.IFormatProvider)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L88">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Hashes_DataSignature_ToString_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.ToString*"></a>
+  <h4 id="BrightChain_Engine_Models_Hashes_DataSignature_ToString_System_String_System_IFormatProvider_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.ToString(System.String,System.IFormatProvider)">ToString(String, IFormatProvider)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string ToString(string format, IFormatProvider _)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">format</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IFormatProvider</span></td>
+        <td><span class="parametername">_</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="operators">Operators
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature_op_Equality_BrightChain_Engine_Models_Hashes_DataSignature_BrightChain_Engine_Models_Hashes_DataSignature_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature.op_Equality(BrightChain.Engine.Models.Hashes.DataSignature%2CBrightChain.Engine.Models.Hashes.DataSignature)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L68">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Hashes_DataSignature_op_Equality_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.op_Equality*"></a>
+  <h4 id="BrightChain_Engine_Models_Hashes_DataSignature_op_Equality_BrightChain_Engine_Models_Hashes_DataSignature_BrightChain_Engine_Models_Hashes_DataSignature_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.op_Equality(BrightChain.Engine.Models.Hashes.DataSignature,BrightChain.Engine.Models.Hashes.DataSignature)">Equality(DataSignature, DataSignature)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator ==(DataSignature a, DataSignature b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Hashes.DataSignature.html">DataSignature</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Hashes.DataSignature.html">DataSignature</a></td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature_op_Equality_System_ReadOnlyMemory_System_Byte__BrightChain_Engine_Models_Hashes_DataSignature_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature.op_Equality(System.ReadOnlyMemory%7BSystem.Byte%7D%2CBrightChain.Engine.Models.Hashes.DataSignature)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L73">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Hashes_DataSignature_op_Equality_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.op_Equality*"></a>
+  <h4 id="BrightChain_Engine_Models_Hashes_DataSignature_op_Equality_System_ReadOnlyMemory_System_Byte__BrightChain_Engine_Models_Hashes_DataSignature_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.op_Equality(System.ReadOnlyMemory{System.Byte},BrightChain.Engine.Models.Hashes.DataSignature)">Equality(ReadOnlyMemory&lt;Byte&gt;, DataSignature)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator ==(ReadOnlyMemory&lt;byte&gt; b, DataSignature a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ReadOnlyMemory</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Hashes.DataSignature.html">DataSignature</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature_op_Inequality_BrightChain_Engine_Models_Hashes_DataSignature_BrightChain_Engine_Models_Hashes_DataSignature_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature.op_Inequality(BrightChain.Engine.Models.Hashes.DataSignature%2CBrightChain.Engine.Models.Hashes.DataSignature)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L83">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Hashes_DataSignature_op_Inequality_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.op_Inequality*"></a>
+  <h4 id="BrightChain_Engine_Models_Hashes_DataSignature_op_Inequality_BrightChain_Engine_Models_Hashes_DataSignature_BrightChain_Engine_Models_Hashes_DataSignature_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.op_Inequality(BrightChain.Engine.Models.Hashes.DataSignature,BrightChain.Engine.Models.Hashes.DataSignature)">Inequality(DataSignature, DataSignature)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator !=(DataSignature a, DataSignature b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Hashes.DataSignature.html">DataSignature</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Hashes.DataSignature.html">DataSignature</a></td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature_op_Inequality_System_ReadOnlyMemory_System_Byte__BrightChain_Engine_Models_Hashes_DataSignature_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature.op_Inequality(System.ReadOnlyMemory%7BSystem.Byte%7D%2CBrightChain.Engine.Models.Hashes.DataSignature)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L78">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Hashes_DataSignature_op_Inequality_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.op_Inequality*"></a>
+  <h4 id="BrightChain_Engine_Models_Hashes_DataSignature_op_Inequality_System_ReadOnlyMemory_System_Byte__BrightChain_Engine_Models_Hashes_DataSignature_" data-uid="BrightChain.Engine.Models.Hashes.DataSignature.op_Inequality(System.ReadOnlyMemory{System.Byte},BrightChain.Engine.Models.Hashes.DataSignature)">Inequality(ReadOnlyMemory&lt;Byte&gt;, DataSignature)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator !=(ReadOnlyMemory&lt;byte&gt; b, DataSignature a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ReadOnlyMemory</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Hashes.DataSignature.html">DataSignature</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="BrightChain.Engine.Interfaces.IDataSignature.html">IDataSignature</a>
+  </div>
+  <div>
+      <span class="xref">System.IFormattable</span>
+  </div>
+  <div>
+      <span class="xref">System.IComparable&lt;T&gt;</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Hashes_DataSignature.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Hashes.DataSignature%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Hashes/DataSignature.cs/#L15" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

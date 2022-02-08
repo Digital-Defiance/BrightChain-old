@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Architecture </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Architecture ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="architecture">Architecture</h1>
+
+<h2 id="part-2-authentication">Part 2: Authentication</h2>
+<p>Most blockchain systems are based around elliptic curve public key cryptography. The Revolution Network is no different.</p>
+<p>A <a href="https://medium.com/mycrypto/the-magic-of-digital-signatures-on-ethereum-98fe184dc9c7#:%7E:text=Ethereum%20uses%20the%20SECP256k1%20curve.%20Using%20elliptic%20curve,can%20create%20signatures%20that%20are%20safe%20and%20tamperproof.">SECP256k1</a> curve like Ethereum will be used.</p>
+<p>The network has a handful of different agents that perform different actions and each has its own key pair, the public key of which will be published on the network and stored in the configuration.</p>
+<p>For each agent or user, we create a keypair and store it in the bright block store. The user is responsible for keeping the &quot;recipe&quot;- the block IDs needed to get their private key back and decrypt it. The private key will be stored AES encrypted with their password.</p>
+<p>User A wants to login:</p>
+<ol>
+<li>User A presents the server with their recipe for their key</li>
+<li>The server returns their key blocks</li>
+<li>The user asks the server for a challenge against their public key, which is known to all actors in the network. A random phrase is encrypted with their public key- readable only with a reconstructed key.</li>
+<li>Not only does the user need to know the recipe for their key, but they must also know the password, decrypt their key and then decrypt the challenge and return it to the server to complete authentication.</li>
+</ol>
+<p>Messages and data can now be sent to or saved for the user using their public key now that we know they can decrypt it. Their password is never stored anywhere. Inputting an incorrect password will either fail to decrypt the private key or the nonsense key will fail to decrypt the challenge.</p>
+<hr>
+<p>Let's move on to <a href="https://github.com/The-Revolution-Network/brightChainAPI/wiki/Quarum">Central Authority / The Quarum</a> and Identity which will cover Anonymity and Moderation.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain.wiki/blob/608f8ea39911c40f9dbb688388c4064c0c7e8c55/old-Authentication.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

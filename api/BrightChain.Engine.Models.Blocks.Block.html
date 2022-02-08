@@ -1,0 +1,2173 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Block
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Block
+   ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="BrightChain.Engine.Models.Blocks.Block">
+  
+  
+  <h1 id="BrightChain_Engine_Models_Blocks_Block" data-uid="BrightChain.Engine.Models.Blocks.Block" class="text-break">Class Block
+  </h1>
+  <div class="markdown level0 summary"><p>The block is the base unit persisted to disk.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Block</span></div>
+      <div class="level2"><a class="xref" href="BrightChain.Engine.Models.Blocks.BrightenedBlock.html">BrightenedBlock</a></div>
+      <div class="level2"><a class="xref" href="BrightChain.Engine.Models.Blocks.IdentifiableBlock.html">IdentifiableBlock</a></div>
+      <div class="level2"><a class="xref" href="BrightChain.Engine.Models.Blocks.RestorableBlock.html">RestorableBlock</a></div>
+      <div class="level2"><a class="xref" href="BrightChain.Engine.Models.Blocks.ZeroVectorBlock.html">ZeroVectorBlock</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="BrightChain.Engine.Interfaces.IBlock.html">IBlock</a></div>
+    <div><span class="xref">System.IDisposable</span></div>
+    <div><a class="xref" href="BrightChain.Engine.Interfaces.IValidatable.html">IValidatable</a></div>
+    <div><span class="xref">System.IComparable</span>&lt;<a class="xref" href="BrightChain.Engine.Interfaces.IBlock.html">IBlock</a>&gt;</div>
+    <div><span class="xref">System.IComparable</span>&lt;<a class="xref" href="BrightChain.Engine.Models.Blocks.Block.html">Block</a>&gt;</div>
+    <div><span class="xref">System.IEquatable</span>&lt;<a class="xref" href="BrightChain.Engine.Models.Blocks.Block.html">Block</a>&gt;</div>
+    <div><span class="xref">System.IEquatable</span>&lt;<a class="xref" href="BrightChain.Engine.Interfaces.IBlock.html">IBlock</a>&gt;</div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="BrightChain.Engine.Models.Blocks.html">BrightChain.Engine.Models.Blocks</a></h6>
+  <h6><strong>Assembly</strong>: BrightChain.Engine.dll</h6>
+  <h5 id="BrightChain_Engine_Models_Blocks_Block_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[DataContract]
+[ProtoContract]
+[ProtoInclude(1, typeof(BrightenedBlock))]
+[ProtoInclude(2, typeof(RootBlock))]
+[ProtoInclude(3, typeof(RandomizerBlock))]
+[ProtoInclude(4, typeof(BrightenedBlock))]
+[ProtoInclude(5, typeof(ConstituentBlockListBlock))]
+[ProtoInclude(6, typeof(SuperConstituentBlockListBlock))]
+[ProtoInclude(7, typeof(ChainLinq&lt;&gt;))]
+public abstract class Block : IBlock, IDisposable, IValidatable, IComparable&lt;IBlock&gt;, IComparable&lt;Block&gt;, IEquatable&lt;Block&gt;, IEquatable&lt;IBlock&gt;</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block__ctor_BrightChain_Engine_Models_Blocks_DataObjects_BlockParams_System_ReadOnlyMemory_System_Byte__System_Collections_Generic_IEnumerable_BrightChain_Engine_Models_Hashes_BlockHash__.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.%23ctor(BrightChain.Engine.Models.Blocks.DataObjects.BlockParams%2CSystem.ReadOnlyMemory%7BSystem.Byte%7D%2CSystem.Collections.Generic.IEnumerable%7BBrightChain.Engine.Models.Hashes.BlockHash%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L182">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block__ctor_" data-uid="BrightChain.Engine.Models.Blocks.Block.#ctor*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block__ctor_BrightChain_Engine_Models_Blocks_DataObjects_BlockParams_System_ReadOnlyMemory_System_Byte__System_Collections_Generic_IEnumerable_BrightChain_Engine_Models_Hashes_BlockHash__" data-uid="BrightChain.Engine.Models.Blocks.Block.#ctor(BrightChain.Engine.Models.Blocks.DataObjects.BlockParams,System.ReadOnlyMemory{System.Byte},System.Collections.Generic.IEnumerable{BrightChain.Engine.Models.Hashes.BlockHash})">Block(BlockParams, ReadOnlyMemory&lt;Byte&gt;, IEnumerable&lt;BlockHash&gt;)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="BrightChain.Engine.Models.Blocks.Block.html">Block</a> class.
+Construct a block from the given parameters and data.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Block(BlockParams blockParams, ReadOnlyMemory&lt;byte&gt; data, IEnumerable&lt;BlockHash&gt; constituentBlockHashes = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.DataObjects.BlockParams.html">BlockParams</a></td>
+        <td><span class="parametername">blockParams</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ReadOnlyMemory</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td><span class="parametername">data</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="BrightChain.Engine.Models.Hashes.BlockHash.html">BlockHash</a>&gt;</td>
+        <td><span class="parametername">constituentBlockHashes</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_OriginalType.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.OriginalType%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L82">View Source</a>
+  </span>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_OriginalType" data-uid="BrightChain.Engine.Models.Blocks.Block.OriginalType">OriginalType</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly Type OriginalType</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Type</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_AsBlock.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.AsBlock%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L104">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_AsBlock_" data-uid="BrightChain.Engine.Models.Blocks.Block.AsBlock*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_AsBlock" data-uid="BrightChain.Engine.Models.Blocks.Block.AsBlock">AsBlock</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Block AsBlock { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.Block.html">Block</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_AsIBlock.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.AsIBlock%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L106">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_AsIBlock_" data-uid="BrightChain.Engine.Models.Blocks.Block.AsIBlock*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_AsIBlock" data-uid="BrightChain.Engine.Models.Blocks.Block.AsIBlock">AsIBlock</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IBlock AsIBlock { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Interfaces.IBlock.html">IBlock</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_AssemblyVersion.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.AssemblyVersion%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L84">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_AssemblyVersion_" data-uid="BrightChain.Engine.Models.Blocks.Block.AssemblyVersion*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_AssemblyVersion" data-uid="BrightChain.Engine.Models.Blocks.Block.AssemblyVersion">AssemblyVersion</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ProtoMember(7)]
+public string AssemblyVersion { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Base58Data.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Base58Data%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L52">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Base58Data_" data-uid="BrightChain.Engine.Models.Blocks.Block.Base58Data*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Base58Data" data-uid="BrightChain.Engine.Models.Blocks.Block.Base58Data">Base58Data</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Base58Data { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Base58Id.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Base58Id%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L54">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Base58Id_" data-uid="BrightChain.Engine.Models.Blocks.Block.Base58Id*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Base58Id" data-uid="BrightChain.Engine.Models.Blocks.Block.Base58Id">Base58Id</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Base58Id { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_BlockParams.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.BlockParams%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L373">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_BlockParams_" data-uid="BrightChain.Engine.Models.Blocks.Block.BlockParams*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_BlockParams" data-uid="BrightChain.Engine.Models.Blocks.Block.BlockParams">BlockParams</h4>
+  <div class="markdown level1 summary"><p>Gets a blockParams object from this block's attributes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual BlockParams BlockParams { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.DataObjects.BlockParams.html">BlockParams</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_BlockSize.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.BlockSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L61">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_BlockSize_" data-uid="BrightChain.Engine.Models.Blocks.Block.BlockSize*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_BlockSize" data-uid="BrightChain.Engine.Models.Blocks.Block.BlockSize">BlockSize</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BlockSize BlockSize { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Enumerations.BlockSize.html">BlockSize</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Bytes.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Bytes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L50">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Bytes_" data-uid="BrightChain.Engine.Models.Blocks.Block.Bytes*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Bytes" data-uid="BrightChain.Engine.Models.Blocks.Block.Bytes">Bytes</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ReadOnlyMemory&lt;byte&gt; Bytes { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ReadOnlyMemory</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_ConstituentBlocks.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.ConstituentBlocks%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L102">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_ConstituentBlocks_" data-uid="BrightChain.Engine.Models.Blocks.Block.ConstituentBlocks*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_ConstituentBlocks" data-uid="BrightChain.Engine.Models.Blocks.Block.ConstituentBlocks">ConstituentBlocks</h4>
+  <div class="markdown level1 summary"><p>Gets or sets a list of the blocks, in order, required to complete this block. Not persisted to disk.
+Generally only used during construction of a chain</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;BlockHash&gt; ConstituentBlocks { get; protected set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="BrightChain.Engine.Models.Hashes.BlockHash.html">BlockHash</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Crc32.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Crc32%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L154">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Crc32_" data-uid="BrightChain.Engine.Models.Blocks.Block.Crc32*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Crc32" data-uid="BrightChain.Engine.Models.Blocks.Block.Crc32">Crc32</h4>
+  <div class="markdown level1 summary"><p>Gets a uint with the CRC32 of the block's data.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public uint Crc32 { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Crc64.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Crc64%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L157">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Crc64_" data-uid="BrightChain.Engine.Models.Blocks.Block.Crc64*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Crc64" data-uid="BrightChain.Engine.Models.Blocks.Block.Crc64">Crc64</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ulong Crc64 { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_EntropyEstimate.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.EntropyEstimate%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L140">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_EntropyEstimate_" data-uid="BrightChain.Engine.Models.Blocks.Block.EntropyEstimate*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_EntropyEstimate" data-uid="BrightChain.Engine.Models.Blocks.Block.EntropyEstimate">EntropyEstimate</h4>
+  <div class="markdown level1 summary"><p>Gets an EntCalcResult.
+Uses ENT Chi Square monte-carlo calculator/estimator.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EntCalc.EntCalcResult EntropyEstimate { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Ent.EntCalc.EntCalcResult.html">EntCalc.EntCalcResult</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_HashVerified.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.HashVerified%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L63">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_HashVerified_" data-uid="BrightChain.Engine.Models.Blocks.Block.HashVerified*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_HashVerified" data-uid="BrightChain.Engine.Models.Blocks.Block.HashVerified">HashVerified</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HashVerified { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Id.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Id%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L38">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Id_" data-uid="BrightChain.Engine.Models.Blocks.Block.Id*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Id" data-uid="BrightChain.Engine.Models.Blocks.Block.Id">Id</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ProtoMember(1)]
+public BlockHash Id { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Hashes.BlockHash.html">BlockHash</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_LegalHoldInvisible.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.LegalHoldInvisible%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L132">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_LegalHoldInvisible_" data-uid="BrightChain.Engine.Models.Blocks.Block.LegalHoldInvisible*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_LegalHoldInvisible" data-uid="BrightChain.Engine.Models.Blocks.Block.LegalHoldInvisible">LegalHoldInvisible</h4>
+  <div class="markdown level1 summary"><p>If Guid is set with valid LegalOrder, any accesses should respond as if block does not exist.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Guid? LegalHoldInvisible { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Guid</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_LegalHoldLogRead.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.LegalHoldLogRead%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L127">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_LegalHoldLogRead_" data-uid="BrightChain.Engine.Models.Blocks.Block.LegalHoldLogRead*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_LegalHoldLogRead" data-uid="BrightChain.Engine.Models.Blocks.Block.LegalHoldLogRead">LegalHoldLogRead</h4>
+  <div class="markdown level1 summary"><p>If Guid is set with valid LegalOrder, any read accesses should be logged to appropriate legal log.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Guid? LegalHoldLogRead { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Guid</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_LegalHoldPreventDelete.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.LegalHoldPreventDelete%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L117">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_LegalHoldPreventDelete_" data-uid="BrightChain.Engine.Models.Blocks.Block.LegalHoldPreventDelete*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_LegalHoldPreventDelete" data-uid="BrightChain.Engine.Models.Blocks.Block.LegalHoldPreventDelete">LegalHoldPreventDelete</h4>
+  <div class="markdown level1 summary"><p>If Guid is set with valid LegalOrder, any delete calls should be prevented. Respond as denied or invisible according to LegalHoldInvisible.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Guid? LegalHoldPreventDelete { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Guid</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_LegalHoldPreventRead.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.LegalHoldPreventRead%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L122">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_LegalHoldPreventRead_" data-uid="BrightChain.Engine.Models.Blocks.Block.LegalHoldPreventRead*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_LegalHoldPreventRead" data-uid="BrightChain.Engine.Models.Blocks.Block.LegalHoldPreventRead">LegalHoldPreventRead</h4>
+  <div class="markdown level1 summary"><p>If Guid is set with valid LegalOrder, any read accesses should be prevented. Respond as denied or invisible according to LegalHoldInvisible.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Guid? LegalHoldPreventRead { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Guid</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_OriginalAssemblyTypeString.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.OriginalAssemblyTypeString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L79">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_OriginalAssemblyTypeString_" data-uid="BrightChain.Engine.Models.Blocks.Block.OriginalAssemblyTypeString*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_OriginalAssemblyTypeString" data-uid="BrightChain.Engine.Models.Blocks.Block.OriginalAssemblyTypeString">OriginalAssemblyTypeString</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ProtoMember(6)]
+public string OriginalAssemblyTypeString { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_OriginatingNode.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.OriginatingNode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L75">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_OriginatingNode_" data-uid="BrightChain.Engine.Models.Blocks.Block.OriginatingNode*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_OriginatingNode" data-uid="BrightChain.Engine.Models.Blocks.Block.OriginatingNode">OriginatingNode</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ProtoMember(5)]
+public BrightChainNode OriginatingNode { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Nodes.BrightChainNode.html">BrightChainNode</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Rating.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Rating%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L112">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Rating_" data-uid="BrightChain.Engine.Models.Blocks.Block.Rating*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Rating" data-uid="BrightChain.Engine.Models.Blocks.Block.Rating">Rating</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public decimal Rating { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Decimal</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Ratings.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Ratings%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L110">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Ratings_" data-uid="BrightChain.Engine.Models.Blocks.Block.Ratings*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Ratings" data-uid="BrightChain.Engine.Models.Blocks.Block.Ratings">Ratings</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;BlockRating&gt; Ratings { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="BrightChain.Engine.Models.Blocks.BlockRating.html">BlockRating</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Reads.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Reads%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L108">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Reads_" data-uid="BrightChain.Engine.Models.Blocks.Block.Reads*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Reads" data-uid="BrightChain.Engine.Models.Blocks.Block.Reads">Reads</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ulong Reads { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_RevocationCertificates.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.RevocationCertificates%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L90">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_RevocationCertificates_" data-uid="BrightChain.Engine.Models.Blocks.Block.RevocationCertificates*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_RevocationCertificates" data-uid="BrightChain.Engine.Models.Blocks.Block.RevocationCertificates">RevocationCertificates</h4>
+  <div class="markdown level1 summary"><p>For private encrypted files, a special token encrypted with the original user's key will allow revocation</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ProtoMember(8)]
+public IEnumerable&lt;RevocationCertificate&gt; RevocationCertificates { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="BrightChain.Engine.Models.Contracts.RevocationCertificate.html">RevocationCertificate</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Revokable.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Revokable%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L96">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Revokable_" data-uid="BrightChain.Engine.Models.Blocks.Block.Revokable*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Revokable" data-uid="BrightChain.Engine.Models.Blocks.Block.Revokable">Revokable</h4>
+  <div class="markdown level1 summary"><p>Gets a boolean whether the revocation list contains possible revocation tokens.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Revokable { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Signature.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Signature%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L68">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Signature_" data-uid="BrightChain.Engine.Models.Blocks.Block.Signature*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Signature" data-uid="BrightChain.Engine.Models.Blocks.Block.Signature">Signature</h4>
+  <div class="markdown level1 summary"><p>Gets a BlockSignature containing a signature of the block's hash and all other contents of metadata except signature.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ProtoMember(4)]
+public BlockSignature Signature { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.BlockSignature.html">BlockSignature</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_SignatureVerified.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.SignatureVerified%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L73">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_SignatureVerified_" data-uid="BrightChain.Engine.Models.Blocks.Block.SignatureVerified*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_SignatureVerified" data-uid="BrightChain.Engine.Models.Blocks.Block.SignatureVerified">SignatureVerified</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool SignatureVerified { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Signed.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Signed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L71">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Signed_" data-uid="BrightChain.Engine.Models.Blocks.Block.Signed*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Signed" data-uid="BrightChain.Engine.Models.Blocks.Block.Signed">Signed</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Signed { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_StorageContract.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.StorageContract%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L41">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_StorageContract_" data-uid="BrightChain.Engine.Models.Blocks.Block.StorageContract*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_StorageContract" data-uid="BrightChain.Engine.Models.Blocks.Block.StorageContract">StorageContract</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ProtoMember(2)]
+public StorageContract StorageContract { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Contracts.StorageContract.html">StorageContract</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_StoredData.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.StoredData%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L48">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_StoredData_" data-uid="BrightChain.Engine.Models.Blocks.Block.StoredData*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_StoredData" data-uid="BrightChain.Engine.Models.Blocks.Block.StoredData">StoredData</h4>
+  <div class="markdown level1 summary"><p>Gets the bytes associated with this block.
+Notably, the StoredData is NOT part of the proto contract.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BlockData StoredData { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.DataObjects.BlockData.html">BlockData</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_ValidationExceptions.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.ValidationExceptions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L134">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_ValidationExceptions_" data-uid="BrightChain.Engine.Models.Blocks.Block.ValidationExceptions*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_ValidationExceptions" data-uid="BrightChain.Engine.Models.Blocks.Block.ValidationExceptions">ValidationExceptions</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;BrightChainValidationException&gt; ValidationExceptions { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="BrightChain.Engine.Exceptions.BrightChainValidationException.html">BrightChainValidationException</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_ByteAt_System_Int32_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.ByteAt(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L56">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_ByteAt_" data-uid="BrightChain.Engine.Models.Blocks.Block.ByteAt*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_ByteAt_System_Int32_" data-uid="BrightChain.Engine.Models.Blocks.Block.ByteAt(System.Int32)">ByteAt(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte ByteAt(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_CompareOriginalType_BrightChain_Engine_Models_Blocks_Block_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.CompareOriginalType(BrightChain.Engine.Models.Blocks.Block)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L322">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_CompareOriginalType_" data-uid="BrightChain.Engine.Models.Blocks.Block.CompareOriginalType*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_CompareOriginalType_BrightChain_Engine_Models_Blocks_Block_" data-uid="BrightChain.Engine.Models.Blocks.Block.CompareOriginalType(BrightChain.Engine.Models.Blocks.Block)">CompareOriginalType(Block)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CompareOriginalType(Block other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.Block.html">Block</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_CompareOriginalType_System_Type_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.CompareOriginalType(System.Type)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L317">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_CompareOriginalType_" data-uid="BrightChain.Engine.Models.Blocks.Block.CompareOriginalType*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_CompareOriginalType_System_Type_" data-uid="BrightChain.Engine.Models.Blocks.Block.CompareOriginalType(System.Type)">CompareOriginalType(Type)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CompareOriginalType(Type compareTo)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Type</span></td>
+        <td><span class="parametername">compareTo</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_CompareTo_BrightChain_Engine_Interfaces_IBlock_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.CompareTo(BrightChain.Engine.Interfaces.IBlock)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L396">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_CompareTo_" data-uid="BrightChain.Engine.Models.Blocks.Block.CompareTo*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_CompareTo_BrightChain_Engine_Interfaces_IBlock_" data-uid="BrightChain.Engine.Models.Blocks.Block.CompareTo(BrightChain.Engine.Interfaces.IBlock)">CompareTo(IBlock)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int CompareTo(IBlock other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Interfaces.IBlock.html">IBlock</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_CompareTo_BrightChain_Engine_Models_Blocks_Block_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.CompareTo(BrightChain.Engine.Models.Blocks.Block)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L401">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_CompareTo_" data-uid="BrightChain.Engine.Models.Blocks.Block.CompareTo*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_CompareTo_BrightChain_Engine_Models_Blocks_Block_" data-uid="BrightChain.Engine.Models.Blocks.Block.CompareTo(BrightChain.Engine.Models.Blocks.Block)">CompareTo(Block)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int CompareTo(Block other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.Block.html">Block</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Dispose.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L389">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Dispose_" data-uid="BrightChain.Engine.Models.Blocks.Block.Dispose*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Dispose" data-uid="BrightChain.Engine.Models.Blocks.Block.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void Dispose()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Equals_BrightChain_Engine_Interfaces_IBlock_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Equals(BrightChain.Engine.Interfaces.IBlock)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L411">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Equals_" data-uid="BrightChain.Engine.Models.Blocks.Block.Equals*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Equals_BrightChain_Engine_Interfaces_IBlock_" data-uid="BrightChain.Engine.Models.Blocks.Block.Equals(BrightChain.Engine.Interfaces.IBlock)">Equals(IBlock)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Equals(IBlock other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Interfaces.IBlock.html">IBlock</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Equals_BrightChain_Engine_Models_Blocks_Block_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Equals(BrightChain.Engine.Models.Blocks.Block)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L416">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Equals_" data-uid="BrightChain.Engine.Models.Blocks.Block.Equals*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Equals_BrightChain_Engine_Models_Blocks_Block_" data-uid="BrightChain.Engine.Models.Blocks.Block.Equals(BrightChain.Engine.Models.Blocks.Block)">Equals(Block)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Equals(Block other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.Block.html">Block</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Equals_System_Object_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L406">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Equals_" data-uid="BrightChain.Engine.Models.Blocks.Block.Equals*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Equals_System_Object_" data-uid="BrightChain.Engine.Models.Blocks.Block.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.Equals(System.Object)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_GetHashCode.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L391">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_GetHashCode_" data-uid="BrightChain.Engine.Models.Blocks.Block.GetHashCode*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_GetHashCode" data-uid="BrightChain.Engine.Models.Blocks.Block.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.GetHashCode()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_MakeTransactable_BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_System_Boolean_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.MakeTransactable(BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L357">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_MakeTransactable_" data-uid="BrightChain.Engine.Models.Blocks.Block.MakeTransactable*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_MakeTransactable_BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_System_Boolean_" data-uid="BrightChain.Engine.Models.Blocks.Block.MakeTransactable(BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase,System.Boolean)">MakeTransactable(BrightenedBlockCacheManagerBase, Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BrightenedBlock MakeTransactable(BrightenedBlockCacheManagerBase cacheManager, bool allowCommit)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html">BrightenedBlockCacheManagerBase</a></td>
+        <td><span class="parametername">cacheManager</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">allowCommit</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.BrightenedBlock.html">BrightenedBlock</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Sign_BrightChain_Engine_Models_Entities_Agent_System_String_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Sign(BrightChain.Engine.Models.Entities.Agent%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L338">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Sign_" data-uid="BrightChain.Engine.Models.Blocks.Block.Sign*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Sign_BrightChain_Engine_Models_Entities_Agent_System_String_" data-uid="BrightChain.Engine.Models.Blocks.Block.Sign(BrightChain.Engine.Models.Entities.Agent,System.String)">Sign(Agent, String)</h4>
+  <div class="markdown level1 summary"><p>Sign the block/metadata.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BlockSignature Sign(Agent user, string password)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Entities.Agent.html">Agent</a></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">password</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.BlockSignature.html">BlockSignature</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_Validate.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.Validate%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L381">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_Validate_" data-uid="BrightChain.Engine.Models.Blocks.Block.Validate*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_Validate" data-uid="BrightChain.Engine.Models.Blocks.Block.Validate">Validate()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Validate()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_ValidateCurrentTypeVsOriginal.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.ValidateCurrentTypeVsOriginal%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L327">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_ValidateCurrentTypeVsOriginal_" data-uid="BrightChain.Engine.Models.Blocks.Block.ValidateCurrentTypeVsOriginal*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_ValidateCurrentTypeVsOriginal" data-uid="BrightChain.Engine.Models.Blocks.Block.ValidateCurrentTypeVsOriginal">ValidateCurrentTypeVsOriginal()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool ValidateCurrentTypeVsOriginal()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_ValidateOriginalType.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.ValidateOriginalType%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L309">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_ValidateOriginalType_" data-uid="BrightChain.Engine.Models.Blocks.Block.ValidateOriginalType*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_ValidateOriginalType" data-uid="BrightChain.Engine.Models.Blocks.Block.ValidateOriginalType">ValidateOriginalType()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool ValidateOriginalType()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_ValidateType_System_Type__System_String_System_Type_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.ValidateType(System.Type%40%2CSystem.String%2CSystem.Type)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L289">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_ValidateType_" data-uid="BrightChain.Engine.Models.Blocks.Block.ValidateType*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_ValidateType_System_Type__System_String_System_Type_" data-uid="BrightChain.Engine.Models.Blocks.Block.ValidateType(System.Type@,System.String,System.Type)">ValidateType(out Type, String, Type)</h4>
+  <div class="markdown level1 summary"><p>Returns a boolean indicating whether the assembly qualified type name was resolved. Optional type to compare against.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool ValidateType(out Type restoredType, string typeName, Type compareTo)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Type</span></td>
+        <td><span class="parametername">restoredType</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">typeName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Type</span></td>
+        <td><span class="parametername">compareTo</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_VerifySignature_BrightChain_Engine_Models_Entities_Agent_System_String_System_Nullable_System_ReadOnlyMemory_System_Byte___.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.VerifySignature(BrightChain.Engine.Models.Entities.Agent%2CSystem.String%2CSystem.Nullable%7BSystem.ReadOnlyMemory%7BSystem.Byte%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L351">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_VerifySignature_" data-uid="BrightChain.Engine.Models.Blocks.Block.VerifySignature*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_VerifySignature_BrightChain_Engine_Models_Entities_Agent_System_String_System_Nullable_System_ReadOnlyMemory_System_Byte___" data-uid="BrightChain.Engine.Models.Blocks.Block.VerifySignature(BrightChain.Engine.Models.Entities.Agent,System.String,System.Nullable{System.ReadOnlyMemory{System.Byte}})">VerifySignature(Agent, String, Nullable&lt;ReadOnlyMemory&lt;Byte&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Verifies the block's signature.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool VerifySignature(Agent user, string password, ReadOnlyMemory&lt;byte&gt;? signature = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Entities.Agent.html">Agent</a></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">password</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.ReadOnlyMemory</span>&lt;<span class="xref">System.Byte</span>&gt;&gt;</td>
+        <td><span class="parametername">signature</span></td>
+        <td><p>Signature hash. If signature is not provided, pull from attributes.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_XOR_BrightChain_Engine_Models_Blocks_Block_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.XOR(BrightChain.Engine.Models.Blocks.Block)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L229">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_XOR_" data-uid="BrightChain.Engine.Models.Blocks.Block.XOR*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_XOR_BrightChain_Engine_Models_Blocks_Block_" data-uid="BrightChain.Engine.Models.Blocks.Block.XOR(BrightChain.Engine.Models.Blocks.Block)">XOR(Block)</h4>
+  <div class="markdown level1 summary"><p>XORs this block with another/randomizer block.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ReadOnlyMemory&lt;byte&gt; XOR(Block other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.Block.html">Block</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ReadOnlyMemory</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_XOR_System_Collections_Generic_IEnumerable_BrightChain_Engine_Models_Blocks_Block__.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.XOR(System.Collections.Generic.IEnumerable%7BBrightChain.Engine.Models.Blocks.Block%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L250">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_XOR_" data-uid="BrightChain.Engine.Models.Blocks.Block.XOR*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_XOR_System_Collections_Generic_IEnumerable_BrightChain_Engine_Models_Blocks_Block__" data-uid="BrightChain.Engine.Models.Blocks.Block.XOR(System.Collections.Generic.IEnumerable{BrightChain.Engine.Models.Blocks.Block})">XOR(IEnumerable&lt;Block&gt;)</h4>
+  <div class="markdown level1 summary"><p>XORs this block with a list of other/randomizer blocks.
+XOR will ignore the instance block in the block array.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ReadOnlyMemory&lt;byte&gt; XOR(IEnumerable&lt;Block&gt; others)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="BrightChain.Engine.Models.Blocks.Block.html">Block</a>&gt;</td>
+        <td><span class="parametername">others</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ReadOnlyMemory</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="operators">Operators
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_op_Equality_BrightChain_Engine_Models_Blocks_Block_BrightChain_Engine_Models_Blocks_Block_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.op_Equality(BrightChain.Engine.Models.Blocks.Block%2CBrightChain.Engine.Models.Blocks.Block)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L166">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_op_Equality_" data-uid="BrightChain.Engine.Models.Blocks.Block.op_Equality*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_op_Equality_BrightChain_Engine_Models_Blocks_Block_BrightChain_Engine_Models_Blocks_Block_" data-uid="BrightChain.Engine.Models.Blocks.Block.op_Equality(BrightChain.Engine.Models.Blocks.Block,BrightChain.Engine.Models.Blocks.Block)">Equality(Block, Block)</h4>
+  <div class="markdown level1 summary"><p>Compares the data hashes only.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator ==(Block a, Block b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.Block.html">Block</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.Block.html">Block</a></td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block_op_Inequality_BrightChain_Engine_Models_Blocks_Block_BrightChain_Engine_Models_Blocks_Block_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block.op_Inequality(BrightChain.Engine.Models.Blocks.Block%2CBrightChain.Engine.Models.Blocks.Block)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L171">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Models_Blocks_Block_op_Inequality_" data-uid="BrightChain.Engine.Models.Blocks.Block.op_Inequality*"></a>
+  <h4 id="BrightChain_Engine_Models_Blocks_Block_op_Inequality_BrightChain_Engine_Models_Blocks_Block_BrightChain_Engine_Models_Blocks_Block_" data-uid="BrightChain.Engine.Models.Blocks.Block.op_Inequality(BrightChain.Engine.Models.Blocks.Block,BrightChain.Engine.Models.Blocks.Block)">Inequality(Block, Block)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator !=(Block a, Block b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.Block.html">Block</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.Block.html">Block</a></td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="BrightChain.Engine.Interfaces.IBlock.html">IBlock</a>
+  </div>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+  <div>
+      <a class="xref" href="BrightChain.Engine.Interfaces.IValidatable.html">IValidatable</a>
+  </div>
+  <div>
+      <span class="xref">System.IComparable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.IComparable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.IEquatable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.IEquatable&lt;T&gt;</span>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="BrightChain.Engine.Extensions.BlockValidationExtensions.html#BrightChain_Engine_Extensions_BlockValidationExtensions_PerformValidation_BrightChain_Engine_Models_Blocks_Block_System_Collections_Generic_IEnumerable_BrightChain_Engine_Exceptions_BrightChainValidationException___">BlockValidationExtensions.PerformValidation(Block, out IEnumerable&lt;BrightChainValidationException&gt;)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Models_Blocks_Block.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Models.Blocks.Block%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Models/Blocks/Block.cs/#L27" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,1748 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class FasterBlockCacheManager
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class FasterBlockCacheManager
+   ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager">
+  
+  
+  <h1 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager" class="text-break">Class FasterBlockCacheManager
+  </h1>
+  <div class="markdown level0 summary"><p>Disk/Memory hybrid Block Cache Manager based on Microsoft FASTER KV.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html">BrightenedBlockCacheManagerBase</a></div>
+    <div class="level2"><span class="xref">FasterBlockCacheManager</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="BrightChain.Engine.Interfaces.IBrightenedBlockCacheManager.html">IBrightenedBlockCacheManager</a></div>
+    <div><a class="xref" href="BrightChain.Engine.Interfaces.ICacheManager-2.html">ICacheManager</a>&lt;<a class="xref" href="BrightChain.Engine.Models.Hashes.BlockHash.html">BlockHash</a>, <a class="xref" href="BrightChain.Engine.Models.Blocks.BrightenedBlock.html">BrightenedBlock</a>&gt;</div>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_Get_System_Collections_Generic_IEnumerable_BrightChain_Engine_Models_Hashes_BlockHash__">BrightenedBlockCacheManagerBase.Get(IEnumerable&lt;BlockHash&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_Get_System_Collections_Generic_IAsyncEnumerable_BrightChain_Engine_Models_Hashes_BlockHash__">BrightenedBlockCacheManagerBase.Get(IAsyncEnumerable&lt;BlockHash&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_Set_BrightChain_Engine_Models_Blocks_BrightenedBlock_System_Boolean_">BrightenedBlockCacheManagerBase.Set(BrightenedBlock, Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_ExtendStorage_BrightChain_Engine_Models_Blocks_BrightenedBlock_System_DateTime_BrightChain_Engine_Enumerations_RedundancyContractType_">BrightenedBlockCacheManagerBase.ExtendStorage(BrightenedBlock, DateTime, RedundancyContractType)</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_Set_BrightChain_Engine_Models_Hashes_BlockHash_BrightChain_Engine_Models_Blocks_BrightenedBlock_">BrightenedBlockCacheManagerBase.Set(BlockHash, BrightenedBlock)</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_Trust_BrightChain_Engine_Models_Nodes_BrightChainNode_">BrightenedBlockCacheManagerBase.Trust(BrightChainNode)</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_MaximumStorageLength_BrightChain_Engine_Enumerations_BlockSize_">BrightenedBlockCacheManagerBase.MaximumStorageLength(BlockSize)</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_UncommittedBlocksByStatus_BrightChain_Engine_Enumerations_TransactionStatus_">BrightenedBlockCacheManagerBase.UncommittedBlocksByStatus(TransactionStatus)</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_UncommittedBlocks">BrightenedBlockCacheManagerBase.UncommittedBlocks</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_testingSelfDestruct">BrightenedBlockCacheManagerBase.testingSelfDestruct</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_ConfigFile">BrightenedBlockCacheManagerBase.ConfigFile</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_Configuration">BrightenedBlockCacheManagerBase.Configuration</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_DatabaseName">BrightenedBlockCacheManagerBase.DatabaseName</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_Logger">BrightenedBlockCacheManagerBase.Logger</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_RootBlock">BrightenedBlockCacheManagerBase.RootBlock</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_SupportedReadBlockSizes">BrightenedBlockCacheManagerBase.SupportedReadBlockSizes</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_SupportedWriteBlockSizes">BrightenedBlockCacheManagerBase.SupportedWriteBlockSizes</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_AsBlockCacheManager">BrightenedBlockCacheManagerBase.AsBlockCacheManager</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_UncomittedBlocksByHash">BrightenedBlockCacheManagerBase.UncomittedBlocksByHash</a>
+    </div>
+    <div>
+      <a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_UncommittedHashesByStatus">BrightenedBlockCacheManagerBase.UncommittedHashesByStatus</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="BrightChain.Engine.Faster.CacheManager.html">BrightChain.Engine.Faster.CacheManager</a></h6>
+  <h6><strong>Assembly</strong>: BrightChain.Engine.dll</h6>
+  <h5 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class FasterBlockCacheManager : BrightenedBlockCacheManagerBase, IBrightenedBlockCacheManager, ICacheManager&lt;BlockHash, BrightenedBlock&gt;, IDisposable</code></pre>
+  </div>
+  <h5 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>The plan is to keep a couple separate caches of data in sync using the FasterKV checkpointing.
+Hopefully errors where we need to put back or take out blocks that have already been altered on disk are rare.
+The primary, Write Once*, Read Many cache:</p>
+<ul>
+<li>The Data cache contains the actual raw block data only. These blocks are not to be altered unless deleted through a revocation certificate or normal expiration.
+The secondary, Multiple Write Multiple Read cache is a combined cache that serves as a shared index table</li>
+<li>The BlockMetadata cache contains block metadata that may be updated.</li>
+<li>BlockExpirationIndexValues contain a list of Block ID's expiring in any given second.</li>
+<li>CBLDataHashIndexValues contain the latest CBL source hash associated with a given correlation ID.</li>
+<li>BrightHandleIndexValues contain the CBL handles for a given source hash ID.</li>
+<li>CBLTagIndexValue contain the correlation IDs for a given tag.</li>
+</ul>
+<p>Sessions are what you issue a sequence of operations against. <br>
+You checkpoint the database periodically, which ensures some prefix of operations <br>
+on the session are persisted, i.e., can survive process failure. If you Upsert and try <br>
+to read back the data in the same session, it should be there.</p>
+</div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager__ctor_Microsoft_Extensions_Logging_ILogger_Microsoft_Extensions_Configuration_IConfiguration_BrightChain_Engine_Models_Blocks_RootBlock_System_Boolean_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.%23ctor(Microsoft.Extensions.Logging.ILogger%2CMicrosoft.Extensions.Configuration.IConfiguration%2CBrightChain.Engine.Models.Blocks.RootBlock%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.cs/#L65">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager__ctor_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.#ctor*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager__ctor_Microsoft_Extensions_Logging_ILogger_Microsoft_Extensions_Configuration_IConfiguration_BrightChain_Engine_Models_Blocks_RootBlock_System_Boolean_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.#ctor(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Configuration.IConfiguration,BrightChain.Engine.Models.Blocks.RootBlock,System.Boolean)">FasterBlockCacheManager(ILogger, IConfiguration, RootBlock, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.html">FasterBlockCacheManager</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FasterBlockCacheManager(ILogger logger, IConfiguration configuration, RootBlock rootBlock, bool testingSelfDestruct = false)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Microsoft.Extensions.Logging.ILogger</span></td>
+        <td><span class="parametername">logger</span></td>
+        <td><p>Instance of the logging provider.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Microsoft.Extensions.Configuration.IConfiguration</span></td>
+        <td><span class="parametername">configuration</span></td>
+        <td><p>Instance of the configuration provider.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.RootBlock.html">RootBlock</a></td>
+        <td><span class="parametername">rootBlock</span></td>
+        <td><p>Block containing key information for store.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">testingSelfDestruct</span></td>
+        <td><p>Whether to delete device files on shutdown.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_ConfigurationFilePath.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.ConfigurationFilePath%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.cs/#L108">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_ConfigurationFilePath_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.ConfigurationFilePath*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_ConfigurationFilePath" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.ConfigurationFilePath">ConfigurationFilePath</h4>
+  <div class="markdown level1 summary"><p>Gets the full path to the configuration file.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string ConfigurationFilePath { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_AddExpiration_BrightChain_Engine_Models_Blocks_BrightenedBlock_System_Boolean_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.AddExpiration(BrightChain.Engine.Models.Blocks.BrightenedBlock%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.ExpirationIndex.cs/#L47">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_AddExpiration_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.AddExpiration*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_AddExpiration_BrightChain_Engine_Models_Blocks_BrightenedBlock_System_Boolean_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.AddExpiration(BrightChain.Engine.Models.Blocks.BrightenedBlock,System.Boolean)">AddExpiration(BrightenedBlock, Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void AddExpiration(BrightenedBlock block, bool noCheckContains = false)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.BrightenedBlock.html">BrightenedBlock</a></td>
+        <td><span class="parametername">block</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">noCheckContains</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_AddExpiration_BrightChain_Engine_Models_Blocks_BrightenedBlock_System_Boolean_">BrightenedBlockCacheManagerBase.AddExpiration(BrightenedBlock, Boolean)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_BlockExpirationIndexKey_System_Int64_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.BlockExpirationIndexKey(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.ExpirationIndex.cs/#L13">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_BlockExpirationIndexKey_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.BlockExpirationIndexKey*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_BlockExpirationIndexKey_System_Int64_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.BlockExpirationIndexKey(System.Int64)">BlockExpirationIndexKey(Int64)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BlockExpirationIndexKey(long date)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">date</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_CheckpointFunc_BrightChain_Engine_Faster_Enumerations_FasterCheckpointOperation_FASTER_core_CheckpointType_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.CheckpointFunc(BrightChain.Engine.Faster.Enumerations.FasterCheckpointOperation%2CFASTER.core.CheckpointType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Transactable.cs/#L59">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_CheckpointFunc_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.CheckpointFunc*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_CheckpointFunc_BrightChain_Engine_Faster_Enumerations_FasterCheckpointOperation_FASTER_core_CheckpointType_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.CheckpointFunc(BrightChain.Engine.Faster.Enumerations.FasterCheckpointOperation,FASTER.core.CheckpointType)">CheckpointFunc(FasterCheckpointOperation, CheckpointType)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BlockSessionCheckpoint CheckpointFunc(FasterCheckpointOperation operation, CheckpointType checkpointType = CheckpointType.Snapshot)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Faster.Enumerations.FasterCheckpointOperation.html">FasterCheckpointOperation</a></td>
+        <td><span class="parametername">operation</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">FASTER.core.CheckpointType</span></td>
+        <td><span class="parametername">checkpointType</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Faster.BlockSessionCheckpoint.html">BlockSessionCheckpoint</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_CheckpointFuncAsync_System_Func_System_Collections_Generic_Dictionary_BrightChain_Engine_Faster_Enumerations_CacheStoreType_System_Threading_Tasks_Task_System_ValueTuple_System_Boolean_System_Guid_____.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.CheckpointFuncAsync(System.Func%7BSystem.Collections.Generic.Dictionary%7BBrightChain.Engine.Faster.Enumerations.CacheStoreType%2CSystem.Threading.Tasks.Task%7BSystem.ValueTuple%7BSystem.Boolean%2CSystem.Guid%7D%7D%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Transactable.cs/#L95">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_CheckpointFuncAsync_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.CheckpointFuncAsync*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_CheckpointFuncAsync_System_Func_System_Collections_Generic_Dictionary_BrightChain_Engine_Faster_Enumerations_CacheStoreType_System_Threading_Tasks_Task_System_ValueTuple_System_Boolean_System_Guid_____" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.CheckpointFuncAsync(System.Func{System.Collections.Generic.Dictionary{BrightChain.Engine.Faster.Enumerations.CacheStoreType,System.Threading.Tasks.Task{System.ValueTuple{System.Boolean,System.Guid}}}})">CheckpointFuncAsync(Func&lt;Dictionary&lt;CacheStoreType, Task&lt;(Boolean, Guid)&gt;&gt;&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task&lt;BlockSessionCheckpoint&gt; CheckpointFuncAsync(Func&lt;Dictionary&lt;CacheStoreType, Task&lt;(bool, Guid)&gt;&gt;&gt; func)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;<span class="xref">System.Collections.Generic.Dictionary</span>&lt;<a class="xref" href="BrightChain.Engine.Faster.Enumerations.CacheStoreType.html">CacheStoreType</a>, <span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.ValueTuple</span>&lt;<span class="xref">System.Boolean</span>, <span class="xref">System.Guid</span>&gt;&gt;&gt;&gt;</td>
+        <td><span class="parametername">func</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="BrightChain.Engine.Faster.BlockSessionCheckpoint.html">BlockSessionCheckpoint</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Compact_System_Boolean_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Compact(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Transactable.cs/#L161">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Compact_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Compact*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Compact_System_Boolean_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Compact(System.Boolean)">Compact(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BlockSessionAddresses Compact(bool shiftBeginAddress = true)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">shiftBeginAddress</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Faster.BlockSessionAddresses.html">BlockSessionAddresses</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_CompleteCheckpointAsync.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.CompleteCheckpointAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Transactable.cs/#L117">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_CompleteCheckpointAsync_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.CompleteCheckpointAsync*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_CompleteCheckpointAsync" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.CompleteCheckpointAsync">CompleteCheckpointAsync()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task CompleteCheckpointAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Contains_BrightChain_Engine_Models_Hashes_BlockHash_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Contains(BrightChain.Engine.Models.Hashes.BlockHash)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.CoreFunctions.cs/#L15">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Contains_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Contains*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Contains_BrightChain_Engine_Models_Hashes_BlockHash_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Contains(BrightChain.Engine.Models.Hashes.BlockHash)">Contains(BlockHash)</h4>
+  <div class="markdown level1 summary"><p>Returns whether the cache manager has the given key and it is not expired.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Contains(BlockHash key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Hashes.BlockHash.html">BlockHash</a></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>key to check the collection for.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>boolean with whether key is present.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_Contains_BrightChain_Engine_Models_Hashes_BlockHash_">BrightenedBlockCacheManagerBase.Contains(BlockHash)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_CreateLogDevice_System_String_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.CreateLogDevice(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Helpers.cs/#L61">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_CreateLogDevice_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.CreateLogDevice*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_CreateLogDevice_System_String_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.CreateLogDevice(System.String)">CreateLogDevice(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected IDevice CreateLogDevice(string nameSpace)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">nameSpace</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">FASTER.core.IDevice</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Dispose.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.cs/#L111">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Dispose_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Dispose*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Dispose" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Drop_BrightChain_Engine_Models_Hashes_BlockHash_System_Boolean_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Drop(BrightChain.Engine.Models.Hashes.BlockHash%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.CoreFunctions.cs/#L29">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Drop_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Drop*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Drop_BrightChain_Engine_Models_Hashes_BlockHash_System_Boolean_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Drop(BrightChain.Engine.Models.Hashes.BlockHash,System.Boolean)">Drop(BlockHash, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Removes a key from the cache and returns a boolean wither whether it was actually present.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Drop(BlockHash key, bool noCheckContains = true)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Hashes.BlockHash.html">BlockHash</a></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>key to drop from the collection.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">noCheckContains</span></td>
+        <td><p>Skips the contains check for performance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>whether requested key was present and actually dropped.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_Drop_BrightChain_Engine_Models_Hashes_BlockHash_System_Boolean_">BrightenedBlockCacheManagerBase.Drop(BlockHash, Boolean)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_ExpireBlocks_System_Int64_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.ExpireBlocks(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.ExpirationIndex.cs/#L85">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_ExpireBlocks_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.ExpireBlocks*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_ExpireBlocks_System_Int64_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.ExpireBlocks(System.Int64)">ExpireBlocks(Int64)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void ExpireBlocks(long date)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">date</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_ExpireBlocks_System_Int64_">BrightenedBlockCacheManagerBase.ExpireBlocks(Int64)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_ExpireBlocksThrough_System_Int64_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.ExpireBlocksThrough(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.ExpirationIndex.cs/#L99">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_ExpireBlocksThrough_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.ExpireBlocksThrough*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_ExpireBlocksThrough_System_Int64_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.ExpireBlocksThrough(System.Int64)">ExpireBlocksThrough(Int64)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void ExpireBlocksThrough(long date)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">date</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_ExpireBlocksThrough_System_Int64_">BrightenedBlockCacheManagerBase.ExpireBlocksThrough(Int64)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Get_BrightChain_Engine_Models_Hashes_BlockHash_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Get(BrightChain.Engine.Models.Hashes.BlockHash)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.CoreFunctions.cs/#L66">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Get_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Get*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Get_BrightChain_Engine_Models_Hashes_BlockHash_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Get(BrightChain.Engine.Models.Hashes.BlockHash)">Get(BlockHash)</h4>
+  <div class="markdown level1 summary"><p>Retrieves a block from the cache if it is present.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override BrightenedBlock Get(BlockHash blockHash)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Hashes.BlockHash.html">BlockHash</a></td>
+        <td><span class="parametername">blockHash</span></td>
+        <td><p>key to retrieve.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.BrightenedBlock.html">BrightenedBlock</a></td>
+        <td><p>returns requested block or throws.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_Get_BrightChain_Engine_Models_Hashes_BlockHash_">BrightenedBlockCacheManagerBase.Get(BlockHash)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_GetBlocksExpiringAt_System_Int64_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.GetBlocksExpiringAt(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.ExpirationIndex.cs/#L18">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_GetBlocksExpiringAt_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.GetBlocksExpiringAt*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_GetBlocksExpiringAt_System_Int64_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.GetBlocksExpiringAt(System.Int64)">GetBlocksExpiringAt(Int64)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IEnumerable&lt;BlockHash&gt; GetBlocksExpiringAt(long date)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">date</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="BrightChain.Engine.Models.Hashes.BlockHash.html">BlockHash</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_GetBlocksExpiringAt_System_Int64_">BrightenedBlockCacheManagerBase.GetBlocksExpiringAt(Int64)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_GetCbl_BrightChain_Engine_Models_Hashes_DataHash_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.GetCbl(BrightChain.Engine.Models.Hashes.DataHash)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.CBLIndex.cs/#L18">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_GetCbl_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.GetCbl*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_GetCbl_BrightChain_Engine_Models_Hashes_DataHash_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.GetCbl(BrightChain.Engine.Models.Hashes.DataHash)">GetCbl(DataHash)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override BrightHandle GetCbl(DataHash sourceHash)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Hashes.DataHash.html">DataHash</a></td>
+        <td><span class="parametername">sourceHash</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.DataObjects.BrightHandle.html">BrightHandle</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_GetCbl_BrightChain_Engine_Models_Hashes_DataHash_">BrightenedBlockCacheManagerBase.GetCbl(DataHash)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_GetCbl_System_Guid_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.GetCbl(System.Guid)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.CBLIndex.cs/#L86">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_GetCbl_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.GetCbl*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_GetCbl_System_Guid_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.GetCbl(System.Guid)">GetCbl(Guid)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override BrightHandle GetCbl(Guid correlationId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">correlationId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.DataObjects.BrightHandle.html">BrightHandle</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_GetCbl_System_Guid_">BrightenedBlockCacheManagerBase.GetCbl(Guid)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_GetDevicePath_System_String_System_IO_DirectoryInfo__.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.GetDevicePath(System.String%2CSystem.IO.DirectoryInfo%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Helpers.cs/#L48">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_GetDevicePath_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.GetDevicePath*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_GetDevicePath_System_String_System_IO_DirectoryInfo__" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.GetDevicePath(System.String,System.IO.DirectoryInfo@)">GetDevicePath(String, out DirectoryInfo)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected string GetDevicePath(string nameSpace, out DirectoryInfo cacheDirectoryInfo)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">nameSpace</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.DirectoryInfo</span></td>
+        <td><span class="parametername">cacheDirectoryInfo</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_GetDiskCacheDirectory.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.GetDiskCacheDirectory%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Helpers.cs/#L39">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_GetDiskCacheDirectory_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.GetDiskCacheDirectory*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_GetDiskCacheDirectory" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.GetDiskCacheDirectory">GetDiskCacheDirectory()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected DirectoryInfo GetDiskCacheDirectory()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.DirectoryInfo</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_HeadAddresses.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.HeadAddresses%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Transactable.cs/#L146">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_HeadAddresses_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.HeadAddresses*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_HeadAddresses" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.HeadAddresses">HeadAddresses()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BlockSessionAddresses HeadAddresses()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Faster.BlockSessionAddresses.html">BlockSessionAddresses</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_NextSerials.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.NextSerials%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Transactable.cs/#L128">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_NextSerials_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.NextSerials*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_NextSerials" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.NextSerials">NextSerials()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BlockSessionAddresses NextSerials()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Faster.BlockSessionAddresses.html">BlockSessionAddresses</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Recover.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Recover%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Transactable.cs/#L181">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Recover_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Recover*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Recover" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Recover">Recover()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async void Recover()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_RemoveExpiration_BrightChain_Engine_Models_Blocks_BrightenedBlock_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.RemoveExpiration(BrightChain.Engine.Models.Blocks.BrightenedBlock)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.ExpirationIndex.cs/#L71">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_RemoveExpiration_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.RemoveExpiration*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_RemoveExpiration_BrightChain_Engine_Models_Blocks_BrightenedBlock_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.RemoveExpiration(BrightChain.Engine.Models.Blocks.BrightenedBlock)">RemoveExpiration(BrightenedBlock)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void RemoveExpiration(BrightenedBlock block)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.BrightenedBlock.html">BrightenedBlock</a></td>
+        <td><span class="parametername">block</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_RemoveExpiration_BrightChain_Engine_Models_Blocks_BrightenedBlock_">BrightenedBlockCacheManagerBase.RemoveExpiration(BrightenedBlock)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Set_BrightChain_Engine_Models_Blocks_BrightenedBlock_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Set(BrightChain.Engine.Models.Blocks.BrightenedBlock)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.CoreFunctions.cs/#L78">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Set_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Set*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_Set_BrightChain_Engine_Models_Blocks_BrightenedBlock_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.Set(BrightChain.Engine.Models.Blocks.BrightenedBlock)">Set(BrightenedBlock)</h4>
+  <div class="markdown level1 summary"><p>Adds a key to the cache if it is not already present.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Set(BrightenedBlock block)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.BrightenedBlock.html">BrightenedBlock</a></td>
+        <td><span class="parametername">block</span></td>
+        <td><p>block to palce in the cache.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_SetAll_System_Collections_Generic_IEnumerable_BrightChain_Engine_Models_Blocks_BrightenedBlock__.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.SetAll(System.Collections.Generic.IEnumerable%7BBrightChain.Engine.Models.Blocks.BrightenedBlock%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.CoreFunctions.cs/#L91">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_SetAll_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.SetAll*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_SetAll_System_Collections_Generic_IEnumerable_BrightChain_Engine_Models_Blocks_BrightenedBlock__" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.SetAll(System.Collections.Generic.IEnumerable{BrightChain.Engine.Models.Blocks.BrightenedBlock})">SetAll(IEnumerable&lt;BrightenedBlock&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void SetAll(IEnumerable&lt;BrightenedBlock&gt; items)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="BrightChain.Engine.Models.Blocks.BrightenedBlock.html">BrightenedBlock</a>&gt;</td>
+        <td><span class="parametername">items</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_SetAll_System_Collections_Generic_IEnumerable_BrightChain_Engine_Models_Blocks_BrightenedBlock__">BrightenedBlockCacheManagerBase.SetAll(IEnumerable&lt;BrightenedBlock&gt;)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_SetAllAsync_System_Collections_Generic_IAsyncEnumerable_BrightChain_Engine_Models_Blocks_BrightenedBlock__.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.SetAllAsync(System.Collections.Generic.IAsyncEnumerable%7BBrightChain.Engine.Models.Blocks.BrightenedBlock%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.CoreFunctions.cs/#L106">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_SetAllAsync_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.SetAllAsync*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_SetAllAsync_System_Collections_Generic_IAsyncEnumerable_BrightChain_Engine_Models_Blocks_BrightenedBlock__" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.SetAllAsync(System.Collections.Generic.IAsyncEnumerable{BrightChain.Engine.Models.Blocks.BrightenedBlock})">SetAllAsync(IAsyncEnumerable&lt;BrightenedBlock&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override async void SetAllAsync(IAsyncEnumerable&lt;BrightenedBlock&gt; items)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IAsyncEnumerable</span>&lt;<a class="xref" href="BrightChain.Engine.Models.Blocks.BrightenedBlock.html">BrightenedBlock</a>&gt;</td>
+        <td><span class="parametername">items</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_SetAllAsync_System_Collections_Generic_IAsyncEnumerable_BrightChain_Engine_Models_Blocks_BrightenedBlock__">BrightenedBlockCacheManagerBase.SetAllAsync(IAsyncEnumerable&lt;BrightenedBlock&gt;)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_SetCbl_BrightChain_Engine_Models_Hashes_BlockHash_BrightChain_Engine_Models_Hashes_DataHash_BrightChain_Engine_Models_Blocks_DataObjects_BrightHandle_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.SetCbl(BrightChain.Engine.Models.Hashes.BlockHash%2CBrightChain.Engine.Models.Hashes.DataHash%2CBrightChain.Engine.Models.Blocks.DataObjects.BrightHandle)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.CBLIndex.cs/#L42">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_SetCbl_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.SetCbl*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_SetCbl_BrightChain_Engine_Models_Hashes_BlockHash_BrightChain_Engine_Models_Hashes_DataHash_BrightChain_Engine_Models_Blocks_DataObjects_BrightHandle_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.SetCbl(BrightChain.Engine.Models.Hashes.BlockHash,BrightChain.Engine.Models.Hashes.DataHash,BrightChain.Engine.Models.Blocks.DataObjects.BrightHandle)">SetCbl(BlockHash, DataHash, BrightHandle)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void SetCbl(BlockHash brightenedCblHash, DataHash identifiableSourceHash, BrightHandle brightHandle)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Hashes.BlockHash.html">BlockHash</a></td>
+        <td><span class="parametername">brightenedCblHash</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Hashes.DataHash.html">DataHash</a></td>
+        <td><span class="parametername">identifiableSourceHash</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.DataObjects.BrightHandle.html">BrightHandle</a></td>
+        <td><span class="parametername">brightHandle</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_SetCbl_BrightChain_Engine_Models_Hashes_BlockHash_BrightChain_Engine_Models_Hashes_DataHash_BrightChain_Engine_Models_Blocks_DataObjects_BrightHandle_">BrightenedBlockCacheManagerBase.SetCbl(BlockHash, DataHash, BrightHandle)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_TakeFullCheckpoint_FASTER_core_CheckpointType_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.TakeFullCheckpoint(FASTER.core.CheckpointType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Transactable.cs/#L17">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_TakeFullCheckpoint_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.TakeFullCheckpoint*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_TakeFullCheckpoint_FASTER_core_CheckpointType_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.TakeFullCheckpoint(FASTER.core.CheckpointType)">TakeFullCheckpoint(CheckpointType)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BlockSessionCheckpoint TakeFullCheckpoint(CheckpointType checkpointType = CheckpointType.Snapshot)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">FASTER.core.CheckpointType</span></td>
+        <td><span class="parametername">checkpointType</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Faster.BlockSessionCheckpoint.html">BlockSessionCheckpoint</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_TakeHybridCheckpoint_FASTER_core_CheckpointType_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.TakeHybridCheckpoint(FASTER.core.CheckpointType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Transactable.cs/#L31">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_TakeHybridCheckpoint_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.TakeHybridCheckpoint*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_TakeHybridCheckpoint_FASTER_core_CheckpointType_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.TakeHybridCheckpoint(FASTER.core.CheckpointType)">TakeHybridCheckpoint(CheckpointType)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BlockSessionCheckpoint TakeHybridCheckpoint(CheckpointType checkpointType)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">FASTER.core.CheckpointType</span></td>
+        <td><span class="parametername">checkpointType</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Faster.BlockSessionCheckpoint.html">BlockSessionCheckpoint</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_TakeHybridCheckpointAsync_FASTER_core_CheckpointType_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.TakeHybridCheckpointAsync(FASTER.core.CheckpointType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Transactable.cs/#L36">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_TakeHybridCheckpointAsync_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.TakeHybridCheckpointAsync*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_TakeHybridCheckpointAsync_FASTER_core_CheckpointType_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.TakeHybridCheckpointAsync(FASTER.core.CheckpointType)">TakeHybridCheckpointAsync(CheckpointType)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task&lt;BlockSessionCheckpoint&gt; TakeHybridCheckpointAsync(CheckpointType checkpointType = CheckpointType.Snapshot)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">FASTER.core.CheckpointType</span></td>
+        <td><span class="parametername">checkpointType</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="BrightChain.Engine.Faster.BlockSessionCheckpoint.html">BlockSessionCheckpoint</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_TakeIndexCheckpoint.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.TakeIndexCheckpoint%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Transactable.cs/#L45">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_TakeIndexCheckpoint_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.TakeIndexCheckpoint*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_TakeIndexCheckpoint" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.TakeIndexCheckpoint">TakeIndexCheckpoint()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BlockSessionCheckpoint TakeIndexCheckpoint()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Faster.BlockSessionCheckpoint.html">BlockSessionCheckpoint</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_TakeIndexCheckPointAsync.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.TakeIndexCheckPointAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Transactable.cs/#L50">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_TakeIndexCheckPointAsync_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.TakeIndexCheckPointAsync*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_TakeIndexCheckPointAsync" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.TakeIndexCheckPointAsync">TakeIndexCheckPointAsync()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task&lt;BlockSessionCheckpoint&gt; TakeIndexCheckPointAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="BrightChain.Engine.Faster.BlockSessionCheckpoint.html">BlockSessionCheckpoint</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_UpdateCblVersion_BrightChain_Engine_Models_Blocks_Chains_ConstituentBlockListBlock_BrightChain_Engine_Models_Blocks_Chains_ConstituentBlockListBlock_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.UpdateCblVersion(BrightChain.Engine.Models.Blocks.Chains.ConstituentBlockListBlock%2CBrightChain.Engine.Models.Blocks.Chains.ConstituentBlockListBlock)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.CBLIndex.cs/#L72">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_UpdateCblVersion_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.UpdateCblVersion*"></a>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_UpdateCblVersion_BrightChain_Engine_Models_Blocks_Chains_ConstituentBlockListBlock_BrightChain_Engine_Models_Blocks_Chains_ConstituentBlockListBlock_" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.UpdateCblVersion(BrightChain.Engine.Models.Blocks.Chains.ConstituentBlockListBlock,BrightChain.Engine.Models.Blocks.Chains.ConstituentBlockListBlock)">UpdateCblVersion(ConstituentBlockListBlock, ConstituentBlockListBlock)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void UpdateCblVersion(ConstituentBlockListBlock newCbl, ConstituentBlockListBlock oldCbl = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.Chains.ConstituentBlockListBlock.html">ConstituentBlockListBlock</a></td>
+        <td><span class="parametername">newCbl</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Models.Blocks.Chains.ConstituentBlockListBlock.html">ConstituentBlockListBlock</a></td>
+        <td><span class="parametername">oldCbl</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_UpdateCblVersion_BrightChain_Engine_Models_Blocks_Chains_ConstituentBlockListBlock_BrightChain_Engine_Models_Blocks_Chains_ConstituentBlockListBlock_">BrightenedBlockCacheManagerBase.UpdateCblVersion(ConstituentBlockListBlock, ConstituentBlockListBlock)</a></div>
+  <h3 id="events">Events
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_CacheMiss.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.CacheMiss%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Events.cs/#L27">View Source</a>
+  </span>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_CacheMiss" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.CacheMiss">CacheMiss</h4>
+  <div class="markdown level1 summary"><p>Fired whenever a block is requested from the cache but is not present.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override event ICacheManager&lt;BlockHash, BrightenedBlock&gt;.CacheMissEventHandler CacheMiss</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Interfaces.ICacheManager-2.CacheMissEventHandler.html">ICacheManager.CacheMissEventHandler</a>&lt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_CacheMiss">BrightenedBlockCacheManagerBase.CacheMiss</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_KeyAdded.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.KeyAdded%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Events.cs/#L12">View Source</a>
+  </span>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_KeyAdded" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.KeyAdded">KeyAdded</h4>
+  <div class="markdown level1 summary"><p>Fired whenever a block is added to the cache</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override event ICacheManager&lt;BlockHash, BrightenedBlock&gt;.KeyAddedEventHandler KeyAdded</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Interfaces.ICacheManager-2.KeyAddedEventHandler.html">ICacheManager.KeyAddedEventHandler</a>&lt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_KeyAdded">BrightenedBlockCacheManagerBase.KeyAdded</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_KeyExpired.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.KeyExpired%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Events.cs/#L17">View Source</a>
+  </span>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_KeyExpired" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.KeyExpired">KeyExpired</h4>
+  <div class="markdown level1 summary"><p>Fired whenever a block is expired from the cache</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override event ICacheManager&lt;BlockHash, BrightenedBlock&gt;.KeyExpiredEventHandler KeyExpired</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Interfaces.ICacheManager-2.KeyExpiredEventHandler.html">ICacheManager.KeyExpiredEventHandler</a>&lt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_KeyExpired">BrightenedBlockCacheManagerBase.KeyExpired</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_KeyRemoved.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.KeyRemoved%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.Events.cs/#L22">View Source</a>
+  </span>
+  <h4 id="BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager_KeyRemoved" data-uid="BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager.KeyRemoved">KeyRemoved</h4>
+  <div class="markdown level1 summary"><p>Fired whenever a block is removed from the collection</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override event ICacheManager&lt;BlockHash, BrightenedBlock&gt;.KeyRemovedEventHandler KeyRemoved</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.Engine.Interfaces.ICacheManager-2.KeyRemovedEventHandler.html">ICacheManager.KeyRemovedEventHandler</a>&lt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="BrightChain.Engine.Services.CacheManagers.Block.BrightenedBlockCacheManagerBase.html#BrightChain_Engine_Services_CacheManagers_Block_BrightenedBlockCacheManagerBase_KeyRemoved">BrightenedBlockCacheManagerBase.KeyRemoved</a></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="BrightChain.Engine.Interfaces.IBrightenedBlockCacheManager.html">IBrightenedBlockCacheManager</a>
+  </div>
+  <div>
+      <a class="xref" href="BrightChain.Engine.Interfaces.ICacheManager-2.html">ICacheManager&lt;Tkey, Tvalue&gt;</a>
+  </div>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_CacheManager_FasterBlockCacheManager.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.CacheManager.FasterBlockCacheManager%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/CacheManager/FasterBlockCacheManager.TypeHelpers.cs/#L14" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

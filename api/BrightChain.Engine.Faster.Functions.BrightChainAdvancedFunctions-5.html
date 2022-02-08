@@ -1,0 +1,483 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class BrightChainAdvancedFunctions&lt;Key, Value, Input, Output, Context&gt;
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class BrightChainAdvancedFunctions&lt;Key, Value, Input, Output, Context&gt;
+   ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions`5">
+  
+  
+  <h1 id="BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5" data-uid="BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions`5" class="text-break">Class BrightChainAdvancedFunctions&lt;Key, Value, Input, Output, Context&gt;
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">FASTER.core.FunctionsBase</span>&lt;Key, Value, Input, Output, Context&gt;</div>
+    <div class="level2"><span class="xref">BrightChainAdvancedFunctions&lt;Key, Value, Input, Output, Context&gt;</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">FASTER.core.IFunctions</span>&lt;Key, Value, Input, Output, Context&gt;</div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.locking</span>
+    </div>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.ConcurrentReader(Key, Input, Value, Output)</span>
+    </div>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.SingleReader(Key, Input, Value, Output)</span>
+    </div>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.ConcurrentWriter(Key, Value, Value)</span>
+    </div>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.SingleWriter(Key, Value, Value)</span>
+    </div>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.InitialUpdater(Key, Input, Value, Output)</span>
+    </div>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.NeedCopyUpdate(Key, Input, Value, Output)</span>
+    </div>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.CopyUpdater(Key, Input, Value, Value, Output)</span>
+    </div>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.InPlaceUpdater(Key, Input, Value, Output)</span>
+    </div>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.ReadCompletionCallback(Key, Input, Output, Context, FASTER.core.Status)</span>
+    </div>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.RMWCompletionCallback(Key, Input, Output, Context, FASTER.core.Status)</span>
+    </div>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.UpsertCompletionCallback(Key, Value, Context)</span>
+    </div>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.DeleteCompletionCallback(Key, Context)</span>
+    </div>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.CheckpointCompletionCallback(System.String, FASTER.core.CommitPoint)</span>
+    </div>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.Lock(FASTER.core.RecordInfo, Key, Value, FASTER.core.LockType, System.Int64)</span>
+    </div>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.Unlock(FASTER.core.RecordInfo, Key, Value, FASTER.core.LockType, System.Int64)</span>
+    </div>
+    <div>
+      <span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.SupportsLocking</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="BrightChain.Engine.Faster.Functions.html">BrightChain.Engine.Faster.Functions</a></h6>
+  <h6><strong>Assembly</strong>: BrightChain.Engine.dll</h6>
+  <h5 id="BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class BrightChainAdvancedFunctions&lt;Key, Value, Input, Output, Context&gt; : FunctionsBase&lt;Key, Value, Input, Output, Context&gt;, IFunctions&lt;Key, Value, Input, Output, Context&gt; where Input : Value where Output : Input, Value</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">Key</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="parametername">Value</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="parametername">Input</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="parametername">Output</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="parametername">Context</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5__ctor_System_Boolean_.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions%605.%23ctor(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/Functions/BrightChainAdvancedFunctions.cs/#L9">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5__ctor_" data-uid="BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions`5.#ctor*"></a>
+  <h4 id="BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5__ctor_System_Boolean_" data-uid="BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions`5.#ctor(System.Boolean)">BrightChainAdvancedFunctions(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BrightChainAdvancedFunctions(bool locking = false)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">locking</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5_ConcurrentReader__0___2___1___3__.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions%605.ConcurrentReader(%600%40%2C%602%40%2C%601%40%2C%603%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/Functions/BrightChainAdvancedFunctions.cs/#L14">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5_ConcurrentReader_" data-uid="BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions`5.ConcurrentReader*"></a>
+  <h4 id="BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5_ConcurrentReader__0___2___1___3__" data-uid="BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions`5.ConcurrentReader(`0@,`2@,`1@,`3@)">ConcurrentReader(ref Key, ref Input, ref Value, ref Output)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void ConcurrentReader(ref Key key, ref Input input, ref Value value, ref Output dst)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Key</span></td>
+        <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Input</span></td>
+        <td><span class="parametername">input</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Value</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Output</span></td>
+        <td><span class="parametername">dst</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.ConcurrentReader(Key, Input, Value, Output)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5_ConcurrentWriter__0___1___1__.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions%605.ConcurrentWriter(%600%40%2C%601%40%2C%601%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/Functions/BrightChainAdvancedFunctions.cs/#L19">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5_ConcurrentWriter_" data-uid="BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions`5.ConcurrentWriter*"></a>
+  <h4 id="BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5_ConcurrentWriter__0___1___1__" data-uid="BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions`5.ConcurrentWriter(`0@,`1@,`1@)">ConcurrentWriter(ref Key, ref Value, ref Value)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool ConcurrentWriter(ref Key key, ref Value src, ref Value dst)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Key</span></td>
+        <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Value</span></td>
+        <td><span class="parametername">src</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Value</span></td>
+        <td><span class="parametername">dst</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.ConcurrentWriter(Key, Value, Value)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5_InitialUpdater__0___2___1___3__.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions%605.InitialUpdater(%600%40%2C%602%40%2C%601%40%2C%603%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/Functions/BrightChainAdvancedFunctions.cs/#L30">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5_InitialUpdater_" data-uid="BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions`5.InitialUpdater*"></a>
+  <h4 id="BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5_InitialUpdater__0___2___1___3__" data-uid="BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions`5.InitialUpdater(`0@,`2@,`1@,`3@)">InitialUpdater(ref Key, ref Input, ref Value, ref Output)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void InitialUpdater(ref Key key, ref Input input, ref Value value, ref Output output)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Key</span></td>
+        <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Input</span></td>
+        <td><span class="parametername">input</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Value</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Output</span></td>
+        <td><span class="parametername">output</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.InitialUpdater(Key, Input, Value, Output)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5_SingleWriter__0___1___1__.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions%605.SingleWriter(%600%40%2C%601%40%2C%601%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/Functions/BrightChainAdvancedFunctions.cs/#L25">View Source</a>
+  </span>
+  <a id="BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5_SingleWriter_" data-uid="BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions`5.SingleWriter*"></a>
+  <h4 id="BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5_SingleWriter__0___1___1__" data-uid="BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions`5.SingleWriter(`0@,`1@,`1@)">SingleWriter(ref Key, ref Value, ref Value)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void SingleWriter(ref Key key, ref Value src, ref Value dst)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Key</span></td>
+        <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Value</span></td>
+        <td><span class="parametername">src</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Value</span></td>
+        <td><span class="parametername">dst</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">FASTER.core.FunctionsBase&lt;Key, Value, Input, Output, Context&gt;.SingleWriter(Key, Value, Value)</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">FASTER.core.IFunctions&lt;Key, Value, Input, Output, Context&gt;</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_Engine_Faster_Functions_BrightChainAdvancedFunctions_5.md&amp;value=---%0Auid%3A%20BrightChain.Engine.Faster.Functions.BrightChainAdvancedFunctions%605%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.Engine/Faster/Functions/BrightChainAdvancedFunctions.cs/#L5" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

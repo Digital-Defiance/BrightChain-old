@@ -1,0 +1,813 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class BrightChainUserManager
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class BrightChainUserManager
+   ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="BrightChain.API.Infrastructure.BrightChainUserManager">
+  
+  
+  <h1 id="BrightChain_API_Infrastructure_BrightChainUserManager" data-uid="BrightChain.API.Infrastructure.BrightChainUserManager" class="text-break">Class BrightChainUserManager
+  </h1>
+  <div class="markdown level0 summary"><p>Custom UserManager to override Authenticator Token generation behavior (encrypt/decrypt).
+from <a href="https://chsakell.com/2019/08/18/asp-net-core-identity-series-two-factor-authentication/">https://chsakell.com/2019/08/18/asp-net-core-identity-series-two-factor-authentication/</a></p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Microsoft.AspNetCore.Identity.UserManager</span>&lt;<a class="xref" href="BrightChain.API.Areas.Identity.BrightChainIdentityUser.html">BrightChainIdentityUser</a>&gt;</div>
+    <div class="level2"><span class="xref">BrightChainUserManager</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.ResetPasswordTokenPurpose</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.ChangePhoneNumberTokenPurpose</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.ConfirmEmailTokenPurpose</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.Dispose()</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetUserName(System.Security.Claims.ClaimsPrincipal)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetUserId(System.Security.Claims.ClaimsPrincipal)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetUserAsync(System.Security.Claims.ClaimsPrincipal)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GenerateConcurrencyStampAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.CreateAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.UpdateAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.DeleteAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.FindByIdAsync(System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.FindByNameAsync(System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.CreateAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.NormalizeName(System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.NormalizeEmail(System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.UpdateNormalizedUserNameAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetUserNameAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SetUserNameAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetUserIdAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.CheckPasswordAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.HasPasswordAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.AddPasswordAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.ChangePasswordAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.RemovePasswordAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.VerifyPasswordAsync(Microsoft.AspNetCore.Identity.IUserPasswordStore&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;, BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetSecurityStampAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.UpdateSecurityStampAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GeneratePasswordResetTokenAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.ResetPasswordAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.FindByLoginAsync(System.String, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.RemoveLoginAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.AddLoginAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, Microsoft.AspNetCore.Identity.UserLoginInfo)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetLoginsAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.AddClaimAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.Security.Claims.Claim)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.AddClaimsAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.Collections.Generic.IEnumerable&lt;System.Security.Claims.Claim&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.ReplaceClaimAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.Security.Claims.Claim, System.Security.Claims.Claim)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.RemoveClaimAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.Security.Claims.Claim)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.RemoveClaimsAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.Collections.Generic.IEnumerable&lt;System.Security.Claims.Claim&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetClaimsAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.AddToRoleAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.AddToRolesAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.Collections.Generic.IEnumerable&lt;System.String&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.RemoveFromRoleAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.RemoveFromRolesAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.Collections.Generic.IEnumerable&lt;System.String&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetRolesAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.IsInRoleAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetEmailAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SetEmailAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.FindByEmailAsync(System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.UpdateNormalizedEmailAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GenerateEmailConfirmationTokenAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.ConfirmEmailAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.IsEmailConfirmedAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GenerateChangeEmailTokenAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.ChangeEmailAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetPhoneNumberAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SetPhoneNumberAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.ChangePhoneNumberAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.IsPhoneNumberConfirmedAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GenerateChangePhoneNumberTokenAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.VerifyChangePhoneNumberTokenAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.VerifyUserTokenAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String, System.String, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GenerateUserTokenAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.RegisterTokenProvider(System.String, Microsoft.AspNetCore.Identity.IUserTwoFactorTokenProvider&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetValidTwoFactorProvidersAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.VerifyTwoFactorTokenAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GenerateTwoFactorTokenAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetTwoFactorEnabledAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SetTwoFactorEnabledAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.Boolean)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.IsLockedOutAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SetLockoutEnabledAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.Boolean)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetLockoutEnabledAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetLockoutEndDateAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SetLockoutEndDateAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.Nullable&lt;System.DateTimeOffset&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.AccessFailedAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.ResetAccessFailedCountAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetAccessFailedCountAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetUsersForClaimAsync(System.Security.Claims.Claim)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetUsersInRoleAsync(System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetAuthenticationTokenAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SetAuthenticationTokenAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String, System.String, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.RemoveAuthenticationTokenAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.ResetAuthenticatorKeyAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.CountRecoveryCodesAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.Dispose(System.Boolean)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.CreateSecurityTokenAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.UpdatePasswordHash(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String, System.Boolean)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetChangeEmailTokenPurpose(System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.ValidateUserAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.ValidatePasswordAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.UpdateUserAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.ThrowIfDisposed()</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.CancellationToken</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.Store</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.Logger</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.PasswordHasher</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.UserValidators</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.PasswordValidators</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.KeyNormalizer</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.ErrorDescriber</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.Options</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SupportsUserAuthenticationTokens</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SupportsUserAuthenticatorKey</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SupportsUserTwoFactorRecoveryCodes</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SupportsUserTwoFactor</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SupportsUserPassword</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SupportsUserSecurityStamp</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SupportsUserRole</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SupportsUserLogin</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SupportsUserEmail</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SupportsUserPhoneNumber</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SupportsUserClaim</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SupportsUserLockout</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.SupportsQueryableUsers</span>
+    </div>
+    <div>
+      <span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.Users</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="BrightChain.API.Infrastructure.html">BrightChain.API.Infrastructure</a></h6>
+  <h6><strong>Assembly</strong>: BrightChain.API.dll</h6>
+  <h5 id="BrightChain_API_Infrastructure_BrightChainUserManager_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class BrightChainUserManager : UserManager&lt;BrightChainIdentityUser&gt;, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserManager__ctor_Microsoft_AspNetCore_Identity_IUserStore_BrightChain_API_Areas_Identity_BrightChainIdentityUser__Microsoft_Extensions_Options_IOptions_Microsoft_AspNetCore_Identity_IdentityOptions__Microsoft_AspNetCore_Identity_IPasswordHasher_BrightChain_API_Areas_Identity_BrightChainIdentityUser__System_Collections_Generic_IEnumerable_Microsoft_AspNetCore_Identity_IUserValidator_BrightChain_API_Areas_Identity_BrightChainIdentityUser___System_Collections_Generic_IEnumerable_Microsoft_AspNetCore_Identity_IPasswordValidator_BrightChain_API_Areas_Identity_BrightChainIdentityUser___Microsoft_AspNetCore_Identity_ILookupNormalizer_Microsoft_AspNetCore_Identity_IdentityErrorDescriber_System_IServiceProvider_Microsoft_Extensions_Logging_ILogger_Microsoft_AspNetCore_Identity_UserManager_BrightChain_API_Areas_Identity_BrightChainIdentityUser___Microsoft_Extensions_Configuration_IConfiguration_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserManager.%23ctor(Microsoft.AspNetCore.Identity.IUserStore%7BBrightChain.API.Areas.Identity.BrightChainIdentityUser%7D%2CMicrosoft.Extensions.Options.IOptions%7BMicrosoft.AspNetCore.Identity.IdentityOptions%7D%2CMicrosoft.AspNetCore.Identity.IPasswordHasher%7BBrightChain.API.Areas.Identity.BrightChainIdentityUser%7D%2CSystem.Collections.Generic.IEnumerable%7BMicrosoft.AspNetCore.Identity.IUserValidator%7BBrightChain.API.Areas.Identity.BrightChainIdentityUser%7D%7D%2CSystem.Collections.Generic.IEnumerable%7BMicrosoft.AspNetCore.Identity.IPasswordValidator%7BBrightChain.API.Areas.Identity.BrightChainIdentityUser%7D%7D%2CMicrosoft.AspNetCore.Identity.ILookupNormalizer%2CMicrosoft.AspNetCore.Identity.IdentityErrorDescriber%2CSystem.IServiceProvider%2CMicrosoft.Extensions.Logging.ILogger%7BMicrosoft.AspNetCore.Identity.UserManager%7BBrightChain.API.Areas.Identity.BrightChainIdentityUser%7D%7D%2CMicrosoft.Extensions.Configuration.IConfiguration)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.API.HISTORY/Infrastructure/BrightChainUserManager.cs/#L22">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserManager__ctor_" data-uid="BrightChain.API.Infrastructure.BrightChainUserManager.#ctor*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserManager__ctor_Microsoft_AspNetCore_Identity_IUserStore_BrightChain_API_Areas_Identity_BrightChainIdentityUser__Microsoft_Extensions_Options_IOptions_Microsoft_AspNetCore_Identity_IdentityOptions__Microsoft_AspNetCore_Identity_IPasswordHasher_BrightChain_API_Areas_Identity_BrightChainIdentityUser__System_Collections_Generic_IEnumerable_Microsoft_AspNetCore_Identity_IUserValidator_BrightChain_API_Areas_Identity_BrightChainIdentityUser___System_Collections_Generic_IEnumerable_Microsoft_AspNetCore_Identity_IPasswordValidator_BrightChain_API_Areas_Identity_BrightChainIdentityUser___Microsoft_AspNetCore_Identity_ILookupNormalizer_Microsoft_AspNetCore_Identity_IdentityErrorDescriber_System_IServiceProvider_Microsoft_Extensions_Logging_ILogger_Microsoft_AspNetCore_Identity_UserManager_BrightChain_API_Areas_Identity_BrightChainIdentityUser___Microsoft_Extensions_Configuration_IConfiguration_" data-uid="BrightChain.API.Infrastructure.BrightChainUserManager.#ctor(Microsoft.AspNetCore.Identity.IUserStore{BrightChain.API.Areas.Identity.BrightChainIdentityUser},Microsoft.Extensions.Options.IOptions{Microsoft.AspNetCore.Identity.IdentityOptions},Microsoft.AspNetCore.Identity.IPasswordHasher{BrightChain.API.Areas.Identity.BrightChainIdentityUser},System.Collections.Generic.IEnumerable{Microsoft.AspNetCore.Identity.IUserValidator{BrightChain.API.Areas.Identity.BrightChainIdentityUser}},System.Collections.Generic.IEnumerable{Microsoft.AspNetCore.Identity.IPasswordValidator{BrightChain.API.Areas.Identity.BrightChainIdentityUser}},Microsoft.AspNetCore.Identity.ILookupNormalizer,Microsoft.AspNetCore.Identity.IdentityErrorDescriber,System.IServiceProvider,Microsoft.Extensions.Logging.ILogger{Microsoft.AspNetCore.Identity.UserManager{BrightChain.API.Areas.Identity.BrightChainIdentityUser}},Microsoft.Extensions.Configuration.IConfiguration)">BrightChainUserManager(IUserStore&lt;BrightChainIdentityUser&gt;, IOptions&lt;IdentityOptions&gt;, IPasswordHasher&lt;BrightChainIdentityUser&gt;, IEnumerable&lt;IUserValidator&lt;BrightChainIdentityUser&gt;&gt;, IEnumerable&lt;IPasswordValidator&lt;BrightChainIdentityUser&gt;&gt;, ILookupNormalizer, IdentityErrorDescriber, IServiceProvider, ILogger&lt;UserManager&lt;BrightChainIdentityUser&gt;&gt;, IConfiguration)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BrightChainUserManager(IUserStore&lt;BrightChainIdentityUser&gt; store, IOptions&lt;IdentityOptions&gt; optionsAccessor, IPasswordHasher&lt;BrightChainIdentityUser&gt; passwordHasher, IEnumerable&lt;IUserValidator&lt;BrightChainIdentityUser&gt;&gt; userValidators, IEnumerable&lt;IPasswordValidator&lt;BrightChainIdentityUser&gt;&gt; passwordValidators, ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, IServiceProvider services, ILogger&lt;UserManager&lt;BrightChainIdentityUser&gt;&gt; logger, IConfiguration configuration)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Microsoft.AspNetCore.Identity.IUserStore</span>&lt;<a class="xref" href="BrightChain.API.Areas.Identity.BrightChainIdentityUser.html">BrightChainIdentityUser</a>&gt;</td>
+        <td><span class="parametername">store</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Microsoft.Extensions.Options.IOptions</span>&lt;<span class="xref">Microsoft.AspNetCore.Identity.IdentityOptions</span>&gt;</td>
+        <td><span class="parametername">optionsAccessor</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Microsoft.AspNetCore.Identity.IPasswordHasher</span>&lt;<a class="xref" href="BrightChain.API.Areas.Identity.BrightChainIdentityUser.html">BrightChainIdentityUser</a>&gt;</td>
+        <td><span class="parametername">passwordHasher</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">Microsoft.AspNetCore.Identity.IUserValidator</span>&lt;<a class="xref" href="BrightChain.API.Areas.Identity.BrightChainIdentityUser.html">BrightChainIdentityUser</a>&gt;&gt;</td>
+        <td><span class="parametername">userValidators</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">Microsoft.AspNetCore.Identity.IPasswordValidator</span>&lt;<a class="xref" href="BrightChain.API.Areas.Identity.BrightChainIdentityUser.html">BrightChainIdentityUser</a>&gt;&gt;</td>
+        <td><span class="parametername">passwordValidators</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Microsoft.AspNetCore.Identity.ILookupNormalizer</span></td>
+        <td><span class="parametername">keyNormalizer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Microsoft.AspNetCore.Identity.IdentityErrorDescriber</span></td>
+        <td><span class="parametername">errors</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IServiceProvider</span></td>
+        <td><span class="parametername">services</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Microsoft.Extensions.Logging.ILogger</span>&lt;<span class="xref">Microsoft.AspNetCore.Identity.UserManager</span>&lt;<a class="xref" href="BrightChain.API.Areas.Identity.BrightChainIdentityUser.html">BrightChainIdentityUser</a>&gt;&gt;</td>
+        <td><span class="parametername">logger</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Microsoft.Extensions.Configuration.IConfiguration</span></td>
+        <td><span class="parametername">configuration</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserManager_CreateTwoFactorRecoveryCode.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserManager.CreateTwoFactorRecoveryCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.API.HISTORY/Infrastructure/BrightChainUserManager.cs/#L79">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserManager_CreateTwoFactorRecoveryCode_" data-uid="BrightChain.API.Infrastructure.BrightChainUserManager.CreateTwoFactorRecoveryCode*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserManager_CreateTwoFactorRecoveryCode" data-uid="BrightChain.API.Infrastructure.BrightChainUserManager.CreateTwoFactorRecoveryCode">CreateTwoFactorRecoveryCode()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override string CreateTwoFactorRecoveryCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.CreateTwoFactorRecoveryCode()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserManager_GenerateNewAuthenticatorKey.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserManager.GenerateNewAuthenticatorKey%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.API.HISTORY/Infrastructure/BrightChainUserManager.cs/#L41">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserManager_GenerateNewAuthenticatorKey_" data-uid="BrightChain.API.Infrastructure.BrightChainUserManager.GenerateNewAuthenticatorKey*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserManager_GenerateNewAuthenticatorKey" data-uid="BrightChain.API.Infrastructure.BrightChainUserManager.GenerateNewAuthenticatorKey">GenerateNewAuthenticatorKey()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string GenerateNewAuthenticatorKey()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GenerateNewAuthenticatorKey()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserManager_GenerateNewTwoFactorRecoveryCodesAsync_BrightChain_API_Areas_Identity_BrightChainIdentityUser_System_Int32_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserManager.GenerateNewTwoFactorRecoveryCodesAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.API.HISTORY/Infrastructure/BrightChainUserManager.cs/#L92">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserManager_GenerateNewTwoFactorRecoveryCodesAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserManager.GenerateNewTwoFactorRecoveryCodesAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserManager_GenerateNewTwoFactorRecoveryCodesAsync_BrightChain_API_Areas_Identity_BrightChainIdentityUser_System_Int32_" data-uid="BrightChain.API.Infrastructure.BrightChainUserManager.GenerateNewTwoFactorRecoveryCodesAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser,System.Int32)">GenerateNewTwoFactorRecoveryCodesAsync(BrightChainIdentityUser, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override async Task&lt;IEnumerable&lt;string&gt;&gt; GenerateNewTwoFactorRecoveryCodesAsync(BrightChainIdentityUser user, int number)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.API.Areas.Identity.BrightChainIdentityUser.html">BrightChainIdentityUser</a></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">number</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GenerateNewTwoFactorRecoveryCodesAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.Int32)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserManager_GetAuthenticatorKeyAsync_BrightChain_API_Areas_Identity_BrightChainIdentityUser_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserManager.GetAuthenticatorKeyAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.API.HISTORY/Infrastructure/BrightChainUserManager.cs/#L56">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserManager_GetAuthenticatorKeyAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserManager.GetAuthenticatorKeyAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserManager_GetAuthenticatorKeyAsync_BrightChain_API_Areas_Identity_BrightChainIdentityUser_" data-uid="BrightChain.API.Infrastructure.BrightChainUserManager.GetAuthenticatorKeyAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)">GetAuthenticatorKeyAsync(BrightChainIdentityUser)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override async Task&lt;string&gt; GetAuthenticatorKeyAsync(BrightChainIdentityUser user)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.API.Areas.Identity.BrightChainIdentityUser.html">BrightChainIdentityUser</a></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.GetAuthenticatorKeyAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserManager_RedeemTwoFactorRecoveryCodeAsync_BrightChain_API_Areas_Identity_BrightChainIdentityUser_System_String_.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserManager.RedeemTwoFactorRecoveryCodeAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.API.HISTORY/Infrastructure/BrightChainUserManager.cs/#L111">View Source</a>
+  </span>
+  <a id="BrightChain_API_Infrastructure_BrightChainUserManager_RedeemTwoFactorRecoveryCodeAsync_" data-uid="BrightChain.API.Infrastructure.BrightChainUserManager.RedeemTwoFactorRecoveryCodeAsync*"></a>
+  <h4 id="BrightChain_API_Infrastructure_BrightChainUserManager_RedeemTwoFactorRecoveryCodeAsync_BrightChain_API_Areas_Identity_BrightChainIdentityUser_System_String_" data-uid="BrightChain.API.Infrastructure.BrightChainUserManager.RedeemTwoFactorRecoveryCodeAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser,System.String)">RedeemTwoFactorRecoveryCodeAsync(BrightChainIdentityUser, String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task&lt;IdentityResult&gt; RedeemTwoFactorRecoveryCodeAsync(BrightChainIdentityUser user, string code)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="BrightChain.API.Areas.Identity.BrightChainIdentityUser.html">BrightChainIdentityUser</a></td>
+        <td><span class="parametername">user</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">code</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">Microsoft.AspNetCore.Identity.IdentityResult</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Microsoft.AspNetCore.Identity.UserManager&lt;BrightChain.API.Areas.Identity.BrightChainIdentityUser&gt;.RedeemTwoFactorRecoveryCodeAsync(BrightChain.API.Areas.Identity.BrightChainIdentityUser, System.String)</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain/new/main/docs/docfx_project/apidoc/new?filename=BrightChain_API_Infrastructure_BrightChainUserManager.md&amp;value=---%0Auid%3A%20BrightChain.API.Infrastructure.BrightChainUserManager%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain/blob/main/src/BrightChain.API.HISTORY/Infrastructure/BrightChainUserManager.cs/#L18" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

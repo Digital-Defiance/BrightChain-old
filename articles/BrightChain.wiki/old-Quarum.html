@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Architecture </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Architecture ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="architecture">Architecture</h1>
+
+<h2 id="part-3-identity-and-central-authority---the-quorum">Part 3: Identity and Central Authority - The Quorum</h2>
+<p>While the entire network is decentralized, there is a segmented unit of central authority called The Quorum.</p>
+<p>At its core, it uses generation of a computed amount of <a href="https://wikipedia.org/en/Forward_Error_Correction">Forward Error Correction</a> pre-generated, set aside, and broken up into shards so that only once a majority of the desired/precomputed percentage is acquired, the data can be reconstructed.</p>
+<p>If you're familiar with the DNS root registry, essentially a handful of different companies and organizations all run root servers. In The Revolution Network, there will be a central, non-profit legal body and effective board of directors responsible for the data integrity of the network.</p>
+<p>Almost everything that will pass over the network will be contained in the bright block store. However, The Quorum has a unique role.</p>
+<p>Let's say that User Mallory wants to go run amok on the network and post terrible or illegal things. She is entitled to do so. Free speech is what it is. However, certain things like yelling Fire in a crowded place you can't say. Moreover people just don't like some things. We need a mechanism to be able to let people say things anonymously and yet be able to hold them to account if they've ultimately run afoul of the network code of conduct and/or the law.</p>
+<p>When Mallory joined the network, she may have registered aliases she's allowed to use (unique). User Mallory wants to post anonymously. She can either use a registered identity with the system that maps back to her original account (think of these like alias accounts), or she can just erase her identity data. Although the post will show the registered identity, no one not in the Quorum will be able to know those aliases. This is essentially part of the user database. The map of user aliases is stored encrypted in the block store and only Quorum members will have the knowledge of the magnet links to identities.</p>
+<p>In TCP/IP, we break data down into packets. Any post on the network ultimately has a header a bit like a TCP/IP header. It has a source and a destination. We will use a technique called Forward Error Correction in order to do a little trick. Normally when you post, the section for your user ID must exactly match the user ID/key you authenticated with or The Revolution Network will allow you to enter one of your registered aliases (simple map) or even erase the ID entirely, but not before generating a chunk of error correction data data that gets stuck on the end which contains enough duplicate data to reconstruct errors in the source information. We generate the checksum with the actual entity/key ID of the user doing the post, before manipulating it to an alias ID or empty. The server accepting the message must inspect the message, ensure the identity is registered to the key or be anonymous and that the user is still entitled to use the network in that capacity. The message is accepted and the forward error correction data is split up into equal pieces amongst the Quorum Members.</p>
+<p>The Quorum is a sharded authority. Nothing can be accomplished without a majority vote.</p>
+<p>The Quorum is effectively a world government. Each shard keeper must then break that shard up according to their bylaws and then safeguard all that data as the independence of the network depends on keeping the governing bodies nonpartisan and able to make informed decisions together. Together. For those in the back: TOGETHER. With majority votes. Digital contracts on shards.</p>
+<p>Lets say Mallory's virus or bad content goes in the network a while and is reported or a FISA warrant is issued. At this point, the Quorum must take a vote whether to turn over the identity according to the bylaws, rules of the countries involved, etc. If the answer is Yea, then the Quorum member provides their chunk of the sharded data. Without a majority of Quorum members, the identity can not be reconstructed.</p>
+<p>At some point the FEC data on the posts could even be expired and deleted. It might be stored separately so this can happen. Once the &quot;statute of limitations expires&quot; that data could be deleted and the original identity never recovered.</p>
+<p>This section has now provided a means to Identify, Authenticate and Moderate users in the network.</p>
+<hr>
+<p>Next we get into the <a href="https://github.com/The-Revolution-Network/brightChainAPI/wiki/Reputation">Reputation</a> system, and ultimately how your Reputation is your Valuation.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain.wiki/blob/608f8ea39911c40f9dbb688388c4064c0c7e8c55/old-Quarum.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

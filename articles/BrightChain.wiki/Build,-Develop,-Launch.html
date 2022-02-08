@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Requirements </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Requirements ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="requirements">Requirements</h1>
+
+<ul>
+<li>64 bit recommended</li>
+<li>&gt;16 GB memory required</li>
+<li>32+ GB memory recommended</li>
+<li>Windows 10+ recommended</li>
+<li>Visual Studio 2022 recommended, Rider EAP otherwise (as of 9/12/21)</li>
+<li>Docker Desktop for windows recommended</li>
+<li>Recommend Windows Terminal for command line with a Git Bash session</li>
+</ul>
+<h1 id="clone">Clone</h1>
+<pre><code>git clone --recursive git@github.com:BrightChain/BrightChain.git
+</code></pre>
+<h1 id="develop">Develop</h1>
+<ul>
+<li>Use Visual Studio 2022 (preview at this time) and open All.sln</li>
+</ul>
+<h1 id="build-brightchain-engine">Build BrightChain Engine</h1>
+<pre><code>cd BrightChain
+dotnet build All.sln
+</code></pre>
+<h1 id="build-brightchain-engine-nuget">Build BrightChain Engine nuget</h1>
+<ul>
+<li>Install nuget 6.0+ <a href="https://www.nuget.org/downloads">Download</a></li>
+<li>Make sure to add ~/.nuget/packages as a local source to Visual Studio and use dotnet</li>
+</ul>
+<pre><code>cd BrightChain
+dotnet pack All.sln
+nuget add .... ~/.nuget/packages (?)
+TODO
+</code></pre>
+<h1 id="build-brightchain-docker-container">Build BrightChain docker container</h1>
+<pre><code>cd BrightChain/src/BrightChain.API
+docker build -t brightchainapi:latest .
+</code></pre>
+<h1 id="test">Test</h1>
+<pre><code>cd BrightChain
+dotnet test All.sln
+</code></pre>
+<h1 id="get-letsencrypt-certs-for-production">Get LetsEncrypt certs for production</h1>
+<pre><code>$ docker run -it --rm -p 443:443 -p 80:80 --name certbot -v https:/etc/letsencrypt -v varhttps:/var/lib/letsencrypt certbot/certbot certonly --standalone
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Please enter the domain name(s) you would like on your certificate (comma and/or
+space separated) (Enter 'c' to cancel): *.brightchain.net,brightchain.net,*.therevolution.network,therevolution.network
+Requesting a certificate for *.brightchain.net and 3 more domains
+
+Successfully received certificate.
+Certificate is saved at: /etc/letsencrypt/live/brightchain.net/fullchain.pem
+Key is saved at:         /etc/letsencrypt/live/brightchain.net/privkey.pem
+This certificate expires on 2021-12-11.
+These files will be updated when the certificate renews.
+
+NEXT STEPS:
+- The certificate will need to be renewed before it expires. Certbot can automatically renew the certificate in the background, but you may need to take steps to enable that functionality. See https://certbot.org/renewal-setup for instructions.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+If you like Certbot, please consider supporting our work by:
+ * Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+ * Donating to EFF:                    https://eff.org/donate-le
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+</code></pre>
+<h1 id="launch-container-to-production">Launch container to production</h1>
+<pre><code>$ docker run --rm -itd --name=brightchainapi -v https:/etc/letsencrypt -v varhttps:/var/lib/letsencrypt --privileged -p 10.2.0.4:80:80 -p 10.2.0.4:443:443 -e ASPNETCORE_URLS=&quot;https://+;http://+&quot; -e ASPNETCORE_HTTPS_PORT=443 -e DOMAIN_NAME=brightchain.net -e USE_STAGING_SERVER=false brightchainapi:splash
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain.wiki/blob/608f8ea39911c40f9dbb688388c4064c0c7e8c55/Build,-Develop,-Launch.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

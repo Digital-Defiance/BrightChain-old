@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Architecture </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Architecture ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="architecture">Architecture</h1>
+
+<h2 id="part-4-reputation-and-valuation">Part 4: Reputation and Valuation</h2>
+<p>( This section likely needs the most help )</p>
+<p>Like most blockchain technologies, your content has a worth and a cost.</p>
+<p>The concept of Proof of Work has been used widely over the years. Essentially, you compute something known to take a certain amount of work to do, and the result of that is verifiable with very little work so someone can easily tell you've come up with the right answer.</p>
+<p>Everything in the network is done with a proof of work attached. The network has a minimal work requirement for every transaction on the network. You compute a small hash collision for your transaction. The minimal work requirement is given to the best user(s) on the network. An algorithm sets the required number of bits set to zero depending on the user's behavior. Some users who have been known to act poorly may have to do much more work to be able to store and retrieve nodes in the network. This throttles bad actors.</p>
+<p>The more your content is liked and/or consumed, the higher your value in the network and the lower your proof of work requirement (no less than the minimum).</p>
+<p>Your content takes up storage, this must be paid to the nodes holding your data (everyone in the network might hold copies). When people consume your content, they are inherently giving it a valuation as being worthwhile. Even a post that causes people to get angry might have value and is none the less interesting to the network. Bandwidth costs are paid in coin essentially to the nodes that ultimately serve the blocks to the end user. Different users may run their own nodes or access any particular node.</p>
+<p>Every entity in the network has a reputation. Every entity is as much as possible attempted to be the only existing entity in the network corresponding to a real world person or organization. Bob Smith should not be able to have 5 accounts. Bob has one account with 4 or 5 aliases registered. Bob will register with Amazon/Facebook/Google registration and we'll have his phone number and/or email and name. We'll try to correlate and match up real people as much as possible. Exceptions made where real need exists for separate legal entities.</p>
+<p>People who contribute resources like storage and bandwidth may have a higher valuation which is a composite of their perceived value as well as the net result of their contributions and costs (reading/consuming) on the network.</p>
+<ul>
+<li>The math of this still needs to be worked out.</li>
+</ul>
+<h2 id="reputation-part-2">Reputation, Part 2</h2>
+<p>Some time ago, I watched a series on Amazon called Upload. In it, people constantly gave eachother ratings for things. Thanks for the coffee, the ride, just to be nice- whatever. This got me thinking about a universal reputation system.</p>
+<p>As User Bob rates things, (which will have a proof of work requirement commensurate with his current reputation), those ratings themselves have a value based on his reputation and affect the rated people and things concordantly.</p>
+<p>Pretty much everything can be represented by a URI anymore. A phone number, an address, a person, a transaction. I propose a rating universe in which you can rate pretty much any object, person, transaction, event or thing on the planet and have it develop its own reputation.</p>
+<p>URIs known to be associated with a given entity will get linked (TBD) and the collective valuations of their URIs will factor in.</p>
+<p>Good people's comments will matter more. If you're a jerk who just is mean to everyone, your ratings will have little impact on the system and you'll work harder to add them.</p>
+<h2 id="valuation">Valuation</h2>
+<p>Maths to be decided.</p>
+<ul>
+<li>I had intended the energy price to be measured in Joules and have a real tie to the actual Joule</li>
+</ul>
+<pre><code>I was thinking more language level. The concept of a file doesn't really even exist in my world
+Just blocks identified by the hash of their content
+Some are meta map blocks some are data
+Users keep the address to the top block
+Meta block
+Replication is by durability and duration
+As requested at store time
+There's going to be an up front discount or otherwise ongoing charges for blocks that don't pay for themselves in user interaction
+Tiny
+But gas for stored energy bits really
+Want to be cognizant of energy costs
+Good players keep low proof of work burdens through reputation
+Contributors and creators get diamond like reward over time as content is consumed
+Essentially your discount for actually using what your stored
+Overpaying for durability or duration you don't need won't pay off
+Pay servers for transit of blocks in the form of the proof of work.
+Use both costs and pays at different rates
+But it's all just energy flow tracking
+Joules here
+Joules there
+</code></pre>
+<hr>
+<p>On to <a href="https://github.com/The-Revolution-Network/brightChainAPI/wiki/Cryptography">Part 5: Digital Contracts and Secure Virtual Machine</a></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain.wiki/blob/608f8ea39911c40f9dbb688388c4064c0c7e8c55/old-Reputation.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

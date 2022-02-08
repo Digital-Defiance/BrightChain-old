@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Table of Contents </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Table of Contents ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="table-of-contents">Table of Contents</h1>
+
+<h2 id="update-61121">Update 6/11/21</h2>
+<p>I've realized I can move way faster in C# than I can in Go and I've had some better thoughts about how to design things, so I've clean-rebooted the C# code in the BrightChain repo. I'll probably borrow back a lot of code, but I'm ditching the whole tapestry metaphor in favor of more traditional business terms in the process. IPFS is no longer in the picture, at least not right now. Basically going back to my goals pre-discovering/being told about IPFS.</p>
+<h2 id="update-5821">Update 5/8/21</h2>
+<p>BrightChain is about to undergo yet another extreme code change. Most of this wiki is still correct as it is generally big picture anyway, but just making readers aware that the actual brightChainAPI repo which was in its infancy is right now pretty much obsolete.</p>
+<p>I think it'll be best if you start over at <a href="https://ipfs.io/">IPFS</a> and then come here once you understand that.</p>
+<p>Once you've done that, continue here.
+I'm just barely starting to understand IPFS, and some of these points I'm about to list may not be differences at all, and that would be GREAT.
+Notably, BrightChain is much more than just the blockstore- that's only the beginning.</p>
+<p>Basically the prime differences and points of concern I see between IPFS and the blockstore of BrightChain:</p>
+<ul>
+<li>Blocks are whitened using the Owner-Free-Filesystem process which essentially eliminates copyright violation concerns for node-runners and shard-holders.</li>
+<li>Blocks are identified by the hash of its data, stopping before the counter fields and other options like keep until at least.</li>
+<li>Blocks are available in a small handful of fixed sizes to accommodate everything from small messages to terabyte files. All blocks in a chain must be the same size.</li>
+<li>When blocks are ingested, the user requesting the data storage requests a specific durability (higher replication vs allowing it to be local/ephemeral, or just standard procedures) as well as a &quot;keep until at least&quot; time, and a minimum access tier (glacier, cold, hot, etc). Eg if you request glacier but one or more of your blocks become hot because of someone elses block that matches and gets used in another file, that's fine because that's higher than you needed.</li>
+<li>
+<ul>
+<li>as blocks are Read, the requests increment last access counters and whatnot so the network can keep track of what blocks are hot or cold</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>as new files are ingested and duplicate block contents are encountered, they update the minimums (listed above) of the blocks</li>
+</ul>
+</li>
+<li>All of this lets us essentially expire out some blocks that never get used, or only need to be stored for a period of time. Prevents storage creep forever.</li>
+<li>People who stored highly accessed content get perks from it, as do exit nodes and storage providers.</li>
+<li>The &quot;money&quot; end of it is not really money, but energy trading. You pay up front with your reputation and are rewarded in reputation.</li>
+<li>Content is accessed by requesting the top meta block of a file if that was stored (might not be for security) or otherwise requesting the &quot;recipe&quot; blocks of the file. A+B+C+Z, etc.</li>
+</ul>
+<p>But BrightChain goes further, all the users are uniquely identified, and other crypto contracts and things will allow universal governmental voting and more.</p>
+<p>Feel free to continue now.
+End of 5/8 update.</p>
+<h2 id="back-to-business">Back to Business</h2>
+<p><img src="https://media.discordapp.net/attachments/833846769354801214/833850688899121162/Blockchain_revolution_1.gif" alt=""></p>
+<h2 id="introduction"><a href="https://github.com/The-Revolution-Network/brightChainAPI/wiki/Introduction">Introduction</a></h2>
+<h2 id="architecture">Architecture</h2>
+<ul>
+<li><h3 id="part-1-the-soup-market"><a href="https://github.com/The-Revolution-Network/brightChainAPI/wiki/Architecture">Part 1: The Soup Market</a></h3>
+</li>
+<li><h3 id="part-2-authentication"><a href="https://github.com/The-Revolution-Network/brightChainAPI/wiki/Authentication">Part 2: Authentication</a></h3>
+</li>
+<li><h3 id="part-3-identity-and-central-authority---the-quorum"><a href="https://github.com/The-Revolution-Network/brightChainAPI/wiki/Quorum">Part 3: Identity and Central Authority - The Quorum</a></h3>
+</li>
+<li><h3 id="part-4-reputation-and-valuation"><a href="https://github.com/The-Revolution-Network/brightChainAPI/wiki/Reputation">Part 4: Reputation and Valuation</a></h3>
+</li>
+<li><h3 id="part-5-digital-contracts-and-secure-virtual-machine"><a href="https://github.com/The-Revolution-Network/brightChainAPI/wiki/Cryptography">Part 5: Digital Contracts and Secure Virtual Machine</a></h3>
+</li>
+</ul>
+<h2 id="collaboration">Collaboration</h2>
+<ul>
+<li><h3 id="off-the-chain-brightchain-discord"><a href="https://discord.gg/jYb9K9HytF">Off the Chain: #BrightChain Discord</a></h3>
+</li>
+<li><h3 id="collaborators"><a href="https://github.com/The-Revolution-Network/brightChainAPI/wiki/Collaborators">Collaborators</a></h3>
+</li>
+<li><h3 id="developing"><a href="https://github.com/The-Revolution-Network/brightChainAPI/wiki/Developing">Developing</a></h3>
+</li>
+</ul>
+<h2 id="miscellaneous">Miscellaneous</h2>
+<ul>
+<li><h3 id="there-are-some-as-yet-uncategorized-thoughts-that-havent-made-it-into-the-wiki-properly-yet-here">There are some as yet uncategorized thoughts that haven't made it into the wiki properly yet, <a href="https://github.com/The-Revolution-Network/brightChainAPI/wiki/Uncategorized-and-Yet-to-be-Inserted-Thoughts">here</a></h3>
+</li>
+</ul>
+<p>** NOTE: At this time, there is a fair bit of write up on Discord that needs to be documented- as well as years worth up in my head. Ask me questions. I have answers.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain.wiki/blob/608f8ea39911c40f9dbb688388c4064c0c7e8c55/old-Home.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

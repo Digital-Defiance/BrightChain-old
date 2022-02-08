@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Block Ingestion / Lifecycle </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Block Ingestion / Lifecycle ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="block-ingestion--lifecycle">Block Ingestion / Lifecycle</h1>
+
+<ol>
+<li><p>Life begins as either a File or a ChainLinq data object.</p>
+</li>
+<li><p>The file is broken up into blocks by blocksize.</p>
+</li>
+<li><p>Each block is joined with presently 4 (Tuple count 5) randomizer blocks which are either brand new or reused bright-blocks and randomizers.</p>
+</li>
+<li><p>A handle block is made that is a list of the hashes of the randomizer blocks used and the resultant bright-blocks from the brightening process.</p>
+</li>
+<li><p>The handle block is either pocketed, leaving only the bright-blocks in-chain/pool, or stored.</p>
+</li>
+</ol>
+<ul>
+<li>Public CBL blocks (whether user-encrypted prior to ingestion or not) must be accepted by the network, relative to reputation rules, etc.</li>
+<li>Private CBL blocks are limited in scope/usefulness to the nodes within quorum, which is the scope of the encryption keys themselves. These may be accepted/ingested into brightchain locally or refused according to node preferences.</li>
+</ul>
+<p>Time passes.</p>
+<ol start="6">
+<li><p>A user presents either the 5 addresses of the tuple stripe, called a Bright Handle, making up the CBL or the single address of the CBL if committed to chain.</p>
+</li>
+<li><p>The network retrieves the remainder of the blocks from the CBL and aligns them for re-constitution.</p>
+</li>
+<li><p>The randomizers are all tossed and the recreated identifiable &quot;Source&quot; blocks are the result. Take care while keeping these in memory to not commit them to chain and treat them as Source blocks which are not directly committable without brightening.</p>
+</li>
+<li><p>Upon ingestion, blocks are committed with a contracted lifetime that must be met. If the expiration is set, we will update a list of blocks expiring at that second. Another worker task will be responsible for looking at the expiring seconds since its last run and making sure those blocks have been flagged for garbage collection. Other processes may extend the block lifetimes and will update the ledger and give its own 'energy' to extend it, or do so on behalf of a user with their credit.</p>
+</li>
+</ol>
+<h1 id="ingestion-diagram">Ingestion diagram</h1>
+<pre><code> | File Source | Randomizers A-D       | Bright Blocks |
+ +-------------+-----+-----+-----+-----+---------------+
+ | S0          | R0A | R0B | R0C | R0D | B0            |
+ +-------------+-----+-----+-----+-----+---------------+
+ | S1          | R1A | R1B | R1C | R1D | B1            |
+ +-------------+-----+-----+-----+-----+---------------+
+ | ...         | ... | ... | ... | ... | B...          |
+ +-------------+-----+-----+-----+-----+---------------+
+ | SN          | RNA | RNB | RNC | RND | BN            |
+ +-------------+-----+-----+-----+-----+---------------+
+   ^ Discard   [ ________ Keep Hashes of These ________]
+     this
+     column
+</code></pre>
+<ol>
+<li>Divide file into N blocks by block size</li>
+<li>XOR the source block bytewise with each of the randomizers, which a fraction of may be reused.</li>
+</ol>
+<ul>
+<li>S0[0...X] ^ R0A[0...X] ^ R0B[0...X] ^ R0C[0...X] ^ R0D[0...X] = B0[0...X]     (where X is block length in bytes)</li>
+</ul>
+<ol start="3">
+<li>Drop the source blocks and commit the bright blocks (randomizers + highly random, cross correlated brightened blocks), R[0-N][A-D] and B[0-N].</li>
+<li>Collect the hashes of all the randomizers and bright block outputs and generate a CBL from the (in-order) list.</li>
+</ol>
+<ul>
+<li>Those hashes are called the Constituent Block List or CBL</li>
+</ul>
+<h1 id="cbl-compilation">CBL Compilation</h1>
+<ul>
+<li>The raw binary data is basically just one hash after another, a row at a time with no padding:</li>
+<li>SHA256(R0A),SHA256(R0B),SHA256(R0C),SHA256(R0D),SHA256(B0)</li>
+<li>SHA256(R1A),SHA256(R1B),SHA256(R1C),SHA256(R1D),SHA256(B1)</li>
+<li>...</li>
+<li>SHA256(RNA),SHA256(RNB),SHA256(RNC),SHA256(RND),SHA256(BN)</li>
+</ul>
+<h1 id="bright-address">Bright Address</h1>
+<ul>
+<li>A Bright Address is the sha256 hash, or address of a block you wish to access. These are usually Constituent Block List or CBL blocks that contain the &quot;recipe&quot; to put the source back together.</li>
+<li>A Bright Address will likely be the raw hash put in Bitcoin Base58</li>
+<li>https://{hash}.brightchain.net or <a href="https://brightchain.net/b/%7Bhash%7D">https://brightchain.net/b/{hash}</a></li>
+</ul>
+<h1 id="bright-handle">Bright Handle</h1>
+<ul>
+<li>A Bright Handle is a collection of the (presently) five (5) SHA-256 hashes of a CBL or other identifiable block put into a URL.</li>
+<li>These handles can be committed to BrightChain or pocketed.</li>
+<li>Without this handle, the file can not be reconstructed.</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/BrightChain/BrightChain.wiki/blob/608f8ea39911c40f9dbb688388c4064c0c7e8c55/Block-Ingestion.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
