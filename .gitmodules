@@ -3,13 +3,13 @@
 	url = https://github.com/BrightChain/BrightChain.wiki.git
 [submodule "ENT"]
 	path = src/ENT
-	url = git@github.com:FreddieMercurial/ENT.git
+	url = https://github.com/FreddieMercurial/ENT.git
 [submodule "src/BrightChain.API"]
 	path = src/BrightChain.API
-	url = git@github.com:BrightChain/BrightChain.API.git
+	url = https://github.com/BrightChain/BrightChain.API.git
 [submodule "src/BBPPiCalculator"]
 	path = src/BBPPiCalculator
-	url = git@github.com:BrightChain/BBPPiCalculator.git
+	url = https://github.com/BrightChain/BBPPiCalculator.git
 [submodule "src/LUHN-mod-n"]
 	path = src/LUHN-mod-n
-	url = git@github.com:BrightChain/LUHN-mod-n.git
+	url = https://github.com/BrightChain/LUHN-mod-n.git
