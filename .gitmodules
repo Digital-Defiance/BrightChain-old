@@ -3,25 +3,25 @@
 	url = https://github.com/BrightChain/BrightChain.wiki.git
 [submodule "src/ENT"]
 	path = src/ENT
-	url = git@github.com:FreddieMercurial/ENT.git
+	url = https://github.com/FreddieMercurial/ENT.git
 [submodule "src/BrightChain.API"]
 	path = src/BrightChain.API
-	url = git@github.com:BrightChain/BrightChain.API.git
+	url = https://github.com/BrightChain/BrightChain.API.git
 [submodule "src/BBPPiCalculator"]
 	path = src/BBPPiCalculator
-	url = git@github.com:BrightChain/BBPPiCalculator.git
+	url = https://github.com/BrightChain/BBPPiCalculator.git
 [submodule "src/LUHN-mod-n"]
 	path = src/LUHN-mod-n
-	url = git@github.com:BrightChain/LUHN-mod-n.git
+	url = https://github.com/BrightChain/LUHN-mod-n.git
 [submodule "src/NeuralFabric"]
 	path = src/NeuralFabric
-	url = git@github.com:BrightChain/NeuralFabric.git
+	url = https://github.com/BrightChain/NeuralFabric.git
 [submodule "test/NeuralFabric.Tests"]
 	path = test/NeuralFabric.Tests
-	url = git@github.com:BrightChain/NeuralFabric.Tests.git
+	url = https://github.com/BrightChain/NeuralFabric.Tests.git
 [submodule "src/Shart"]
 	path = src/Shart
-	url = git@github.com:FreddieMercurial/Shart.git
+	url = https://github.com/FreddieMercurial/Shart.git
 [submodule "test/Shart.Test"]
 	path = test/Shart.Test
-	url = git@github.com:FreddieMercurial/Shart.Test.git
+	url = https://github.com/FreddieMercurial/Shart.Test.git
