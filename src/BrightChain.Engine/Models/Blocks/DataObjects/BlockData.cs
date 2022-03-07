@@ -23,10 +23,10 @@
             System.Security.Cryptography.SHA256.Create().ComputeHash(this.Bytes.ToArray());
 
         public uint Crc32 =>
-            NeuralFabric.Helpers.Crc32.ComputeNewChecksum(this.Bytes.ToArray());
+            NeuralFabric.Helpers.Crc32.ComputeChecksum(this.Bytes.ToArray());
 
         public ulong Crc64 =>
-            DamienG.Security.Cryptography.Crc64Iso.Compute(this.Bytes.ToArray());
+            NeuralFabric.Helpers.Crc64Iso.ComputeChecksum(this.Bytes.ToArray());
 
         public string Base64SHA256 =>
             SimpleBase.Base58.Bitcoin.Encode(new ReadOnlySpan<byte>((byte[])this.SHA256));

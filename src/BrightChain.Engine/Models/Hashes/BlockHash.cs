@@ -8,7 +8,6 @@ namespace BrightChain.Engine.Models.Hashes
     using BrightChain.Engine.Exceptions;
     using BrightChain.Engine.Interfaces;
     using BrightChain.Engine.Models.Blocks;
-    using DamienG.Security.Cryptography;
     using FASTER.core;
     using ProtoBuf;
 
@@ -92,10 +91,10 @@ namespace BrightChain.Engine.Models.Hashes
             SimpleBase.Base58.Bitcoin.Encode(this.HashBytes.ToArray());
 
         public uint Crc32 =>
-            NeuralFabric.Helpers.Crc32.ComputeNewChecksum(this.HashBytes.ToArray());
+            NeuralFabric.Helpers.Crc32.ComputeChecksum(this.HashBytes.ToArray());
 
         public ulong Crc64 =>
-            DamienG.Security.Cryptography.Crc64Iso.Compute(this.HashBytes.ToArray());
+            NeuralFabric.Helpers.Crc64Iso.ComputeChecksum(this.HashBytes.ToArray());
 
         public string Base58Crc64 =>
             SimpleBase.Base58.Bitcoin.Encode(BitConverter.GetBytes(this.Crc64));
@@ -152,12 +151,12 @@ namespace BrightChain.Engine.Models.Hashes
 
         public override int GetHashCode()
         {
-            return (int)NeuralFabric.Helpers.Crc32.ComputeNewChecksum(this.HashBytes.ToArray());
+            return (int)NeuralFabric.Helpers.Crc32.ComputeChecksum(this.HashBytes.ToArray());
         }
 
         public long GetHashCode64(ref BlockHash k)
         {
-            return (long)Crc64Iso.Compute(this.HashBytes.ToArray());
+            return (long)Crc64Iso.ComputeChecksum(this.HashBytes.ToArray());
         }
 
         public bool Equals(ref BlockHash k1, ref BlockHash k2)

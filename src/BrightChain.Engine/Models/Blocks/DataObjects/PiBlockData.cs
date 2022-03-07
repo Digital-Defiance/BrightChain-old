@@ -19,8 +19,7 @@
         {
             get
             {
-                PiDigit pd = new PiDigit(nOffset: this.PiOffset);
-                return new ReadOnlyMemory<byte>(pd.PiBytes(
+                return new ReadOnlyMemory<byte>(BBPCalculator.PiBytes(
                     n: this.PiOffset,
                     count: this.BlockSize).ToArray());
             }
