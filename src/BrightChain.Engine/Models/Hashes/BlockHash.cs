@@ -1,3 +1,6 @@
+using NeuralFabric.Models.Hashes;
+using NeuralFabric.Helpers;
+
 namespace BrightChain.Engine.Models.Hashes
 {
     using System;
@@ -89,7 +92,7 @@ namespace BrightChain.Engine.Models.Hashes
             SimpleBase.Base58.Bitcoin.Encode(this.HashBytes.ToArray());
 
         public uint Crc32 =>
-            Helpers.Crc32.ComputeNewChecksum(this.HashBytes.ToArray());
+            NeuralFabric.Helpers.Crc32.ComputeNewChecksum(this.HashBytes.ToArray());
 
         public ulong Crc64 =>
             DamienG.Security.Cryptography.Crc64Iso.Compute(this.HashBytes.ToArray());
@@ -99,12 +102,12 @@ namespace BrightChain.Engine.Models.Hashes
 
         public static bool operator ==(BlockHash a, BlockHash b)
         {
-            return a.SourceDataLength == b.SourceDataLength && Helpers.ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;
+            return a.SourceDataLength == b.SourceDataLength && NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;
         }
 
         public static bool operator ==(ReadOnlyMemory<byte> a, BlockHash b)
         {
-            return a.Length == b.SourceDataLength && Helpers.ReadOnlyMemoryComparer<byte>.Compare(b.HashBytes, a) == 0;
+            return a.Length == b.SourceDataLength && NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(b.HashBytes, a) == 0;
         }
 
         public static bool operator !=(ReadOnlyMemory<byte> b, BlockHash a)
@@ -124,7 +127,7 @@ namespace BrightChain.Engine.Models.Hashes
         /// <returns>Returns a boolean indicating whether the bytes are the same in both objects.</returns>
         public override bool Equals(object obj)
         {
-            return obj is BlockHash blockHash ? blockHash.SourceDataLength == this.SourceDataLength && Helpers.ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, blockHash.HashBytes) == 0 : false;
+            return obj is BlockHash blockHash ? blockHash.SourceDataLength == this.SourceDataLength && NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, blockHash.HashBytes) == 0 : false;
         }
 
         /// <summary>
@@ -134,7 +137,7 @@ namespace BrightChain.Engine.Models.Hashes
         /// <returns>Returns a standard comparison result, -1, 0, 1 for less than, equal, greater than.</returns>
         public int CompareTo(BlockHash other)
         {
-            return other.SourceDataLength == this.SourceDataLength ? Helpers.ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) : other.SourceDataLength > this.SourceDataLength ? -1 : 1;
+            return other.SourceDataLength == this.SourceDataLength ? NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) : other.SourceDataLength > this.SourceDataLength ? -1 : 1;
         }
 
         /// <summary>
@@ -144,12 +147,12 @@ namespace BrightChain.Engine.Models.Hashes
         /// <returns>Returns the standard comparison result, -1, 0, 1 for less than, equal, greater than.</returns>
         public bool Equals(BlockHash other)
         {
-            return other.SourceDataLength == this.SourceDataLength && Helpers.ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) == 0;
+            return other.SourceDataLength == this.SourceDataLength && NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) == 0;
         }
 
         public override int GetHashCode()
         {
-            return (int)Helpers.Crc32.ComputeNewChecksum(this.HashBytes.ToArray());
+            return (int)NeuralFabric.Helpers.Crc32.ComputeNewChecksum(this.HashBytes.ToArray());
         }
 
         public long GetHashCode64(ref BlockHash k)
@@ -159,7 +162,7 @@ namespace BrightChain.Engine.Models.Hashes
 
         public bool Equals(ref BlockHash k1, ref BlockHash k2)
         {
-            return !(k2 is null) ? k2.SourceDataLength == k1.SourceDataLength && Helpers.ReadOnlyMemoryComparer<byte>.Compare(k1.HashBytes, k2.HashBytes) == 0 : false;
+            return !(k2 is null) ? k2.SourceDataLength == k1.SourceDataLength && NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(k1.HashBytes, k2.HashBytes) == 0 : false;
         }
     }
 }

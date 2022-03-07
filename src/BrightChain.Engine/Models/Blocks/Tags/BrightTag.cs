@@ -29,7 +29,7 @@ namespace BrightChain.Engine.Models.Blocks.Tags
             System.Text.Encoding.ASCII.GetBytes(this.uniqueIdentifier);
 
         public uint Crc32 =>
-            Helpers.Crc32.ComputeNewChecksum(this.Bytes.ToArray());
+            NeuralFabric.Helpers.Crc32.ComputeNewChecksum(this.Bytes.ToArray());
 
         public ulong Crc64 =>
             DamienG.Security.Cryptography.Crc64Iso.Compute(this.Bytes.ToArray());

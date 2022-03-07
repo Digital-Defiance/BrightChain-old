@@ -2,6 +2,8 @@
 // Copyright (c) BrightChain. All rights reserved.
 // </copyright>
 
+using NeuralFabric.Models.Hashes;
+
 namespace BrightChain.Engine.Services
 {
 #nullable enable
@@ -61,7 +63,7 @@ namespace BrightChain.Engine.Services
             var nodeOptions = configuration.GetSection("NodeOptions");
             if (nodeOptions is null || !nodeOptions.Exists())
             {
-                this.configuration = ConfigurationHelper.LoadConfiguration();
+                this.configuration = NeuralFabric.Helpers.ConfigurationHelper.LoadConfiguration();
                 nodeOptions = this.configuration.GetSection("NodeOptions");
             }
 
@@ -99,7 +101,7 @@ namespace BrightChain.Engine.Services
             this.blockBrightener = new BlockBrightenerService(
                 resultCache: this.blockFasterCache);
             this.brightChainNodeAuthority = new BrightChainNode(this.configuration);
-            this.AssemblyVersion = Utilities.GetAssemblyVersionForType();
+            this.AssemblyVersion = NeuralFabric.Helpers.Utilities.GetAssemblyVersionForType(assemblyType: typeof(BrightBlockService));
         }
 
         public RootBlock RootBlock => this.blockFasterCache.RootBlock;

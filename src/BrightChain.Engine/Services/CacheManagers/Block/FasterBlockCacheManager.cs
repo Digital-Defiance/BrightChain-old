@@ -50,9 +50,8 @@
         /// </summary>
         private readonly bool useReadCache = false;
 
-        private readonly Dictionary<CacheStoreType, Dictionary<CacheDeviceType, IDevice>> fasterDevices;
-        private readonly Dictionary<CacheStoreType, FasterBase> fasterStores;
-        private List<Block> uncommittedBlocks;
+        private readonly Dictionary<CacheDeviceType, IDevice> fasterDevices;
+        private readonly FasterBase fasterStore;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="FasterBlockCacheManager" /> class.
@@ -95,11 +94,10 @@
             var readCache = nodeOptions.GetSection("EnableReadCache");
             this.useReadCache = readCache is null || readCache.Value is null ? false : Convert.ToBoolean(readCache.Value);
 
-            (this.fasterDevices, this.fasterStores) = this.InitFaster();
+            (this.fasterDevices, this.fasterStore) = this.InitFaster();
             this.lastHead = this.HeadAddresses();
             this.lastCommit = lastHead;
             this.lastCheckpoint = this.TakeFullCheckpoint();
-            this.uncommittedBlocks = new List<Block>();
         }
 
         /// <summary>
@@ -112,19 +110,9 @@
         {
             foreach (var entry in this.fasterDevices)
             {
-                var faster = this.fasterStores[entry.Key];
+                var faster = this.fasterStore;
                 (faster as IDisposable).Dispose();
-                entry.Value.Values.All(d =>
-                {
-                    d.Dispose();
-                    if (this.testingSelfDestruct)
-                    {
-                        File.Delete(d.FileName);
-                    }
-
-                    return true;
-                });
-
+                entry.Value.Dispose();
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace BrightChain.Engine.Models.Blocks.DataObjects
+﻿using NeuralFabric.Models.Hashes;
+
+namespace BrightChain.Engine.Models.Blocks.DataObjects
 {
     using System.Collections.Generic;
     using System.Linq;

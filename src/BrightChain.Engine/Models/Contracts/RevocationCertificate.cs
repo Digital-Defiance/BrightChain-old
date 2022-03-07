@@ -1,4 +1,6 @@
-﻿namespace BrightChain.Engine.Models.Contracts
+﻿using NeuralFabric.Models.Hashes;
+
+namespace BrightChain.Engine.Models.Contracts
 {
     using System;
     using BrightChain.Engine.Models.Blocks;
@@ -12,7 +14,7 @@
     public class RevocationCertificate : DataSignature, IComparable<RevocationCertificate>
     {
         public RevocationCertificate(BrightenedBlock block)
-            : base(block)
+            : base(dataBytes: block.StoredData.Bytes)
         {
         }
 

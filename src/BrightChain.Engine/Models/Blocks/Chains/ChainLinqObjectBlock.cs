@@ -10,6 +10,7 @@
     using global::BrightChain.Engine.Helpers;
     using global::BrightChain.Engine.Models.Blocks.DataObjects;
     using global::BrightChain.Engine.Models.Hashes;
+    using NeuralFabric.Helpers;
     using ProtoBuf;
 
     /// <summary>

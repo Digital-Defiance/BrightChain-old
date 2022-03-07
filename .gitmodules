@@ -1,7 +1,7 @@
-[submodule "BrightChain.wiki"]
+[submodule "docs/articles/BrightChain.wiki"]
 	path = docs/articles/BrightChain.wiki
 	url = https://github.com/BrightChain/BrightChain.wiki.git
-[submodule "ENT"]
+[submodule "src/ENT"]
 	path = src/ENT
 	url = https://github.com/FreddieMercurial/ENT.git
 [submodule "src/BrightChain.API"]
@@ -13,3 +13,15 @@
 [submodule "src/LUHN-mod-n"]
 	path = src/LUHN-mod-n
 	url = https://github.com/BrightChain/LUHN-mod-n.git
+[submodule "src/NeuralFabric"]
+	path = src/NeuralFabric
+	url = https://github.com/BrightChain/NeuralFabric.git
+[submodule "test/NeuralFabric.Tests"]
+	path = test/NeuralFabric.Tests
+	url = https://github.com/BrightChain/NeuralFabric.Tests.git
+[submodule "src/Shart"]
+	path = src/Shart
+	url = https://github.com/FreddieMercurial/Shart.git
+[submodule "test/Shart.Test"]
+	path = test/Shart.Test
+	url = https://github.com/FreddieMercurial/Shart.Test.git

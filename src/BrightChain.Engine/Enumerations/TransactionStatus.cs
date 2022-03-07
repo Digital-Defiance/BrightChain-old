@@ -43,4 +43,9 @@ public enum TransactionStatus
     /// Only copies remaining should be variable references to original object.
     /// </summary>
     DroppedCommitted,
+
+    /// <summary>
+    /// 
+    /// </summary>
+    DroppedUncommitted,
 }

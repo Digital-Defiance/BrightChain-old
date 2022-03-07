@@ -24,7 +24,7 @@ namespace BrightChain.Engine.Models.Blocks
                 constituentBlockHashes: constituentBlockHashes)
         {
             this.CacheManager = blockParams.CacheManager;
-            this.State = !blockParams.AllowCommit ? TransactionStatus.DoNotWrite : TransactionStatus.Uncommitted;
+            this.AllowCommit = blockParams.AllowCommit;
             this.disposedValue = false;
         }
 
@@ -60,22 +60,7 @@ namespace BrightChain.Engine.Models.Blocks
 
         public ICacheManager<BlockHash, BrightenedBlock> CacheManager { get; internal set; }
 
-        public TransactionStatus State { get; private set; }
-
-        public bool AllowCommit
-        {
-            get
-            {
-                return new TransactionStatus[]
-                {
-                    TransactionStatus.Uncommitted,
-                    TransactionStatus.Committed,
-                    TransactionStatus.DroppedCommitted,
-                    TransactionStatus.WrittenUnconfirmed,
-                    TransactionStatus.RolledBackRewrite,
-                }.Contains(this.State);
-            }
-        }
+        public bool AllowCommit { get; internal set; }
 
         public static bool operator ==(BrightenedBlock a, BrightenedBlock b)
         {
@@ -99,59 +84,17 @@ namespace BrightChain.Engine.Models.Blocks
         /// <exception cref="NotImplementedException"></exception>
         public void Commit()
         {
-            switch (this.State)
-            {
-                case TransactionStatus.DoNotWrite:
-                case TransactionStatus.RolledBackDoNotWrite:
-                    throw new BrightChainException("Block is not allowed to be committed");
-
-                case TransactionStatus.RolledBackRewrite:
-                case TransactionStatus.Uncommitted:
-                    this.State = TransactionStatus.WrittenUnconfirmed;
-                    throw new NotImplementedException();
-                    return;
-
-                case TransactionStatus.WrittenUnconfirmed:
-                    this.State = TransactionStatus.Committed;
-                    throw new NotImplementedException();
-                    return;
-
-                case TransactionStatus.Committed:
-                case TransactionStatus.DroppedCommitted:
-                    return;
-
-                default:
-                    throw new BrightChainException(nameof(this.State));
-            }
+            throw new NotImplementedException();
         }
 
         public void Rollback(bool rewrite = false)
         {
-            switch (this.State)
-            {
-                case TransactionStatus.DoNotWrite:
-                case TransactionStatus.RolledBackDoNotWrite:
-                    return;
-
-                case TransactionStatus.RolledBackRewrite:
-                case TransactionStatus.Uncommitted:
-                case TransactionStatus.WrittenUnconfirmed:
-                    this.State = rewrite ? TransactionStatus.RolledBackRewrite : TransactionStatus.RolledBackDoNotWrite;
-                    throw new NotImplementedException();
-                    return;
-
-                case TransactionStatus.DroppedCommitted:
-                case TransactionStatus.Committed:
-                    throw new BrightChainException("Block already committed");
-
-                default:
-                    throw new BrightChainException(nameof(this.State));
-            }
+            throw new NotImplementedException();
         }
 
         public override BrightenedBlockParams BlockParams => new BrightenedBlockParams(
                 cacheManager: this.CacheManager,
-                allowCommit: State.Equals(TransactionStatus.DoNotWrite) ? false : true,
+                allowCommit: this.AllowCommit,
                 blockParams: new BlockParams(
                     blockSize: this.BlockSize,
                     requestTime: this.StorageContract.RequestTime,

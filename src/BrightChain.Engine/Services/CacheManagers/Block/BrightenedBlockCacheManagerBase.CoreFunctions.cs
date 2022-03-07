@@ -31,10 +31,17 @@
         /// <returns>Whether requested key was present and actually dropped.</returns>
         public virtual bool Drop(BlockHash key, bool noCheckContains = true)
         {
+            if (this._activeTransaction is null)
+            {
+                throw new BrightChainException("Must be in transaction");
+            }
+
             if (!noCheckContains && !this.Contains(key))
             {
                 return false;
             }
+
+            this._activeTransaction.DropTransactionBlock(blockHash: key);
 
             return true;
         }
@@ -46,55 +53,18 @@
         /// <returns>returns requested block or throws.</returns>
         public abstract BrightenedBlock Get(BlockHash blockHash);
 
-        private void AddUpdateMemoryBlock(BrightenedBlock block)
-        {
-            var memoryHit = this.UncomittedBlocksByHash.ContainsKey(block.Id);
-            var oldBlock = memoryHit ? this.UncomittedBlocksByHash[block.Id] : null;
-            this.UncomittedBlocksByHash[block.Id] = block;
-            this.UncommittedHashesByStatus[block.State].Add(block.Id);
-
-            if (!memoryHit)
-            {
-                return;
-            }
-
-            var memoryHashesByStatusList = this.UncommittedHashesByStatus[oldBlock!.State];
-            if (memoryHashesByStatusList.Contains(block.Id))
-            {
-                memoryHashesByStatusList.Remove(block.Id);
-            }
-        }
-
-        private BrightenedBlock CacheFetchToMemory(BlockHash blockHash)
-        {
-            var cacheHit = this.Contains(key: blockHash);
-            if (!cacheHit)
-            {
-                throw new BrightChainException(message: "Cache Miss");
-            }
-
-            var cacheBlock = this.Get(blockHash: blockHash);
-            this.AddUpdateMemoryBlock(block: cacheBlock);
-
-            return cacheBlock;
-        }
-
         public virtual IEnumerable<BrightenedBlock> Get(IEnumerable<BlockHash> keys)
         {
+            if (this._activeTransaction is null)
+            {
+                throw new BrightChainException("Must be in transaction");
+            }
+
             var blocks = new List<BrightenedBlock>();
             foreach (var key in keys)
             {
-                BrightenedBlock blockData;
-                if (this.UncomittedBlocksByHash.ContainsKey(key))
-                {
-                    blockData = this.UncomittedBlocksByHash[key];
-                    this.UncommittedHashesByStatus[blockData.State].Add(key);
-                }
-                else
-                {
-                    blockData = this.Get(blockHash: key);
-                }
-
+                var blockData = this.Get(blockHash: key);
+                this._activeTransaction.AddUpdateMemoryBlock(block: blockData);
                 blocks.Add(blockData);
             }
 
@@ -103,6 +73,11 @@
 
         public virtual async IAsyncEnumerable<BrightenedBlock> Get(IAsyncEnumerable<BlockHash> keys)
         {
+            if (this._activeTransaction is null)
+            {
+                throw new BrightChainException("Must be in transaction");
+            }
+
             await foreach (var key in keys)
             {
                 yield return this.Get(key);
@@ -116,6 +91,11 @@
         /// <param name="updateMetadataOnly">whether to allow duplicate and update the block metadata.</param>
         public virtual void Set(BrightenedBlock value, bool updateMetadataOnly = false)
         {
+            if (this._activeTransaction is null)
+            {
+                throw new BrightChainException("Must be in transaction");
+            }
+
             if (value is null)
             {
                 throw new BrightChainException("Can not store null block");
@@ -133,14 +113,7 @@
                 throw new BrightChainException("Key already exists in fasterkv");
             }
 
-            if (this.UncomittedBlocksByHash.ContainsKey(value.Id) && !updateMetadataOnly)
-            {
-                throw new BrightChainException("Key already exists uncommitted blocks");
-            }
-
-            AddUpdateMemoryBlock(block: value);
-
-            // TODO: place into transaction
+            this._activeTransaction.AddUpdateMemoryBlock(block: value);
         }
 
         public void ExtendStorage(BrightenedBlock block, DateTime keepUntilAtLeast, RedundancyContractType redundancy = RedundancyContractType.Unknown)
@@ -169,6 +142,11 @@
 
         public virtual void Set(BlockHash key, BrightenedBlock value)
         {
+            if (this._activeTransaction is null)
+            {
+                throw new BrightChainException("Must be in transaction");
+            }
+
             if (value.Id != key)
             {
                 throw new BrightChainException("Can not store transactable block with different key");
@@ -222,10 +200,5 @@
             // this means total size is hashes^2*size
             return hashesPerBlockSquared * iBlockSize;
         }
-
-        public IEnumerable<BrightenedBlock> UncommittedBlocksByStatus(TransactionStatus transactionStatus) =>
-            this.Get(keys: this.UncommittedHashesByStatus[transactionStatus].ToArray());
-
-        public IEnumerable<BrightenedBlock> UncommittedBlocks => this.UncomittedBlocksByHash.Values;
     }
 }

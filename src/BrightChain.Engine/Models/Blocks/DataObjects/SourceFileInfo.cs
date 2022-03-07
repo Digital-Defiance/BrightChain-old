@@ -2,6 +2,7 @@
 using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Models.Hashes;
+using NeuralFabric.Models.Hashes;
 
 namespace BrightChain.Engine.Models.Blocks.DataObjects
 {

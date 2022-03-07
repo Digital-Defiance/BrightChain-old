@@ -23,7 +23,7 @@
             System.Security.Cryptography.SHA256.Create().ComputeHash(this.Bytes.ToArray());
 
         public uint Crc32 =>
-            Helpers.Crc32.ComputeNewChecksum(this.Bytes.ToArray());
+            NeuralFabric.Helpers.Crc32.ComputeNewChecksum(this.Bytes.ToArray());
 
         public ulong Crc64 =>
             DamienG.Security.Cryptography.Crc64Iso.Compute(this.Bytes.ToArray());
@@ -33,7 +33,7 @@
 
         public static bool operator ==(BlockData a, BlockData b)
         {
-            return Helpers.ReadOnlyMemoryComparer<byte>.Compare(a.Bytes, b.Bytes) == 0;
+            return NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(a.Bytes, b.Bytes) == 0;
         }
 
         public string Base58Crc64 =>
@@ -41,7 +41,7 @@
 
         public static bool operator !=(BlockData a, BlockData b)
         {
-            return Helpers.ReadOnlyMemoryComparer<byte>.Compare(a.Bytes, b.Bytes) != 0;
+            return NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(a.Bytes, b.Bytes) != 0;
         }
 
         public string Base58Data =>
@@ -49,17 +49,17 @@
 
         public int CompareTo(BlockData other)
         {
-            return Helpers.ReadOnlyMemoryComparer<byte>.Compare(this.Bytes, other.Bytes);
+            return NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(this.Bytes, other.Bytes);
         }
 
         public bool Equals(BlockData other)
         {
-            return Helpers.ReadOnlyMemoryComparer<byte>.Compare(this.Bytes, other.Bytes) == 0;
+            return NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(this.Bytes, other.Bytes) == 0;
         }
 
         public bool Equals(BlockData x, BlockData y)
         {
-            return Helpers.ReadOnlyMemoryComparer<byte>.Compare(x.Bytes, y.Bytes) == 0;
+            return NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(x.Bytes, y.Bytes) == 0;
         }
 
         public int GetHashCode([DisallowNull] BlockData obj)
@@ -74,7 +74,7 @@
 
         public bool Equals(ref BlockData k1, ref BlockData k2)
         {
-            return Helpers.ReadOnlyMemoryComparer<byte>.Compare(k1.Bytes, k2.Bytes) == 0;
+            return NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(k1.Bytes, k2.Bytes) == 0;
         }
     }
 }
