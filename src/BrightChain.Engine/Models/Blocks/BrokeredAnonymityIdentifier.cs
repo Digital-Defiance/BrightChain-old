@@ -1,50 +1,49 @@
-﻿namespace BrightChain.Engine.Models.Blocks
+﻿using System;
+using ProtoBuf;
+
+namespace BrightChain.Engine.Models.Blocks;
+
+/// <summary>
+///     Constitues really just the user's id- however the system will allow users to store data with registered identities or even anonymously
+///     but we will store error correction (FEC) data that allows us to recover the original Id if all the pieces of it (once sharded) are
+///     reconstructed.
+///     Plan is to use Reed Solomon.
+/// </summary>
+[ProtoContract]
+public class BrokeredAnonymityIdentifier : IComparable<BrokeredAnonymityIdentifier>, IDisposable, IFormattable,
+    IEquatable<BrokeredAnonymityIdentifier>
 {
-    using System;
-    using ProtoBuf;
+    /// <summary>
+    ///     FEC data computed off the ID prior to any masking
+    /// </summary>
+    [ProtoMember(tag: 2)] public ReadOnlyMemory<byte> ChecksumRecovery;
 
     /// <summary>
-    /// Constitues really just the user's id- however the system will allow users to store data with registered identities or even anonymously
-    /// but we will store error correction (FEC) data that allows us to recover the original Id if all the pieces of it (once sharded) are reconstructed.
-    /// Plan is to use Reed Solomon.
+    ///     Filled in with either the real Id, an alias of, or the the "anonymous" user (00000.. all zero).
     /// </summary>
-    [ProtoContract]
-    public class BrokeredAnonymityIdentifier : IComparable<BrokeredAnonymityIdentifier>, IDisposable, IFormattable, IEquatable<BrokeredAnonymityIdentifier>
+    [ProtoMember(tag: 1)] public ReadOnlyMemory<byte> Id;
+
+    public BrokeredAnonymityIdentifier(ReadOnlyMemory<byte> originalId, ReadOnlyMemory<byte> requestedId)
     {
-        /// <summary>
-        /// Filled in with either the real Id, an alias of, or the the "anonymous" user (00000.. all zero).
-        /// </summary>
-        [ProtoMember(1)]
-        public ReadOnlyMemory<byte> Id;
+    }
 
-        /// <summary>
-        /// FEC data computed off the ID prior to any masking
-        /// </summary>
-        [ProtoMember(2)]
-        public ReadOnlyMemory<byte> ChecksumRecovery;
+    public int CompareTo(BrokeredAnonymityIdentifier other)
+    {
+        throw new NotImplementedException();
+    }
 
-        public BrokeredAnonymityIdentifier(ReadOnlyMemory<byte> originalId, ReadOnlyMemory<byte> requestedId)
-        {
-        }
+    public void Dispose()
+    {
+        throw new NotImplementedException();
+    }
 
-        public int CompareTo(BrokeredAnonymityIdentifier other)
-        {
-            throw new NotImplementedException();
-        }
+    public bool Equals(BrokeredAnonymityIdentifier other)
+    {
+        throw new NotImplementedException();
+    }
 
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Equals(BrokeredAnonymityIdentifier other)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            throw new NotImplementedException();
-        }
+    public string ToString(string format, IFormatProvider formatProvider)
+    {
+        throw new NotImplementedException();
     }
 }

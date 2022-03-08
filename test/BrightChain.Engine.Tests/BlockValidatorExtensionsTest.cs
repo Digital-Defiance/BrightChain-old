@@ -1,84 +1,88 @@
-﻿namespace BrightChain.Engine.Tests
+﻿using System;
+using BrightChain.Engine.Enumerations;
+using BrightChain.Engine.Models.Blocks;
+using BrightChain.Engine.Models.Blocks.DataObjects;
+using BrightChain.Engine.Services.CacheManagers.Block;
+using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+
+namespace BrightChain.Engine.Tests;
+
+[TestClass]
+public class BlockValidatorExtensionsTest
 {
-    using System;
-    using BrightChain.Engine.Enumerations;
-    using BrightChain.Engine.Models.Blocks;
-    using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Services.CacheManagers.Block;
-    using Microsoft.Extensions.Logging;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Moq;
+    protected ILogger logger { get; set; }
 
-    [TestClass]
-    public class BlockValidatorExtensionsTest
+    [TestInitialize]
+    public void PreTestSetUp()
     {
-        protected ILogger logger { get; set; }
+        this.logger = new Mock<ILogger<BrightenedBlockCacheManagerBase>>().Object;
+    }
 
-        [TestInitialize]
-        public void PreTestSetUp()
-        {
-            this.logger = new Mock<ILogger<BrightenedBlockCacheManagerBase>>().Object;
-        }
-
-        [DataTestMethod]
-        [DataRow(BlockSize.Nano)]
-        [DataRow(BlockSize.Micro)]
-        [DataRow(BlockSize.Message)]
-        [DataRow(BlockSize.Tiny)]
-        [DataRow(BlockSize.Small)]
-        [DataRow(BlockSize.Medium)]
-        [DataRow(BlockSize.Large)]
-        public void ItValidatesValidBlocksTest(BlockSize blockSize)
-        {
-            Assert.IsTrue(new ZeroVectorBlock(
+    [DataTestMethod]
+    [DataRow(data1: BlockSize.Nano)]
+    [DataRow(data1: BlockSize.Micro)]
+    [DataRow(data1: BlockSize.Message)]
+    [DataRow(data1: BlockSize.Tiny)]
+    [DataRow(data1: BlockSize.Small)]
+    [DataRow(data1: BlockSize.Medium)]
+    [DataRow(data1: BlockSize.Large)]
+    public void ItValidatesValidBlocksTest(BlockSize blockSize)
+    {
+        Assert.IsTrue(condition: new ZeroVectorBlock(
                 blockParams: new BlockParams(
                     blockSize: blockSize,
                     requestTime: DateTime.Now,
                     keepUntilAtLeast: DateTime.MaxValue,
-                    redundancy: Enumerations.RedundancyContractType.HeapAuto,
+                    redundancy: RedundancyContractType.HeapAuto,
                     privateEncrypted: false,
                     originalType: typeof(ZeroVectorBlock)))
-                .Validate());
+            .Validate());
 
-            var loggerMock = Mock.Get(this.logger);
-            loggerMock.Verify(l => l.Log(
+        var loggerMock = Mock.Get(mocked: this.logger);
+        loggerMock.Verify(expression: l => l.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.IsAny<Exception>(),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
-                Times.Exactly(0));
-            loggerMock.VerifyNoOtherCalls();
-        }
+            times: Times.Exactly(callCount: 0));
+        loggerMock.VerifyNoOtherCalls();
+    }
 
-        [TestMethod, Ignore]
-        public void ItValidatesUnknownBlockSizeTest()
-        {
-            throw new NotImplementedException();
-        }
+    [TestMethod]
+    [Ignore]
+    public void ItValidatesUnknownBlockSizeTest()
+    {
+        throw new NotImplementedException();
+    }
 
-        [TestMethod, Ignore]
-        public void ItValidatesBlockSizeMatchesDataSizeTest()
-        {
-            throw new NotImplementedException();
-        }
+    [TestMethod]
+    [Ignore]
+    public void ItValidatesBlockSizeMatchesDataSizeTest()
+    {
+        throw new NotImplementedException();
+    }
 
-        [TestMethod, Ignore]
-        public void ItValidatesBlockHashMatchesBlockHashTest()
-        {
-            throw new NotImplementedException();
-        }
+    [TestMethod]
+    [Ignore]
+    public void ItValidatesBlockHashMatchesBlockHashTest()
+    {
+        throw new NotImplementedException();
+    }
 
-        [TestMethod, Ignore]
-        public void ItValidatesStorageContractDataLengthTest()
-        {
-            throw new NotImplementedException();
-        }
+    [TestMethod]
+    [Ignore]
+    public void ItValidatesStorageContractDataLengthTest()
+    {
+        throw new NotImplementedException();
+    }
 
-        [TestMethod, Ignore]
-        public void ItValidatesStorageContractMatchesRedundancyContractTest()
-        {
-            throw new NotImplementedException();
-        }
+    [TestMethod]
+    [Ignore]
+    public void ItValidatesStorageContractMatchesRedundancyContractTest()
+    {
+        throw new NotImplementedException();
     }
 }

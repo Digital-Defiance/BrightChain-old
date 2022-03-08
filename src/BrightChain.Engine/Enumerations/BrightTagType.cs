@@ -1,9 +1,8 @@
-﻿namespace BrightChain.Engine.Enumerations
+﻿namespace BrightChain.Engine.Enumerations;
+
+public enum BrightTagType
 {
-    public enum BrightTagType
-    {
-        Filename,
-        UserAssigned,
-        SystemAssigned,
-    }
+    Filename,
+    UserAssigned,
+    SystemAssigned,
 }

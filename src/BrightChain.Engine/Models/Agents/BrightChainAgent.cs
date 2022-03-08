@@ -1,23 +1,23 @@
-﻿namespace BrightChain.Engine.Models.Agents
+﻿using System;
+using System.Security.Cryptography;
+using BrightChain.Engine.Models.Keys;
+
+namespace BrightChain.Engine.Models.Agents;
+
+public class BrightChainAgent
 {
-    using System;
-    using System.Security.Cryptography;
-    using BrightChain.Engine.Models.Keys;
+    public Guid Id { get; }
 
-    public class BrightChainAgent
+    private BrightChainKey AgentKey { get; }
+
+    public ECDiffieHellmanCngPublicKey PublicKey
     {
-        public Guid Id { get; }
-
-        private BrightChainKey AgentKey { get; }
-
-        public ECDiffieHellmanCngPublicKey PublicKey
+        get
         {
-            get
-            {
-                var keyInfo = this.AgentKey.ExportSubjectPublicKeyInfo();
+            var keyInfo = this.AgentKey.ExportSubjectPublicKeyInfo();
 
-                return ECDiffieHellmanCngPublicKey.FromByteArray(keyInfo, CngKeyBlobFormat.EccPublicBlob) as ECDiffieHellmanCngPublicKey;
-            }
+            return ECDiffieHellmanCngPublicKey.FromByteArray(publicKeyBlob: keyInfo,
+                format: CngKeyBlobFormat.EccPublicBlob) as ECDiffieHellmanCngPublicKey;
         }
     }
 }

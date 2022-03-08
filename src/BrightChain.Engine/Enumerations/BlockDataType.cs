@@ -1,8 +1,7 @@
-﻿namespace BrightChain.Engine.Enumerations
+﻿namespace BrightChain.Engine.Enumerations;
+
+public enum BlockDataType
 {
-    public enum BlockDataType
-    {
-        Stored,
-        Pi
-    }
+    Stored,
+    Pi,
 }

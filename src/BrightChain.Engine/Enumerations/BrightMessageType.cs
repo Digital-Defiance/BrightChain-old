@@ -1,9 +1,8 @@
-﻿namespace BrightChain.Engine.Enumerations
+﻿namespace BrightChain.Engine.Enumerations;
+
+public enum BrightMessageType
 {
-    public enum BrightMessageType
-    {
-        Notification,
-        BrightNote,
-        BrightMail,
-    }
+    Notification,
+    BrightNote,
+    BrightMail,
 }

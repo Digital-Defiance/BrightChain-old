@@ -11,36 +11,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository and submodules
-      uses: actions/checkout@v2
-      with:
-        submodules: recursive
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-        include-prerelease: true
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build Debug
-      run: dotnet build -c Debug --no-restore
-# TODO:
-#    - name: CodeCov
-#      run: .\packages\<ADD PATH>\OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:".\MyUnitTests\bin\Debug\MyUnitTests.dll -noshadow" -filter:"+[UnitTestTargetProject*]* -[MyUnitTests*]*" -output:".\MyProject_coverage.xml"
-#    - name: CodeCov Process
-#      run: .\packages\<ADD PATH>\codecov.exe -f "MyProject_coverage.xml"
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+          include-prerelease: true
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build Debug
+        run: dotnet build -c Debug --no-restore
+  # TODO:
+  #    - name: CodeCov
+  #      run: .\packages\<ADD PATH>\OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:".\MyUnitTests\bin\Debug\MyUnitTests.dll -noshadow" -filter:"+[UnitTestTargetProject*]* -[MyUnitTests*]*" -output:".\MyProject_coverage.xml"
+  #    - name: CodeCov Process
+  #      run: .\packages\<ADD PATH>\codecov.exe -f "MyProject_coverage.xml"
   test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository and submodules
-      uses: actions/checkout@v2
-      with:
-        submodules: recursive
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-        include-prerelease: true
-    - name: Test
-      run: dotnet test --verbosity normal
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+          include-prerelease: true
+      - name: Test
+        run: dotnet test --verbosity normal

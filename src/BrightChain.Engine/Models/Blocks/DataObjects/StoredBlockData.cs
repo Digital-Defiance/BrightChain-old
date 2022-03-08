@@ -1,43 +1,39 @@
-﻿namespace BrightChain.Engine.Models.Blocks.DataObjects
+﻿using System;
+using Microsoft.Toolkit.HighPerformance.Buffers;
+
+namespace BrightChain.Engine.Models.Blocks.DataObjects;
+
+public class StoredBlockData : BlockData, IDisposable
 {
-    using System;
-    using Microsoft.Toolkit.HighPerformance.Buffers;
+    private readonly MemoryOwner<byte> StoredBytes;
+    private bool _disposedValue;
 
-    public class StoredBlockData : BlockData, IDisposable
+    public StoredBlockData(ReadOnlyMemory<byte> data)
     {
-        private readonly MemoryOwner<byte> StoredBytes;
-        private bool _disposedValue;
+        this.StoredBytes = MemoryOwner<byte>.Allocate(size: data.Length,
+            mode: AllocationMode.Default);
+        data.Span.CopyTo(destination: this.StoredBytes.Span);
+    }
 
-        public override ReadOnlyMemory<byte> Bytes
-        {
-            get
-                => new ReadOnlyMemory<byte>(this.StoredBytes.Span.ToArray());
-        }
+    public override ReadOnlyMemory<byte> Bytes => new(array: this.StoredBytes.Span.ToArray());
 
-        public StoredBlockData(ReadOnlyMemory<byte> data)
-        {
-            this.StoredBytes = MemoryOwner<byte>.Allocate(size: data.Length, mode: AllocationMode.Default);
-            data.Span.CopyTo(destination: this.StoredBytes.Span);
-        }
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        this.Dispose(disposing: true);
+        GC.SuppressFinalize(obj: this);
+    }
 
-        protected virtual void Dispose(bool disposing)
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!this._disposedValue)
         {
-            if (!_disposedValue)
+            if (disposing)
             {
-                if (disposing)
-                {
-                    this.StoredBytes.Dispose();
-                }
-
-                _disposedValue = true;
+                this.StoredBytes.Dispose();
             }
-        }
 
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
+            this._disposedValue = true;
         }
     }
 }

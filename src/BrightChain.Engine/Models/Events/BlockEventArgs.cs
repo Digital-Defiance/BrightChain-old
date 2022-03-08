@@ -1,13 +1,12 @@
 ﻿using System;
 using BrightChain.Engine.Models.Blocks;
 
-namespace BrightChain.Engine.Models.Events
+namespace BrightChain.Engine.Models.Events;
+
+/// <summary>
+///     Any action related to a block will have these event args
+/// </summary>
+public class BlockEventArgs : EventArgs
 {
-    /// <summary>
-    /// Any action related to a block will have these event args
-    /// </summary>
-    public class BlockEventArgs : EventArgs
-    {
-        public readonly Block Block;
-    }
+    public readonly Block Block;
 }

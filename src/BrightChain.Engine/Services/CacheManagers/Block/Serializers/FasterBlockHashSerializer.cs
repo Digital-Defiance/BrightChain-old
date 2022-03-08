@@ -1,49 +1,45 @@
-﻿namespace BrightChain.Engine.Faster.Serializers
+﻿using System;
+using BrightChain.Engine.Enumerations;
+using BrightChain.Engine.Models.Hashes;
+using FASTER.core;
+using NeuralFabric.Models.Hashes;
+
+namespace BrightChain.Engine.Faster.Serializers;
+
+/// <summary>
+///     Serializer for CacheKey - used if CacheKey is changed from struct to class
+/// </summary>
+public class FasterBlockHashSerializer
+    : BinaryObjectSerializer<BlockHash>
 {
-    using System;
-    using BrightChain.Engine.Enumerations;
-    using BrightChain.Engine.Models.Hashes;
-    using FASTER.core;
-
-    /// <summary>
-    /// Serializer for CacheKey - used if CacheKey is changed from struct to class
-    /// </summary>
-    public class FasterBlockHashSerializer
-        : BinaryObjectSerializer<BlockHash>
+    public override void Deserialize(out BlockHash obj)
     {
+        var hashSize = this.reader.ReadInt32();
+        var blockSizeString = this.reader.ReadString();
+        var blockSize = (BlockSize)Enum.Parse(enumType: typeof(BlockSize),
+            value: blockSizeString);
+        var blockBytes = this.reader.ReadBytes(count: hashSize);
+        var blockType = Type.GetType(typeName: this.reader.ReadString());
+        var computed = this.reader.ReadBoolean();
 
-        public FasterBlockHashSerializer()
+        obj = new BlockHash(
+            blockType: blockType,
+            originalBlockSize: blockSize,
+            providedHashBytes: blockBytes,
+            computed: computed);
+    }
+
+    public override void Serialize(ref BlockHash obj)
+    {
+        if (obj is null)
         {
+            throw new ArgumentNullException(paramName: nameof(obj));
         }
 
-        public override void Deserialize(out BlockHash obj)
-        {
-            var hashSize = this.reader.ReadInt32();
-            var blockSizeString = this.reader.ReadString();
-            var blockSize = (BlockSize)Enum.Parse(typeof(BlockSize), blockSizeString);
-            var blockBytes = this.reader.ReadBytes(hashSize);
-            var blockType = Type.GetType(this.reader.ReadString());
-            var computed = this.reader.ReadBoolean();
-
-            obj = new BlockHash(
-                blockType: blockType,
-                originalBlockSize: blockSize,
-                providedHashBytes: blockBytes,
-                computed: computed);
-        }
-
-        public override void Serialize(ref BlockHash obj)
-        {
-            if (obj is null)
-            {
-                throw new ArgumentNullException(nameof(obj));
-            }
-
-            this.writer.Write(BlockHash.HashSizeBytes);
-            this.writer.Write(obj.BlockSize.ToString());
-            this.writer.Write(obj.HashBytes.ToArray());
-            this.writer.Write(obj.BlockType.AssemblyQualifiedName);
-            this.writer.Write(obj.Computed);
-        }
+        this.writer.Write(value: DataHash.HashSizeBytes);
+        this.writer.Write(value: obj.BlockSize.ToString());
+        this.writer.Write(buffer: obj.HashBytes.ToArray());
+        this.writer.Write(value: obj.BlockType.AssemblyQualifiedName);
+        this.writer.Write(value: obj.Computed);
     }
 }

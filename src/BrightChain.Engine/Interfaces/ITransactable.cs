@@ -1,6 +1,5 @@
-﻿namespace BrightChain.Engine.Interfaces
+﻿namespace BrightChain.Engine.Interfaces;
+
+public interface ITransactable
 {
-    public interface ITransactable
-    {
-    }
 }

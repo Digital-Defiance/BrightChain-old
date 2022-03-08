@@ -1,167 +1,180 @@
+using System;
+using BrightChain.Engine.Enumerations;
+using BrightChain.Engine.Exceptions;
+using BrightChain.Engine.Interfaces;
+using BrightChain.Engine.Models.Blocks;
+using FASTER.core;
 using NeuralFabric.Models.Hashes;
-using NeuralFabric.Helpers;
+using ProtoBuf;
 
-namespace BrightChain.Engine.Models.Hashes
+namespace BrightChain.Engine.Models.Hashes;
+
+/// <summary>
+///     Type box for the sha hashes.
+/// </summary>
+[ProtoContract]
+public class BlockHash : DataHash, IDataHash, IComparable<BlockHash>, IEquatable<BlockHash>, IFasterEqualityComparer<BlockHash>
 {
-    using System;
-    using BrightChain.Engine.Enumerations;
-    using BrightChain.Engine.Exceptions;
-    using BrightChain.Engine.Interfaces;
-    using BrightChain.Engine.Models.Blocks;
-    using FASTER.core;
-    using ProtoBuf;
+    /// <summary>
+    ///     Size in bits of the hash.
+    /// </summary>
+    public new const int HashSize = 256;
 
     /// <summary>
-    /// Type box for the sha hashes.
+    ///     Initializes a new instance of the <see cref="BlockHash" /> class.
     /// </summary>
-    [ProtoContract]
-    public class BlockHash : DataHash, IDataHash, IComparable<BlockHash>, IEquatable<BlockHash>, IFasterEqualityComparer<BlockHash>
+    /// <param name="block">Source block to compute data hash from.</param>
+    public BlockHash(Block block)
+        : base(dataBytes: block.Bytes)
     {
-        /// <summary>
-        /// Size in bits of the hash.
-        /// </summary>
-        public new const int HashSize = 256;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BlockHash"/> class.
-        /// </summary>
-        /// <param name="block">Source block to compute data hash from.</param>
-        public BlockHash(Block block)
-            : base(dataBytes: block.Bytes)
+        if (block is not RootBlock)
         {
-            if (block is not RootBlock)
+            var detectedSize = BlockSizeMap.BlockSize(blockSize: block.Bytes.Length);
+            if (detectedSize != block.BlockSize)
             {
-                var detectedSize = BlockSizeMap.BlockSize(block.Bytes.Length);
-                if (detectedSize != block.BlockSize)
-                {
-                    throw new BrightChainValidationException(
-                        element: nameof(detectedSize),
-                        message: "Detected block size did not match specified block size");
-                }
-
-                this.BlockSize = block.BlockSize;
-                this.BlockType = block.GetType();
-            }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BlockHash"/> class.
-        /// </summary>
-        /// <param name="blockType">Block type of the underlying block.</param>
-        /// <param name="originalBlockSize">Block size of the block the hash was computed from.</param>
-        /// <param name="providedHashBytes">Hash bytes to accept as the hash.</param>
-        /// <param name="computed">A boolean value indicating whether the source bytes were computed internally or externally (false).</param>
-        public BlockHash(Type blockType, BlockSize originalBlockSize, ReadOnlyMemory<byte> providedHashBytes, bool computed)
-            : base(providedHashBytes: providedHashBytes, sourceDataLength: BlockSizeMap.BlockSize(originalBlockSize), computed: computed)
-        {
-            if (!typeof(Block).IsAssignableFrom(blockType))
-            {
-                throw new BrightChainException("Block Type must be Block or descendant.");
+                throw new BrightChainValidationException(
+                    element: nameof(detectedSize),
+                    message: "Detected block size did not match specified block size");
             }
 
-            this.BlockType = blockType;
-            this.BlockSize = originalBlockSize;
+            this.BlockSize = block.BlockSize;
+            this.BlockType = block.GetType();
         }
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BlockHash"/> class.
-        /// </summary>
-        /// <param name="blockType">Block type of the underlying block.</param>
-        /// <param name="dataBytes">Data to compute hash from.</param>
-        public BlockHash(Type blockType, ReadOnlyMemory<byte> dataBytes)
-            : base(dataBytes)
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="BlockHash" /> class.
+    /// </summary>
+    /// <param name="blockType">Block type of the underlying block.</param>
+    /// <param name="originalBlockSize">Block size of the block the hash was computed from.</param>
+    /// <param name="providedHashBytes">Hash bytes to accept as the hash.</param>
+    /// <param name="computed">A boolean value indicating whether the source bytes were computed internally or externally (false).</param>
+    public BlockHash(Type blockType, BlockSize originalBlockSize, ReadOnlyMemory<byte> providedHashBytes, bool computed)
+        : base(providedHashBytes: providedHashBytes,
+            sourceDataLength: BlockSizeMap.BlockSize(blockSize: originalBlockSize),
+            computed: computed)
+    {
+        if (!typeof(Block).IsAssignableFrom(c: blockType))
         {
-            this.BlockSize = BlockSizeMap.BlockSize(dataBytes.Length);
-            this.BlockType = blockType;
+            throw new BrightChainException(message: "Block Type must be Block or descendant.");
         }
 
-        /// <summary>
-        /// Gets a value indicating the block type of the underlying block.
-        /// </summary>
-        [ProtoMember(20)]
-        public Type BlockType { get; }
+        this.BlockType = blockType;
+        this.BlockSize = originalBlockSize;
+    }
 
-        /// <summary>
-        /// Gets a BlockSize enum of the source block.
-        /// </summary>
-        [ProtoMember(21)]
-        public BlockSize BlockSize { get; }
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="BlockHash" /> class.
+    /// </summary>
+    /// <param name="blockType">Block type of the underlying block.</param>
+    /// <param name="dataBytes">Data to compute hash from.</param>
+    public BlockHash(Type blockType, ReadOnlyMemory<byte> dataBytes)
+        : base(dataBytes: dataBytes)
+    {
+        this.BlockSize = BlockSizeMap.BlockSize(blockSize: dataBytes.Length);
+        this.BlockType = blockType;
+    }
 
-        public string Base58 =>
-            SimpleBase.Base58.Bitcoin.Encode(this.HashBytes.ToArray());
+    /// <summary>
+    ///     Gets a value indicating the block type of the underlying block.
+    /// </summary>
+    [ProtoMember(tag: 20)]
+    public Type BlockType { get; }
 
-        public uint Crc32 =>
-            NeuralFabric.Helpers.Crc32.ComputeChecksum(this.HashBytes.ToArray());
+    /// <summary>
+    ///     Gets a BlockSize enum of the source block.
+    /// </summary>
+    [ProtoMember(tag: 21)]
+    public BlockSize BlockSize { get; }
 
-        public ulong Crc64 =>
-            NeuralFabric.Helpers.Crc64Iso.ComputeChecksum(this.HashBytes.ToArray());
+    public string Base58 =>
+        SimpleBase.Base58.Bitcoin.Encode(bytes: this.HashBytes.ToArray());
 
-        public string Base58Crc64 =>
-            SimpleBase.Base58.Bitcoin.Encode(BitConverter.GetBytes(this.Crc64));
+    public uint Crc32 =>
+        NeuralFabric.Helpers.Crc32.ComputeChecksum(bytes: this.HashBytes.ToArray());
 
-        public static bool operator ==(BlockHash a, BlockHash b)
-        {
-            return a.SourceDataLength == b.SourceDataLength && NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(a.HashBytes, b.HashBytes) == 0;
-        }
+    public ulong Crc64 =>
+        NeuralFabric.Helpers.Crc64.ComputeChecksum(bytes: this.HashBytes.ToArray());
 
-        public static bool operator ==(ReadOnlyMemory<byte> a, BlockHash b)
-        {
-            return a.Length == b.SourceDataLength && NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(b.HashBytes, a) == 0;
-        }
+    public string Base58Crc64 =>
+        SimpleBase.Base58.Bitcoin.Encode(bytes: BitConverter.GetBytes(value: this.Crc64));
 
-        public static bool operator !=(ReadOnlyMemory<byte> b, BlockHash a)
-        {
-            return !(b == a);
-        }
+    /// <summary>
+    ///     Compares the raw bytes of the hash.
+    /// </summary>
+    /// <param name="other">Other BlockHash to compare bytes with.</param>
+    /// <returns>Returns a standard comparison result, -1, 0, 1 for less than, equal, greater than.</returns>
+    public int CompareTo(BlockHash other)
+    {
+        return other.SourceDataLength == this.SourceDataLength ? NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(
+                ar1: this.HashBytes,
+                ar2: other.HashBytes) :
+            other.SourceDataLength > this.SourceDataLength ? -1 : 1;
+    }
 
-        public static bool operator !=(BlockHash a, BlockHash b)
-        {
-            return !a.Equals(b);
-        }
+    /// <summary>
+    ///     Returns a boolean whether the two objects contain the same series of bytes.
+    /// </summary>
+    /// <param name="other">Other BlockHash to compare bytes with.</param>
+    /// <returns>Returns the standard comparison result, -1, 0, 1 for less than, equal, greater than.</returns>
+    public bool Equals(BlockHash other)
+    {
+        return other.SourceDataLength == this.SourceDataLength && NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(
+            ar1: this.HashBytes,
+            ar2: other.HashBytes) == 0;
+    }
 
-        /// <summary>
-        /// Compares the raw bytes of the hash with a BlockHash classed as a plain object.
-        /// </summary>
-        /// <param name="obj">Should be of BlockHash type.</param>
-        /// <returns>Returns a boolean indicating whether the bytes are the same in both objects.</returns>
-        public override bool Equals(object obj)
-        {
-            return obj is BlockHash blockHash ? blockHash.SourceDataLength == this.SourceDataLength && NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, blockHash.HashBytes) == 0 : false;
-        }
+    public long GetHashCode64(ref BlockHash k)
+    {
+        return (long)NeuralFabric.Helpers.Crc64.ComputeChecksum(bytes: this.HashBytes.ToArray());
+    }
 
-        /// <summary>
-        /// Compares the raw bytes of the hash.
-        /// </summary>
-        /// <param name="other">Other BlockHash to compare bytes with.</param>
-        /// <returns>Returns a standard comparison result, -1, 0, 1 for less than, equal, greater than.</returns>
-        public int CompareTo(BlockHash other)
-        {
-            return other.SourceDataLength == this.SourceDataLength ? NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) : other.SourceDataLength > this.SourceDataLength ? -1 : 1;
-        }
+    public bool Equals(ref BlockHash k1, ref BlockHash k2)
+    {
+        return !(k2 is null)
+            ? k2.SourceDataLength == k1.SourceDataLength && NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(ar1: k1.HashBytes,
+                ar2: k2.HashBytes) == 0
+            : false;
+    }
 
-        /// <summary>
-        /// Returns a boolean whether the two objects contain the same series of bytes.
-        /// </summary>
-        /// <param name="other">Other BlockHash to compare bytes with.</param>
-        /// <returns>Returns the standard comparison result, -1, 0, 1 for less than, equal, greater than.</returns>
-        public bool Equals(BlockHash other)
-        {
-            return other.SourceDataLength == this.SourceDataLength && NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) == 0;
-        }
+    public static bool operator ==(BlockHash a, BlockHash b)
+    {
+        return a.SourceDataLength == b.SourceDataLength && NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(ar1: a.HashBytes,
+            ar2: b.HashBytes) == 0;
+    }
 
-        public override int GetHashCode()
-        {
-            return (int)NeuralFabric.Helpers.Crc32.ComputeChecksum(this.HashBytes.ToArray());
-        }
+    public static bool operator ==(ReadOnlyMemory<byte> a, BlockHash b)
+    {
+        return a.Length == b.SourceDataLength && NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(ar1: b.HashBytes,
+            ar2: a) == 0;
+    }
 
-        public long GetHashCode64(ref BlockHash k)
-        {
-            return (long)Crc64Iso.ComputeChecksum(this.HashBytes.ToArray());
-        }
+    public static bool operator !=(ReadOnlyMemory<byte> b, BlockHash a)
+    {
+        return !(b == a);
+    }
 
-        public bool Equals(ref BlockHash k1, ref BlockHash k2)
-        {
-            return !(k2 is null) ? k2.SourceDataLength == k1.SourceDataLength && NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(k1.HashBytes, k2.HashBytes) == 0 : false;
-        }
+    public static bool operator !=(BlockHash a, BlockHash b)
+    {
+        return !a.Equals(other: b);
+    }
+
+    /// <summary>
+    ///     Compares the raw bytes of the hash with a BlockHash classed as a plain object.
+    /// </summary>
+    /// <param name="obj">Should be of BlockHash type.</param>
+    /// <returns>Returns a boolean indicating whether the bytes are the same in both objects.</returns>
+    public override bool Equals(object obj)
+    {
+        return obj is BlockHash blockHash
+            ? blockHash.SourceDataLength == this.SourceDataLength && NeuralFabric.Helpers.ReadOnlyMemoryComparer<byte>.Compare(
+                ar1: this.HashBytes,
+                ar2: blockHash.HashBytes) == 0
+            : false;
+    }
+
+    public override int GetHashCode()
+    {
+        return (int)NeuralFabric.Helpers.Crc32.ComputeChecksum(bytes: this.HashBytes.ToArray());
     }
 }

@@ -1,204 +1,204 @@
-﻿namespace BrightChain.Engine.Services.CacheManagers.Block
+﻿using System;
+using System.Collections.Generic;
+using BrightChain.Engine.Enumerations;
+using BrightChain.Engine.Exceptions;
+using BrightChain.Engine.Interfaces;
+using BrightChain.Engine.Models.Blocks;
+using BrightChain.Engine.Models.Blocks.DataObjects;
+using BrightChain.Engine.Models.Hashes;
+using BrightChain.Engine.Models.Nodes;
+
+namespace BrightChain.Engine.Services.CacheManagers.Block;
+
+/// <summary>
+///     Block Cache Manager.
+/// </summary>
+public abstract partial class BrightenedBlockCacheManagerBase : IBrightenedBlockCacheManager
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using BrightChain.Engine.Enumerations;
-    using BrightChain.Engine.Exceptions;
-    using BrightChain.Engine.Interfaces;
-    using BrightChain.Engine.Models.Blocks;
-    using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Models.Hashes;
-    using BrightChain.Engine.Models.Nodes;
+    /// <summary>
+    ///     Returns whether the cache manager has the given key and it is not expired
+    /// </summary>
+    /// <param name="key">key to check the collection for</param>
+    /// <returns>boolean with whether key is present</returns>
+    public abstract bool Contains(BlockHash key);
 
     /// <summary>
-    ///     Block Cache Manager.
+    ///     Removes a key from the cache and returns a boolean wither whether it was actually present.
     /// </summary>
-    public abstract partial class BrightenedBlockCacheManagerBase : IBrightenedBlockCacheManager
+    /// <param name="key">Key to drop from the collection.</param>
+    /// <param name="noCheckContains">Skips the contains check for performance.</param>
+    /// <returns>Whether requested key was present and actually dropped.</returns>
+    public virtual bool Drop(BlockHash key, bool noCheckContains = true)
     {
-        /// <summary>
-        ///     Returns whether the cache manager has the given key and it is not expired
-        /// </summary>
-        /// <param name="key">key to check the collection for</param>
-        /// <returns>boolean with whether key is present</returns>
-        public abstract bool Contains(BlockHash key);
-
-        /// <summary>
-        ///     Removes a key from the cache and returns a boolean wither whether it was actually present.
-        /// </summary>
-        /// <param name="key">Key to drop from the collection.</param>
-        /// <param name="noCheckContains">Skips the contains check for performance.</param>
-        /// <returns>Whether requested key was present and actually dropped.</returns>
-        public virtual bool Drop(BlockHash key, bool noCheckContains = true)
+        if (this.ActiveTransaction is null)
         {
-            if (this._activeTransaction is null)
-            {
-                throw new BrightChainException("Must be in transaction");
-            }
-
-            if (!noCheckContains && !this.Contains(key))
-            {
-                return false;
-            }
-
-            this._activeTransaction.DropTransactionBlock(blockHash: key);
-
-            return true;
+            throw new BrightChainException(message: "Must be in transaction");
         }
 
-        /// <summary>
-        ///     Retrieves a block from the cache if it is present.
-        /// </summary>
-        /// <param name="blockHash">key to retrieve.</param>
-        /// <returns>returns requested block or throws.</returns>
-        public abstract BrightenedBlock Get(BlockHash blockHash);
-
-        public virtual IEnumerable<BrightenedBlock> Get(IEnumerable<BlockHash> keys)
+        if (!noCheckContains && !this.Contains(key: key))
         {
-            if (this._activeTransaction is null)
-            {
-                throw new BrightChainException("Must be in transaction");
-            }
-
-            var blocks = new List<BrightenedBlock>();
-            foreach (var key in keys)
-            {
-                var blockData = this.Get(blockHash: key);
-                this._activeTransaction.AddUpdateMemoryBlock(block: blockData);
-                blocks.Add(blockData);
-            }
-
-            return blocks;
+            return false;
         }
 
-        public virtual async IAsyncEnumerable<BrightenedBlock> Get(IAsyncEnumerable<BlockHash> keys)
-        {
-            if (this._activeTransaction is null)
-            {
-                throw new BrightChainException("Must be in transaction");
-            }
+        this.ActiveTransaction.DropTransactionBlock(blockHash: key);
 
-            await foreach (var key in keys)
-            {
-                yield return this.Get(key);
-            }
+        return true;
+    }
+
+    /// <summary>
+    ///     Retrieves a block from the cache if it is present.
+    /// </summary>
+    /// <param name="blockHash">key to retrieve.</param>
+    /// <returns>returns requested block or throws.</returns>
+    public abstract BrightenedBlock Get(BlockHash blockHash);
+
+    /// <summary>
+    ///     Adds a key to the cache if it is not already present.
+    /// </summary>
+    /// <param name="value">block to palce in the cache.</param>
+    /// <param name="updateMetadataOnly">whether to allow duplicate and update the block metadata.</param>
+    public virtual void Set(BrightenedBlock value, bool updateMetadataOnly = false)
+    {
+        if (this.ActiveTransaction is null)
+        {
+            throw new BrightChainException(message: "Must be in transaction");
         }
 
-        /// <summary>
-        ///     Adds a key to the cache if it is not already present.
-        /// </summary>
-        /// <param name="value">block to palce in the cache.</param>
-        /// <param name="updateMetadataOnly">whether to allow duplicate and update the block metadata.</param>
-        public virtual void Set(BrightenedBlock value, bool updateMetadataOnly = false)
+        if (value is null)
         {
-            if (this._activeTransaction is null)
-            {
-                throw new BrightChainException("Must be in transaction");
-            }
-
-            if (value is null)
-            {
-                throw new BrightChainException("Can not store null block");
-            }
-
-            if (!value.Validate())
-            {
-                throw new BrightChainValidationEnumerableException(
-                    value.ValidationExceptions,
-                    "Can not store invalid block");
-            }
-
-            if (this.Contains(value.Id) && !updateMetadataOnly)
-            {
-                throw new BrightChainException("Key already exists in fasterkv");
-            }
-
-            this._activeTransaction.AddUpdateMemoryBlock(block: value);
+            throw new BrightChainException(message: "Can not store null block");
         }
 
-        public void ExtendStorage(BrightenedBlock block, DateTime keepUntilAtLeast, RedundancyContractType redundancy = RedundancyContractType.Unknown)
+        if (!value.Validate())
         {
-            // duplicate block with extended attributes
-            var newBlock = new BrightenedBlock(
-                blockParams: new BrightenedBlockParams(
-                    cacheManager: block.CacheManager,
-                    allowCommit: block.AllowCommit,
-                    blockParams: new BlockParams(
-                        blockSize: block.BlockSize,
-                        requestTime: block.StorageContract.RequestTime,
-                        keepUntilAtLeast: keepUntilAtLeast,
-                        redundancy: redundancy == RedundancyContractType.Unknown ? block.StorageContract.RedundancyContractType : redundancy,
-                        privateEncrypted: block.StorageContract.PrivateEncrypted,
-                        originalType: block.OriginalType)),
-                data: block.Bytes,
-                constituentBlockHashes: block.ConstituentBlocks);
+            throw new BrightChainValidationEnumerableException(
+                exceptions: value.ValidationExceptions,
+                message: "Can not store invalid block");
+        }
 
-            this.RemoveExpiration(block);
-            this.AddExpiration(newBlock);
+        if (this.Contains(key: value.Id) && !updateMetadataOnly)
+        {
+            throw new BrightChainException(message: "Key already exists in fasterkv");
+        }
+
+        this.ActiveTransaction.AddUpdateMemoryBlock(block: value);
+    }
+
+    public virtual void Set(BlockHash key, BrightenedBlock value)
+    {
+        if (this.ActiveTransaction is null)
+        {
+            throw new BrightChainException(message: "Must be in transaction");
+        }
+
+        if (value.Id != key)
+        {
+            throw new BrightChainException(message: "Can not store transactable block with different key");
+        }
+
+        this.Set(
+            value: value,
+            updateMetadataOnly: false);
+    }
+
+    public virtual void SetAll(IEnumerable<BrightenedBlock> items)
+    {
+        foreach (var item in items)
+        {
             this.Set(
-                value: block,
+                value: item,
                 updateMetadataOnly: false);
         }
+    }
 
-        public virtual void Set(BlockHash key, BrightenedBlock value)
+    public virtual async void SetAllAsync(IAsyncEnumerable<BrightenedBlock> items)
+    {
+        await foreach (var item in items)
         {
-            if (this._activeTransaction is null)
-            {
-                throw new BrightChainException("Must be in transaction");
-            }
-
-            if (value.Id != key)
-            {
-                throw new BrightChainException("Can not store transactable block with different key");
-            }
-
             this.Set(
-                value: value,
+                value: item,
                 updateMetadataOnly: false);
         }
+    }
 
-        public virtual void SetAll(IEnumerable<BrightenedBlock> items)
+    /// <summary>
+    ///     Add a node that the cache manager should trust.
+    /// </summary>
+    /// <param name="node">Node submitting the block to the cache.</param>
+    public void Trust(BrightChainNode node)
+    {
+        this.trustedNodes.Add(item: node);
+    }
+
+    public virtual IEnumerable<BrightenedBlock> Get(IEnumerable<BlockHash> keys)
+    {
+        if (this.ActiveTransaction is null)
         {
-            foreach (var item in items)
-            {
-                this.Set(
-                    value: item,
-                    updateMetadataOnly: false);
-            }
+            throw new BrightChainException(message: "Must be in transaction");
         }
 
-        public async virtual void SetAllAsync(IAsyncEnumerable<BrightenedBlock> items)
+        var blocks = new List<BrightenedBlock>();
+        foreach (var key in keys)
         {
-            await foreach (var item in items)
-            {
-                this.Set(
-                    value: item,
-                    updateMetadataOnly: false);
-            }
+            var blockData = this.Get(blockHash: key);
+            this.ActiveTransaction.AddUpdateMemoryBlock(block: blockData);
+            blocks.Add(item: blockData);
         }
 
-        /// <summary>
-        ///     Add a node that the cache manager should trust.
-        /// </summary>
-        /// <param name="node">Node submitting the block to the cache.</param>
-        public void Trust(BrightChainNode node)
+        return blocks;
+    }
+
+    public virtual async IAsyncEnumerable<BrightenedBlock> Get(IAsyncEnumerable<BlockHash> keys)
+    {
+        if (this.ActiveTransaction is null)
         {
-            this.trustedNodes.Add(node);
+            throw new BrightChainException(message: "Must be in transaction");
         }
 
-        /// <summary>
-        ///     Returns the maximum number of bytes storable for a given block size.
-        /// </summary>
-        /// <param name="blockSize"></param>
-        /// <returns></returns>
-        public static long MaximumStorageLength(BlockSize blockSize)
+        await foreach (var key in keys)
         {
-            var iBlockSize = BlockSizeMap.BlockSize(blockSize);
-            var hashesPerBlockSquared = BlockSizeMap.HashesPerBlock(blockSize, 2);
-
-            // right now, we can contain 1 SuperCBL with hashesPerSegment blocks, and up to hashesPerSegment blocks there.
-            // this means total size is hashes^2*size
-            return hashesPerBlockSquared * iBlockSize;
+            yield return this.Get(blockHash: key);
         }
+    }
+
+    public void ExtendStorage(BrightenedBlock block, DateTime keepUntilAtLeast,
+        RedundancyContractType redundancy = RedundancyContractType.Unknown)
+    {
+        // duplicate block with extended attributes
+        var newBlock = new BrightenedBlock(
+            blockParams: new BrightenedBlockParams(
+                cacheManager: block.CacheManager,
+                allowCommit: block.AllowCommit,
+                blockParams: new BlockParams(
+                    blockSize: block.BlockSize,
+                    requestTime: block.StorageContract.RequestTime,
+                    keepUntilAtLeast: keepUntilAtLeast,
+                    redundancy: redundancy == RedundancyContractType.Unknown ? block.StorageContract.RedundancyContractType : redundancy,
+                    privateEncrypted: block.StorageContract.PrivateEncrypted,
+                    originalType: block.OriginalType)),
+            data: block.Bytes,
+            constituentBlockHashes: block.ConstituentBlocks);
+
+        this.RemoveExpiration(block: block);
+        this.AddExpiration(block: newBlock);
+        this.Set(
+            value: block,
+            updateMetadataOnly: false);
+    }
+
+    /// <summary>
+    ///     Returns the maximum number of bytes storable for a given block size.
+    /// </summary>
+    /// <param name="blockSize"></param>
+    /// <returns></returns>
+    public static long MaximumStorageLength(BlockSize blockSize)
+    {
+        var iBlockSize = BlockSizeMap.BlockSize(blockSize: blockSize);
+        var hashesPerBlockSquared = BlockSizeMap.HashesPerBlock(blockSize: blockSize,
+            exponent: 2);
+
+        // right now, we can contain 1 SuperCBL with hashesPerSegment blocks, and up to hashesPerSegment blocks there.
+        // this means total size is hashes^2*size
+        return hashesPerBlockSquared * iBlockSize;
     }
 }

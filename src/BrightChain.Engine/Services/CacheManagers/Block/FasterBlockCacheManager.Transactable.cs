@@ -1,190 +1,172 @@
-﻿namespace BrightChain.Engine.Faster.CacheManager
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using BrightChain.Engine.Exceptions;
+using BrightChain.Engine.Faster.Enumerations;
+using FASTER.core;
+
+namespace BrightChain.Engine.Faster.CacheManager;
+
+public partial class FasterBlockCacheManager
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using BrightChain.Engine.Exceptions;
-    using BrightChain.Engine.Faster;
-    using BrightChain.Engine.Faster.Enumerations;
-    using FASTER.core;
+    private readonly BlockSessionCheckpoint lastCheckpoint;
+    private readonly BlockSessionAddresses lastCommit;
+    private readonly BlockSessionAddresses lastHead;
 
-    public partial class FasterBlockCacheManager
+    public BlockSessionCheckpoint TakeFullCheckpoint(CheckpointType checkpointType = CheckpointType.Snapshot)
     {
-        private readonly BlockSessionCheckpoint lastCheckpoint;
-        private readonly BlockSessionAddresses lastHead;
-        private readonly BlockSessionAddresses lastCommit;
+        return this.CheckpointFunc(operation: FasterCheckpointOperation.Full,
+            checkpointType: checkpointType);
+    }
 
-        public BlockSessionCheckpoint TakeFullCheckpoint(CheckpointType checkpointType = CheckpointType.Snapshot)
+    private async Task<BlockSessionCheckpoint> TakeFullCheckpointAsync(CheckpointType checkpointType = CheckpointType.Snapshot)
+    {
+        return await this.CheckpointFuncAsync(func: () => new Dictionary<CacheStoreType, Task<(bool, Guid)>>
         {
-            return this.CheckpointFunc(FasterCheckpointOperation.Full, checkpointType);
+            {CacheStoreType.BlockData, this.KV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask()},
+            {CacheStoreType.Indices, this.cblIndicesKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask()},
+        }).ConfigureAwait(continueOnCapturedContext: false);
+    }
+
+    public BlockSessionCheckpoint TakeHybridCheckpoint(CheckpointType checkpointType)
+    {
+        return this.CheckpointFunc(operation: FasterCheckpointOperation.Hybrid,
+            checkpointType: checkpointType);
+    }
+
+    public async Task<BlockSessionCheckpoint> TakeHybridCheckpointAsync(CheckpointType checkpointType = CheckpointType.Snapshot)
+    {
+        return await this.CheckpointFuncAsync(func: () => new Dictionary<CacheStoreType, Task<(bool, Guid)>>
+        {
+            {CacheStoreType.BlockData, this.KV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask()},
+            {CacheStoreType.Indices, this.cblIndicesKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask()},
+        }).ConfigureAwait(continueOnCapturedContext: false);
+    }
+
+    public BlockSessionCheckpoint TakeIndexCheckpoint()
+    {
+        return this.CheckpointFunc(operation: FasterCheckpointOperation.Index);
+    }
+
+    public async Task<BlockSessionCheckpoint> TakeIndexCheckPointAsync()
+    {
+        return await this.CheckpointFuncAsync(func: () => new Dictionary<CacheStoreType, Task<(bool, Guid)>>
+        {
+            {CacheStoreType.BlockData, this.KV.TakeIndexCheckpointAsync().AsTask()},
+            {CacheStoreType.Indices, this.cblIndicesKV.TakeIndexCheckpointAsync().AsTask()},
+        }).ConfigureAwait(continueOnCapturedContext: false);
+    }
+
+    public BlockSessionCheckpoint CheckpointFunc(FasterCheckpointOperation operation,
+        CheckpointType checkpointType = CheckpointType.Snapshot)
+    {
+        bool dataResult, expirationResult, cblResult, cblIndexResult;
+        Guid dataToken, expirationToken, cblToken, cblIndexsToken;
+        switch (operation)
+        {
+            case FasterCheckpointOperation.Full:
+                dataResult = this.KV.TakeFullCheckpoint(token: out dataToken,
+                    checkpointType: checkpointType);
+                cblIndexResult = this.cblIndicesKV.TakeFullCheckpoint(token: out cblIndexsToken,
+                    checkpointType: checkpointType);
+                break;
+            case FasterCheckpointOperation.Hybrid:
+                dataResult = this.KV.TakeHybridLogCheckpoint(out dataToken);
+                cblIndexResult = this.cblIndicesKV.TakeHybridLogCheckpoint(out cblIndexsToken);
+                break;
+            case FasterCheckpointOperation.Index:
+                dataResult = this.KV.TakeIndexCheckpoint(out dataToken);
+                cblIndexResult = this.cblIndicesKV.TakeIndexCheckpoint(out cblIndexsToken);
+                break;
+            default:
+                throw new BrightChainExceptionImpossible(message: "Unexpected type");
         }
 
-        private async Task<BlockSessionCheckpoint> TakeFullCheckpointAsync(CheckpointType checkpointType = CheckpointType.Snapshot)
-        {
-            return await this.CheckpointFuncAsync(() => new Dictionary<CacheStoreType, Task<(bool, Guid)>>()
+        return new BlockSessionCheckpoint(
+            success: dataResult && cblIndexResult,
+            results: new Dictionary<CacheStoreType, bool>
             {
-                { CacheStoreType.BlockData, this.KV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
-                { CacheStoreType.Indices, this.cblIndicesKV.TakeFullCheckpointAsync(checkpointType: checkpointType).AsTask() },
-            }).ConfigureAwait(false);
+                {CacheStoreType.BlockData, dataResult}, {CacheStoreType.Indices, cblIndexResult},
+            },
+            guids: new Dictionary<CacheStoreType, Guid> {{CacheStoreType.BlockData, dataToken}, {CacheStoreType.Indices, cblIndexsToken}});
+    }
+
+    public async Task<BlockSessionCheckpoint> CheckpointFuncAsync(Func<Dictionary<CacheStoreType, Task<(bool, Guid)>>> func)
+    {
+        var taskDict = func();
+
+        await Task.WhenAll(taskDict.Values)
+            .ConfigureAwait(continueOnCapturedContext: false);
+
+        var resultDict = new Dictionary<CacheStoreType, bool>();
+        var guidDict = new Dictionary<CacheStoreType, Guid>();
+        var allGood = true;
+        foreach (var task in taskDict)
+        {
+            var result = task.Value.Result;
+            resultDict.Add(key: task.Key,
+                value: result.Item1);
+            guidDict.Add(key: task.Key,
+                value: result.Item2);
+
+            allGood = allGood && result.Item1;
         }
 
-        public BlockSessionCheckpoint TakeHybridCheckpoint(CheckpointType checkpointType)
-        {
-            return this.CheckpointFunc(FasterCheckpointOperation.Hybrid, checkpointType);
-        }
+        return new BlockSessionCheckpoint(success: allGood,
+            result: resultDict,
+            guid: guidDict);
+    }
 
-        public async Task<BlockSessionCheckpoint> TakeHybridCheckpointAsync(CheckpointType checkpointType = CheckpointType.Snapshot)
+    public async Task CompleteCheckpointAsync()
+    {
+        await Task
+            .WhenAll(this.KV.CompleteCheckpointAsync().AsTask(),
+                this.cblIndicesKV.CompleteCheckpointAsync().AsTask())
+            .ConfigureAwait(continueOnCapturedContext: false);
+    }
+
+    public BlockSessionAddresses NextSerials()
+    {
+        using var sessionContext = this.NewFasterSessionContext;
         {
-            return await this.CheckpointFuncAsync(() => new Dictionary<CacheStoreType, Task<(bool, Guid)>>()
+            return new BlockSessionAddresses(addresses: new Dictionary<CacheStoreType, long>
             {
-                { CacheStoreType.BlockData, this.KV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
-                { CacheStoreType.Indices, this.cblIndicesKV.TakeHybridLogCheckpointAsync(checkpointType: checkpointType).AsTask() },
-            }).ConfigureAwait(false);
+                {CacheStoreType.BlockData, sessionContext.BlockDataBlobSession.NextSerialNo},
+                {CacheStoreType.Indices, sessionContext.SharedCacheSession.NextSerialNo},
+            });
         }
+    }
 
-        public BlockSessionCheckpoint TakeIndexCheckpoint()
+    public BlockSessionAddresses HeadAddresses()
+    {
+        return new BlockSessionAddresses(addresses: new Dictionary<CacheStoreType, long>
         {
-            return this.CheckpointFunc(FasterCheckpointOperation.Index);
-        }
+            {CacheStoreType.BlockData, this.KV.Log.HeadAddress}, {CacheStoreType.Indices, this.cblIndicesKV.Log.HeadAddress},
+        });
+    }
 
-        public async Task<BlockSessionCheckpoint> TakeIndexCheckPointAsync()
-        {
-            return await this.CheckpointFuncAsync(() => new Dictionary<CacheStoreType, Task<(bool, Guid)>>()
-            {
-                { CacheStoreType.BlockData, this.KV.TakeIndexCheckpointAsync().AsTask() },
-                { CacheStoreType.Indices, this.cblIndicesKV.TakeIndexCheckpointAsync().AsTask() },
-            }).ConfigureAwait(false);
-        }
-
-        public BlockSessionCheckpoint CheckpointFunc(FasterCheckpointOperation operation, CheckpointType checkpointType = CheckpointType.Snapshot)
-        {
-            bool dataResult, expirationResult, cblResult, cblIndexResult;
-            Guid dataToken, expirationToken, cblToken, cblIndexsToken;
-            switch (operation)
-            {
-                case FasterCheckpointOperation.Full:
-                    dataResult = this.KV.TakeFullCheckpoint(token: out dataToken, checkpointType: checkpointType);
-                    cblIndexResult = this.cblIndicesKV.TakeFullCheckpoint(token: out cblIndexsToken, checkpointType: checkpointType);
-                    break;
-                case FasterCheckpointOperation.Hybrid:
-                    dataResult = this.KV.TakeHybridLogCheckpoint(out dataToken);
-                    cblIndexResult = this.cblIndicesKV.TakeHybridLogCheckpoint(out cblIndexsToken);
-                    break;
-                case FasterCheckpointOperation.Index:
-                    dataResult = this.KV.TakeIndexCheckpoint(out dataToken);
-                    cblIndexResult = this.cblIndicesKV.TakeIndexCheckpoint(out cblIndexsToken);
-                    break;
-                default:
-                    throw new BrightChainExceptionImpossible("Unexpected type");
-            }
-
-            return new BlockSessionCheckpoint(
-                success: dataResult && cblIndexResult,
-                results: new Dictionary<CacheStoreType, bool>()
-                    {
-                    { CacheStoreType.BlockData, dataResult },
-                    { CacheStoreType.Indices, cblIndexResult },
-                    },
-                guids: new Dictionary<CacheStoreType, Guid>()
-                    {
-                    { CacheStoreType.BlockData, dataToken },
-                    { CacheStoreType.Indices, cblIndexsToken },
-                    });
-        }
-
-        public async Task<BlockSessionCheckpoint> CheckpointFuncAsync(Func<Dictionary<CacheStoreType, Task<(bool, Guid)>>> func)
-        {
-            var taskDict = func();
-
-            await Task.WhenAll(taskDict.Values)
-                .ConfigureAwait(false);
-
-            var resultDict = new Dictionary<CacheStoreType, bool>();
-            var guidDict = new Dictionary<CacheStoreType, Guid>();
-            var allGood = true;
-            foreach (var task in taskDict)
-            {
-                var result = task.Value.Result;
-                resultDict.Add(task.Key, result.Item1);
-                guidDict.Add(task.Key, result.Item2);
-
-                allGood = allGood && result.Item1;
-            }
-
-            return new BlockSessionCheckpoint(allGood, resultDict, guidDict);
-        }
-
-        public async Task CompleteCheckpointAsync()
-        {
-            await Task
-                .WhenAll(new Task[]
-                    {
-                        this.KV.CompleteCheckpointAsync().AsTask(),
-                        this.cblIndicesKV.CompleteCheckpointAsync().AsTask(),
-                    })
-                .ConfigureAwait(false);
-        }
-
-        public BlockSessionAddresses NextSerials()
-        {
-            using var sessionContext = this.NewFasterSessionContext;
-            {
-                return new BlockSessionAddresses(addresses: new Dictionary<CacheStoreType, long>
-                {
-                    {
-                        CacheStoreType.BlockData,
-                        sessionContext.BlockDataBlobSession.NextSerialNo
-                    },
-                    {
-                        CacheStoreType.Indices,
-                        sessionContext.SharedCacheSession.NextSerialNo
-                    },
-                });
-            }
-        }
-
-        public BlockSessionAddresses HeadAddresses()
+    public BlockSessionAddresses Compact(bool shiftBeginAddress = true)
+    {
+        using var sessionContext = this.NewFasterSessionContext;
         {
             return new BlockSessionAddresses(addresses: new Dictionary<CacheStoreType, long>
             {
                 {
-                    CacheStoreType.BlockData,
-                    this.KV.Log.HeadAddress
+                    CacheStoreType.BlockData, sessionContext.BlockDataBlobSession.Compact(
+                        untilAddress: this.KV.Log.HeadAddress,
+                        shiftBeginAddress: shiftBeginAddress)
                 },
                 {
-                    CacheStoreType.Indices,
-                    this.cblIndicesKV.Log.HeadAddress
+                    CacheStoreType.Indices, sessionContext.SharedCacheSession.Compact(
+                        untilAddress: this.cblIndicesKV.Log.HeadAddress,
+                        shiftBeginAddress: shiftBeginAddress)
                 },
             });
         }
+    }
 
-        public BlockSessionAddresses Compact(bool shiftBeginAddress = true)
-        {
-            using var sessionContext = this.NewFasterSessionContext;
-            {
-                return new BlockSessionAddresses(addresses: new Dictionary<CacheStoreType, long>
-                {
-                    {
-                        CacheStoreType.BlockData, sessionContext.BlockDataBlobSession.Compact(
-                            untilAddress: this.KV.Log.HeadAddress,
-                            shiftBeginAddress: shiftBeginAddress)
-                    },
-                    {
-                        CacheStoreType.Indices, sessionContext.SharedCacheSession.Compact(
-                            untilAddress: this.cblIndicesKV.Log.HeadAddress,
-                            shiftBeginAddress: shiftBeginAddress)
-                    },
-                });
-            }
-        }
-
-        public async void Recover()
-        {
-            Task.WaitAll(new Task[]
-            {
-                this.KV.RecoverAsync().AsTask(),
-                this.cblIndicesKV.RecoverAsync().AsTask(),
-            });
-        }
+    public async void Recover()
+    {
+        Task.WaitAll(tasks: new Task[] {this.KV.RecoverAsync().AsTask(), this.cblIndicesKV.RecoverAsync().AsTask()});
     }
 }

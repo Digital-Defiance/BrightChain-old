@@ -1,8 +1,7 @@
-﻿namespace BrightChain.Engine.Enumerations
+﻿namespace BrightChain.Engine.Enumerations;
+
+public enum BrightMailBoxType
 {
-    public enum BrightMailBoxType
-    {
-        Received,
-        Sent,
-    }
+    Received,
+    Sent,
 }

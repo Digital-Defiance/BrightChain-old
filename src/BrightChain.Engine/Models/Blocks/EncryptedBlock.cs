@@ -1,17 +1,17 @@
-﻿namespace BrightChain.Engine.Models.Blocks
+﻿using System;
+using BrightChain.Engine.Models.Blocks.DataObjects;
+using BrightChain.Engine.Models.Entities;
+
+namespace BrightChain.Engine.Models.Blocks;
+
+public class EncryptedBlock : IdentifiableBlock
 {
-    using System;
-    using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Models.Entities;
+    public readonly Agent RecipientAgent;
 
-    public class EncryptedBlock : IdentifiableBlock
+    public EncryptedBlock(BlockParams blockParams, Agent recipientAgent, ReadOnlyMemory<byte> encryptedData)
+        : base(blockParams: blockParams,
+            data: encryptedData)
     {
-        public readonly Agent RecipientAgent;
-
-        public EncryptedBlock(BlockParams blockParams, Agent recipientAgent, ReadOnlyMemory<byte> encryptedData)
-            : base(blockParams, encryptedData)
-        {
-            this.RecipientAgent = recipientAgent;
-        }
+        this.RecipientAgent = recipientAgent;
     }
 }

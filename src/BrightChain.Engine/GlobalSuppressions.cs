@@ -5,4 +5,9 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Style", "IDE0003:Remove qualification", Justification = "<Pending>", Scope = "member", Target = "~M:BrightChain.Engine.Services.BrightBlockService.CreateCblFromFile(System.String,System.DateTime,BrightChain.Engine.Enumerations.RedundancyContractType,System.Boolean,System.Boolean,System.Nullable{BrightChain.Engine.Enumerations.BlockSize})~BrightChain.Engine.Models.Blocks.Chains.ConstituentBlockListBlock")]
+[assembly: SuppressMessage(category: "Style",
+    checkId: "IDE0003:Remove qualification",
+    Justification = "<Pending>",
+    Scope = "member",
+    Target =
+        "~M:BrightChain.Engine.Services.BrightBlockService.CreateCblFromFile(System.String,System.DateTime,BrightChain.Engine.Enumerations.RedundancyContractType,System.Boolean,System.Boolean,System.Nullable{BrightChain.Engine.Enumerations.BlockSize})~BrightChain.Engine.Models.Blocks.Chains.ConstituentBlockListBlock")]

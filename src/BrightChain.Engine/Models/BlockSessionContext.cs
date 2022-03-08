@@ -1,158 +1,165 @@
-﻿namespace BrightChain.Engine.Faster
+﻿using System;
+using System.Threading.Tasks;
+using BrightChain.Engine.Exceptions;
+using BrightChain.Engine.Faster.Functions;
+using BrightChain.Engine.Faster.Indices;
+using BrightChain.Engine.Models.Blocks;
+using BrightChain.Engine.Models.Blocks.DataObjects;
+using BrightChain.Engine.Models.Hashes;
+using FASTER.core;
+using Microsoft.Extensions.Logging;
+
+namespace BrightChain.Engine.Faster;
+
+public class BlockSessionContext : IDisposable
 {
-    using System;
-    using System.Threading.Tasks;
-    using BrightChain.Engine.Exceptions;
-    using BrightChain.Engine.Faster.Functions;
-    using BrightChain.Engine.Faster.Indices;
-    using BrightChain.Engine.Models.Blocks;
-    using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Models.Hashes;
-    using FASTER.core;
-    using Microsoft.Extensions.Logging;
+    public readonly
+        ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainBlockHashAdvancedFunctions>
+        BlockDataBlobSession;
 
-    public class BlockSessionContext : IDisposable
+    private readonly ILogger logger;
+
+    public readonly
+        ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext,
+            BrightChainIndicesAdvancedFunctions> SharedCacheSession;
+
+    public BlockSessionContext(
+        ILogger logger,
+        ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainBlockHashAdvancedFunctions>
+            dataSession,
+        ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext,
+            BrightChainIndicesAdvancedFunctions> cblIndicesSession)
     {
-        private readonly ILogger logger;
+        this.logger = logger;
+        this.BlockDataBlobSession = dataSession;
+        this.SharedCacheSession = cblIndicesSession;
+    }
 
-        public readonly ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainBlockHashAdvancedFunctions> BlockDataBlobSession;
+    public string SessionID =>
+        string.Format(format: "{0}-{1}",
+            arg0: this.BlockDataBlobSession.ID,
+            arg1: this.SharedCacheSession.ID);
 
-        public readonly ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, BrightChainIndicesAdvancedFunctions> SharedCacheSession;
+    public void Dispose()
+    {
+        this.BlockDataBlobSession.Dispose();
+        this.SharedCacheSession.Dispose();
+    }
 
-        public BlockSessionContext(
-            ILogger logger,
-            ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainBlockHashAdvancedFunctions> dataSession,
-            ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext, BrightChainIndicesAdvancedFunctions> cblIndicesSession)
+    public bool Contains(BlockHash blockHash)
+    {
+        var dataResultTuple = this.BlockDataBlobSession.Read(key: blockHash);
+
+        return
+            dataResultTuple.status == Status.OK;
+    }
+
+    public bool Drop(BlockHash blockHash, bool complete = true)
+    {
+        if (this.BlockDataBlobSession.Delete(key: blockHash) != Status.OK)
         {
-            this.logger = logger;
-            this.BlockDataBlobSession = dataSession;
-            this.SharedCacheSession = cblIndicesSession;
+            // TODO: rollback?
+            return false;
         }
 
-        public bool Contains(BlockHash blockHash)
-        {
-            var dataResultTuple = this.BlockDataBlobSession.Read(blockHash);
+        // TODO: determine when/where & implement index deletions relevant to the block
 
-            return
-                dataResultTuple.status == Status.OK;
+        if (complete)
+        {
+            return this.CompletePending(waitForCommit: false);
         }
 
-        public bool Drop(BlockHash blockHash, bool complete = true)
+        return true;
+    }
+
+    private static string BlockMetadataIndexKey(BlockHash blockHash)
+    {
+        return string.Format(format: "Metadata:{0}",
+            arg0: blockHash.ToString());
+    }
+
+    public BrightenedBlock Get(BlockHash blockHash)
+    {
+        var dataResultTuple = this.BlockDataBlobSession.Read(key: blockHash);
+
+        if (dataResultTuple.status != Status.OK)
         {
-            if (this.BlockDataBlobSession.Delete(blockHash) != Status.OK)
-            {
-                // TODO: rollback?
-                return false;
-            }
-
-            // TODO: determine when/where & implement index deletions relevant to the block
-
-            if (complete)
-            {
-                return this.CompletePending(waitForCommit: false);
-            }
-
-            return true;
+            throw new IndexOutOfRangeException(message: blockHash.ToString());
         }
 
-        private static string BlockMetadataIndexKey(BlockHash blockHash)
-            => string.Format("Metadata:{0}", blockHash.ToString());
-
-        public BrightenedBlock Get(BlockHash blockHash)
+        var result = this.SharedCacheSession.Read(key: BlockMetadataIndexKey(blockHash: blockHash));
+        if (result.status == Status.NOTFOUND)
         {
-            var dataResultTuple = this.BlockDataBlobSession.Read(blockHash);
-
-            if (dataResultTuple.status != Status.OK)
-            {
-                throw new IndexOutOfRangeException(message: blockHash.ToString());
-            }
-
-            var result = this.SharedCacheSession.Read(BlockMetadataIndexKey(blockHash));
-            if (result.status == Status.NOTFOUND)
-            {
-                throw new IndexOutOfRangeException(message: blockHash.ToString());
-            }
-            else if (result.status != Status.OK)
-            {
-                throw new BrightChainException(
-                    message: string.Format("metadata fetch error: {0}", result.status.ToString()));
-            }
-
-            if (result.output is BlockMetadataIndexValue blockMetadata)
-            {
-                var block = blockMetadata.Block;
-
-                block.StoredData = dataResultTuple.output;
-
-                if (!block.Validate())
-                {
-                    throw new BrightChainValidationEnumerableException(block.ValidationExceptions, "Failed to reload block from store");
-                }
-
-                return block;
-            }
-
-            throw new BrightChainException("Unexpected index result type for key");
-
+            throw new IndexOutOfRangeException(message: blockHash.ToString());
         }
 
-        public void Upsert(BrightenedBlock block, bool completePending = false)
+        if (result.status != Status.OK)
         {
-            var resultStatus = this.SharedCacheSession.Upsert(
-                key: BlockMetadataIndexKey(block.Id),
-                desiredValue: new BlockMetadataIndexValue(block));
+            throw new BrightChainException(
+                message: string.Format(format: "metadata fetch error: {0}",
+                    arg0: result.status.ToString()));
+        }
 
-            if (resultStatus != Status.OK)
+        if (result.output is BlockMetadataIndexValue blockMetadata)
+        {
+            var block = blockMetadata.Block;
+
+            block.StoredData = dataResultTuple.output;
+
+            if (!block.Validate())
             {
-                throw new BrightChainException("Unable to store block");
+                throw new BrightChainValidationEnumerableException(exceptions: block.ValidationExceptions,
+                    message: "Failed to reload block from store");
             }
 
-            resultStatus = this.BlockDataBlobSession.Upsert(block.Id, block.StoredData);
-            if (resultStatus != Status.OK)
-            {
-                throw new BrightChainException("Unable to store block");
-            }
-
-            if (completePending)
-            {
-                this.CompletePending(waitForCommit: false);
-            }
+            return block;
         }
 
-        public async Task WaitForCommitAsync()
+        throw new BrightChainException(message: "Unexpected index result type for key");
+    }
+
+    public void Upsert(BrightenedBlock block, bool completePending = false)
+    {
+        var resultStatus = this.SharedCacheSession.Upsert(
+            key: BlockMetadataIndexKey(blockHash: block.Id),
+            desiredValue: new BlockMetadataIndexValue(block: block));
+
+        if (resultStatus != Status.OK)
         {
-            await Task.WhenAll(new Task[]
-            {
-                    this.BlockDataBlobSession.WaitForCommitAsync().AsTask(),
-                    this.SharedCacheSession.WaitForCommitAsync().AsTask(),
-            }).ConfigureAwait(false);
+            throw new BrightChainException(message: "Unable to store block");
         }
 
-        public bool CompletePending(bool waitForCommit)
+        resultStatus = this.BlockDataBlobSession.Upsert(key: block.Id,
+            desiredValue: block.StoredData);
+        if (resultStatus != Status.OK)
         {
-            var d = this.BlockDataBlobSession.CompletePending(wait: waitForCommit);
-            var c = this.SharedCacheSession.CompletePending(wait: waitForCommit);
-
-            // broken out to prevent short circuit
-            return d && c;
+            throw new BrightChainException(message: "Unable to store block");
         }
 
-        public async Task CompletePendingAsync(bool waitForCommit)
+        if (completePending)
         {
-            Task.WaitAll(new Task[]
-            {
-                this.BlockDataBlobSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask(),
-                this.SharedCacheSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask(),
-            });
+            this.CompletePending(waitForCommit: false);
         }
+    }
 
-        public string SessionID =>
-            string.Format("{0}-{1}", this.BlockDataBlobSession.ID, this.SharedCacheSession.ID);
+    public async Task WaitForCommitAsync()
+    {
+        await Task.WhenAll(this.BlockDataBlobSession.WaitForCommitAsync().AsTask(),
+            this.SharedCacheSession.WaitForCommitAsync().AsTask()).ConfigureAwait(continueOnCapturedContext: false);
+    }
 
-        public void Dispose()
-        {
-            this.BlockDataBlobSession.Dispose();
-            this.SharedCacheSession.Dispose();
-        }
+    public bool CompletePending(bool waitForCommit)
+    {
+        var d = this.BlockDataBlobSession.CompletePending(wait: waitForCommit);
+        var c = this.SharedCacheSession.CompletePending(wait: waitForCommit);
+
+        // broken out to prevent short circuit
+        return d && c;
+    }
+
+    public async Task CompletePendingAsync(bool waitForCommit)
+    {
+        Task.WaitAll(this.BlockDataBlobSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask(),
+            this.SharedCacheSession.CompletePendingAsync(waitForCommit: waitForCommit).AsTask());
     }
 }

@@ -1,13 +1,13 @@
-﻿namespace BrightChain.Engine.Models.Blocks
-{
-    using System;
-    using BrightChain.Engine.Models.Blocks.DataObjects;
+﻿using System;
+using BrightChain.Engine.Models.Blocks.DataObjects;
 
-    public class CleartextBlock : IdentifiableBlock
+namespace BrightChain.Engine.Models.Blocks;
+
+public class CleartextBlock : IdentifiableBlock
+{
+    public CleartextBlock(BlockParams blockParams, ReadOnlyMemory<byte> cleartextData)
+        : base(blockParams: blockParams,
+            data: cleartextData)
     {
-        public CleartextBlock(BlockParams blockParams, ReadOnlyMemory<byte> cleartextData)
-            : base(blockParams, cleartextData)
-        {
-        }
     }
 }

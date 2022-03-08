@@ -1,55 +1,49 @@
-﻿namespace BrightChain.Engine.Faster.Serializers
+﻿using System;
+using BrightChain.Engine.Exceptions;
+using BrightChain.Engine.Faster.Indices;
+using FASTER.core;
+
+namespace BrightChain.Engine.Faster.Serializers;
+
+/// <summary>
+///     Serializer for CacheKey - used if CacheKey is changed from struct to class
+/// </summary>
+public class FasterBrightChainIndexValueSerializer
+    : BinaryObjectSerializer<BrightChainIndexValue>
 {
-    using System;
-    using BrightChain.Engine.Exceptions;
-    using BrightChain.Engine.Faster.Indices;
-    using FASTER.core;
-
-    /// <summary>
-    /// Serializer for CacheKey - used if CacheKey is changed from struct to class
-    /// </summary>
-    public class FasterBrightChainIndexValueSerializer
-        : BinaryObjectSerializer<BrightChainIndexValue>
+    public override void Deserialize(out BrightChainIndexValue obj)
     {
+        var length = this.reader.ReadInt32();
+        var type = Type.GetType(typeName: this.reader.ReadString());
+        var data = this.reader.ReadBytes(count: length);
 
-        public FasterBrightChainIndexValueSerializer()
+        if (type.Equals(o: typeof(BlockExpirationIndexValue)))
         {
+            obj = new BlockExpirationIndexValue(data: new ReadOnlyMemory<byte>(array: data));
+        }
+        else if (type.Equals(o: typeof(CBLDataHashIndexValue)))
+        {
+            obj = new CBLDataHashIndexValue(data: new ReadOnlyMemory<byte>(array: data));
+        }
+        else if (type.Equals(o: typeof(CBLTagIndexValue)))
+        {
+            obj = new CBLTagIndexValue(data: new ReadOnlyMemory<byte>(array: data));
+        }
+        else
+        {
+            throw new BrightChainException(message: "Unexpected type");
+        }
+    }
+
+    public override void Serialize(ref BrightChainIndexValue obj)
+    {
+        if (obj is null)
+        {
+            throw new ArgumentNullException(paramName: nameof(obj));
         }
 
-        public override void Deserialize(out BrightChainIndexValue obj)
-        {
-            int length = this.reader.ReadInt32();
-            Type type = Type.GetType(typeName: this.reader.ReadString());
-            var data = this.reader.ReadBytes(length);
-
-            if (type.Equals(typeof(BlockExpirationIndexValue)))
-            {
-                obj = new BlockExpirationIndexValue(new ReadOnlyMemory<byte>(data));
-            }
-            else if (type.Equals(typeof(CBLDataHashIndexValue)))
-            {
-                obj = new CBLDataHashIndexValue(new ReadOnlyMemory<byte>(data));
-            }
-            else if (type.Equals(typeof(CBLTagIndexValue)))
-            {
-                obj = new CBLTagIndexValue(new ReadOnlyMemory<byte>(data));
-            }
-            else
-            {
-                throw new BrightChainException("Unexpected type");
-            }
-        }
-
-        public override void Serialize(ref BrightChainIndexValue obj)
-        {
-            if (obj is null)
-            {
-                throw new ArgumentNullException(nameof(obj));
-            }
-
-            this.writer.Write(obj.Data.Length);
-            this.writer.Write(obj.GetType().AssemblyQualifiedName);
-            this.writer.Write(obj.Data.ToArray());
-        }
+        this.writer.Write(value: obj.Data.Length);
+        this.writer.Write(value: obj.GetType().AssemblyQualifiedName);
+        this.writer.Write(buffer: obj.Data.ToArray());
     }
 }

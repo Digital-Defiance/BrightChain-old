@@ -1,9 +1,8 @@
-﻿namespace BrightChain.Engine.Enumerations
+﻿namespace BrightChain.Engine.Enumerations;
+
+public enum RecipientType
 {
-    public enum RecipientType
-    {
-        To,
-        CC,
-        BCC,
-    }
+    To,
+    CC,
+    BCC,
 }

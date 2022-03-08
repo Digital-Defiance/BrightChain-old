@@ -22,7 +22,9 @@ public class SegmentHash : DataHash, IDataHash, IComparable<SegmentHash>, IEquat
     /// <param name="sourceDataLength">Long indicating the length of the source the hash was computed from.</param>
     /// <param name="computed">A boolean value indicating whether the source bytes were computed internally or externally (false).</param>
     public SegmentHash(ReadOnlyMemory<byte> providedHashBytes, long sourceDataLength, bool computed)
-        : base(providedHashBytes, sourceDataLength, computed)
+        : base(providedHashBytes: providedHashBytes,
+            sourceDataLength: sourceDataLength,
+            computed: computed)
     {
     }
 
@@ -32,7 +34,7 @@ public class SegmentHash : DataHash, IDataHash, IComparable<SegmentHash>, IEquat
     /// <param name="blockType">Block type of the underlying block.</param>
     /// <param name="dataBytes">Data to compute hash from.</param>
     public SegmentHash(ReadOnlyMemory<byte> dataBytes)
-        : base(dataBytes)
+        : base(dataBytes: dataBytes)
     {
     }
 
@@ -44,7 +46,8 @@ public class SegmentHash : DataHash, IDataHash, IComparable<SegmentHash>, IEquat
     /// TODO: verify -1/1 correctness
     public int CompareTo(SegmentHash other)
     {
-        return other.SourceDataLength == this.SourceDataLength ? ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) :
+        return other.SourceDataLength == this.SourceDataLength ? ReadOnlyMemoryComparer<byte>.Compare(ar1: this.HashBytes,
+                ar2: other.HashBytes) :
             this.SourceDataLength > other.SourceDataLength ? -1 : 1;
     }
 
@@ -56,7 +59,8 @@ public class SegmentHash : DataHash, IDataHash, IComparable<SegmentHash>, IEquat
     public bool Equals(SegmentHash other)
     {
         return !(other is null)
-            ? other.SourceDataLength == this.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(this.HashBytes, other.HashBytes) == 0
+            ? other.SourceDataLength == this.SourceDataLength && ReadOnlyMemoryComparer<byte>.Compare(ar1: this.HashBytes,
+                ar2: other.HashBytes) == 0
             : false;
     }
 }

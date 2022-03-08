@@ -1,27 +1,27 @@
-﻿namespace BrightChain.Engine.Faster.Indices
+﻿using System;
+using System.Text;
+using BrightChain.Engine.Models.Blocks.DataObjects;
+
+namespace BrightChain.Engine.Faster.Indices;
+
+public class BrightHandleIndexValue : BrightChainIndexValue
 {
-    using System;
-    using BrightChain.Engine.Models.Blocks.DataObjects;
+    public readonly BrightHandle BrightHandle;
 
-    public class BrightHandleIndexValue : BrightChainIndexValue
-    {
-        public readonly BrightHandle BrightHandle;
-
-        public BrightHandleIndexValue(BrightHandle brightHandle)
-            : base(data: new ReadOnlyMemory<byte>(
-                System.Text.Encoding.ASCII.GetBytes(
-                    brightHandle.BrightChainAddress(
+    public BrightHandleIndexValue(BrightHandle brightHandle)
+        : base(data: new ReadOnlyMemory<byte>(
+            array: Encoding.ASCII.GetBytes(
+                s: brightHandle.BrightChainAddress(
                         hostName: "hostname")
                     .ToString())))
-        {
-            this.BrightHandle = brightHandle;
-        }
+    {
+        this.BrightHandle = brightHandle;
+    }
 
-        public BrightHandleIndexValue(ReadOnlyMemory<byte> data)
-            : base(data)
-        {
-            var uriString = System.Text.Encoding.ASCII.GetString(data.ToArray());
-            this.BrightHandle = new BrightHandle(new Uri(uriString));
-        }
+    public BrightHandleIndexValue(ReadOnlyMemory<byte> data)
+        : base(data: data)
+    {
+        var uriString = Encoding.ASCII.GetString(bytes: data.ToArray());
+        this.BrightHandle = new BrightHandle(brightChainAddress: new Uri(uriString: uriString));
     }
 }

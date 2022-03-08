@@ -1,39 +1,38 @@
-﻿namespace BrightChain.Engine.Models.Blocks.DataObjects
+﻿using BrightChain.Engine.Exceptions;
+using BrightChain.Engine.Interfaces;
+using BrightChain.Engine.Models.Hashes;
+
+namespace BrightChain.Engine.Models.Blocks.DataObjects;
+
+public class BrightenedBlockParams : BlockParams
 {
-    using BrightChain.Engine.Exceptions;
-    using BrightChain.Engine.Interfaces;
-    using BrightChain.Engine.Models.Hashes;
+    public ICacheManager<BlockHash, BrightenedBlock> CacheManager;
 
-    public class BrightenedBlockParams : BlockParams
+    public BrightenedBlockParams(ICacheManager<BlockHash, BrightenedBlock> cacheManager, bool allowCommit, BlockParams blockParams)
+        : base(
+            blockSize: blockParams.BlockSize,
+            requestTime: blockParams.RequestTime,
+            keepUntilAtLeast: blockParams.KeepUntilAtLeast,
+            redundancy: blockParams.Redundancy,
+            privateEncrypted: blockParams.PrivateEncrypted,
+            originalType: blockParams.OriginalType)
     {
-        public ICacheManager<BlockHash, BrightenedBlock> CacheManager;
+        this.CacheManager = cacheManager;
+        this.AllowCommit = allowCommit;
+    }
 
-        public bool AllowCommit { get; }
+    public bool AllowCommit { get; }
 
-        public BrightenedBlockParams(ICacheManager<BlockHash, BrightenedBlock> cacheManager, bool allowCommit, BlockParams blockParams)
-            : base(
-                  blockSize: blockParams.BlockSize,
-                  requestTime: blockParams.RequestTime,
-                  keepUntilAtLeast: blockParams.KeepUntilAtLeast,
-                  redundancy: blockParams.Redundancy,
-                  privateEncrypted: blockParams.PrivateEncrypted,
-                  originalType: blockParams.OriginalType)
+    public BrightenedBlockParams Merge(BrightenedBlockParams otherBlockParams)
+    {
+        if (otherBlockParams.BlockSize != this.BlockSize)
         {
-            this.CacheManager = cacheManager;
-            this.AllowCommit = allowCommit;
+            throw new BrightChainException(message: "BlockSize mismatch");
         }
 
-        public BrightenedBlockParams Merge(BrightenedBlockParams otherBlockParams)
-        {
-            if (otherBlockParams.BlockSize != this.BlockSize)
-            {
-                throw new BrightChainException("BlockSize mismatch");
-            }
-
-            return new BrightenedBlockParams(
-                cacheManager: this.CacheManager,
-                allowCommit: this.AllowCommit && otherBlockParams.AllowCommit,
-                blockParams: this.Merge(otherBlockParams));
-        }
+        return new BrightenedBlockParams(
+            cacheManager: this.CacheManager,
+            allowCommit: this.AllowCommit && otherBlockParams.AllowCommit,
+            blockParams: this.Merge(otherBlockParams: otherBlockParams));
     }
 }

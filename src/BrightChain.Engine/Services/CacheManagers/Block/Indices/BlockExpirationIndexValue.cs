@@ -1,63 +1,64 @@
-﻿namespace BrightChain.Engine.Faster.Indices
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using BrightChain.Engine.Faster.Serializers;
+using BrightChain.Engine.Models.Hashes;
+
+namespace BrightChain.Engine.Faster.Indices;
+
+public class BlockExpirationIndexValue : BrightChainIndexValue
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using BrightChain.Engine.Faster.Serializers;
-    using BrightChain.Engine.Models.Hashes;
+    public readonly IEnumerable<BlockHash> ExpiringHashes;
 
-    public class BlockExpirationIndexValue : BrightChainIndexValue
+    public BlockExpirationIndexValue(IEnumerable<BlockHash> hashes)
+        : base(data: InternalSerialize(data: hashes))
     {
-        public readonly IEnumerable<BlockHash> ExpiringHashes;
+        this.ExpiringHashes = hashes;
+    }
 
-        public BlockExpirationIndexValue(IEnumerable<BlockHash> hashes)
-            : base(data: InternalSerialize(hashes))
+    public BlockExpirationIndexValue(ReadOnlyMemory<byte> data)
+        : base(data: data)
+    {
+        this.ExpiringHashes = InternalDeserialize(data: data).ExpiringHashes;
+    }
+
+    private static ReadOnlyMemory<byte> InternalSerialize(IEnumerable<BlockHash> data)
+    {
+        var serializer = new FasterBlockHashSerializer();
+        var memory = new MemoryStream();
+
+        memory.Write(buffer: BitConverter.GetBytes(value: data.Count()));
+        serializer.BeginSerialize(stream: memory);
+        foreach (var item in data)
         {
-            this.ExpiringHashes = hashes;
+            var refItem = item;
+            serializer.Serialize(obj: ref refItem);
         }
 
-        public BlockExpirationIndexValue(ReadOnlyMemory<byte> data)
-            : base(data)
+        var retval = new ReadOnlyMemory<byte>(array: memory.ToArray());
+        serializer.EndSerialize();
+        return retval;
+    }
+
+    private static BlockExpirationIndexValue InternalDeserialize(ReadOnlyMemory<byte> data)
+    {
+        var deserializer = new FasterBlockHashSerializer();
+        var s = new MemoryStream(buffer: data.ToArray());
+        deserializer.BeginDeserialize(stream: s);
+
+        var iBytes = new byte[sizeof(int)];
+        s.Read(buffer: iBytes,
+            offset: 0,
+            count: sizeof(int));
+        var count = BitConverter.ToInt32(value: new ReadOnlySpan<byte>(array: iBytes));
+        var hashes = new BlockHash[count];
+        for (var i = 0; i < count; i++)
         {
-            this.ExpiringHashes = InternalDeserialize(data).ExpiringHashes;
+            deserializer.Deserialize(obj: out hashes[i]);
         }
 
-        private static ReadOnlyMemory<byte> InternalSerialize(IEnumerable<BlockHash> data)
-        {
-            var serializer = new FasterBlockHashSerializer();
-            var memory = new MemoryStream();
-
-            memory.Write(BitConverter.GetBytes(data.Count()));
-            serializer.BeginSerialize(memory);
-            foreach (var item in data)
-            {
-                var refItem = item;
-                serializer.Serialize(ref refItem);
-            }
-
-            var retval = new ReadOnlyMemory<byte>(memory.ToArray());
-            serializer.EndSerialize();
-            return retval;
-        }
-
-        private static BlockExpirationIndexValue InternalDeserialize(ReadOnlyMemory<byte> data)
-        {
-            var deserializer = new FasterBlockHashSerializer();
-            MemoryStream s = new MemoryStream(data.ToArray());
-            deserializer.BeginDeserialize(s);
-
-            byte[] iBytes = new byte[sizeof(int)];
-            s.Read(iBytes, 0, sizeof(int));
-            var count = BitConverter.ToInt32(new ReadOnlySpan<byte>(array: iBytes));
-            var hashes = new BlockHash[count];
-            for (int i = 0; i < count; i++)
-            {
-                deserializer.Deserialize(out hashes[i]);
-            }
-
-            deserializer.EndDeserialize();
-            return new BlockExpirationIndexValue(hashes: hashes);
-        }
+        deserializer.EndDeserialize();
+        return new BlockExpirationIndexValue(hashes: hashes);
     }
 }

@@ -1,13 +1,13 @@
-﻿
+﻿using System;
+using System.Buffers;
+using System.Text.Json;
+
 namespace BrightChain.Engine.Extensions
 {
-    using System;
-    using System.Buffers;
-    using System.Text.Json;
-
     public static class JsonDocumentExtensions
     {
-        #region https://stackoverflow.com/a/61047681/4009129
+        #region https: //stackoverflow.com/a/61047681/4009129
+
         public static T ToObject<T>(this JsonElement element, JsonSerializerOptions options = null)
         {
             var bufferWriter = new ArrayBufferWriter<byte>();
@@ -16,7 +16,8 @@ namespace BrightChain.Engine.Extensions
                 element.WriteTo(writer);
             }
 
-            return JsonSerializer.Deserialize<T>(bufferWriter.WrittenSpan, options);
+            return JsonSerializer.Deserialize<T>(bufferWriter.WrittenSpan,
+                options);
         }
 
         public static T ToObject<T>(this JsonDocument document, JsonSerializerOptions options = null)
@@ -37,7 +38,9 @@ namespace BrightChain.Engine.Extensions
                 element.WriteTo(writer);
             }
 
-            return JsonSerializer.Deserialize(bufferWriter.WrittenSpan, returnType, options);
+            return JsonSerializer.Deserialize(bufferWriter.WrittenSpan,
+                returnType,
+                options);
         }
 
         public static object ToObject(this JsonDocument document, Type returnType, JsonSerializerOptions options = null)
@@ -47,8 +50,10 @@ namespace BrightChain.Engine.Extensions
                 throw new ArgumentNullException(nameof(document));
             }
 
-            return document.RootElement.ToObject(returnType, options);
+            return document.RootElement.ToObject(returnType,
+                options);
         }
+
         #endregion
     }
 }

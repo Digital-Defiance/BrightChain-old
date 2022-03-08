@@ -1,16 +1,15 @@
-﻿namespace BrightChain.Engine.Faster.Indices
+﻿using System;
+
+namespace BrightChain.Engine.Faster.Indices;
+
+public abstract class BrightChainIndexValue
 {
-    using System;
+    public readonly ReadOnlyMemory<byte> Data;
 
-    public abstract class BrightChainIndexValue
+    public BrightChainIndexValue(ReadOnlyMemory<byte> data)
     {
-        public readonly ReadOnlyMemory<byte> Data;
-
-        public BrightChainIndexValue(ReadOnlyMemory<byte> data)
-        {
-            this.Data = data;
-        }
-
-        public BrightChainIndexValue AsIndex => this;
+        this.Data = data;
     }
+
+    public BrightChainIndexValue AsIndex => this;
 }

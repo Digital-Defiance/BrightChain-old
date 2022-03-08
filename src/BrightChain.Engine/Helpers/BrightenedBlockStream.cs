@@ -1,66 +1,66 @@
-﻿namespace BrightChain.Engine.Helpers
+﻿using System;
+using System.IO;
+using BrightChain.Engine.Enumerations;
+using BrightChain.Engine.Models.Blocks;
+using BrightChain.Engine.Services;
+
+namespace BrightChain.Engine.Helpers;
+
+public class BrightenedBlockStream : Stream
 {
-    using System;
-    using System.IO;
-    using BrightChain.Engine.Enumerations;
-    using BrightChain.Engine.Models.Blocks;
+    private readonly BlockSize blockSize;
+    private readonly Stream destinationStream;
+    private readonly Stream sourceStream;
 
-    public class BrightenedBlockStream : Stream
+
+    public BrightenedBlockStream(Stream sourceStream, BlockSize blockSize)
     {
-        private readonly Stream sourceStream;
-        private readonly Stream destinationStream;
-        private readonly BlockSize blockSize;
+        this.sourceStream = sourceStream;
+        this.blockSize = blockSize;
+    }
 
+    public long SourcePosition =>
+        this.sourceStream.Position;
 
-        public BrightenedBlockStream(Stream sourceStream, BlockSize blockSize)
-        {
-            this.sourceStream = sourceStream;
-            this.blockSize = blockSize;
-        }
+    public override bool CanRead =>
+        this.sourceStream.CanRead;
 
-        public long SourcePosition =>
-            this.sourceStream.Position;
+    public override bool CanSeek =>
+        this.sourceStream.CanSeek;
 
-        public override bool CanRead =>
-            this.sourceStream.CanRead;
+    public override bool CanWrite =>
+        this.sourceStream.CanWrite;
 
-        public override bool CanSeek =>
-            this.sourceStream.CanSeek;
+    public long BlockLength =>
+        (long)Math.Ceiling(a: (double)this.sourceStream.Length / BlockSizeMap.BlockSize(blockSize: this.blockSize));
 
-        public override bool CanWrite =>
-            this.sourceStream.CanWrite;
+    public override long Length =>
+        this.BlockLength * BlockSizeMap.BlockSize(blockSize: this.blockSize) * BlockBrightenerService.TupleCount;
 
-        public long BlockLength =>
-            (long)Math.Ceiling((double)this.sourceStream.Length / BlockSizeMap.BlockSize(this.blockSize));
+    public override long Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public override long Length =>
-            this.BlockLength * BlockSizeMap.BlockSize(this.blockSize) * Services.BlockBrightenerService.TupleCount;
+    public override void Flush()
+    {
+        throw new NotImplementedException();
+    }
 
-        public override long Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public override int Read(byte[] buffer, int offset, int count)
+    {
+        throw new NotImplementedException();
+    }
 
-        public override void Flush()
-        {
-            throw new NotImplementedException();
-        }
+    public override long Seek(long offset, SeekOrigin origin)
+    {
+        throw new NotImplementedException();
+    }
 
-        public override int Read(byte[] buffer, int offset, int count)
-        {
-            throw new NotImplementedException();
-        }
+    public override void SetLength(long value)
+    {
+        throw new NotImplementedException();
+    }
 
-        public override long Seek(long offset, SeekOrigin origin)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void SetLength(long value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Write(byte[] buffer, int offset, int count)
-        {
-            throw new NotImplementedException();
-        }
+    public override void Write(byte[] buffer, int offset, int count)
+    {
+        throw new NotImplementedException();
     }
 }

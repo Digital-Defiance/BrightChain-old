@@ -1,18 +1,16 @@
-﻿namespace BrightChain.Engine.Models.Blocks
+﻿using System;
+using BrightChain.Engine.Models.Hashes;
+
+namespace BrightChain.Engine.Models.Blocks;
+
+public record BlockRating
 {
-    using System;
-    using BrightChain.Engine.Models.Hashes;
+    public readonly Guid AgentId;
 
-    public record BlockRating
-    {
-        public readonly Guid Id;
+    public readonly decimal AgentReputationWeight;
 
-        public readonly BlockHash BlockId;
+    public readonly BlockHash BlockId;
+    public readonly Guid Id;
 
-        public readonly Guid AgentId;
-
-        public readonly decimal AgentReputationWeight;
-
-        public readonly decimal Rating;
-    }
+    public readonly decimal Rating;
 }

@@ -1,33 +1,37 @@
-﻿namespace BrightChain.Engine.Helpers
+﻿using System;
+using System.IO;
+using System.Linq;
+using FASTER.core;
+
+namespace BrightChain.Engine.Helpers;
+
+public class BinaryStringSerializer : BinaryObjectSerializer<string>
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-    using FASTER.core;
-
-    public class BinaryStringSerializer : BinaryObjectSerializer<string>
+    public override void Deserialize(out string obj)
     {
-        public override void Deserialize(out string obj)
+        var mem = new MemoryStream();
+        var streamReader = new StreamReader(stream: this.reader.BaseStream);
+        var streamWriter = new StreamWriter(stream: mem);
+        int b;
+        while ((b = streamReader.Read()) > 0)
         {
-            var mem = new MemoryStream();
-            var streamReader = new StreamReader(this.reader.BaseStream);
-            var streamWriter = new StreamWriter(mem);
-            int b;
-            while ((b = streamReader.Read()) > 0)
-            {
-                streamWriter.Write((byte)b);
-            }
-
-            var memBuf = mem.ToArray();
-            var origBytes = Convert.FromBase64CharArray(memBuf.Select(b => (char)b).ToArray(), 0, (int)mem.Length);
-            obj = new string(origBytes.Select(b => (char)b).ToArray());
+            streamWriter.Write(value: (byte)b);
         }
 
-        public override void Serialize(ref string obj)
-        {
-            var stringArr = obj.ToCharArray().Select(c => (byte)c).ToArray();
-            this.writer.Write(Convert.ToBase64String(stringArr, 0, stringArr.Length, Base64FormattingOptions.None));
-            this.writer.Write(0);
-        }
+        var memBuf = mem.ToArray();
+        var origBytes = Convert.FromBase64CharArray(inArray: memBuf.Select(selector: b => (char)b).ToArray(),
+            offset: 0,
+            length: (int)mem.Length);
+        obj = new string(value: origBytes.Select(selector: b => (char)b).ToArray());
+    }
+
+    public override void Serialize(ref string obj)
+    {
+        var stringArr = obj.ToCharArray().Select(selector: c => (byte)c).ToArray();
+        this.writer.Write(value: Convert.ToBase64String(inArray: stringArr,
+            offset: 0,
+            length: stringArr.Length,
+            options: Base64FormattingOptions.None));
+        this.writer.Write(value: 0);
     }
 }

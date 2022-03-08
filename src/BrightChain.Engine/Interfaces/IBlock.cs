@@ -1,78 +1,77 @@
-namespace BrightChain.Engine.Interfaces
+using System;
+using System.Collections.Generic;
+using BrightChain.Engine.Enumerations;
+using BrightChain.Engine.Models.Blocks;
+using BrightChain.Engine.Models.Blocks.DataObjects;
+using BrightChain.Engine.Models.Contracts;
+using BrightChain.Engine.Models.Entities;
+using BrightChain.Engine.Models.Hashes;
+using BrightChain.Engine.Models.Nodes;
+
+namespace BrightChain.Engine.Interfaces;
+
+/// <summary>
+///     Basic description for a block.
+/// </summary>
+public interface IBlock : IDisposable, IComparable<IBlock>, IValidatable
 {
-    using System;
-    using System.Collections.Generic;
-    using BrightChain.Engine.Enumerations;
-    using BrightChain.Engine.Models.Blocks;
-    using BrightChain.Engine.Models.Blocks.DataObjects;
-    using BrightChain.Engine.Models.Contracts;
-    using BrightChain.Engine.Models.Entities;
-    using BrightChain.Engine.Models.Hashes;
-    using BrightChain.Engine.Models.Nodes;
+    /// <summary>
+    ///     Gets the block's SHA-256 hash.
+    /// </summary>
+    BlockHash Id { get; }
 
     /// <summary>
-    /// Basic description for a block.
+    ///     Gets a BlockSize enum associated with it's data length.
     /// </summary>
-    public interface IBlock : IDisposable, IComparable<IBlock>, IValidatable
-    {
-        /// <summary>
-        /// Gets the block's SHA-256 hash.
-        /// </summary>
-        BlockHash Id { get; }
+    BlockSize BlockSize { get; }
 
-        /// <summary>
-        /// Gets a BlockSize enum associated with it's data length.
-        /// </summary>
-        BlockSize BlockSize { get; }
+    /// <summary>
+    ///     Gets the parameters of the storage contract for this block.
+    /// </summary>
+    StorageContract StorageContract { get; set; }
 
-        /// <summary>
-        /// Function to XOR this block's data with another.
-        /// </summary>
-        /// <param name="other">Block to XOR with.</param>
-        /// <returns>Returns resultant block with its constituent blocks.</returns>
-        ReadOnlyMemory<byte> XOR(Block other);
+    /// <summary>
+    ///     Gets only the raw data for the block and none of the metadata. The hash is based only on this.
+    /// </summary>
+    BlockData StoredData { get; }
 
-        /// <summary>
-        /// Function to XOR this block's data with an array of others.
-        /// </summary>
-        /// <param name="others"></param>
-        /// <returns></returns>
-        ReadOnlyMemory<byte> XOR(IEnumerable<Block> others);
+    /// <summary>
+    ///     Gets the node that originated the block.
+    /// </summary>
+    BrightChainNode OriginatingNode { get; }
 
-        BlockSignature Sign(Agent user, string password);
+    /// <summary>
+    ///     Gets the signature hash of the data by the committer.
+    /// </summary>
+    BlockSignature Signature { get; }
 
-        /// <summary>
-        /// Gets the parameters of the storage contract for this block.
-        /// </summary>
-        StorageContract StorageContract { get; set; }
+    /// <summary>
+    ///     Whether a signature hash is present
+    /// </summary>
+    bool Signed { get; }
 
-        /// <summary>
-        /// Gets only the raw data for the block and none of the metadata. The hash is based only on this.
-        /// </summary>
-        BlockData StoredData { get; }
+    /// <summary>
+    ///     Whether the signature hash has been compared against the data
+    /// </summary>
+    bool SignatureVerified { get; }
 
-        /// <summary>
-        /// Gets the node that originated the block.
-        /// </summary>
-        BrightChainNode OriginatingNode { get; }
+    string OriginalAssemblyTypeString { get; }
 
-        /// <summary>
-        /// Gets the signature hash of the data by the committer.
-        /// </summary>
-        BlockSignature Signature { get; }
+    string AssemblyVersion { get; }
 
-        /// <summary>
-        /// Whether a signature hash is present
-        /// </summary>
-        bool Signed { get; }
+    /// <summary>
+    ///     Function to XOR this block's data with another.
+    /// </summary>
+    /// <param name="other">Block to XOR with.</param>
+    /// <returns>Returns resultant block with its constituent blocks.</returns>
+    ReadOnlyMemory<byte> XOR(Block other);
 
-        /// <summary>
-        /// Whether the signature hash has been compared against the data
-        /// </summary>
-        bool SignatureVerified { get; }
+    /// <summary>
+    ///     Function to XOR this block's data with an array of others.
+    /// </summary>
+    /// <param name="others"></param>
+    /// <returns></returns>
+    ReadOnlyMemory<byte> XOR(IEnumerable<Block> others);
 
-        string OriginalAssemblyTypeString { get; }
-
-        string AssemblyVersion { get; }
-    }
+    BlockSignature Sign(Agent user, string password);
 }

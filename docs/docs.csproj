@@ -11,6 +11,10 @@
     </PackageReference>
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties docfx_1json__JsonSchema="https://json.schemastore.org/grafana-dashboard-5.x.json" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties docfx_1json__JsonSchema="https://json.schemastore.org/grafana-dashboard-5.x.json"/>
+    </VisualStudio>
+  </ProjectExtensions>
 
 </Project>

@@ -1,39 +1,37 @@
-﻿namespace BrightChain.Engine.Tests.TestModels
+﻿using System;
+using System.Collections.Generic;
+using Bogus.DataSets;
+using ProtoBuf;
+
+namespace BrightChain.Engine.Tests.TestModels;
+
+[ProtoContract]
+public class ChainLinqExampleSerializable
+    : IDisposable
 {
-    using System;
-    using System.Collections.Generic;
-    using ProtoBuf;
-
-    [ProtoContract]
-    public class ChainLinqExampleSerializable
-        : IDisposable
+    public ChainLinqExampleSerializable()
     {
-        public ChainLinqExampleSerializable()
+        this.PublicData = new Lorem().Text();
+        this.PrivateData = new Lorem().Text();
+    }
+
+    [ProtoMember(tag: 1)] public string PublicData { get; }
+
+    [ProtoMember(tag: 2)] private string PrivateData { get; }
+
+    public void Dispose()
+    {
+        throw new NotImplementedException();
+    }
+
+    public static IEnumerable<ChainLinqExampleSerializable> MakeMultiple(int count)
+    {
+        var datas = new ChainLinqExampleSerializable[count];
+        for (var i = 0; i < count; i++)
         {
-            this.PublicData = new Bogus.DataSets.Lorem().Text();
-            this.PrivateData = new Bogus.DataSets.Lorem().Text();
+            datas[i] = new ChainLinqExampleSerializable();
         }
 
-        public static IEnumerable<ChainLinqExampleSerializable> MakeMultiple(int count)
-        {
-            ChainLinqExampleSerializable[] datas = new ChainLinqExampleSerializable[count];
-            for (int i = 0; i < count; i++)
-            {
-                datas[i] = new ChainLinqExampleSerializable();
-            }
-
-            return datas;
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        [ProtoMember(1)]
-        public string PublicData { get; }
-
-        [ProtoMember(2)]
-        private string PrivateData { get; }
+        return datas;
     }
 }

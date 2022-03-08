@@ -1,12 +1,12 @@
 using System;
 
-namespace BrightChain.Engine.Interfaces
+namespace BrightChain.Engine.Interfaces;
+
+public interface IDataSignature : IFormattable
 {
-    public interface IDataSignature : IFormattable
-    {
-        /// <summary>`
-        /// raw bytes of the hash value
-        /// </summary>
-        ReadOnlyMemory<byte> SignatureHashBytes { get; }
-    }
+    /// <summary>
+    ///     `
+    ///     raw bytes of the hash value
+    /// </summary>
+    ReadOnlyMemory<byte> SignatureHashBytes { get; }
 }

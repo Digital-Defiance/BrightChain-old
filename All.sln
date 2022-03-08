@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shart", "src\Shart\Shart.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shart.Test", "test\Shart.Test\Shart.Test.csproj", "{37DFCF8D-7D60-4235-9FD6-AA6EE6578B4D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BBP.Test", "src\BBPPiCalculator\BBPPiCalculator\BBP.Test\BBP.Test.csproj", "{0F60EE04-30AF-4EDE-A531-002978E06457}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,10 @@ Global
 		{37DFCF8D-7D60-4235-9FD6-AA6EE6578B4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37DFCF8D-7D60-4235-9FD6-AA6EE6578B4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37DFCF8D-7D60-4235-9FD6-AA6EE6578B4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F60EE04-30AF-4EDE-A531-002978E06457}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F60EE04-30AF-4EDE-A531-002978E06457}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F60EE04-30AF-4EDE-A531-002978E06457}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F60EE04-30AF-4EDE-A531-002978E06457}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

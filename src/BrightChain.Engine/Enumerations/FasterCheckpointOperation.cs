@@ -1,9 +1,8 @@
-﻿namespace BrightChain.Engine.Faster.Enumerations
+﻿namespace BrightChain.Engine.Faster.Enumerations;
+
+public enum FasterCheckpointOperation
 {
-    public enum FasterCheckpointOperation
-    {
-        Full,
-        Hybrid,
-        Index,
-    }
+    Full,
+    Hybrid,
+    Index,
 }

@@ -1,39 +1,37 @@
-﻿using NeuralFabric.Models.Hashes;
+﻿using System;
+using System.IO;
+using NeuralFabric.Models.Hashes;
+using ProtoBuf;
 
-namespace BrightChain.Engine.Faster.Indices
+namespace BrightChain.Engine.Faster.Indices;
+
+public class CBLDataHashIndexValue : BrightChainIndexValue
 {
-    using System;
-    using System.IO;
-    using BrightChain.Engine.Models.Hashes;
-    using ProtoBuf;
+    public readonly DataHash DataHash;
 
-    public class CBLDataHashIndexValue : BrightChainIndexValue
+    public CBLDataHashIndexValue(DataHash dataHash)
+        : base(data: InternalSerialize(data: dataHash))
     {
-        public readonly DataHash DataHash;
+        this.DataHash = dataHash;
+    }
 
-        public CBLDataHashIndexValue(DataHash dataHash)
-            : base(data: InternalSerialize(dataHash))
-        {
-            this.DataHash = dataHash;
-        }
+    public CBLDataHashIndexValue(ReadOnlyMemory<byte> data)
+        : base(data: data)
+    {
+        this.DataHash = InternalDeserialize<DataHash>(data: data);
+    }
 
-        public CBLDataHashIndexValue(ReadOnlyMemory<byte> data)
-            : base(data)
-        {
-            this.DataHash = InternalDeserialize<DataHash>(data);
-        }
+    internal static ReadOnlyMemory<byte> InternalSerialize<T>(T data)
+    {
+        var s = new MemoryStream();
+        Serializer.Serialize(destination: s,
+            instance: data);
+        return new ReadOnlyMemory<byte>(array: s.ToArray());
+    }
 
-        internal static ReadOnlyMemory<byte> InternalSerialize<T>(T data)
-        {
-            MemoryStream s = new MemoryStream();
-            Serializer.Serialize(s, data);
-            return new ReadOnlyMemory<byte>(s.ToArray());
-        }
-
-        internal static T InternalDeserialize<T>(ReadOnlyMemory<byte> data)
-        {
-            MemoryStream s = new MemoryStream(data.ToArray());
-            return Serializer.Deserialize<T>(s);
-        }
+    internal static T InternalDeserialize<T>(ReadOnlyMemory<byte> data)
+    {
+        var s = new MemoryStream(buffer: data.ToArray());
+        return Serializer.Deserialize<T>(source: s);
     }
 }

@@ -1,50 +1,52 @@
-﻿namespace BrightChain.Engine.Models.Blocks.DataObjects
+﻿using System;
+using BrightChain.Engine.Enumerations;
+using BrightChain.Engine.Exceptions;
+
+namespace BrightChain.Engine.Models.Blocks.DataObjects;
+
+/// <summary>
+///     Simple data object for passing block parameters
+/// </summary>
+public class BlockParams
 {
-    using System;
-    using BrightChain.Engine.Enumerations;
-    using BrightChain.Engine.Exceptions;
+    public readonly BlockSize BlockSize;
 
-    /// <summary>
-    /// Simple data object for passing block parameters
-    /// </summary>
-    public class BlockParams
+    public readonly DateTime KeepUntilAtLeast;
+
+    public readonly Type OriginalType;
+
+    public readonly bool PrivateEncrypted;
+
+    public readonly RedundancyContractType Redundancy;
+
+    public readonly DateTime RequestTime;
+
+    public BlockParams(BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy,
+        bool privateEncrypted, Type originalType)
     {
-        public readonly BlockSize BlockSize;
+        this.BlockSize = blockSize;
+        this.RequestTime = requestTime;
+        this.KeepUntilAtLeast = keepUntilAtLeast;
+        this.Redundancy = redundancy;
+        this.PrivateEncrypted = privateEncrypted;
+        this.OriginalType = originalType;
+    }
 
-        public readonly DateTime RequestTime;
-
-        public readonly DateTime KeepUntilAtLeast;
-
-        public readonly RedundancyContractType Redundancy;
-
-        public readonly bool PrivateEncrypted;
-
-        public readonly Type OriginalType;
-
-        public BlockParams(BlockSize blockSize, DateTime requestTime, DateTime keepUntilAtLeast, RedundancyContractType redundancy, bool privateEncrypted, Type originalType)
+    public BlockParams Merge(BlockParams otherBlockParams)
+    {
+        if (otherBlockParams.BlockSize != this.BlockSize)
         {
-            this.BlockSize = blockSize;
-            this.RequestTime = requestTime;
-            this.KeepUntilAtLeast = keepUntilAtLeast;
-            this.Redundancy = redundancy;
-            this.PrivateEncrypted = privateEncrypted;
-            this.OriginalType = originalType;
+            throw new BrightChainException(message: "BlockSize mismatch");
         }
 
-        public BlockParams Merge(BlockParams otherBlockParams)
-        {
-            if (otherBlockParams.BlockSize != this.BlockSize)
-            {
-                throw new BrightChainException("BlockSize mismatch");
-            }
-
-            return new BlockParams(
-                blockSize: this.BlockSize,
-                requestTime: this.RequestTime > otherBlockParams.RequestTime ? this.RequestTime : otherBlockParams.RequestTime,
-                keepUntilAtLeast: (otherBlockParams.KeepUntilAtLeast > this.KeepUntilAtLeast) ? otherBlockParams.KeepUntilAtLeast : this.KeepUntilAtLeast,
-                redundancy: (otherBlockParams.Redundancy > this.Redundancy) ? otherBlockParams.Redundancy : this.Redundancy,
-                privateEncrypted: this.PrivateEncrypted || otherBlockParams.PrivateEncrypted,
-                originalType: this.OriginalType);
-        }
+        return new BlockParams(
+            blockSize: this.BlockSize,
+            requestTime: this.RequestTime > otherBlockParams.RequestTime ? this.RequestTime : otherBlockParams.RequestTime,
+            keepUntilAtLeast: otherBlockParams.KeepUntilAtLeast > this.KeepUntilAtLeast
+                ? otherBlockParams.KeepUntilAtLeast
+                : this.KeepUntilAtLeast,
+            redundancy: otherBlockParams.Redundancy > this.Redundancy ? otherBlockParams.Redundancy : this.Redundancy,
+            privateEncrypted: this.PrivateEncrypted || otherBlockParams.PrivateEncrypted,
+            originalType: this.OriginalType);
     }
 }

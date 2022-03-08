@@ -1,26 +1,21 @@
-﻿namespace BrightChain.Engine.Faster.Serializers
+﻿using System;
+using FASTER.core;
+
+namespace BrightChain.Engine.Faster.Serializers;
+
+/// <summary>
+///     Serializer for CacheKey - used if CacheKey is changed from struct to class
+/// </summary>
+public class FasterGuidSerializer
+    : BinaryObjectSerializer<Guid>
 {
-    using System;
-    using FASTER.core;
-    /// <summary>
-    /// Serializer for CacheKey - used if CacheKey is changed from struct to class
-    /// </summary>
-    public class FasterGuidSerializer
-        : BinaryObjectSerializer<Guid>
+    public override void Deserialize(out Guid obj)
     {
-        public FasterGuidSerializer()
-        {
-        }
+        obj = Guid.Parse(input: this.reader.ReadString());
+    }
 
-        public override void Deserialize(out Guid obj)
-        {
-            obj = Guid.Parse(this.reader.ReadString());
-        }
-
-        public override void Serialize(ref Guid obj)
-        {
-
-            this.writer.Write(obj.ToString());
-        }
+    public override void Serialize(ref Guid obj)
+    {
+        this.writer.Write(value: obj.ToString());
     }
 }

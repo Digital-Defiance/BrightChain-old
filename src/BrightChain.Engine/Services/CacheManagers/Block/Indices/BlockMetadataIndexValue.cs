@@ -1,47 +1,46 @@
-﻿namespace BrightChain.Engine.Faster.Indices
+﻿using System;
+using System.IO;
+using BrightChain.Engine.Models.Blocks;
+using FASTER.core;
+
+namespace BrightChain.Engine.Faster.Indices;
+
+public class BlockMetadataIndexValue : BrightChainIndexValue
 {
-    using System;
-    using System.IO;
-    using BrightChain.Engine.Models.Blocks;
-    using FASTER.core;
+    public readonly BrightenedBlock Block;
 
-    public class BlockMetadataIndexValue : BrightChainIndexValue
+    public BlockMetadataIndexValue(BrightenedBlock block)
+        : base(data: InternalSerialize(data: block))
     {
-        public readonly BrightenedBlock Block;
+        this.Block = block;
+    }
 
-        public BlockMetadataIndexValue(BrightenedBlock block)
-            : base(data: InternalSerialize(block))
-        {
-            this.Block = block;
-        }
+    public BlockMetadataIndexValue(ReadOnlyMemory<byte> data)
+        : base(data: data)
+    {
+        this.Block = InternalDeserialize(data: data).Block;
+    }
 
-        public BlockMetadataIndexValue(ReadOnlyMemory<byte> data)
-            : base(data)
-        {
-            this.Block = InternalDeserialize(data).Block;
-        }
+    private static ReadOnlyMemory<byte> InternalSerialize(BrightenedBlock data)
+    {
+        var serializer = new DataContractObjectSerializer<BrightenedBlock>();
+        var memory = new MemoryStream();
+        serializer.BeginSerialize(stream: memory);
+        serializer.Serialize(obj: ref data);
+        var bytes = memory.ToArray();
+        serializer.EndSerialize();
 
-        private static ReadOnlyMemory<byte> InternalSerialize(BrightenedBlock data)
-        {
-            var serializer = new DataContractObjectSerializer<BrightenedBlock>();
-            var memory = new MemoryStream();
-            serializer.BeginSerialize(memory);
-            serializer.Serialize(ref data);
-            var bytes = memory.ToArray();
-            serializer.EndSerialize();
+        var retval = new ReadOnlyMemory<byte>(array: bytes);
+        return retval;
+    }
 
-            var retval = new ReadOnlyMemory<byte>(bytes);
-            return retval;
-        }
-
-        private static BlockMetadataIndexValue InternalDeserialize(ReadOnlyMemory<byte> data)
-        {
-            var deserializer = new DataContractObjectSerializer<BrightenedBlock>();
-            MemoryStream s = new MemoryStream(data.ToArray());
-            deserializer.BeginDeserialize(s);
-            deserializer.Deserialize(out BrightenedBlock block);
-            deserializer.EndDeserialize();
-            return new BlockMetadataIndexValue(block: block);
-        }
+    private static BlockMetadataIndexValue InternalDeserialize(ReadOnlyMemory<byte> data)
+    {
+        var deserializer = new DataContractObjectSerializer<BrightenedBlock>();
+        var s = new MemoryStream(buffer: data.ToArray());
+        deserializer.BeginDeserialize(stream: s);
+        deserializer.Deserialize(obj: out var block);
+        deserializer.EndDeserialize();
+        return new BlockMetadataIndexValue(block: block);
     }
 }

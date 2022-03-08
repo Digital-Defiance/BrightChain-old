@@ -1,13 +1,12 @@
-﻿namespace BrightChain.Engine.Tests
-{
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    [TestClass]
-    public class BBPTest
+namespace BrightChain.Engine.Tests;
+
+[TestClass]
+public class BBPTest
+{
+    [TestMethod]
+    public void TestBBP()
     {
-        [TestMethod]
-        public void TestBBP()
-        {
-        }
     }
 }

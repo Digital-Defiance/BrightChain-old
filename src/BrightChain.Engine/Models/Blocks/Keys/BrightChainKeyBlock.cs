@@ -1,9 +1,8 @@
-﻿namespace BrightChain.Engine.Models.Blocks.Keys
-{
-    using ProtoBuf;
+﻿using ProtoBuf;
 
-    [ProtoContract]
-    public class BrightChainKeyBlock : BrightenedBlock
-    {
-    }
+namespace BrightChain.Engine.Models.Blocks.Keys;
+
+[ProtoContract]
+public class BrightChainKeyBlock : BrightenedBlock
+{
 }

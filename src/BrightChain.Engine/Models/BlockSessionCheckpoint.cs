@@ -1,20 +1,17 @@
-﻿namespace BrightChain.Engine.Faster
+﻿using System;
+
+namespace BrightChain.Engine.Faster;
+
+public struct BlockSessionCheckpoint
 {
-    using System;
-    using System.Collections.Generic;
-    using BrightChain.Engine.Faster.Enumerations;
+    public readonly bool Success;
+    public readonly bool CheckpointResult;
+    public readonly Guid CheckpointGuids;
 
-    public struct BlockSessionCheckpoint
+    public BlockSessionCheckpoint(bool success, bool result, Guid guid)
     {
-        public readonly bool Success;
-        public readonly bool CheckpointResult;
-        public readonly Guid CheckpointGuids;
-
-        public BlockSessionCheckpoint(bool success, bool result, Guid guid)
-        {
-            this.Success = success;
-            this.CheckpointResult = result;
-            this.CheckpointGuids = guid;
-        }
+        this.Success = success;
+        this.CheckpointResult = result;
+        this.CheckpointGuids = guid;
     }
 }

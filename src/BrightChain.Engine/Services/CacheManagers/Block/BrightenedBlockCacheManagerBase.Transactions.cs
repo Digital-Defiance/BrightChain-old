@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Interfaces;
 using BrightChain.Engine.Models;
@@ -8,40 +6,32 @@ namespace BrightChain.Engine.Services.CacheManagers.Block;
 
 public abstract partial class BrightenedBlockCacheManagerBase : IBrightenedBlockCacheManager
 {
-    private BrightenedBlockTransaction _activeTransaction = null;
-
-    private BrightenedBlockTransaction ActiveTransaction
-    {
-        get
-        {
-            return this._activeTransaction;
-        }
-    }
+    private BrightenedBlockTransaction ActiveTransaction { get; set; }
 
     public BrightenedBlockTransaction NewTransaction()
     {
-        if (this._activeTransaction is not null)
+        if (this.ActiveTransaction is not null)
         {
-            throw new BrightChainException("Already in transaction");
+            throw new BrightChainException(message: "Already in transaction");
         }
 
         var transaction = new BrightenedBlockTransaction(cacheManager: this);
-        this._activeTransaction = transaction;
+        this.ActiveTransaction = transaction;
         return transaction;
     }
 
     public (bool Result, BrightenedBlockTransaction Transaction) Commit()
     {
-        if (this._activeTransaction is null)
+        if (this.ActiveTransaction is null)
         {
-            throw new BrightChainException("Must be in transaction");
+            throw new BrightChainException(message: "Must be in transaction");
         }
 
-        var result = this._activeTransaction.Commit();
-        var activeTransaction = this._activeTransaction;
+        var result = this.ActiveTransaction.Commit();
+        var activeTransaction = this.ActiveTransaction;
         if (result)
         {
-            this._activeTransaction = null;
+            this.ActiveTransaction = null;
         }
 
         return (Result: result, Transaction: activeTransaction);
@@ -49,16 +39,16 @@ public abstract partial class BrightenedBlockCacheManagerBase : IBrightenedBlock
 
     public (bool Result, BrightenedBlockTransaction Transaction) Rollback()
     {
-        if (this._activeTransaction is null)
+        if (this.ActiveTransaction is null)
         {
-            throw new BrightChainException("Must be in transaction");
+            throw new BrightChainException(message: "Must be in transaction");
         }
 
-        var result = this._activeTransaction.Rollback();
-        var activeTransaction = this._activeTransaction;
+        var result = this.ActiveTransaction.Rollback();
+        var activeTransaction = this.ActiveTransaction;
         if (result)
         {
-            this._activeTransaction = null;
+            this.ActiveTransaction = null;
         }
 
         return (Result: result, Transaction: activeTransaction);

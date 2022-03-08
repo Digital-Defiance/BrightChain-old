@@ -1,178 +1,174 @@
-﻿using NeuralFabric.Models.Hashes;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using BrightChain.Engine.Exceptions;
+using BrightChain.Engine.Helpers;
+using BrightChain.Engine.Interfaces;
+using BrightChain.Engine.Models.Blocks.DataObjects;
+using BrightChain.Engine.Models.Blocks.Tags;
+using BrightChain.Engine.Models.Hashes;
+using BrightChain.Engine.Services;
+using NeuralFabric.Models.Hashes;
+using ProtoBuf;
 
-namespace BrightChain.Engine.Models.Blocks.Chains
+namespace BrightChain.Engine.Models.Blocks.Chains;
+
+/// <summary>
+///     A block which describes the hashes of all of the blocks needed to reconstitute a resultant block.
+///     TODO: Ensure that the resultant list doesn't exceed a block, split into two lists, make a new top block, etc.
+///     TODO: Ensure that the hash of the source file
+///     TODO: Validate constituent blocks can recompose into that data (break up by tuple size), validate all blocks are same length
+/// </summary>
+[ProtoContract]
+public class ConstituentBlockListBlock : IdentifiableBlock, IBlock, IDisposable, IValidatable
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using global::BrightChain.Engine.Exceptions;
-    using global::BrightChain.Engine.Interfaces;
-    using global::BrightChain.Engine.Models.Blocks.DataObjects;
-    using global::BrightChain.Engine.Models.Blocks.Tags;
-    using global::BrightChain.Engine.Models.Hashes;
-    using global::BrightChain.Engine.Services;
-    using ProtoBuf;
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ConstituentBlockListBlock" /> class.
+    /// </summary>
+    /// <param name="blockParams"></param>
+    public ConstituentBlockListBlock(ConstituentBlockListBlockParams blockParams)
+        : base(
+            blockParams: blockParams,
+            data: RandomDataHelper.DataFiller(
+                inputData: blockParams.ConstituentBlockHashes
+                    .SelectMany(selector: b => b.HashBytes.ToArray())
+                    .ToArray(),
+                blockSize: blockParams.BlockSize))
+    {
+        // TODO : if finalBlockHash is null, reconstitute and compute- or accept the validation result's hash essentially?
+        this.SourceId = blockParams.SourceId;
+        this.TotalLength = blockParams.TotalLength;
+        this.ConstituentBlocks = blockParams.ConstituentBlockHashes;
+        this.Previous = blockParams.Previous;
+        this.Next = blockParams.Next;
+        this.TupleCount = BlockBrightenerService.TupleCount;
+        this.CorrelationId = blockParams.CorrelationId;
+        this.PreviousVersionHash = blockParams.PreviousVersionHash;
+    }
 
     /// <summary>
-    /// A block which describes the hashes of all of the blocks needed to reconstitute a resultant block.
-    /// TODO: Ensure that the resultant list doesn't exceed a block, split into two lists, make a new top block, etc.
-    /// TODO: Ensure that the hash of the source file
-    /// TODO: Validate constituent blocks can recompose into that data (break up by tuple size), validate all blocks are same length
+    ///     Gets a CBLBlockParams object with the parameters of this block.
     /// </summary>
-    [ProtoContract]
-    public class ConstituentBlockListBlock : IdentifiableBlock, IBlock, IDisposable, IValidatable
+    public override ConstituentBlockListBlockParams BlockParams => new(
+        blockParams: new BlockParams(
+            blockSize: this.BlockSize,
+            requestTime: this.StorageContract.RequestTime,
+            keepUntilAtLeast: this.StorageContract.KeepUntilAtLeast,
+            redundancy: this.StorageContract.RedundancyContractType,
+            privateEncrypted: this.StorageContract.PrivateEncrypted,
+            originalType: this.OriginalType),
+        sourceId: this.SourceId,
+        segmentId: this.SegmentId,
+        totalLength: this.TotalLength,
+        constituentBlockHashes: this.ConstituentBlocks,
+        previous: this.Previous,
+        next: this.Next,
+        correlationId: this.CorrelationId,
+        previousVersionHash: this.PreviousVersionHash);
+
+    /// <summary>
+    ///     Gets or sets the hash of the sum bytes of the file when assembled in order.
+    /// </summary>
+    [ProtoMember(tag: 60)]
+    public DataHash SourceId { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the total length of bytes in the user data section.
+    /// </summary>
+    [ProtoMember(tag: 61)]
+    public long TotalLength { get; set; }
+
+    /// <summary>
+    ///     Gets or sets an int with the TupleCount at the time of creation.
+    /// </summary>
+    [ProtoMember(tag: 62)]
+    public int TupleCount { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the hash of the sum bytes of the segment of the file contained in this CBL when assembled in order.
+    ///     If the segment does not fill the the final block, the hash does not include the remainder of the data.
+    /// </summary>
+    [ProtoMember(tag: 63)]
+    public SegmentHash SegmentId { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the BlockHash of the previous CBL in this CBL Chain.
+    /// </summary>
+    [ProtoMember(tag: 64)]
+    public BlockHash Previous { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the hash of the next CBL in this CBL Chain.
+    /// </summary>
+    [ProtoMember(tag: 65)]
+    public BlockHash Next { get; set; }
+
+    [ProtoMember(tag: 69)] public IEnumerable<BrightTag> Tags { get; internal set; }
+
+    /// <summary>
+    ///     Gets or sets the BrightChainID of the block's creator.
+    /// </summary>
+    [ProtoMember(tag: 66)]
+    public BrokeredAnonymityIdentifier CreatorId { get; set; }
+
+    [ProtoMember(tag: 67)] public Guid CorrelationId { get; set; }
+
+    [ProtoMember(tag: 68)] public DataHash PreviousVersionHash { get; set; }
+
+    /// <summary>
+    ///     Gets an array of the bytes of the constituent block hashes for writing to disk.
+    /// </summary>
+    public ReadOnlyMemory<byte> ConstituentBlockHashesBytes => new(
+        array: this.ConstituentBlocks
+            .SelectMany(selector: b =>
+                b.HashBytes.ToArray())
+            .ToArray());
+
+    /// <summary>
+    ///     Gets a value indicating the computed cost of storing this contract.
+    /// </summary>
+    [ProtoMember(tag: 67)]
+    public double TotalCost { get; set; }
+
+    /// <summary>
+    ///     Gets an int representing the computed capacity of this block in terms of number of BlockHashes.
+    /// </summary>
+    public int MaximumHashesPerBlock =>
+        (int)Math.Floor(d: (double)(BlockHash.HashSize / 8) / BlockSizeMap.BlockSize(blockSize: this.BlockSize));
+
+    /// <summary>
+    ///     Perform validation of this CBL and its underlying data.
+    /// </summary>
+    /// <returns>A boolean indicating whether validation succeeded.</returns>
+    public new bool Validate()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConstituentBlockListBlock"/> class.
-        /// </summary>
-        /// <param name="blockParams"></param>
-        public ConstituentBlockListBlock(ConstituentBlockListBlockParams blockParams)
-        : base(
-              blockParams: blockParams,
-              data: Helpers.RandomDataHelper.DataFiller(
-                  inputData: blockParams.ConstituentBlockHashes
-                            .SelectMany(b => b.HashBytes.ToArray())
-                             .ToArray(),
-                  blockSize: blockParams.BlockSize))
+        if (!base.Validate())
         {
-            // TODO : if finalBlockHash is null, reconstitute and compute- or accept the validation result's hash essentially?
-            this.SourceId = blockParams.SourceId;
-            this.TotalLength = blockParams.TotalLength;
-            this.ConstituentBlocks = blockParams.ConstituentBlockHashes;
-            this.Previous = blockParams.Previous;
-            this.Next = blockParams.Next;
-            this.TupleCount = BlockBrightenerService.TupleCount;
-            this.CorrelationId = blockParams.CorrelationId;
-            this.PreviousVersionHash = blockParams.PreviousVersionHash;
+            return false;
         }
 
-        /// <summary>
-        /// Gets a CBLBlockParams object with the parameters of this block.
-        /// </summary>
-        public override ConstituentBlockListBlockParams BlockParams => new ConstituentBlockListBlockParams(
-                    blockParams: new BlockParams(
-                            blockSize: this.BlockSize,
-                            requestTime: this.StorageContract.RequestTime,
-                            keepUntilAtLeast: this.StorageContract.KeepUntilAtLeast,
-                            redundancy: this.StorageContract.RedundancyContractType,
-                            privateEncrypted: this.StorageContract.PrivateEncrypted,
-                            originalType: this.OriginalType),
-                    sourceId: this.SourceId,
-                    segmentId: this.SegmentId,
-                    totalLength: this.TotalLength,
-                    constituentBlockHashes: this.ConstituentBlocks,
-                    previous: this.Previous,
-                    next: this.Next,
-                    correlationId: this.CorrelationId,
-                    previousVersionHash: this.PreviousVersionHash);
+        var validationExceptions = new List<BrightChainValidationException>(collection: this.ValidationExceptions);
 
-        /// <summary>
-        /// Gets or sets the hash of the sum bytes of the file when assembled in order.
-        /// </summary>
-        [ProtoMember(60)]
-        public DataHash SourceId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the total length of bytes in the user data section.
-        /// </summary>
-        [ProtoMember(61)]
-        public long TotalLength { get; set; }
-
-        /// <summary>
-        /// Gets or sets an int with the TupleCount at the time of creation.
-        /// </summary>
-        [ProtoMember(62)]
-        public int TupleCount { get; set; }
-
-        /// <summary>
-        /// Gets or sets the hash of the sum bytes of the segment of the file contained in this CBL when assembled in order.
-        /// If the segment does not fill the the final block, the hash does not include the remainder of the data.
-        /// </summary>
-        [ProtoMember(63)]
-        public SegmentHash SegmentId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the BlockHash of the previous CBL in this CBL Chain.
-        /// </summary>
-        [ProtoMember(64)]
-        public BlockHash Previous { get; set; }
-
-        /// <summary>
-        /// Gets or sets the hash of the next CBL in this CBL Chain.
-        /// </summary>
-        [ProtoMember(65)]
-        public BlockHash Next { get; set; }
-
-        [ProtoMember(69)]
-        public IEnumerable<BrightTag> Tags { get; internal set; }
-
-        /// <summary>
-        /// Gets or sets the BrightChainID of the block's creator.
-        /// </summary>
-        [ProtoMember(66)]
-        public BrokeredAnonymityIdentifier CreatorId { get; set; }
-
-        [ProtoMember(67)]
-        public Guid CorrelationId { get; set; }
-
-        [ProtoMember(68)]
-        public DataHash PreviousVersionHash { get; set; }
-
-        /// <summary>
-        /// Gets an array of the bytes of the constituent block hashes for writing to disk.
-        /// </summary>
-        public ReadOnlyMemory<byte> ConstituentBlockHashesBytes => new ReadOnlyMemory<byte>(
-                this.ConstituentBlocks
-                    .SelectMany(b =>
-                        b.HashBytes.ToArray())
-                    .ToArray());
-
-        /// <summary>
-        /// Gets a value indicating the computed cost of storing this contract.
-        /// </summary>
-        [ProtoMember(67)]
-        public double TotalCost { get; set; }
-
-        /// <summary>
-        /// Gets an int representing the computed capacity of this block in terms of number of BlockHashes.
-        /// </summary>
-        public int MaximumHashesPerBlock =>
-            (int)Math.Floor((double)(BlockHash.HashSize / 8) / BlockSizeMap.BlockSize(this.BlockSize));
-
-        /// <summary>
-        /// Generate a BlockMap from the list of constituent blocks.
-        /// </summary>
-        /// <returns>BlockChainFileMap with TupleStripes of the chain.</returns>
-        public BrightMap CreateBrightMap()
+        if (!(this.Previous is null))
         {
-            return new BrightMap(this);
-        }
-
-        /// <summary>
-        /// Perform validation of this CBL and its underlying data.
-        /// </summary>
-        /// <returns>A boolean indicating whether validation succeeded.</returns>
-        public new bool Validate()
-        {
-            if (!base.Validate())
+            if (!(this.Previous is ConstituentBlockListBlock))
             {
-                return false;
+                validationExceptions.Add(item: new BrightChainValidationException(
+                    element: nameof(this.Previous),
+                    message: "Previous object must be a CBL."));
             }
-
-            var validationExceptions = new List<BrightChainValidationException>(this.ValidationExceptions);
-
-            if (!(this.Previous is null))
-            {
-                if (!(this.Previous is ConstituentBlockListBlock))
-                {
-                    validationExceptions.Add(new BrightChainValidationException(
-                        element: nameof(this.Previous),
-                        message: "Previous object must be a CBL."));
-                }
-            }
-
-            // TODO: perform additional validation as described above
-            return true;
         }
+
+        // TODO: perform additional validation as described above
+        return true;
+    }
+
+    /// <summary>
+    ///     Generate a BlockMap from the list of constituent blocks.
+    /// </summary>
+    /// <returns>BlockChainFileMap with TupleStripes of the chain.</returns>
+    public BrightMap CreateBrightMap()
+    {
+        return new BrightMap(cblBlock: this);
     }
 }

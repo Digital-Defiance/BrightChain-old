@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using BrightChain.Engine.Enumerations;
 using BrightChain.Engine.Exceptions;
 using BrightChain.Engine.Models.Blocks;
@@ -12,39 +11,33 @@ namespace BrightChain.Engine.Models;
 
 public class BrightenedBlockTransaction
 {
-    public Guid Id => this.TransactionId;
-
-    private readonly Guid TransactionId;
     private readonly BrightenedBlockCacheManagerBase CacheManager;
-    private TransactionStatus TransactionState;
-    
-    /// <summary>
-    /// Blocks that are in-memory either pending write to the cache or confirmation of no-rollback required.
-    /// </summary>
-    private readonly Dictionary<BlockHash, BrightenedBlock> UncommittedBlocksByHash;
-    /// <summary>
-    /// Hashes of concomitted blocks grouped by transactions status.
-    /// </summary>
-    private readonly Dictionary<TransactionStatus, List<BlockHash>> UncommittedHashesByStatus;
 
     public readonly Queue<BlockHash> UncomittedBlockQueue;
 
-    public IEnumerable<BrightenedBlock> UncommittedBlocksByStatus(TransactionStatus transactionStatus) =>
-        this.CacheManager.Get(keys: this.UncommittedHashesByStatus[transactionStatus].ToArray());
+    /// <summary>
+    ///     Blocks that are in-memory either pending write to the cache or confirmation of no-rollback required.
+    /// </summary>
+    private readonly Dictionary<BlockHash, BrightenedBlock> UncommittedBlocksByHash;
 
-    public IEnumerable<BrightenedBlock> UncommittedBlocks => this.UncommittedBlocksByHash.Values;
+    /// <summary>
+    ///     Hashes of concomitted blocks grouped by transactions status.
+    /// </summary>
+    private readonly Dictionary<TransactionStatus, List<BlockHash>> UncommittedHashesByStatus;
+
+    private int BlockAddDrop = 0;
+    private int BlockAdditions = 0;
+    private int BlockDrops = 0;
 
     private int BlockReads = 0;
-    private int BlockAdditions = 0;
     private int BlockUpdates = 0;
-    private int BlockDrops = 0;
-    private int BlockAddDrop = 0;
     private int CommittedBlocks = 0;
     private int RolledBackBlocks = 0;
+    private TransactionStatus TransactionState;
 
     public BrightenedBlockTransaction(BrightenedBlockCacheManagerBase cacheManager)
     {
-        this.TransactionId = Guid.NewGuid();
+        this.Id = Guid.NewGuid();
         this.CacheManager = cacheManager;
         this.TransactionState = TransactionStatus.Uncommitted;
         this.UncommittedBlocksByHash = new Dictionary<BlockHash, BrightenedBlock>();
@@ -52,36 +45,21 @@ public class BrightenedBlockTransaction
         this.UncomittedBlockQueue = new Queue<BlockHash>();
     }
 
-    public BlockHash NextBlockHash
-    {
-        get
-        {
-            return this.UncomittedBlockQueue.Dequeue();
-        }
-    }
+    public Guid Id { get; }
 
-    public BrightenedBlock NextBlock
-    {
-        get
-        {
-            return this.UncommittedBlocksByHash[this.NextBlockHash];
-        }
-    }
+    public IEnumerable<BrightenedBlock> UncommittedBlocks => this.UncommittedBlocksByHash.Values;
 
-    public BlockHash PeekNextBlockHash
-    {
-        get
-        {
-            return this.UncomittedBlockQueue.Peek();
-        }
-    }
+    public BlockHash NextBlockHash => this.UncomittedBlockQueue.Dequeue();
 
-    public BrightenedBlock PeekNextBlock
+    public BrightenedBlock NextBlock => this.UncommittedBlocksByHash[key: this.NextBlockHash];
+
+    public BlockHash PeekNextBlockHash => this.UncomittedBlockQueue.Peek();
+
+    public BrightenedBlock PeekNextBlock => this.UncommittedBlocksByHash[key: this.PeekNextBlockHash];
+
+    public IEnumerable<BrightenedBlock> UncommittedBlocksByStatus(TransactionStatus transactionStatus)
     {
-        get
-        {
-            return this.UncommittedBlocksByHash[this.PeekNextBlockHash];
-        }
+        return this.CacheManager.Get(keys: this.UncommittedHashesByStatus[key: transactionStatus].ToArray());
     }
 
     public void DropTransactionBlock(BlockHash blockHash)
@@ -90,23 +68,24 @@ public class BrightenedBlockTransaction
 
         if (!this.UncomittedBlockQueue.Contains(value: blockHash))
         {
-            this.UncomittedBlockQueue.Append(blockHash);
+            this.UncomittedBlockQueue.Append(element: blockHash);
         }
 
         if (currentStatus.HasValue && currentStatus.Value != TransactionStatus.Uncommitted)
         {
-            throw new BrightChainException("Unexpected state");
+            throw new BrightChainException(message: "Unexpected state");
         }
 
-        this.SetBlockStatus(blockHash: blockHash, newStatus: TransactionStatus.DroppedUncommitted);
+        this.SetBlockStatus(blockHash: blockHash,
+            newStatus: TransactionStatus.DroppedUncommitted);
     }
 
     private TransactionStatus? GetBlockStatus(BlockHash blockHash)
     {
-        foreach (TransactionStatus status in Enum.GetValues(typeof(TransactionStatus)))
+        foreach (TransactionStatus status in Enum.GetValues(enumType: typeof(TransactionStatus)))
         {
-            var hashesByStatusList = this.UncommittedHashesByStatus[status];
-            if (hashesByStatusList.Contains(blockHash))
+            var hashesByStatusList = this.UncommittedHashesByStatus[key: status];
+            if (hashesByStatusList.Contains(item: blockHash))
             {
                 return status;
             }
@@ -117,22 +96,22 @@ public class BrightenedBlockTransaction
 
     private void SetBlockStatus(BlockHash blockHash, TransactionStatus newStatus)
     {
-        bool updated = this.UncomittedBlockQueue.Contains(value: blockHash);
-        foreach (TransactionStatus status in Enum.GetValues(typeof(TransactionStatus)))
+        var updated = this.UncomittedBlockQueue.Contains(value: blockHash);
+        foreach (TransactionStatus status in Enum.GetValues(enumType: typeof(TransactionStatus)))
         {
-            var hashesByStatusList = this.UncommittedHashesByStatus[newStatus];
+            var hashesByStatusList = this.UncommittedHashesByStatus[key: newStatus];
             if (status == newStatus)
             {
-                if (!hashesByStatusList.Contains(blockHash))
+                if (!hashesByStatusList.Contains(item: blockHash))
                 {
-                    hashesByStatusList.Add(blockHash);
+                    hashesByStatusList.Add(item: blockHash);
                 }
             }
             else if (updated)
             {
-                if (hashesByStatusList.Contains(blockHash))
+                if (hashesByStatusList.Contains(item: blockHash))
                 {
-                    hashesByStatusList.Remove(blockHash);
+                    hashesByStatusList.Remove(item: blockHash);
                 }
             }
         }
@@ -140,15 +119,16 @@ public class BrightenedBlockTransaction
 
     public bool AddUpdateMemoryBlock(BrightenedBlock block)
     {
-        bool updated = this.UncomittedBlockQueue.Contains(value: block.Id);
+        var updated = this.UncomittedBlockQueue.Contains(value: block.Id);
 
         if (!updated)
         {
-            this.UncomittedBlockQueue.Append(block.Id);
+            this.UncomittedBlockQueue.Append(element: block.Id);
         }
 
-        this.UncommittedBlocksByHash[block.Id] = block;
-        this.SetBlockStatus(blockHash: block.Id, TransactionStatus.Uncommitted);
+        this.UncommittedBlocksByHash[key: block.Id] = block;
+        this.SetBlockStatus(blockHash: block.Id,
+            newStatus: TransactionStatus.Uncommitted);
 
         return updated;
     }
@@ -171,18 +151,19 @@ public class BrightenedBlockTransaction
     {
         if (!this.UncommittedBlocksByHash.ContainsKey(key: blockHash))
         {
-            throw new BrightChainException("Hash not found");
+            throw new BrightChainException(message: "Hash not found");
         }
 
-        return this.UncommittedBlocksByHash[blockHash];
+        return this.UncommittedBlocksByHash[key: blockHash];
     }
 
     public bool Commit()
     {
         throw new NotImplementedException();
     }
-    
+
     public bool Rollback()
     {
         throw new NotImplementedException();
-    }}
+    }
+}

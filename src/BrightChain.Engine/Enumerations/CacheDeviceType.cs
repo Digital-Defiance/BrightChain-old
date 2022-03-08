@@ -1,8 +1,7 @@
-﻿namespace BrightChain.Engine.Faster.Enumerations
+﻿namespace BrightChain.Engine.Faster.Enumerations;
+
+public enum CacheDeviceType
 {
-    public enum CacheDeviceType
-    {
-        Log,
-        Data,
-    }
+    Log,
+    Data,
 }

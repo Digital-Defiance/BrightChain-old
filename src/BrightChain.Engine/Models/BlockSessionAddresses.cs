@@ -1,15 +1,11 @@
-﻿namespace BrightChain.Engine.Faster
+﻿namespace BrightChain.Engine.Faster;
+
+public struct BlockSessionAddresses
 {
-    using System.Collections.Generic;
-    using BrightChain.Engine.Faster.Enumerations;
+    public readonly long Address;
 
-    public struct BlockSessionAddresses
+    public BlockSessionAddresses(long address)
     {
-        public readonly long Address;
-
-        public BlockSessionAddresses(long address)
-        {
-            this.Address = address;
-        }
+        this.Address = address;
     }
 }
