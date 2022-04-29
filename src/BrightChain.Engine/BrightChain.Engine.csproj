@@ -98,4 +98,10 @@
         </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Quorum\Enumerations" />
+      <Folder Include="Quorum\Extensions" />
+      <Folder Include="Quorum\Models" />
+    </ItemGroup>
+
 </Project>
