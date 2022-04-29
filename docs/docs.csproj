@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="docfx.console" Version="2.59.0">
+    <PackageReference Include="docfx.console" Version="2.59.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -13,7 +13,7 @@
 
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties docfx_1json__JsonSchema="https://json.schemastore.org/grafana-dashboard-5.x.json"/>
+      <UserProperties docfx_1json__JsonSchema="https://json.schemastore.org/grafana-dashboard-5.x.json" />
     </VisualStudio>
   </ProjectExtensions>
 

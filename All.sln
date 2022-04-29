@@ -35,21 +35,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BBP.FasterKVMiner", "src\BB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrightChain.API", "src\BrightChain.API\BrightChain.API.csproj", "{1EE859F7-0070-4D78-87BA-15460888329F}"
 EndProject
-Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "docs", "docs\docs.csproj", "{1D3E7AEC-8A73-40CC-A576-A524DB2C9564}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "docs", "docs\docs.csproj", "{1D3E7AEC-8A73-40CC-A576-A524DB2C9564}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E5DDC909-4F18-47F6-B4C8-517EF29B748E} = {E5DDC909-4F18-47F6-B4C8-517EF29B748E}
 		{98A946BE-ECA9-46FF-908D-A136588ACFB8} = {98A946BE-ECA9-46FF-908D-A136588ACFB8}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralFabric", "src\NeuralFabric\NeuralFabric.csproj", "{CACA30DD-770D-4F4E-BD50-F36D1D7120A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralFabric", "src\NeuralFabric\NeuralFabric.csproj", "{CACA30DD-770D-4F4E-BD50-F36D1D7120A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralFabric.Tests", "test\NeuralFabric.Tests\NeuralFabric.Tests.csproj", "{9616CACE-D293-42DC-877D-4F2777AFB550}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralFabric.Tests", "test\NeuralFabric.Tests\NeuralFabric.Tests.csproj", "{9616CACE-D293-42DC-877D-4F2777AFB550}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shart", "src\Shart\Shart.csproj", "{3EEDF5EC-422F-4B97-A931-682B12A0A6DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shart", "src\Shart\Shart.csproj", "{3EEDF5EC-422F-4B97-A931-682B12A0A6DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shart.Test", "test\Shart.Test\Shart.Test.csproj", "{37DFCF8D-7D60-4235-9FD6-AA6EE6578B4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shart.Test", "test\Shart.Test\Shart.Test.csproj", "{37DFCF8D-7D60-4235-9FD6-AA6EE6578B4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BBP.Test", "src\BBPPiCalculator\BBPPiCalculator\BBP.Test\BBP.Test.csproj", "{0F60EE04-30AF-4EDE-A531-002978E06457}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BBP.Test", "src\BBPPiCalculator\BBPPiCalculator\BBP.Test\BBP.Test.csproj", "{0F60EE04-30AF-4EDE-A531-002978E06457}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
