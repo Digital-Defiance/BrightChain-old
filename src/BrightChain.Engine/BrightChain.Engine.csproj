@@ -101,6 +101,7 @@
     <ItemGroup>
       <Folder Include="Quorum\Enumerations" />
       <Folder Include="Quorum\Extensions" />
+      <Folder Include="Quorum\FromJava" />
       <Folder Include="Quorum\Models" />
     </ItemGroup>
 
