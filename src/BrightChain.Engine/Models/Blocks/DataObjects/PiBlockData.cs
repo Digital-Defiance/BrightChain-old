@@ -16,6 +16,6 @@ public class PiBlockData : BlockData
     }
 
     public override ReadOnlyMemory<byte> Bytes => new ReadOnlyMemory<byte>(array: BBPCalculator.PiBytes(
-        n: this.PiOffset,
+        offsetInHexDigitChars: this.PiOffset,
         count: this.BlockSize).ToArray());
 }

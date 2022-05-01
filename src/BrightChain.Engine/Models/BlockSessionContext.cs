@@ -21,14 +21,14 @@ public class BlockSessionContext : IDisposable
 
     public readonly
         ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext,
-            BrightChainIndicesAdvancedFunctions> SharedCacheSession;
+            BrightChainIndicesFunctions> SharedCacheSession;
 
     public BlockSessionContext(
         ILogger logger,
         ClientSession<BlockHash, BlockData, BlockData, BlockData, BrightChainFasterCacheContext, BrightChainBlockHashAdvancedFunctions>
             dataSession,
         ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext,
-            BrightChainIndicesAdvancedFunctions> cblIndicesSession)
+            BrightChainIndicesFunctions> cblIndicesSession)
     {
         this.logger = logger;
         this.BlockDataBlobSession = dataSession;
@@ -51,12 +51,12 @@ public class BlockSessionContext : IDisposable
         var dataResultTuple = this.BlockDataBlobSession.Read(key: blockHash);
 
         return
-            dataResultTuple.status == Status.OK;
+            dataResultTuple.status.Found;
     }
 
     public bool Drop(BlockHash blockHash, bool complete = true)
     {
-        if (this.BlockDataBlobSession.Delete(key: blockHash) != Status.OK)
+        if (!this.BlockDataBlobSession.Delete(key: blockHash).IsCompletedSuccessfully)
         {
             // TODO: rollback?
             return false;
@@ -82,22 +82,23 @@ public class BlockSessionContext : IDisposable
     {
         var dataResultTuple = this.BlockDataBlobSession.Read(key: blockHash);
 
-        if (dataResultTuple.status != Status.OK)
+        if (!dataResultTuple.status.Found)
         {
             throw new IndexOutOfRangeException(message: blockHash.ToString());
         }
 
         var result = this.SharedCacheSession.Read(key: BlockMetadataIndexKey(blockHash: blockHash));
-        if (result.status == Status.NOTFOUND)
-        {
-            throw new IndexOutOfRangeException(message: blockHash.ToString());
-        }
 
-        if (result.status != Status.OK)
+        if (result.status.IsFaulted)
         {
             throw new BrightChainException(
                 message: string.Format(format: "metadata fetch error: {0}",
                     arg0: result.status.ToString()));
+        }
+
+        if (!result.status.Found)
+        {
+            throw new IndexOutOfRangeException(message: blockHash.ToString());
         }
 
         if (result.output is BlockMetadataIndexValue blockMetadata)
@@ -124,14 +125,14 @@ public class BlockSessionContext : IDisposable
             key: BlockMetadataIndexKey(blockHash: block.Id),
             desiredValue: new BlockMetadataIndexValue(block: block));
 
-        if (resultStatus != Status.OK)
+        if (!resultStatus.IsCompletedSuccessfully)
         {
             throw new BrightChainException(message: "Unable to store block");
         }
 
         resultStatus = this.BlockDataBlobSession.Upsert(key: block.Id,
             desiredValue: block.StoredData);
-        if (resultStatus != Status.OK)
+        if (!resultStatus.IsCompletedSuccessfully)
         {
             throw new BrightChainException(message: "Unable to store block");
         }

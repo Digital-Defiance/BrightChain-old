@@ -85,7 +85,7 @@ public class TapestryCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer
     {
         using var session =
             this.fasterKV.NewSession(
-                functions: new BrightChainAdvancedFunctions<Tkey, Tvalue, Tvalue, Tvalue, BrightChainFasterCacheContext>());
+                functions: new BrightChainFunctions<Tkey, Tvalue, Tvalue, Tvalue, BrightChainFasterCacheContext>());
         var resultTuple = session.Read(key);
         return resultTuple.status == Status.OK;
     }
@@ -100,7 +100,7 @@ public class TapestryCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer
     {
         using var session =
             this.fasterKV.NewSession(
-                functions: new BrightChainAdvancedFunctions<Tkey, Tvalue, Tvalue, Tvalue, BrightChainFasterCacheContext>());
+                functions: new BrightChainFunctions<Tkey, Tvalue, Tvalue, Tvalue, BrightChainFasterCacheContext>());
         var resultStatus = session.Delete(key);
         return resultStatus == Status.OK;
     }
@@ -114,7 +114,7 @@ public class TapestryCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer
     {
         using var session =
             this.fasterKV.NewSession(
-                functions: new BrightChainAdvancedFunctions<Tkey, Tvalue, Tvalue, Tvalue, BrightChainFasterCacheContext>());
+                functions: new BrightChainFunctions<Tkey, Tvalue, Tvalue, Tvalue, BrightChainFasterCacheContext>());
         var resultTuple = session.Read(blockHash);
 
         if (resultTuple.status != Status.OK)
@@ -131,7 +131,7 @@ public class TapestryCacheManager<Tkey, Tvalue, TkeySerializer, TvalueSerializer
     /// <param name="block">block to palce in the cache.</param>
     public void Set(Tkey key, Tvalue value)
     {
-        var functions = new BrightChainAdvancedFunctions<Tkey, Tvalue, Tvalue, Tvalue, BrightChainFasterCacheContext>();
+        var functions = new BrightChainFunctions<Tkey, Tvalue, Tvalue, Tvalue, BrightChainFasterCacheContext>();
         using var session = this.fasterKV.NewSession(functions: functions);
         var resultStatus = session.Upsert(
             key: key,

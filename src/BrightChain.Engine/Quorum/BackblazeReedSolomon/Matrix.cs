@@ -273,10 +273,10 @@ public class Matrix
                 for (var i = 0; i < this.getColumns(); i++)
                 {
                     value ^= Galois.multiply(
-                        a: this.get(
+                        a: (byte) this.get(
                             r: r,
                             c: i),
-                        b: right.get(
+                        b: (byte) right.get(
                             r: i,
                             c: c));
                 }
@@ -434,12 +434,12 @@ public class Matrix
             {
                 var scale = Galois.divide(
                     a: 1,
-                    b: this.data[r][r]);
+                    b: (sbyte) this.data[r][r]);
                 for (var c = 0; c < this.columns; c++)
                 {
                     this.data[r][c] = Galois.multiply(
-                        a: this.data[r][c],
-                        b: scale);
+                        a: (byte) this.data[r][c],
+                        b: (byte) scale);
                 }
             }
 
@@ -454,8 +454,8 @@ public class Matrix
                     for (var c = 0; c < this.columns; c++)
                     {
                         this.data[rowBelow][c] ^= Galois.multiply(
-                            a: scale,
-                            b: this.data[r][c]);
+                            a: (byte) scale,
+                            b: (byte) this.data[r][c]);
                     }
                 }
             }
@@ -472,8 +472,8 @@ public class Matrix
                     for (var c = 0; c < this.columns; c++)
                     {
                         this.data[rowAbove][c] ^= Galois.multiply(
-                            a: scale,
-                            b: this.data[d][c]);
+                            a: (byte) scale,
+                            b: (byte) this.data[d][c]);
                     }
                 }
             }

@@ -20,8 +20,8 @@ public partial class FasterBlockCacheManager
             .NewSession<BrightChainBlockHashAdvancedFunctions>();
 
     private ClientSession<string, BrightChainIndexValue, BrightChainIndexValue, BrightChainIndexValue, BrightChainFasterCacheContext,
-        BrightChainIndicesAdvancedFunctions> NewCblIndicesSession
+        BrightChainIndicesFunctions> NewCblIndicesSession
         => this.cblIndicesKV
-            .For(functions: new BrightChainIndicesAdvancedFunctions())
-            .NewSession<BrightChainIndicesAdvancedFunctions>();
+            .For(functions: new BrightChainIndicesFunctions())
+            .NewSession<BrightChainIndicesFunctions>();
 }
