@@ -1,3 +1,9 @@
+# NOTE This has been replaced by a fully functional, modern TypeScript implementation.
+
+[https://github.brightchain.org](https://github.brightchain.org)
+
+----
+
 # BrightChain
 ## (pre-alpha work in progress. Limited alpha testing coming soon!) 
 [![.NET](https://github.com/BrightChain/BrightChain/actions/workflows/dotnet.yml/badge.svg)](https://github.com/BrightChain/BrightChain/actions/workflows/dotnet.yml)
